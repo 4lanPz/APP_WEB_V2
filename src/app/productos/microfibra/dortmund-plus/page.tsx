@@ -12,6 +12,7 @@ import {
   dortmundPlusStats,
   dortmundPlusReasons,
 } from "@/data/taxonomy";
+import { foto } from "@/data/imagenes";
 
 export const metadata: Metadata = {
   title: "Dortmund Plus — Textil Padilla",
@@ -27,6 +28,7 @@ export default async function SubcategoriaDortmundPlusPage() {
   return (
     <div className="flex flex-col">
       <Hero
+        imagen="hero-dortmund-plus"
         breadcrumb={[
           { label: "Productos", href: "/productos" },
           { label: "Microfibra", href: "/productos/microfibra" },
@@ -48,6 +50,9 @@ export default async function SubcategoriaDortmundPlusPage() {
 
           <div className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
             <PhotoCurtain
+              src={foto("dortmund-plus-cancha")?.ruta}
+              alt={foto("dortmund-plus-cancha")?.alt ?? ""}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               label="Dortmund Plus en cancha"
               caption="Dortmund Plus en cancha · foto real"
               className="aspect-4/3"

@@ -4,9 +4,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Container } from "./Container";
 import { HeroVideo } from "./HeroVideo";
+import { FondoHero, REJILLA_HERO, DEGRADADO_HERO } from "./FondoHero";
 import { Breadcrumb, type BreadcrumbItem } from "./Breadcrumb";
 import { buttonVariants } from "./buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
+import { foto } from "@/data/imagenes";
 import { EASE_REVELAR, EASE_DESENROLLAR, DURATION } from "@/lib/motion";
 
 export interface HeroProps {
@@ -24,6 +26,17 @@ export interface HeroProps {
    * válida como fallback.
    */
   video?: boolean;
+  /**
+   * PRUEBA — id de slot con fotografía de fondo a sangre (ver `FondoHero`).
+   *
+   * El diseño aprobado no lleva foto en los heroes: su fondo es la trama CSS a
+   * propósito. Está a evaluación en todas las páginas que tienen hero. Si el
+   * slot no tiene archivo, el hero cae a la trama de siempre, así que pasarlo
+   * no cambia nada hasta que hay foto.
+   *
+   * No se combina con `video`: la portada usa vídeo y su imagen va de póster.
+   */
+  imagen?: string;
 }
 
 const HEADLINE_START = 0.3;
@@ -57,29 +70,39 @@ export function Hero({
   secondaryCta,
   caption,
   video = false,
+  imagen,
 }: HeroProps) {
   // Con vídeo la rejilla va POR ENCIMA, no de fondo: si se queda debajo el
   // vídeo la tapa y se pierde la textura que define el hero.
-  const rejilla =
-    "repeating-linear-gradient(0deg, rgba(245,242,238,0.04) 0 1px, transparent 1px 34px), repeating-linear-gradient(90deg, rgba(245,242,238,0.04) 0 1px, transparent 1px 34px)";
-  const degradado =
-    "linear-gradient(115deg, rgba(13,25,30,0.86) 0%, rgba(28,25,23,0.55) 45%, rgba(28,25,23,0.15) 100%)";
+  const conFoto = Boolean(imagen && foto(imagen));
 
   return (
     <header
       className="relative overflow-hidden bg-ink text-paper"
-      style={video ? undefined : { backgroundImage: `${rejilla}, ${degradado}` }}
+      style={
+        video || conFoto
+          ? undefined
+          : { backgroundImage: `${REJILLA_HERO}, ${DEGRADADO_HERO}` }
+      }
     >
       {video && (
         <>
-          <HeroVideo poster="/video/hero-poster.jpg" />
+          {/* El póster sale del slot `hero-home-poster` si lo has cargado a
+              mano; si no, del fotograma que saca `npm run video`. En la portada
+              la foto va de póster y NO de fondo alternativo: el fondo es el
+              vídeo. */}
+          <HeroVideo
+            poster={foto("hero-home-poster")?.ruta ?? "/video/hero-poster.jpg"}
+          />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            style={{ backgroundImage: rejilla }}
+            style={{ backgroundImage: REJILLA_HERO }}
           />
         </>
       )}
+
+      {!video && imagen && <FondoHero slot={imagen} />}
       <Container className="relative flex min-h-[70vh] flex-col justify-center gap-6 py-24">
         {caption && (
           <span

@@ -26,6 +26,8 @@ const stats = [
 ];
 
 interface Fabric {
+  /** Id del slot de imagen (ver `slots-imagen.ts`). */
+  slot: string;
   tag: string;
   name: string;
   structure: string;
@@ -38,6 +40,7 @@ interface Fabric {
 
 const fabrics: Fabric[] = [
   {
+    slot: "camisetas-jersey",
     tag: "Tela 01 · La base",
     name: "Jersey de algodón peinado 30/1",
     structure: "Single jersey",
@@ -54,6 +57,7 @@ const fabrics: Fabric[] = [
       "El punto liso por excelencia para camisetas. Ligero, transpirable y de caída natural sobre el cuerpo. El algodón peinado elimina las fibras cortas: menos pilling, más tacto y un color que aguanta el uso diario.",
   },
   {
+    slot: "camisetas-pique",
     tag: "Tela 02 · La estructura",
     name: "Piqué",
     structure: "Punto tipo panal",
@@ -109,6 +113,7 @@ export default function CamisetasPage() {
   return (
     <div className="flex flex-col">
       <Hero
+        imagen="hero-camisetas"
         breadcrumb={[
           { label: "Productos", href: "/productos" },
           { label: "Camisetas deportivas" },
@@ -177,6 +182,9 @@ export default function CamisetasPage() {
                 )}
               >
                 <ImagePlaceholder
+                  src={foto(fabric.slot)?.ruta}
+                  alt={foto(fabric.slot)?.alt ?? ""}
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   label={`${fabric.structure} · macro real`}
                   className={cn("aspect-4/3", i % 2 === 1 && "lg:order-2")}
                 />

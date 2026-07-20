@@ -112,6 +112,8 @@ export default function EmpresaPage() {
   return (
     <div className="flex flex-col">
       <Hero
+        /* PRUEBA de fondo fotográfico en hero — solo aquí, a evaluar. */
+        imagen="hero-empresa"
         eyebrow="Nuestra empresa · Taller textil · Ecuador · desde 1987"
         headlineLines={["Un taller que", "aprendió a callar", "y a medirlo todo."]}
         subhead="Casi cuatro décadas seleccionando hilo, tejiendo rollo y afinando color desde Ecuador. Somos un fabricante familiar con mentalidad de ingeniero: herencia de oficio, disciplina de ficha técnica."
@@ -281,10 +283,24 @@ export default function EmpresaPage() {
               />
             </RevealItem>
             <RevealItem>
-              <ImagePlaceholder dark caption="02 · Tintorería" className="aspect-4/3" />
+              <ImagePlaceholder
+                dark
+                src={foto("oficio-tintoreria")?.ruta}
+                alt={foto("oficio-tintoreria")?.alt ?? ""}
+                sizes="(min-width: 640px) 50vw, 100vw"
+                caption="02 · Tintorería"
+                className="aspect-4/3"
+              />
             </RevealItem>
             <RevealItem>
-              <ImagePlaceholder dark caption="03 · Carta de color" className="aspect-4/3" />
+              <ImagePlaceholder
+                dark
+                src={foto("oficio-carta-color")?.ruta}
+                alt={foto("oficio-carta-color")?.alt ?? ""}
+                sizes="(min-width: 640px) 50vw, 100vw"
+                caption="03 · Carta de color"
+                className="aspect-4/3"
+              />
             </RevealItem>
           </RevealGroup>
           <div className="mt-10 flex flex-wrap items-center gap-6">

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { cn } from "@/lib/cn";
+import { foto } from "@/data/imagenes";
 
 export interface GarmentOption {
   key: string;
@@ -73,6 +74,9 @@ export function GarmentRecommender() {
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10">
         <ImagePlaceholder
+          src={foto(`prenda-${option.key}`)?.ruta}
+          alt={foto(`prenda-${option.key}`)?.alt ?? ""}
+          sizes="(min-width: 640px) 50vw, 100vw"
           label="Tela · foto real"
           sublabel={option.title}
           className="aspect-4/3"

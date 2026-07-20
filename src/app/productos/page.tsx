@@ -47,6 +47,7 @@ export default function ProductosPage() {
   return (
     <div className="flex flex-col">
       <Hero
+        imagen="hero-productos"
         eyebrow="Nuestros productos · Telas para confección deportiva y casual"
         headlineLines={["Cada rollo", "responde por", "su ficha técnica."]}
         subhead="No hacemos listas de precios: hacemos tela que se comporta. Gramaje medido, color sólido entre tiradas y una mano que se reconoce al tacto. Esto es lo que ponemos en cada rollo."

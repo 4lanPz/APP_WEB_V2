@@ -6,6 +6,7 @@ import { ImagePlaceholder } from "./ImagePlaceholder";
 import { ColorSwatchPicker } from "./ColorSwatchPicker";
 import { PhotoCurtain } from "@/components/motion/Curtain";
 import type { ProductDetail } from "@/data/taxonomy";
+import { foto } from "@/data/imagenes";
 
 /**
  * Motion v1 §07 — Galería de producto: crossfade puro 350ms entre imágenes
@@ -51,6 +52,9 @@ export function ProductGallery({ product, title }: { product: ProductDetail; tit
         </p>
         <PhotoCurtain
           dark
+          src={foto("dortmund-plus-blancos-macro")?.ruta}
+          alt={foto("dortmund-plus-blancos-macro")?.alt ?? ""}
+          sizes="100vw"
           label="Macro de microfibra"
           caption="Macro de microfibra · referencia de textura"
           className="aspect-21/9"

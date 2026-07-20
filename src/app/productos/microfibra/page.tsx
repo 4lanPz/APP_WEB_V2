@@ -23,6 +23,7 @@ export default async function CategoriaMicrofibraPage() {
   return (
     <div className="flex flex-col">
       <Hero
+        imagen="hero-microfibra"
         breadcrumb={[
           { label: "Productos", href: "/productos" },
           { label: "Categorías", href: "/productos#categorias" },

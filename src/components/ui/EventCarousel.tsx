@@ -5,8 +5,11 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { cn } from "@/lib/cn";
 import { EASE_REVELAR } from "@/lib/motion";
+import { foto } from "@/data/imagenes";
 
 export interface EventSlide {
+  /** Id del slot de imagen (ver `slots-imagen.ts`). */
+  slot: string;
   date: string;
   title: string;
   description: string;
@@ -55,6 +58,9 @@ export function EventCarousel({ slides }: EventCarouselProps) {
             className="col-span-full grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10"
           >
             <ImagePlaceholder
+              src={foto(slide.slot)?.ruta}
+              alt={foto(slide.slot)?.alt ?? ""}
+              sizes="(min-width: 640px) 50vw, 100vw"
               label={slide.placeholderLabel}
               className="aspect-4/3"
             />

@@ -18,6 +18,7 @@
 
 import {
   existsSync,
+  readFileSync,
   mkdirSync,
   readdirSync,
   writeFileSync,
@@ -25,7 +26,7 @@ import {
 } from "node:fs";
 import { basename, dirname, extname, join } from "node:path";
 import sharp from "sharp";
-import { SLOTS, IDS_VALIDOS, slotPorId } from "../src/data/slots-imagen";
+import { SLOTS, SLOTS_TELA, IDS_VALIDOS, slotPorId } from "../src/data/slots-imagen";
 
 const RAIZ = join(import.meta.dirname, "..");
 const ENTREGA = join(RAIZ, "entrega");
@@ -123,6 +124,56 @@ async function procesarEntrega(): Promise<Resultado> {
   return r;
 }
 
+/**
+ * Slots que ningún componente lee.
+ *
+ * Existe porque ya pasó: había 15 slots registrados y anunciados en
+ * /admin/imagenes que ninguna página consumía. El archivo se procesaba, el
+ * manifiesto lo daba por lleno, la miniatura salía en el panel — y la página
+ * seguía mostrando el placeholder. Un slot registrado pero no cableado es peor
+ * que uno que no existe, porque promete.
+ *
+ * Detección: se busca el id literal en `src/`. Los que se consumen con plantilla
+ * (`hito-${ref}`) no aparecen literales, así que se declaran aquí sus prefijos
+ * junto al sitio que los lee. Añadir un prefijo obliga a nombrar su consumidor.
+ */
+const CONSUMO_DINAMICO: { prefijo: string; consumidor: string }[] = [
+  { prefijo: "hito-", consumidor: "components/ui/Timeline.tsx" },
+  { prefijo: "prenda-", consumidor: "components/ui/GarmentRecommender.tsx" },
+];
+
+/**
+ * El propio registro y el manifiesto se excluyen del rastreo. Los dos contienen
+ * todos los ids literalmente, así que incluirlos haría que la comprobación
+ * pasara siempre: encontraría el id en el sitio que lo declara, no en el que lo
+ * lee, que es justo lo que hay que distinguir.
+ */
+const NO_CUENTAN_COMO_CONSUMO = ["slots-imagen.ts", "imagenes.generado.ts"];
+
+function slotsSinCablear(): string[] {
+  const fuentes: string[] = [];
+  const recorrer = (dir: string) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) recorrer(p);
+      else if (/\.tsx?$/.test(e.name) && !NO_CUENTAN_COMO_CONSUMO.includes(e.name)) {
+        fuentes.push(readFileSync(p, "utf8"));
+      }
+    }
+  };
+  recorrer(join(RAIZ, "src"));
+  const codigo = fuentes.join("\n");
+
+  const slugsDeTela = new Set(SLOTS_TELA.map((s) => s.id));
+
+  return SLOTS.filter((slot) => {
+    // Las telas se consumen todas por `fotoDeTela(sub.slug)`, desde taxonomy.
+    if (slugsDeTela.has(slot.id)) return false;
+    if (CONSUMO_DINAMICO.some((d) => slot.id.startsWith(d.prefijo))) return false;
+    return !codigo.includes(`"${slot.id}"`);
+  }).map((s) => s.id);
+}
+
 /** El manifiesto se genera mirando `public/`, no acumulando estado. */
 function escribirManifiesto(): { llenos: string[]; vacios: string[] } {
   const llenos: string[] = [];
@@ -176,6 +227,14 @@ async function main() {
     );
   }
 
+  const huerfanos = slotsSinCablear();
+  if (huerfanos.length) {
+    console.log(`
+SLOTS REGISTRADOS QUE NINGÚN COMPONENTE LEE — ${huerfanos.length}`);
+    console.log("  (la foto se procesaría y la página seguiría vacía)");
+    for (const id of huerfanos) console.log(`  · ${id}`);
+  }
+
   const { llenos, vacios } = escribirManifiesto();
   console.log(
     `\nmanifiesto actualizado — ${llenos.length} de ${SLOTS.length} slots con imagen, ${vacios.length} vacíos\n`,
@@ -183,7 +242,7 @@ async function main() {
 
   // Un nombre mal escrito es justo lo que este script existe para cazar: si se
   // ignora, la imagen no aparece y parece un fallo de la web.
-  if (r.erratas.length) process.exitCode = 1;
+  if (r.erratas.length || huerfanos.length) process.exitCode = 1;
 }
 
 main().catch((e) => {

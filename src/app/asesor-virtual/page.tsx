@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { AsesorWizard } from "@/components/ui/AsesorWizard";
+import { FondoHero } from "@/components/ui/FondoHero";
 
 export const metadata: Metadata = {
   title: "Asesor Virtual — Textil Padilla",
@@ -11,8 +12,11 @@ export const metadata: Metadata = {
 
 export default function AsesorVirtualPage() {
   return (
-    <div className="bg-ink py-16 text-paper sm:py-24">
-      <Container>
+    <div className="relative overflow-hidden bg-ink py-16 text-paper sm:py-24">
+      {/* Esta página no usa <Hero>: tiene su propia banda oscura. El fondo
+          fotográfico se comparte igualmente vía FondoHero. */}
+      <FondoHero slot="hero-asesor-virtual" />
+      <Container className="relative">
         <Breadcrumb
           tone="dark"
           items={[{ label: "Inicio", href: "/" }, { label: "Asesor virtual" }]}

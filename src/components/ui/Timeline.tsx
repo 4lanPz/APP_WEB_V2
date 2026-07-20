@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { cn } from "@/lib/cn";
+import { foto } from "@/data/imagenes";
 
 export interface TimelineItem {
   year: string;
@@ -127,7 +128,15 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
                 {item.description}
               </p>
             </div>
-            <ImagePlaceholder label="" className="hidden aspect-4/3 sm:block" />
+            {/* El id del slot sale del `ref` del hito (FND-01 -> hito-fnd-01),
+                que es la misma regla con la que `slots-imagen.ts` los declara. */}
+            <ImagePlaceholder
+              src={foto(`hito-${item.ref.toLowerCase()}`)?.ruta}
+              alt={foto(`hito-${item.ref.toLowerCase()}`)?.alt ?? ""}
+              sizes="130px"
+              label=""
+              className="hidden aspect-4/3 sm:block"
+            />
           </div>
         </div>
       ))}

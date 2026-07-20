@@ -30,6 +30,7 @@ export default function ContactoPage() {
   return (
     <div className="flex flex-col">
       <Hero
+        imagen="hero-contacto"
         eyebrow="Contacto · Escríbenos o visita un local · Ecuador"
         headlineLines={["Hablemos de tu", "tela, tu color,", "tu referencia."]}
         subhead="Detrás del formulario hay un asesor comercial, no un buzón. Cuéntanos qué buscas —uso, gramaje, tono— y te respondemos con criterio de taller. O acércate a cualquiera de nuestros locales en Ecuador."
@@ -44,6 +45,9 @@ export default function ContactoPage() {
             <Reveal className="order-first lg:order-last">
               <ImagePlaceholder
                 dark
+                src={foto("retrato-asesor")?.ruta}
+                alt={foto("retrato-asesor")?.alt ?? ""}
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 label="Oficio · manos y máquina"
                 sublabel="Retrato de asesor comercial"
                 caption="Tu asesor · Asesoría técnica · Selección de tela y color"

@@ -46,6 +46,7 @@ const eventSlides = [
     title: "Feria Internacional del Textil Andino",
     description:
       "Presentamos la carta de color a demanda y las series de sarga peinada ante marcas y distribuidores de la región.",
+    slot: "evento-feria-andina",
     placeholderLabel: "Documental de taller · foto real",
   },
   {
@@ -53,6 +54,7 @@ const eventSlides = [
     title: "Jornada de color a demanda",
     description:
       "Un día abierto de teñido: clientes trajeron su referencia Pantone y salieron con el rollo aprobado, medido y documentado.",
+    slot: "evento-jornada-color",
     placeholderLabel: "Carta de color · foto real",
   },
   {
@@ -60,6 +62,7 @@ const eventSlides = [
     title: "Alianza con retail premium",
     description:
       "Nueva distribución para retail de alto poder adquisitivo, con muestrario físico diseñado como pieza de biblioteca.",
+    slot: "evento-alianza-retail",
     placeholderLabel: "Bodegón de rollo · foto real",
   },
   {
@@ -67,6 +70,7 @@ const eventSlides = [
     title: "Presentación línea PerformKnit 320",
     description:
       "Un tejido técnico de 320 g/m² pensado para uniformidad y contract: rendimiento, solidez y color constante.",
+    slot: "evento-performknit-320",
     placeholderLabel: "Macro de fibra · foto real",
   },
 ];

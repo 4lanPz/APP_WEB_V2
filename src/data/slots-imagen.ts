@@ -132,6 +132,110 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     ancho: 1600,
     nota: "Prenda hecha con la tela, en uso. Sin rótulos ni tipografía quemada.",
   },
+  {
+    id: "dortmund-plus-blancos-macro",
+    destino: "/telas/dortmund-plus-blancos-macro.webp",
+    alt: "Macrofotografía de la microfibra Dortmund Plus en blanco, con la textura del punto a contraluz.",
+    grupo: "Microfibra · Dortmund Plus",
+    ancho: 1920,
+    nota: "Macro de textura, muy apaisada (21:9).",
+  },
+
+  /**
+   * PRUEBA — fondos fotográficos de hero.
+   *
+   * El diseño aprobado NO lleva foto en los heroes: su fondo es la trama CSS a
+   * propósito. Están todos a evaluación. Mientras el slot esté vacío, el hero se
+   * ve exactamente igual que siempre, así que tenerlos registrados no cuesta
+   * nada.
+   *
+   * Requisitos comunes, y por eso se repiten en cada `nota`: tono BAJO y sin
+   * detalle importante en el tercio izquierdo, que es donde cae el titular. Muy
+   * apaisadas — se recortan a 70vh de alto.
+   *
+   * La portada NO tiene fondo fotográfico: su hero es el vídeo en bucle. Su
+   * slot de imagen es el PÓSTER del vídeo, que es otra cosa.
+   */
+  ...(
+    [
+      ["empresa", "Empresa", "Planta de Textil Padilla en Alangasí: vista general de la nave de producción."],
+      ["contacto", "Contacto", "Mostrador de atención de Textil Padilla, con muestrarios de tela sobre la mesa."],
+      ["productos", "Productos", "Rollos de tela de distintos colores alineados en la bodega de producto terminado."],
+      ["camisetas", "Camisetas", "Camisetas deportivas terminadas, confeccionadas con telas de Textil Padilla."],
+      ["microfibra", "Microfibra", "Tejido de microfibra saliendo de la máquina de tejido circular."],
+      ["dortmund-plus", "Microfibra · Dortmund Plus", "Rollo de Dortmund Plus en la nave de producción."],
+      ["asesor-virtual", "Asesor Virtual", "Asesor de Textil Padilla revisando muestras de tela con un cliente."],
+    ] as const
+  ).map(([slug, grupo, alt]) => ({
+    id: `hero-${slug}`,
+    destino: `/heroes/${slug}.webp`,
+    alt,
+    grupo: `${grupo} · Hero (prueba)`,
+    ancho: 2400,
+    nota: "Fondo de cabecera a sangre. Tono bajo, sin detalle en el tercio izquierdo (ahí va el titular). Muy apaisada: se recorta a 70vh.",
+  })),
+  {
+    id: "hero-home-poster",
+    destino: "/video/hero-poster-manual.webp",
+    alt: "",
+    grupo: "Home",
+    ancho: 1920,
+    nota: "PÓSTER del vídeo del hero, no un fondo: es lo que se ve mientras carga, si el navegador no reproduce, y con prefers-reduced-motion. Opcional — `npm run video` ya saca uno del propio vídeo. Cárgalo solo si quieres uno distinto; debe parecerse al primer fotograma o el salto se nota.",
+  },
+
+  // Carrusel de encuentros de la portada. El id nombra el evento y no su
+  // posición: si mañana se reordenan las tarjetas, las fotos siguen a su evento.
+  {
+    id: "evento-feria-andina",
+    destino: "/eventos/feria-andina.webp",
+    alt: "Stand de Textil Padilla en la Feria Internacional del Textil Andino, con muestrario de telas.",
+    grupo: "Home · Encuentros",
+    ancho: 1280,
+  },
+  {
+    id: "evento-jornada-color",
+    destino: "/eventos/jornada-color.webp",
+    alt: "Jornada de color a demanda: cliente comparando su referencia contra una carta de color.",
+    grupo: "Home · Encuentros",
+    ancho: 1280,
+  },
+  {
+    id: "evento-alianza-retail",
+    destino: "/eventos/alianza-retail.webp",
+    alt: "Rollos de tela preparados para un cliente de retail premium.",
+    grupo: "Home · Encuentros",
+    ancho: 1280,
+  },
+  {
+    id: "evento-performknit-320",
+    destino: "/eventos/performknit-320.webp",
+    alt: "Presentación de la línea PerformKnit 320: detalle del tejido sobre la mesa de muestras.",
+    grupo: "Home · Encuentros",
+    ancho: 1280,
+  },
+
+  // Recomendador de prenda de /productos. El id es la `key` de cada opción.
+  {
+    id: "prenda-camiseta",
+    destino: "/prendas/camiseta.webp",
+    alt: "Camiseta confeccionada en jersey de algodón peinado, mostrando la caída del punto.",
+    grupo: "Productos · Recomendador",
+    ancho: 1280,
+  },
+  {
+    id: "prenda-chompa",
+    destino: "/prendas/chompa.webp",
+    alt: "Chompa en French Terry perchado, con el reverso afelpado a la vista.",
+    grupo: "Productos · Recomendador",
+    ancho: 1280,
+  },
+  {
+    id: "prenda-pantalon",
+    destino: "/prendas/pantalon.webp",
+    alt: "Pantalón deportivo en sarga stretch, mostrando la caída y la recuperación del tejido.",
+    grupo: "Productos · Recomendador",
+    ancho: 1280,
+  },
 ];
 
 /**
