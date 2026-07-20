@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/*
+ * Textil Padilla — Design tokens (Design System v1.1)
+ * "El blanco es de papel, no de laboratorio." Nunca #FFFFFF ni #000000 puros.
+ */
+@theme {
+  /* ---- Color · base acromático cálido ---- */
+  --color-paper: #f5f2ee; /* fondo base de todas las superficies */
+  --color-bone: #ede9e3; /* fondos secundarios, tarjetas */
+  --color-greige: #c8c2b8; /* hairlines, bordes, divisores */
+  --color-graphite: #6b6560; /* texto secundario, etiquetas */
+  --color-ink: #1c1917; /* texto principal, títulos */
+
+  /* ---- Color · marca Azul Padilla (disciplinado y restringido: identifica, no decora) ---- */
+  --color-brand: #33a2dc; /* logo, CTA principal (máx. uno por pantalla), estado activo */
+  --color-brand-deep: #0d2937; /* contornos de logo, fondos oscuros de contraste puntual */
+
+  /* ---- Color · acento cálido Terracota (puntuación, nunca >5% de una superficie) ---- */
+  --color-accent: #a0715a; /* numeración de sección, filetes editoriales, énfasis puntual */
+
+  /* ---- Tipografía · tres voces, un solo autor ---- */
+  --font-sans: var(--font-archivo), -apple-system, "Segoe UI", sans-serif; /* grotesca neutra — títulos, navegación, botones */
+  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif; /* serif editorial — texto largo, citas */
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace; /* datos, referencias, etiquetas */
+
+  /*
+   * Escala tipográfica (Design System v1.1 §02).
+   * Display/H1/H2/H3 usan clamp() para escalar entre mobile y el tamaño de
+   * escritorio documentado. Los mínimos mobile son una interpolación propia
+   * — ajustar si los exports .dc.html de Claude Design definen otros breakpoints.
+   */
+  --text-display: clamp(2.75rem, 2rem + 3.2vw, 4.5rem); /* 44px → 72px */
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.03em;
+
+  --text-h1: clamp(2.25rem, 1.85rem + 1.8vw, 3rem); /* 36px → 48px */
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.02em;
+
+  --text-h2: clamp(1.625rem, 1.4rem + 1vw, 2rem); /* 26px → 32px */
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.01em;
+
+  --text-h3: clamp(1.1875rem, 1.1rem + 0.4vw, 1.375rem); /* 19px → 22px */
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.005em;
+
+  --text-body-l: 1.25rem; /* 20px */
+  --text-body-l--line-height: 1.6;
+
+  --text-body-m: 1rem; /* 16px */
+  --text-body-m--line-height: 1.6;
+
+  --text-caption: 0.8125rem; /* 13px */
+  --text-caption--line-height: 1.5;
+
+  --text-label: 0.75rem; /* 12px */
+  --text-label--letter-spacing: 0.08em;
+
+  --text-mono: 0.875rem; /* 14px */
+  --text-mono--line-height: 1.55;
+
+  /*
+   * Espaciado: la escala base-4 de Tailwind (space-1…space-32) ya coincide
+   * exactamente con space-1:4px … space-32:128px del Design System. No se
+   * sobreescribe --spacing.
+   */
+
+  /* ---- Grid ---- */
+  --container-padilla: 1240px; /* contenedor máx. desktop → clase max-w-padilla */
+
+  /*
+   * Breakpoint de navegación: verificado contra los exports (nav, tabs,
+   * filtros de catálogo cambian todos a max-width:900px, no al md=768px
+   * por defecto de Tailwind).
+   */
+  --breakpoint-tablet: 900px;
+
+  /*
+   * Radios de esquina: ángulos rectos por defecto. Se reemplaza la escala
+   * completa de Tailwind (xs…4xl) por los tres únicos valores permitidos.
+   * "Escala permitida: 0 · 2 · 4px. Nada más." — rounded-full sigue existiendo
+   * como utilidad estática de Tailwind; su uso está prohibido por norma de marca,
+   * no por el sistema de tokens.
+   */
+  --radius-*: initial;
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /*
+   * Motion Architecture v1 §02 — las cuatro curvas, expuestas como
+   * utilidades `ease-*` (mismos valores que src/lib/motion.ts).
+   */
+  --ease-revelar: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-plegar: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-asentar: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-desenrollar: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  body {
+    @apply bg-paper text-ink;
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-brand);
+    color: var(--color-paper);
+  }
+}
+
+/*
+ * Motion Architecture v1 §02/§05 — micro-interacciones en CSS puro.
+ * Curva "Interacción · Asentar" (0.40,0,0.20,1), 220ms — botones, subrayado
+ * de nav, anillo de swatch. Un solo lugar para el valor: si cambia, cambia
+ * aquí y en src/lib/motion.ts (para las animaciones en Framer Motion/GSAP).
+ */
+@layer utilities {
+  .transition-asentar {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 220ms;
+  }
+}
+
+/*
+ * Accesibilidad — no negociable (Motion Architecture v1, sección final).
+ * Red de seguridad global para cualquier transición/animación CSS: con
+ * prefers-reduced-motion, todo colapsa a cambios instantáneos. Las
+ * animaciones dirigidas por JS (Framer Motion, GSAP) respetan la misma
+ * preferencia explícitamente en cada componente.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
