@@ -1,0 +1,9 @@
+Deja aquí las imágenes, con el nombre EXACTO del slot y cualquier extensión
+(jpg, png, webp, tif). Luego corre:
+
+    npm run imagenes
+
+Los nombres válidos:  npm run imagenes:slots
+o abre  http://localhost:3000/admin/imagenes  con el sitio en marcha.
+
+Los originales se mueven solos a entrega/procesadas/ al terminar.

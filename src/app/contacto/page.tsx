@@ -11,6 +11,7 @@ import { MagneticLink } from "@/components/motion/MagneticLink";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { locations, PENDING } from "@/data/locations";
+import { foto } from "@/data/imagenes";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -98,6 +99,18 @@ export default function ContactoPage() {
               administración antes de publicar.
             </p>
           </div>
+
+          {/*
+            Ilustra la sección, no una sucursal concreta: no se sabe cuál de los
+            cinco locales es, así que ni el caption ni el alt lo atribuyen.
+          */}
+          <ImagePlaceholder
+            src={foto("local-fachada")?.ruta}
+            alt={foto("local-fachada")?.alt}
+            sizes="(min-width: 1024px) 80vw, 100vw"
+            caption="Textil Padilla e Hijos"
+            className="mb-10 aspect-21/9"
+          />
 
           <div className="hidden grid-cols-[40px_1.1fr_1.4fr_1fr] gap-4 border-b border-ink pb-3 font-mono text-xs uppercase tracking-widest text-graphite sm:grid">
             <span>Ref</span>

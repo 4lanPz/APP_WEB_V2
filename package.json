@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "imagenes": "npx tsx scripts/procesar-entrega.ts",
+    "imagenes:slots": "npx tsx scripts/listar-slots.ts",
+    "imagenes:telas-pw": "npx tsx scripts/preparar-imagenes.ts",
+    "catalogo": "npx tsx scripts/verificar-catalogo.ts",
+    "video": "npx tsx scripts/preparar-video.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

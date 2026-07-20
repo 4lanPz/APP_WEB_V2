@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PreparacionPage } from "@/components/ui/PreparacionPage";
 import { getTone, categories } from "@/data/taxonomy";
+import { tonoTienePaginaPropia } from "@/lib/rutas";
 
 interface Props {
   params: Promise<{ categoria: string; subcategoria: string; tono: string }>;
@@ -48,7 +49,9 @@ export async function generateStaticParams() {
   return categories.flatMap((category) =>
     category.subcategories.flatMap((sub) =>
       (sub.tones ?? [])
-        .filter((tone) => !tone.available)
+        .filter(
+          (tone) => !tonoTienePaginaPropia(category.slug, sub.slug, tone.slug),
+        )
         .map((tone) => ({
           categoria: category.slug,
           subcategoria: sub.slug,

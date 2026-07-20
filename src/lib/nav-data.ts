@@ -1,9 +1,10 @@
 import { categories, catalogTotals, type Category } from "@/data/taxonomy";
+import { estadoFicha, type EstadoFicha } from "@/data/fichas";
 
 export interface NavSubcategory {
   label: string;
   href: string;
-  available: boolean;
+  estado: EstadoFicha;
 }
 
 export interface NavCategory {
@@ -20,10 +21,18 @@ function categoryHref(category: Category): string {
     : `/productos/${category.slug}#en-preparacion`;
 }
 
-function subcategoryHref(category: Category, slug: string, available: boolean): string {
-  return available
-    ? `/productos/${category.slug}/${slug}`
-    : `/productos/${category.slug}/${slug}#en-preparacion`;
+/**
+ * El ancla `#en-preparacion` solo tiene sentido si el destino es la página de
+ * preparación. Una tela con ficha —aunque sea preliminar— renderiza contenido
+ * real y ese ancla no existe allí.
+ */
+function subcategoryHref(
+  category: Category,
+  slug: string,
+  estado: EstadoFicha,
+): string {
+  const base = `/productos/${category.slug}/${slug}`;
+  return estado === "sin-ficha" ? `${base}#en-preparacion` : base;
 }
 
 /**
@@ -36,11 +45,14 @@ export const productCategories: NavCategory[] = categories.map((category) => ({
   href: categoryHref(category),
   count: category.subcategories.length,
   available: category.available,
-  subcategories: category.subcategories.map((sub) => ({
-    label: sub.name,
-    href: subcategoryHref(category, sub.slug, sub.available),
-    available: sub.available,
-  })),
+  subcategories: category.subcategories.map((sub) => {
+    const estado = estadoFicha(sub.slug);
+    return {
+      label: sub.name,
+      href: subcategoryHref(category, sub.slug, estado),
+      estado,
+    };
+  }),
 }));
 
 export const catalogStats = `${catalogTotals.telas} telas · ${catalogTotals.familias} familias · teñido a demanda`;

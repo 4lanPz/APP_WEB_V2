@@ -10,6 +10,8 @@
 !.yarn/releases
 !.yarn/versions
 
+/Telas_PW
+
 # testing
 /coverage
 
@@ -43,3 +45,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Entrega de imágenes: los originales no se versionan (pesan).
+entrega/*
+!entrega/LEEME.txt

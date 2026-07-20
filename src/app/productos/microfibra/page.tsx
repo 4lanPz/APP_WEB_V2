@@ -7,11 +7,13 @@ import { SubcategoryTile } from "@/components/ui/SubcategoryTile";
 import { AsesorComercial } from "@/components/ui/AsesorComercial";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { getCategory } from "@/data/taxonomy";
+import { estadoFicha } from "@/data/fichas";
+import { fotoDeTela } from "@/data/imagenes";
 
 export const metadata: Metadata = {
   title: "Microfibra — Textil Padilla",
   description:
-    "Catorce construcciones de microfibra: hilos finos de poliéster, poco peso, secado rápido y alta recuperación.",
+    "Veinte construcciones de microfibra: hilos finos de poliéster, poco peso, secado rápido y alta recuperación.",
 };
 
 export default async function CategoriaMicrofibraPage() {
@@ -33,7 +35,7 @@ export default async function CategoriaMicrofibraPage() {
             rinde en cancha.
           </span>,
         ]}
-        subhead="Nuestra familia de tejidos de microfibra: hilos finos de poliéster que dan poco peso, secado rápido y alta recuperación. Una misma base con catorce construcciones —cada una afinada para un uso deportivo distinto."
+        subhead="Nuestra familia de tejidos de microfibra: hilos finos de poliéster que dan poco peso, secado rápido y alta recuperación. Una misma base con veinte construcciones —cada una afinada para un uso deportivo distinto."
         primaryCta={{ label: "Ver las subcategorías →", href: "#subcategorias" }}
       />
 
@@ -51,21 +53,25 @@ export default async function CategoriaMicrofibraPage() {
             completa.
           </p>
           <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-3">
-            {category.subcategories.map((sub, i) => (
-              <RevealItem key={sub.slug}>
-                <SubcategoryTile
-                  href={
-                    sub.available
-                      ? `/productos/microfibra/${sub.slug}`
-                      : `/productos/microfibra/${sub.slug}#en-preparacion`
-                  }
-                  index={String(i + 1).padStart(2, "0")}
-                  title={sub.name}
-                  available={sub.available}
-                  className="h-full"
-                />
-              </RevealItem>
-            ))}
+            {category.subcategories.map((sub, i) => {
+              const estado = estadoFicha(sub.slug);
+              return (
+                <RevealItem key={sub.slug}>
+                  <SubcategoryTile
+                    href={
+                      estado === "sin-ficha"
+                        ? `/productos/microfibra/${sub.slug}#en-preparacion`
+                        : `/productos/microfibra/${sub.slug}`
+                    }
+                    index={String(i + 1).padStart(2, "0")}
+                    title={sub.name}
+                    estado={estado}
+                    foto={fotoDeTela(sub.slug)}
+                    className="h-full"
+                  />
+                </RevealItem>
+              );
+            })}
           </RevealGroup>
           <p className="mt-6 max-w-2xl font-serif text-caption italic text-graphite">
             Solo publicamos la ficha de una subcategoría cuando existe su

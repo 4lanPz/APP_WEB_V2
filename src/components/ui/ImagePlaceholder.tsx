@@ -4,6 +4,14 @@ import { cn } from "@/lib/cn";
 export interface ImagePlaceholderProps {
   src?: string;
   alt?: string;
+  /**
+   * Anchos servidos según viewport. `next/image` con `fill` no puede deducirlos
+   * y sin esto descarga siempre la variante más grande. Por defecto asume ancho
+   * completo; pásalo cuando la imagen viva en una columna o en una grid.
+   */
+  sizes?: string;
+  /** Marca la imagen como prioritaria (LCP). Solo para la primera del viewport. */
+  priority?: boolean;
   /** Texto centrado cuando no hay foto real. Por defecto "Foto pendiente". */
   label?: string;
   /** Línea secundaria bajo el label, p. ej. el nombre de la referencia. */
@@ -31,6 +39,8 @@ export interface ImagePlaceholderProps {
 export function ImagePlaceholder({
   src,
   alt = "",
+  sizes = "100vw",
+  priority = false,
   label = "Foto pendiente",
   sublabel,
   caption,
@@ -46,7 +56,14 @@ export function ImagePlaceholder({
   return (
     <div className={cn("relative w-full overflow-hidden", className)}>
       {src ? (
-        <Image src={src} alt={alt} fill className={cn("object-cover", zoomClass)} />
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className={cn("object-cover", zoomClass)}
+        />
       ) : (
         <div
           className={cn(

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Container } from "./Container";
+import { HeroVideo } from "./HeroVideo";
 import { Breadcrumb, type BreadcrumbItem } from "./Breadcrumb";
 import { buttonVariants } from "./buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
@@ -17,6 +18,12 @@ export interface HeroProps {
   primaryCta?: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
   caption?: string;
+  /**
+   * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
+   * de heroes se quedan con la textura estática, que el propio documento da por
+   * válida como fallback.
+   */
+  video?: boolean;
 }
 
 const HEADLINE_START = 0.3;
@@ -31,12 +38,15 @@ const CTA_DELAY = 0.65;
  * Motion v1 §06 — secuencia orquestada exacta:
  *   0ms textura ya visible · 150ms eyebrow fade+rise 16px · 300ms titular
  *   desenrolla por líneas (máscara, stagger 90ms) · 650ms CTA revela.
- * Sin video-loop real (no hay asset): el fondo estático ya cumple "textura
- * visible desde el primer frame", como indica el fallback del documento.
+ * Con `video`, fondo de vídeo en bucle (§06); el póster cubre el "textura
+ * visible desde el primer frame". Sin él, el fondo estático, que el propio
+ * documento da por válido como fallback.
  *
  * prefers-reduced-motion se resuelve vía <MotionConfig reducedMotion="user">
  * en el layout raíz — no se ramifica aquí (ver Reveal.tsx) para evitar un
- * mismatch de hidratación servidor/cliente.
+ * mismatch de hidratación servidor/cliente. La excepción es `HeroVideo`, que sí
+ * lo consulta: ahí la alternativa sería descargar megas de vídeo para no
+ * reproducirlos, y lo resuelve montando en efecto, sin desajuste.
  */
 export function Hero({
   eyebrow,
@@ -46,16 +56,31 @@ export function Hero({
   primaryCta,
   secondaryCta,
   caption,
+  video = false,
 }: HeroProps) {
+  // Con vídeo la rejilla va POR ENCIMA, no de fondo: si se queda debajo el
+  // vídeo la tapa y se pierde la textura que define el hero.
+  const rejilla =
+    "repeating-linear-gradient(0deg, rgba(245,242,238,0.04) 0 1px, transparent 1px 34px), repeating-linear-gradient(90deg, rgba(245,242,238,0.04) 0 1px, transparent 1px 34px)";
+  const degradado =
+    "linear-gradient(115deg, rgba(13,25,30,0.86) 0%, rgba(28,25,23,0.55) 45%, rgba(28,25,23,0.15) 100%)";
+
   return (
     <header
       className="relative overflow-hidden bg-ink text-paper"
-      style={{
-        backgroundImage:
-          "repeating-linear-gradient(0deg, rgba(245,242,238,0.04) 0 1px, transparent 1px 34px), repeating-linear-gradient(90deg, rgba(245,242,238,0.04) 0 1px, transparent 1px 34px), linear-gradient(115deg, rgba(13,25,30,0.86) 0%, rgba(28,25,23,0.55) 45%, rgba(28,25,23,0.15) 100%)",
-      }}
+      style={video ? undefined : { backgroundImage: `${rejilla}, ${degradado}` }}
     >
-      <Container className="flex min-h-[70vh] flex-col justify-center gap-6 py-24">
+      {video && (
+        <>
+          <HeroVideo poster="/video/hero-poster.jpg" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ backgroundImage: rejilla }}
+          />
+        </>
+      )}
+      <Container className="relative flex min-h-[70vh] flex-col justify-center gap-6 py-24">
         {caption && (
           <span
             className="absolute right-0 top-8 hidden font-mono text-xs uppercase tracking-widest text-paper/50 sm:block"

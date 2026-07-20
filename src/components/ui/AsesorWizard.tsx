@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { categories } from "@/data/taxonomy";
+import { estadoFicha } from "@/data/fichas";
 import { EASE_REVELAR, EASE_PLEGAR, EASE_ASENTAR } from "@/lib/motion";
 
 /**
@@ -70,9 +71,13 @@ const ULABEL: Record<Uso, string> = {
 };
 
 /**
- * Recomendación por uso, con telas REALES del catálogo (taxonomy.ts) — no
- * los nombres viejos del mockup (Melisa/Austria/Aruba/Doble Face) que no
- * existen en el Excel de productos.
+ * Recomendación por uso, con telas REALES del catálogo (taxonomy.ts).
+ *
+ * Nota histórica: aquí decía que "Melisa/Austria/Aruba/Doble Face" no existían
+ * en el Excel. Era falso, y venía de una extracción incompleta del catálogo.
+ * Melisa 24 y Austria Premium 18 SÍ son productos de línea y hoy están en
+ * taxonomy; Aruba y Doble Face existen pero son A PEDIDO, así que no se
+ * publican. Ver `08_catalogo_definitivo.md`.
  */
 const RECOMMENDATION_SLUGS: Record<Uso, { category: string; subcategory: string }[]> = {
   rendimiento: [
@@ -92,12 +97,20 @@ const RECOMMENDATION_SLUGS: Record<Uso, { category: string; subcategory: string 
   ],
 };
 
+/**
+ * Los slugs de arriba están escritos a mano. Antes esto usaba `!` y un slug
+ * renombrado reventaba en runtime en el navegador, sin error de compilación;
+ * ahora la recomendación simplemente omite la tela que ya no exista. El test
+ * de coherencia (`fichas.test.ts`) avisa en CI de que hay que actualizarlos.
+ */
 function buildResults(uso: Uso) {
-  return RECOMMENDATION_SLUGS[uso].map(({ category: categorySlug, subcategory: subSlug }) => {
-    const category = categories.find((c) => c.slug === categorySlug)!;
-    const sub = category.subcategories.find((s) => s.slug === subSlug)!;
-    return { category, sub };
-  });
+  return RECOMMENDATION_SLUGS[uso].flatMap(
+    ({ category: categorySlug, subcategory: subSlug }) => {
+      const category = categories.find((c) => c.slug === categorySlug);
+      const sub = category?.subcategories.find((s) => s.slug === subSlug);
+      return category && sub ? [{ category, sub }] : [];
+    },
+  );
 }
 
 export function AsesorWizard() {
@@ -340,9 +353,9 @@ export function AsesorWizard() {
                     <div className="mt-4 flex items-center justify-between gap-3 border-t border-paper/15 pt-3.75">
                       <Link
                         href={
-                          sub.available
-                            ? `/productos/${category.slug}/${sub.slug}`
-                            : `/productos/${category.slug}/${sub.slug}#en-preparacion`
+                          estadoFicha(sub.slug) === "sin-ficha"
+                            ? `/productos/${category.slug}/${sub.slug}#en-preparacion`
+                            : `/productos/${category.slug}/${sub.slug}`
                         }
                         className="font-sans text-[13px] font-medium text-paper hover:text-brand"
                       >

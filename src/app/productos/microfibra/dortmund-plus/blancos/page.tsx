@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { ProductGallery } from "@/components/ui/ProductGallery";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { FichaTecnica } from "@/components/ui/FichaTecnica";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { buttonVariants } from "@/components/ui/buttonVariants";
@@ -81,26 +82,7 @@ export default async function ProductoDortmundPlusBlancosPage() {
               </p>
             </div>
 
-            <div>
-              <p className="mb-3 font-mono text-xs uppercase tracking-widest text-graphite">
-                Ficha técnica
-              </p>
-              <div className="border-t border-greige">
-                {product.fichaTecnica.map((row) => (
-                  <div
-                    key={row.label}
-                    className="flex items-center justify-between gap-4 border-b border-greige py-3.75"
-                  >
-                    <span className="font-mono text-xs uppercase tracking-widest text-graphite">
-                      {row.label}
-                    </span>
-                    <span className="text-right font-sans text-[15px] font-medium text-ink">
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <FichaTecnica rows={product.fichaTecnica} />
 
             <div className="flex flex-col gap-4">
               <MagneticLink

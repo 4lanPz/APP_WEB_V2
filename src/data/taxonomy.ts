@@ -1,13 +1,24 @@
 /**
  * Catálogo de Textil Padilla — Categoría → Subcategoría → Tono.
  *
- * Fuente: Excel de productos del cliente (líneas DE LÍNEA, Fase 2 kickoff).
+ * Fuente de verdad: `08_catalogo_definitivo.md` (extraído de tela_sin_precio.xlsx).
  * Estructurado como si viniera de una API: los accesores son `async` a
  * propósito, para que en Fase 4 solo cambie la implementación (fetch a un
  * backend real) y no la forma en que las páginas consumen los datos.
  *
- * Solo Microfibra → Dortmund Plus → Blancos tiene ficha construida; el resto
- * resuelve a "página en preparación".
+ * REGLA DE PUBLICACIÓN: aquí solo entran los productos marcados DE LÍNEA. Los
+ * 29 A PEDIDO quedan ocultos por completo — al no estar en esta estructura no
+ * generan ruta, no se listan y no se enlazan desde ningún sitio. No los añadas
+ * "para tenerlos": estar aquí es exactamente lo que significa estar publicado.
+ *
+ * Son 50 de las 53 telas de línea. Faltan las categorías RAMADAS (2 telas) y
+ * SPX (1), pendientes de una decisión de negocio sobre si van al mega-menú, se
+ * pliegan dentro de Microfibra/Polialgodón, o se dejan fuera a propósito.
+ *
+ * Ojo con `Subcategory.available`: significa "tiene página estática dedicada"
+ * (hoy solo dortmund-plus), NO "tiene ficha técnica". Ponerlo en true a una
+ * tela sin página propia la saca de generateStaticParams y la manda a 404. Para
+ * saber si una tela tiene ficha, usa `estadoFicha()` de `fichas.ts`.
  */
 
 export interface ProductTone {
@@ -131,6 +142,20 @@ export const categories: Category[] = [
       { slug: "juventus", name: "Juventus", available: false },
       { slug: "kansas", name: "Kansas", available: false },
       { slug: "sevilla-plus", name: "Sevilla Plus", available: false },
+      { slug: "boston-plus", name: "Boston Plus", available: false },
+      { slug: "dobleface-plus", name: "Dobleface Plus", available: false },
+      { slug: "equator-plus", name: "Equator Plus", available: false },
+      {
+        slug: "sevilla-plus-brillante",
+        name: "Sevilla Plus Brillante",
+        available: false,
+      },
+      {
+        slug: "dortmund-plus-brillante",
+        name: "Dortmund Plus Brillante",
+        available: false,
+      },
+      { slug: "aston-plus", name: "Aston Plus", available: false },
     ],
   },
   {
@@ -163,6 +188,7 @@ export const categories: Category[] = [
       { slug: "buff-romina-30", name: "Buff Romina 30", available: false },
       { slug: "buff-romina-rev-30", name: "Buff Romina Rev 30", available: false },
       { slug: "ribb-30", name: "Ribb 30", available: false },
+      { slug: "interlock-40", name: "Interlock 40", available: false },
       { slug: "ribb-40", name: "Ribb 40", available: false },
     ],
   },
@@ -173,6 +199,15 @@ export const categories: Category[] = [
     description: "Mezcla poliéster-algodón resistente. En preparación.",
     available: false,
     subcategories: [
+      { slug: "denis-20", name: "Denis 20", available: false },
+      { slug: "balboa-24", name: "Balboa 24", available: false },
+      { slug: "melisa-24", name: "Melisa 24", available: false },
+      /** En el Excel figura como "AUSTRIA PREMIUN" — typo de origen. */
+      { slug: "austria-premium-18", name: "Austria Premium 18", available: false },
+      { slug: "australia-18", name: "Australia 18", available: false },
+      { slug: "amelia-24", name: "Amelia 24", available: false },
+      { slug: "ribb-18", name: "Ribb 18", available: false },
+      { slug: "ribb-20-24", name: "Ribb 20/24", available: false },
       { slug: "lacoast-20", name: "Lacoast 20", available: false },
       { slug: "lacoast-polo-20", name: "Lacoast Polo 20", available: false },
       { slug: "lacoast-kratos-22", name: "Lacoast Kratos 22", available: false },
@@ -183,12 +218,17 @@ export const categories: Category[] = [
   },
 ];
 
-/** Estadísticas nominales mostradas en "01 · Beneficios y usos" de Dortmund Plus. */
+/**
+ * Estadísticas nominales mostradas en "01 · Beneficios y usos" de Dortmund Plus.
+ * Verificadas contra la ficha del cliente (Telas_PW/Microfibras/Dortmund Plus.png,
+ * transcrita en `fichas-tecnicas.raw.ts`). Separador decimal en coma, como la
+ * ficha original y como corresponde en castellano.
+ */
 export const dortmundPlusStats = [
-  { value: "1.2 m", label: "Ancho tubular (±0,01 m)" },
-  { value: "134.41 g/m²", label: "Gramaje (±5%)" },
-  { value: "2.94 m/kg", label: "Rendimiento lineal inf." },
-  { value: "3.1 m/kg", label: "Rendimiento lineal" },
+  { value: "1,20 m", label: "Ancho tubular (±0,01 m)" },
+  { value: "134,41 g/m²", label: "Gramaje (±5%)" },
+  { value: "2,95 m/kg", label: "Rendimiento lineal inf." },
+  { value: "3,10 m/kg", label: "Rendimiento lineal" },
 ];
 
 export const dortmundPlusReasons = [
@@ -220,9 +260,9 @@ export const dortmundPlusBlancosProduct: ProductDetail = {
   fichaTecnica: [
     { label: "Tipo de tejido", value: "Single jersey microfibra" },
     { label: "Composición", value: "100% poliéster microfibra" },
-    { label: "Ancho", value: "1.2 m tubular (±0,01 m)" },
-    { label: "Gramaje", value: "134.41 g/m² (±5%)" },
-    { label: "Rendimiento", value: "3.1 m/kg · inf. 2.94 m/kg" },
+    { label: "Ancho", value: "1,20 m tubular (±0,01 m)" },
+    { label: "Gramaje", value: "134,41 g/m² (±5%)" },
+    { label: "Rendimiento", value: "3,10 m/kg · inf. 2,95 m/kg" },
     { label: "Tono", value: "Blancos · óptico y crudos" },
   ],
   swatches: [

@@ -239,7 +239,11 @@ export function Navbar() {
                               <Link
                                 key={sub.label}
                                 href={sub.href}
-                                title={!sub.available ? "Página en preparación" : undefined}
+                                title={
+                                  sub.estado === "sin-ficha"
+                                    ? "Página en preparación"
+                                    : undefined
+                                }
                                 onClick={() => setMegaOpen(false)}
                                 className="py-1.25 font-sans text-[14px] text-graphite hover:text-brand"
                               >
@@ -366,7 +370,11 @@ export function Navbar() {
                               <Link
                                 key={sub.label}
                                 href={sub.href}
-                                title={!sub.available ? "Página en preparación" : undefined}
+                                title={
+                                  sub.estado === "sin-ficha"
+                                    ? "Página en preparación"
+                                    : undefined
+                                }
                                 onClick={() => setMobileOpen(false)}
                                 className="font-sans text-[15px] text-graphite"
                               >

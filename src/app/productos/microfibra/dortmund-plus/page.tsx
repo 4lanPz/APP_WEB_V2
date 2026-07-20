@@ -116,7 +116,9 @@ export default async function SubcategoriaDortmundPlusPage() {
                   index={String(i + 1).padStart(2, "0")}
                   title={tone.name}
                   description={tone.description}
-                  available={tone.available}
+                  /* Los tonos no tienen ficha técnica propia: `available` aquí
+                     significa "tiene página de tono publicada" (solo Blancos). */
+                  estado={tone.available ? "publicada" : "sin-ficha"}
                   swatchColor={tone.swatchColor}
                   className="h-full bg-paper"
                 />

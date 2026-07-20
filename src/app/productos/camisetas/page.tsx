@@ -10,6 +10,7 @@ import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { cn } from "@/lib/cn";
+import { foto } from "@/data/imagenes";
 
 export const metadata: Metadata = {
   title: "Camisetas — Textil Padilla",
@@ -136,8 +137,10 @@ export default function CamisetasPage() {
             </p>
             <PhotoCurtain
               dark
-              label="Punto de camiseta"
-              caption="Punto de camiseta · foto real"
+              src={foto("macro-punto-camiseta")?.ruta}
+              alt={foto("macro-punto-camiseta")?.alt}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              caption="Punto de camiseta"
               className="aspect-4/3"
             />
           </div>

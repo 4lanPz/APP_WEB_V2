@@ -1,17 +1,45 @@
 import Link from "next/link";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { cn } from "@/lib/cn";
+import type { EstadoFicha } from "@/data/fichas";
+import type { Foto } from "@/data/imagenes";
 
 export interface SubcategoryTileProps {
   href: string;
   index: string;
   title: string;
   description?: string;
-  available: boolean;
+  /**
+   * Tres estados, no dos. "preliminar" existe porque hay telas con ficha cuyos
+   * datos numéricos están bloqueados por incidencias del cliente: anunciarlas
+   * como "Ficha disponible" y que al abrirlas todo diga "Pendiente de
+   * confirmar" es exactamente la señal falsa que hay que evitar.
+   */
+  estado: EstadoFicha;
+  /** Foto real de la tela, si se sabe con certeza cuál es. */
+  foto?: Foto;
   /** Color plano de fondo — para tiles de tono (color real, no foto). */
   swatchColor?: string;
   className?: string;
 }
+
+const ETIQUETA: Record<EstadoFicha, { estado: string; accion: string; tono: string }> = {
+  publicada: {
+    estado: "Ficha disponible",
+    accion: "Ver ficha →",
+    tono: "text-brand",
+  },
+  preliminar: {
+    estado: "Ficha preliminar",
+    accion: "Ver ficha →",
+    tono: "text-accent",
+  },
+  "sin-ficha": {
+    estado: "En preparación",
+    accion: "Próximamente →",
+    tono: "text-graphite",
+  },
+};
 
 /**
  * Tile de subcategoría/tono — patrón verificado en Categoria Microfibra
@@ -24,14 +52,17 @@ export function SubcategoryTile({
   index,
   title,
   description,
-  available,
+  estado,
+  foto,
   swatchColor,
   className,
 }: SubcategoryTileProps) {
+  const etiqueta = ETIQUETA[estado];
+
   return (
     <Link
       href={href}
-      title={!available ? "Página en preparación" : undefined}
+      title={estado === "sin-ficha" ? "Página en preparación" : undefined}
       className={cn(
         "group flex flex-col border border-transparent bg-paper text-ink transition-colors duration-500 ease-revelar hover:border-graphite",
         className,
@@ -44,6 +75,9 @@ export function SubcategoryTile({
         />
       ) : (
         <ImagePlaceholder
+          src={foto?.ruta}
+          alt={foto?.alt ?? ""}
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           zoomOnGroupHover
           className="h-[clamp(150px,18vh,190px)] w-full"
         />
@@ -66,13 +100,13 @@ export function SubcategoryTile({
           <span
             className={cn(
               "font-mono text-xs uppercase tracking-widest",
-              available ? "text-brand" : "text-graphite",
+              etiqueta.tono,
             )}
           >
-            {available ? "Ficha disponible" : "En preparación"}
+            {etiqueta.estado}
           </span>
           <span className="font-sans text-[13px] font-medium text-ink">
-            {available ? "Ver ficha →" : "Próximamente →"}
+            {etiqueta.accion}
           </span>
         </div>
       </div>

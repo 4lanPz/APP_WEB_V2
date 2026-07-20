@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
+import { HERO_VIDEO_LISTO } from "@/data/video.generado";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { CategoryCard } from "@/components/ui/CategoryCard";
 import { EventCarousel } from "@/components/ui/EventCarousel";
@@ -9,6 +10,7 @@ import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { categories } from "@/data/taxonomy";
+import { foto } from "@/data/imagenes";
 
 const stats = [
   { target: 39, prefix: "", suffix: "", label: "Años de oficio" },
@@ -73,6 +75,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <Hero
+        video={HERO_VIDEO_LISTO}
         eyebrow="Fabricante y distribuidor textil · Ecuador · desde 1987"
         headlineLines={["Tela deportiva", "premium, tejida", "y teñida a tu", "color exacto."]}
         subhead="Seleccionamos el hilo, tejemos el rollo y lo teñimos al tono que tu marca necesita. Rigor de ingeniería, mano de taller —desde Ecuador para marcas, distribuidores y retail premium."
@@ -142,8 +145,10 @@ export default function Home() {
         </Container>
         <PhotoCurtain
           dark
-          label="Macro de fibra"
-          caption="Macro de fibra · foto real"
+          src={foto("macro-fibra-blanca")?.ruta}
+          alt={foto("macro-fibra-blanca")?.alt}
+          sizes="100vw"
+          caption="Macro de fibra"
           className="mt-12 aspect-21/9 w-full"
         />
       </section>

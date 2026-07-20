@@ -8,6 +8,7 @@ import { MagneticLink } from "@/components/motion/MagneticLink";
 import { PhotoCurtain } from "@/components/motion/Curtain";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { categories } from "@/data/taxonomy";
+import { foto } from "@/data/imagenes";
 
 export const metadata: Metadata = {
   title: "Nuestros Productos — Textil Padilla",
@@ -63,8 +64,10 @@ export default function ProductosPage() {
               sale con su ficha —no una promesa, un registro.
             </p>
             <PhotoCurtain
-              label="Macro de tejido"
-              caption="Macro de tejido · foto real"
+              src={foto("macro-tejido")?.ruta}
+              alt={foto("macro-tejido")?.alt}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              caption="Macro de tejido"
               className="aspect-4/3"
             />
           </div>

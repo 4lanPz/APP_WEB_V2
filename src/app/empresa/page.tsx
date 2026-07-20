@@ -6,6 +6,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { Timeline } from "@/components/ui/Timeline";
 import { DraftNotice } from "@/components/ui/DraftNotice";
+import { foto } from "@/data/imagenes";
 import { buttonVariants } from "@/components/ui/buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { Reveal } from "@/components/motion/Reveal";
@@ -230,7 +231,9 @@ export default function EmpresaPage() {
             </div>
             <Reveal>
               <ImagePlaceholder
-                sublabel="Alangasí · el taller"
+                src={foto("oficio-taller-alangasi")?.ruta}
+                alt={foto("oficio-taller-alangasi")?.alt}
+                sizes="(min-width: 1024px) 40vw, 100vw"
                 caption="Alangasí · el taller"
                 className="aspect-4/5"
               />
@@ -270,6 +273,9 @@ export default function EmpresaPage() {
             <RevealItem className="sm:row-span-2">
               <ImagePlaceholder
                 dark
+                src={foto("oficio-nave-tejido")?.ruta}
+                alt={foto("oficio-nave-tejido")?.alt}
+                sizes="(min-width: 640px) 50vw, 100vw"
                 caption="01 · Nave de tejido · Alangasí"
                 className="aspect-4/3 h-full sm:aspect-auto"
               />
