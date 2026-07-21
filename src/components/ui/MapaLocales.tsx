@@ -28,8 +28,9 @@ import { cn } from "@/lib/cn";
  * este componente solo se monta en cliente y así no hay dos verdades.
  */
 
-/** Teselas monocromas de CARTO. Sin clave; la licencia exige la atribución. */
-const TESELAS = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+/** Teselas monocromas de CARTO Positron (claras). Sin clave; la licencia exige
+ *  la atribución. */
+const TESELAS = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 const ATRIBUCION = "© OpenStreetMap · © CARTO";
 
 /**
@@ -133,7 +134,12 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
   }, [activo, locations]);
 
   return (
-    <div>
+    // Panel papel: las teselas Positron son casi blancas, y un bloque claro a
+    // sangre dentro de la banda `bg-brand-deep` se lee como un widget incrustado,
+    // no como parte del sistema. Matado en papel con su propio respiro, el mapa
+    // pasa a leerse como una muestra prendida sobre la superficie oscura —misma
+    // familia de superficie que la ficha del local, que también es papel—.
+    <div className="bg-paper p-3 sm:p-4">
       {/*
        * Índice de locales. No es un adorno: en el encuadre inicial —de Quito a
        * Samborondón, unos 430 km— los cuatro locales de la sierra caen a pocos
@@ -143,7 +149,7 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
        * por teclado, y el mapa se acerca lo suficiente para que además el
        * marcador sea pulsable.
        */}
-      <div className="mb-4 flex flex-wrap gap-px border border-greige bg-greige">
+      <div className="mb-3 flex flex-wrap gap-px border border-greige bg-greige sm:mb-4">
         {locations.map((location) => {
           const seleccionado = activo?.ref === location.ref;
           return (
@@ -155,8 +161,8 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
               className={cn(
                 "flex grow items-center justify-center gap-2 px-4 py-2.5 font-mono text-[11px] uppercase tracking-widest transition-colors",
                 seleccionado
-                  ? "bg-paper text-ink"
-                  : "bg-brand-deep text-paper/70 hover:text-paper",
+                  ? "bg-ink text-paper"
+                  : "bg-bone text-graphite hover:text-ink",
               )}
             >
               <span
@@ -176,22 +182,23 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
           apilado: sus panes usan z-index altos y sin esto se montan sobre la
           barra de navegación. */}
       <div className="relative z-0 aspect-4/3 w-full border border-greige sm:aspect-video">
-        <div ref={contenedor} className="size-full bg-brand-deep" />
+        <div ref={contenedor} className="size-full bg-bone" />
 
         {activo && (
           <FichaLocal location={activo} onCerrar={() => setActivo(null)} />
         )}
 
-        {/* A la derecha a propósito: a la izquierda lo tapa el control de zoom
-            de Leaflet. */}
+        {/* Grafito, no papel: sobre las teselas claras de Positron un texto claro
+            desaparece. A la derecha a propósito: a la izquierda lo tapa el
+            control de zoom de Leaflet. */}
         {!activo && (
-          <span className="pointer-events-none absolute right-4 top-4 z-500 font-mono text-[10px] uppercase tracking-widest text-paper/50">
+          <span className="pointer-events-none absolute right-4 top-4 z-500 font-mono text-[10px] uppercase tracking-widest text-graphite">
             Elige un local o pulsa un marcador
           </span>
         )}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 sm:mt-4">
         <div className="flex flex-wrap items-center gap-6 font-mono text-xs uppercase tracking-widest text-graphite">
           <span className="flex items-center gap-2.5">
             <span
