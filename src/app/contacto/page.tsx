@@ -10,7 +10,7 @@ import { buttonVariants } from "@/components/ui/buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
-import { locations, PENDING } from "@/data/locations";
+import { locations, comoLlegar, PENDING } from "@/data/locations";
 import { foto } from "@/data/imagenes";
 import Link from "next/link";
 
@@ -84,10 +84,9 @@ export default function ContactoPage() {
         <Container>
           <SectionHeader index="02" title="Dónde encontrarnos" tag="5 locales · Ecuador" tone="dark" />
           <p className="mb-10 max-w-2xl font-serif text-body-m text-paper/80">
-            Mapa esquemático del sistema: matriz en Alangasí, cuatro puntos
-            en la sierra —valle de los Chillos y Quito— y presencia en la
-            costa. Sin fotografía satelital: solo la retícula, la posición y
-            el dato.
+            Matriz en Alangasí, tres puntos de venta en Quito y el valle de los
+            Chillos, y distribución en la costa. Pulsa un marcador para ver la
+            ficha del local y abrir la ruta.
           </p>
           <LocationsMap locations={locations} />
         </Container>
@@ -116,18 +115,19 @@ export default function ContactoPage() {
             className="mb-10 aspect-21/9"
           />
 
-          <div className="hidden grid-cols-[40px_1.1fr_1.4fr_1fr] gap-4 border-b border-ink pb-3 font-mono text-xs uppercase tracking-widest text-graphite sm:grid">
+          <div className="hidden grid-cols-[40px_1.1fr_1.4fr_1fr_auto] gap-4 border-b border-ink pb-3 font-mono text-xs uppercase tracking-widest text-graphite sm:grid">
             <span>Ref</span>
             <span>Local</span>
-            <span>Dirección</span>
+            <span>Sector · dirección</span>
             <span>Contacto · horario</span>
+            <span className="sr-only">Ir</span>
           </div>
 
           <RevealGroup className="flex flex-col">
             {locations.map((location) => (
               <RevealItem
                 key={location.ref}
-                className="grid grid-cols-1 gap-2 border-b border-greige py-5 sm:grid-cols-[40px_1.1fr_1.4fr_1fr] sm:items-baseline sm:gap-4"
+                className="grid grid-cols-1 gap-2 border-b border-greige py-5 sm:grid-cols-[40px_1.1fr_1.4fr_1fr_auto] sm:items-baseline sm:gap-4"
               >
                 <span className="font-mono text-[11px] text-accent">{location.ref}</span>
                 <span className="flex items-center gap-2.5 font-sans text-[15px] font-semibold text-ink">
@@ -140,8 +140,21 @@ export default function ContactoPage() {
                     {location.zone}
                   </span>
                 </span>
+                {/* El sector está confirmado (ficha de Google + OSM); la calle y
+                    el número no llegaron, así que ese campo sigue pendiente. */}
+                <span className="flex flex-col font-mono text-[13px]">
+                  <span className="text-ink">{location.sector}</span>
+                  <span className="text-graphite">{PENDING}</span>
+                </span>
                 <span className="font-mono text-[13px] text-graphite">{PENDING}</span>
-                <span className="font-mono text-[13px] text-graphite">{PENDING}</span>
+                <a
+                  href={comoLlegar(location)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-sans text-[15px] font-medium text-ink hover:text-brand"
+                >
+                  Cómo llegar ↗
+                </a>
               </RevealItem>
             ))}
           </RevealGroup>
