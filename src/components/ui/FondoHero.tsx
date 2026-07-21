@@ -4,10 +4,10 @@ import { foto } from "@/data/imagenes";
 /**
  * Fondo fotográfico a sangre para bandas oscuras de cabecera.
  *
- * PRUEBA EN CURSO: el diseño aprobado no lleva foto en los heroes — su fondo es
- * la trama CSS a propósito. Esto está a evaluación. Si el slot no tiene archivo
- * devuelve `null` y quien lo usa se queda con su fondo de siempre, así que
- * añadirlo a una página no cambia nada hasta que hay foto.
+ * El diseño aprobado no llevaba foto en los heroes — su fondo es la trama CSS a
+ * propósito—, así que si el slot no tiene archivo esto no pinta fondo y quien lo
+ * usa se queda con el de siempre. Añadirlo a una página no cambia nada hasta que
+ * hay foto. En desarrollo, eso sí, marca el hueco (ver abajo).
  *
  * Vive aparte de `Hero` porque `/asesor-virtual` tiene su propia banda oscura y
  * no usa ese componente; sin extraerlo habría que duplicar los velos, y un velo
@@ -32,7 +32,31 @@ export function FondoHero({
   priority?: boolean;
 }) {
   const imagen = foto(slot);
-  if (!imagen) return null;
+
+  /*
+   * Hueco vacío: en producción no se pinta nada y la cabecera se queda con su
+   * trama CSS, que es el diseño aprobado.
+   *
+   * En desarrollo sí se marca. Un hueco de cabecera vacío es invisible —el
+   * respaldo es una textura a sangre, no un recuadro— y eso lo vuelve
+   * indistinguible de "aquí no hay slot". El resto del sitio no tiene el
+   * problema porque `ImagePlaceholder` ya dibuja el hueco. `NODE_ENV` es
+   * constante de build, así que servidor y cliente pintan lo mismo y no hay
+   * desajuste de hidratación.
+   */
+  if (!imagen) {
+    if (process.env.NODE_ENV === "production") return null;
+    return (
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 border border-dashed border-paper/15"
+      >
+        <span className="absolute bottom-5 right-5 border border-dashed border-paper/25 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-widest text-paper/45">
+          Cabecera vacía · deja {slot}.jpg en entrega/
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0">

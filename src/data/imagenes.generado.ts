@@ -13,6 +13,7 @@ export const SLOTS_LLENOS: ReadonlySet<string> = new Set([
   "oficio-nave-tejido",
   "oficio-taller-alangasi",
   "local-fachada",
+  "dortmund-plus-cancha",
   "hero-empresa",
   "hero-home-poster",
   "chelsea",

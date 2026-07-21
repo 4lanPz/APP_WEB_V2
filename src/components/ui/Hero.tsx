@@ -107,6 +107,9 @@ export function Hero({
           />
         </>
       )}
+      {/* Portada sin póster ni vídeo: FondoHero no pinta fondo, pero marca el
+          hueco en desarrollo igual que en las demás cabeceras. */}
+      {video && !poster && <FondoHero slot="hero-home-poster" />}
 
       {!video && imagen && <FondoHero slot={imagen} />}
       <Container className="relative flex min-h-[70vh] flex-col justify-center gap-6 py-24">
