@@ -9,6 +9,7 @@ import { Breadcrumb, type BreadcrumbItem } from "./Breadcrumb";
 import { buttonVariants } from "./buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { foto } from "@/data/imagenes";
+import { HERO_VIDEO_LISTO } from "@/data/video.generado";
 import { EASE_REVELAR, EASE_DESENROLLAR, DURATION } from "@/lib/motion";
 
 export interface HeroProps {
@@ -76,24 +77,29 @@ export function Hero({
   // vídeo la tapa y se pierde la textura que define el hero.
   const conFoto = Boolean(imagen && foto(imagen));
 
+  // El póster sale del slot `hero-home-poster` si lo has cargado a mano; si no,
+  // del fotograma que saca `npm run video` —que solo existe si hay vídeo—.
+  const poster =
+    foto("hero-home-poster")?.ruta ??
+    (HERO_VIDEO_LISTO ? "/video/hero-poster.jpg" : undefined);
+
+  // `video` marca "esta es la portada", no "hay vídeo". La portada pinta su
+  // banda con lo que tenga: vídeo si está procesado, póster si solo hay foto, y
+  // si no hay ninguno cae a la trama CSS como cualquier otro hero.
+  const conBanda = video && Boolean(poster);
+
   return (
     <header
       className="relative overflow-hidden bg-ink text-paper"
       style={
-        video || conFoto
+        conBanda || conFoto
           ? undefined
           : { backgroundImage: `${REJILLA_HERO}, ${DEGRADADO_HERO}` }
       }
     >
-      {video && (
+      {conBanda && poster && (
         <>
-          {/* El póster sale del slot `hero-home-poster` si lo has cargado a
-              mano; si no, del fotograma que saca `npm run video`. En la portada
-              la foto va de póster y NO de fondo alternativo: el fondo es el
-              vídeo. */}
-          <HeroVideo
-            poster={foto("hero-home-poster")?.ruta ?? "/video/hero-poster.jpg"}
-          />
+          <HeroVideo poster={poster} hayVideo={HERO_VIDEO_LISTO} />
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"

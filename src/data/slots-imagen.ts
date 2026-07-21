@@ -142,45 +142,46 @@ export const SLOTS_UNICOS: SlotImagen[] = [
   },
 
   /**
-   * PRUEBA — fondos fotográficos de hero.
+   * Fondos fotográficos de cabecera, uno por página con hero.
    *
-   * El diseño aprobado NO lleva foto en los heroes: su fondo es la trama CSS a
-   * propósito. Están todos a evaluación. Mientras el slot esté vacío, el hero se
-   * ve exactamente igual que siempre, así que tenerlos registrados no cuesta
-   * nada.
+   * Van todos al MISMO grupo a propósito. Repartidos por página quedaban en
+   * ocho grupos de un solo slot, perdidos entre los 87 huecos de
+   * `/admin/imagenes`, y esa página es la lista de tareas: si un hueco no se
+   * encuentra, no se llena.
+   *
+   * El diseño aprobado no llevaba foto aquí —su fondo es la trama CSS a
+   * propósito—, así que mientras el slot esté vacío el hero se ve exactamente
+   * igual que siempre. Tenerlos registrados no cuesta nada.
    *
    * Requisitos comunes, y por eso se repiten en cada `nota`: tono BAJO y sin
    * detalle importante en el tercio izquierdo, que es donde cae el titular. Muy
    * apaisadas — se recortan a 70vh de alto.
-   *
-   * La portada NO tiene fondo fotográfico: su hero es el vídeo en bucle. Su
-   * slot de imagen es el PÓSTER del vídeo, que es otra cosa.
    */
   ...(
     [
-      ["empresa", "Empresa", "Planta de Textil Padilla en Alangasí: vista general de la nave de producción."],
-      ["contacto", "Contacto", "Mostrador de atención de Textil Padilla, con muestrarios de tela sobre la mesa."],
-      ["productos", "Productos", "Rollos de tela de distintos colores alineados en la bodega de producto terminado."],
-      ["camisetas", "Camisetas", "Camisetas deportivas terminadas, confeccionadas con telas de Textil Padilla."],
-      ["microfibra", "Microfibra", "Tejido de microfibra saliendo de la máquina de tejido circular."],
-      ["dortmund-plus", "Microfibra · Dortmund Plus", "Rollo de Dortmund Plus en la nave de producción."],
-      ["asesor-virtual", "Asesor Virtual", "Asesor de Textil Padilla revisando muestras de tela con un cliente."],
+      ["empresa", "/empresa", "Planta de Textil Padilla en Alangasí: vista general de la nave de producción."],
+      ["contacto", "/contacto", "Mostrador de atención de Textil Padilla, con muestrarios de tela sobre la mesa."],
+      ["productos", "/productos", "Rollos de tela de distintos colores alineados en la bodega de producto terminado."],
+      ["camisetas", "/productos/camisetas", "Camisetas deportivas terminadas, confeccionadas con telas de Textil Padilla."],
+      ["microfibra", "/productos/microfibra", "Tejido de microfibra saliendo de la máquina de tejido circular."],
+      ["dortmund-plus", "/productos/microfibra/dortmund-plus", "Rollo de Dortmund Plus en la nave de producción."],
+      ["asesor-virtual", "/asesor-virtual", "Asesor de Textil Padilla revisando muestras de tela con un cliente."],
     ] as const
-  ).map(([slug, grupo, alt]) => ({
+  ).map(([slug, ruta, alt]) => ({
     id: `hero-${slug}`,
     destino: `/heroes/${slug}.webp`,
     alt,
-    grupo: `${grupo} · Hero (prueba)`,
+    grupo: "Cabeceras de página",
     ancho: 2400,
-    nota: "Fondo de cabecera a sangre. Tono bajo, sin detalle en el tercio izquierdo (ahí va el titular). Muy apaisada: se recorta a 70vh.",
+    nota: `Cabecera de ${ruta}, a sangre. Tono bajo, sin detalle en el tercio izquierdo (ahí va el titular). Muy apaisada: se recorta a 70vh.`,
   })),
   {
     id: "hero-home-poster",
     destino: "/video/hero-poster-manual.webp",
     alt: "",
-    grupo: "Home",
+    grupo: "Cabeceras de página",
     ancho: 1920,
-    nota: "PÓSTER del vídeo del hero, no un fondo: es lo que se ve mientras carga, si el navegador no reproduce, y con prefers-reduced-motion. Opcional — `npm run video` ya saca uno del propio vídeo. Cárgalo solo si quieres uno distinto; debe parecerse al primer fotograma o el salto se nota.",
+    nota: "Cabecera de / (la portada). Mientras no haya vídeo procesado se ve ella sola, a sangre. Cuando corras `npm run video` pasa a ser el póster del bucle —lo que se ve mientras carga, si el navegador no reproduce, y con prefers-reduced-motion— y conviene que se parezca al primer fotograma o el salto se nota. Mismos requisitos que los demás heroes: tono bajo, sin detalle en el tercio izquierdo.",
   },
 
   // Carrusel de encuentros de la portada. El id nombra el evento y no su

@@ -16,20 +16,30 @@ import { useEffect, useRef, useState } from "react";
  * a descargar los megas del vídeo, que es la parte que de verdad le importa.
  *
  * El póster se queda debajo siempre: es lo que se ve mientras carga, lo que
- * queda si el navegador no sabe reproducir ninguno de los dos formatos, y lo
- * único que se ve con reduced-motion.
+ * queda si el navegador no sabe reproducir ninguno de los dos formatos, lo
+ * único que se ve con reduced-motion — y, mientras no haya vídeo procesado
+ * (`hayVideo=false`), el fondo de la portada por sí solo. Sin esa última
+ * condición el póster queda muerto: lleno en el manifiesto e invisible en la
+ * página, porque solo se pintaba si antes existía el vídeo.
  */
-export function HeroVideo({ poster }: { poster: string }) {
+export function HeroVideo({
+  poster,
+  hayVideo,
+}: {
+  poster: string;
+  hayVideo: boolean;
+}) {
   const [conVideo, setConVideo] = useState(false);
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    if (!hayVideo) return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const aplicar = () => setConVideo(!mq.matches);
     aplicar();
     mq.addEventListener("change", aplicar);
     return () => mq.removeEventListener("change", aplicar);
-  }, []);
+  }, [hayVideo]);
 
   // playbackRate es propiedad del elemento, no atributo: no se puede poner en
   // el JSX y se pierde si el navegador recarga el recurso.

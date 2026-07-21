@@ -1,6 +1,5 @@
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
-import { HERO_VIDEO_LISTO } from "@/data/video.generado";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { CategoryCard } from "@/components/ui/CategoryCard";
 import { EventCarousel } from "@/components/ui/EventCarousel";
@@ -79,7 +78,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <Hero
-        video={HERO_VIDEO_LISTO}
+        video
         eyebrow="Fabricante y distribuidor textil · Ecuador · desde 1987"
         headlineLines={["Tela deportiva", "premium, tejida", "y teñida a tu", "color exacto."]}
         subhead="Seleccionamos el hilo, tejemos el rollo y lo teñimos al tono que tu marca necesita. Rigor de ingeniería, mano de taller —desde Ecuador para marcas, distribuidores y retail premium."
