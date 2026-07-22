@@ -38,25 +38,18 @@ export function SectionHeader({
       )}
     >
       <div className="flex items-baseline gap-5">
-        {/*
-         * OJO — sin `cn()` en estas dos. `cn` pasa por tailwind-merge, que no
-         * conoce las escalas propias del tema (`text-h2`, `text-mono`) y las
-         * toma por clases de COLOR: al ver después `text-ink` las considera en
-         * conflicto y se queda con la última, así que se comía el tamaño. Los
-         * titulares de sección llevaban tiempo pintándose al tamaño por
-         * defecto. Concatenar a mano evita el merge. No devolverlas a `cn`.
-         */}
         <Reveal tipo="etiqueta">
-          <span className={`font-mono text-mono ${dark ? "text-brand" : "text-accent"}`}>
+          <span className={cn("font-mono text-mono", dark ? "text-brand" : "text-accent")}>
             {index}
           </span>
         </Reveal>
         <LineasEnMascara
           as="h2"
           lineas={[title]}
-          className={`font-sans text-h2 font-medium tracking-[-0.01em] ${
-            dark ? "text-paper" : "text-ink"
-          }`}
+          className={cn(
+            "font-sans text-h2 font-medium tracking-[-0.01em]",
+            dark ? "text-paper" : "text-ink",
+          )}
         />
         {tag && (
           <Reveal tipo="etiqueta" delay={MASCARA.stagger * 2} className="ml-auto">
