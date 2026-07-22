@@ -264,12 +264,10 @@ export default function EmpresaPage() {
             tag="Oficio · manos y máquina"
             tone="dark"
           />
-          <p className="mb-10 max-w-2xl font-serif text-body-m text-paper/80">
-            Documental de taller: manos, telar y tinte. El gesto real del
-            trabajo, sin pose. Aquí irán las fotografías reales de nuestra
-            infraestructura —luz lateral rasante, óptica fija, color fiel—
-            cuando estén listas.
-          </p>
+          {/* Aquí había un briefing de fotografía ("Documental de taller…
+              Aquí irán las fotografías reales cuando estén listas"): una nota
+              del mockup dirigida al fotógrafo, no al visitante, y se estaba
+              publicando. La cabecera de sección ya dice qué es esto. */}
           <RevealGroup
             variante="rejilla" fondo="bg-brand-deep"
             className="grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">

@@ -79,14 +79,20 @@ const eventSlides = [
 export default function Home() {
   return (
     <div className="flex flex-col">
+      {/*
+        Una sola acción en la cabecera: "Hablar con un asesor" lo cubre ahora el
+        flotante de WhatsApp, que además está en las once páginas y no solo
+        aquí. Lo que queda pasa de enlace de texto a botón primario: siendo la
+        única salida del hero, no puede tener menos peso que el secundario que
+        acompañaba antes, y así la portada usa el mismo patrón que las otras
+        seis cabeceras (botón primario + nada).
+      */}
       <Hero
         video
         eyebrow="Fabricante y distribuidor textil · Ecuador · desde 1987"
         headlineLines={["Tela deportiva", "premium, tejida", "y teñida a tu", "color exacto."]}
         subhead="Seleccionamos el hilo, tejemos el rollo y lo teñimos al tono que tu marca necesita. Rigor de ingeniería, mano de taller —desde Ecuador para marcas, distribuidores y retail premium."
-        primaryCta={{ label: "Hablar con un asesor", href: "#asesor" }}
-        secondaryCta={{ label: "Ver catálogo de telas →", href: "/productos" }}
-        caption="Macro de fibra · loop"
+        primaryCta={{ label: "Ver catálogo de telas →", href: "/productos" }}
       />
 
       <section className="py-16 sm:py-24">
@@ -162,7 +168,6 @@ export default function Home() {
           src={foto("macro-fibra-blanca")?.ruta}
           alt={foto("macro-fibra-blanca")?.alt}
           sizes="100vw"
-          caption="Macro de fibra"
           className="mt-12 aspect-21/9 w-full"
         />
       </section>

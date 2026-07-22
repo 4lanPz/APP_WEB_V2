@@ -21,7 +21,6 @@ export interface HeroProps {
   subhead: string;
   primaryCta?: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
-  caption?: string;
   /**
    * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
    * de heroes se quedan con su foto de slot.
@@ -53,6 +52,13 @@ export interface HeroProps {
  * Con `video`, fondo de vídeo en bucle (§06); el póster cubre el "visible desde
  * el primer frame". Sin ninguna fuente, tinta plana con su degradado.
  *
+ * NO REPONER EL CAPTION NI EL "DESLIZA"
+ * La cabecera llevaba un caption mono arriba a la derecha ("MACRO DE FIBRA ·
+ * LOOP") y un rótulo "Desliza" abajo. El primero describía el fondo a quien ya
+ * lo está viendo; el segundo explica el scroll. Ninguno de los dos informaba de
+ * nada y competían con el titular por la atención en la única pantalla que se
+ * ve entera. Se retiraron de las siete cabeceras, no solo de la portada.
+ *
  * NO REPONER LA REJILLA
  * Estas cabeceras llevaron una rejilla CSS de 34px encima del fondo. Salía de
  * los exports .dc.html, donde esa trama marcaba "aquí va una imagen": era un
@@ -72,7 +78,6 @@ export function Hero({
   subhead,
   primaryCta,
   secondaryCta,
-  caption,
   video = false,
   imagen,
 }: HeroProps) {
@@ -101,15 +106,6 @@ export function Hero({
 
       {!video && imagen && <FondoHero slot={imagen} />}
       <Container className="relative flex min-h-[70vh] flex-col justify-center gap-6 py-24">
-        {caption && (
-          <span
-            className="absolute right-0 top-8 hidden font-mono text-xs uppercase tracking-widest text-paper/50 sm:block"
-            style={{ right: "clamp(24px,7vw,120px)" }}
-          >
-            {caption}
-          </span>
-        )}
-
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -181,10 +177,6 @@ export function Hero({
             )}
           </motion.div>
         )}
-
-        <span className="mt-10 font-mono text-xs uppercase tracking-widest text-paper/40">
-          Desliza
-        </span>
       </Container>
     </header>
   );

@@ -29,9 +29,10 @@ describir el efecto. Si hay que mirar fijo para percibirlo, está mal calibrado.
 | **Tarjetas** | Opacidad + 56px + escala 0.985→1, 700ms. Recorrido largo, se asienta | `Reveal tipo="tarjeta"` / celdas de `RevealGroup` | Sí |
 | **Etiquetas mono, eyebrows** | Solo opacidad, 350ms. No se desplazan: acompañan, no lideran | `Reveal tipo="etiqueta"` | Sí |
 | **Línea de hitos** | La línea vertical se dibuja atada al progreso de scroll (GSAP ScrollTrigger, único caso) y cada hito entra detrás de su punto | `Timeline` | No |
+| **Flotante de WhatsApp** | Escala 0.7→1 a los 1,5s, cuando la secuencia del hero ya terminó. **Solo transform, sin opacidad**: con `prefers-reduced-motion` la opacidad sí se seguiría animando y el encargo pedía entrada sin animación | `BotonWhatsApp` | No (no es de scroll) |
 
 Todos los valores viven en [`src/lib/motion.ts`](src/lib/motion.ts)
-(`VOCABULARIO`, `MASCARA`, `REJILLA`, `CIFRA`, `HERO_SECUENCIA`). **Ningún
+(`VOCABULARIO`, `MASCARA`, `REJILLA`, `CIFRA`, `HERO_SECUENCIA`, `FLOTANTE`). **Ningún
 componente define duraciones ni distancias propias.**
 
 ## Reversión al subir el scroll
@@ -54,6 +55,9 @@ subtítulo 500ms → CTA 800ms.
 En v1 el subtítulo estaba en 150ms, empatado con el eyebrow, así que **entraba
 antes que el titular al que subtitula**. Ahora arranca cuando la primera línea
 del titular ya está arriba.
+
+La cabecera ya no lleva caption ni rótulo "Desliza": no informaban de nada y se
+comían atención en la única pantalla que se ve entera. No reponerlos.
 
 ## Reglas técnicas
 

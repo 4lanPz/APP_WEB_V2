@@ -85,7 +85,16 @@ export function EventCarousel({ slides }: EventCarouselProps) {
         </AnimatePresence>
       </div>
 
-      <div className="mt-6 flex items-center justify-between">
+      {/*
+        En móvil los controles se agrupan a la IZQUIERDA en vez de repartirse a
+        los dos lados. El flotante de WhatsApp ocupa la esquina inferior derecha
+        de la ventana, y medido con barrido fino de scroll había un tramo de
+        ~60px en el que el botón se llevaba el toque de la flecha "siguiente".
+        No es cuestión de márgenes: el flotante es fijo y la fila puede quedar a
+        cualquier altura, así que la única solución estable es que los controles
+        no vivan en esa columna. Desde 640px sobra sitio y vuelven a repartirse.
+      */}
+      <div className="mt-6 flex items-center justify-start gap-5 sm:justify-between sm:gap-0">
         <span className="font-mono text-xs text-graphite">
           {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
         </span>

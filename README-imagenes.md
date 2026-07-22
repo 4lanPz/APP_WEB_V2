@@ -35,6 +35,18 @@ llenos, una miniatura de los que sí, y el nombre exacto que espera cada uno
 
 Solo existe en desarrollo — en producción devuelve 404.
 
+### Los marcadores de hueco no se publican
+
+Un hueco sin foto se dibuja con trama diagonal y su rótulo ("Foto pendiente",
+"Documental de taller · foto real"…) **solo en desarrollo**. En producción el
+hueco queda en un plano de color liso, sin texto ni trama: esos rótulos venían
+del mockup, describían la foto que faltaba y estaban llegando al visitante, que
+ni sabe ni le importa qué foto falta. Mismo criterio que `FondoHero` con su
+marcador punteado de cabecera.
+
+O sea: si trabajando en local ves "Foto pendiente", es un aviso para ti. Al
+publicar no se ve. La lista de tareas sigue siendo `/admin/imagenes`.
+
 Sin levantar el servidor:
 
 ```bash

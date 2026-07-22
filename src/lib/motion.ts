@@ -120,6 +120,22 @@ export const CIFRA = {
   escalonado: 0.16, // y cada siguiente 160ms después
 } as const;
 
+/**
+ * Botón flotante de WhatsApp. Entra al final, cuando la secuencia del hero ya
+ * ha terminado (`HERO_SECUENCIA.cta` + su duración): es una utilidad
+ * permanente, no parte de la portada, y no debe competir con el titular.
+ *
+ * Solo escala — sin opacidad — a propósito. `MotionConfig reducedMotion="user"`
+ * salta transform pero no opacidad, así que un fade seguiría animándose para
+ * quien pidió no moverse. Escalando, con la preferencia activa el botón
+ * aparece ya puesto y quieto.
+ */
+export const FLOTANTE = {
+  entrada: 0.45,
+  retardo: 1.5,
+  escalaInicial: 0.7,
+} as const;
+
 /** CSS easing strings (para transiciones fuera de framer-motion). */
 export const CSS_EASE_ASENTAR = "cubic-bezier(0.4, 0, 0.2, 1)";
 export const CSS_EASE_REVELAR = "cubic-bezier(0.16, 1, 0.3, 1)";

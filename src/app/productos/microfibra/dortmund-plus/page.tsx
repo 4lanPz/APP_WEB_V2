@@ -54,7 +54,7 @@ export default async function SubcategoriaDortmundPlusPage() {
               alt={foto("dortmund-plus-cancha")?.alt ?? ""}
               sizes="(min-width: 1024px) 50vw, 100vw"
               label="Dortmund Plus en cancha"
-              caption="Dortmund Plus en cancha · foto real"
+              caption="Dortmund Plus en cancha"
               className="aspect-4/3"
             />
             <p className="font-serif text-body-l text-ink">

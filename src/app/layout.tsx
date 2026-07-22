@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Newsreader, IBM_Plex_Mono } from "next/font/google";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
+import { BotonWhatsApp } from "@/components/ui/BotonWhatsApp";
 import { MotionProviders } from "@/components/motion/MotionProviders";
 import { PageTransition } from "@/components/motion/PageTransition";
 import "./globals.css";
@@ -51,6 +52,10 @@ export default function RootLayout({
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
+          {/* Fuera de <main> y al final del DOM: es una utilidad de toda la
+              web, no contenido de la página, y así queda el último en el orden
+              de tabulación en vez de interrumpir la lectura. */}
+          <BotonWhatsApp />
         </MotionProviders>
       </body>
     </html>
