@@ -149,9 +149,10 @@ export const SLOTS_UNICOS: SlotImagen[] = [
    * `/admin/imagenes`, y esa página es la lista de tareas: si un hueco no se
    * encuentra, no se llena.
    *
-   * El diseño aprobado no llevaba foto aquí —su fondo es la trama CSS a
-   * propósito—, así que mientras el slot esté vacío el hero se ve exactamente
-   * igual que siempre. Tenerlos registrados no cuesta nada.
+   * Mientras un slot esté vacío su hero se queda en tinta plana. Eso es "falta
+   * la foto", no un diseño: el fondo de estas cabeceras es la fotografía. (Hubo
+   * una rejilla CSS que lo disimulaba; venía de los mockups, donde marcaba el
+   * hueco de imagen, y se retiró — ver `FondoHero`.)
    *
    * Requisitos comunes, y por eso se repiten en cada `nota`: tono BAJO y sin
    * detalle importante en el tercio izquierdo, que es donde cae el titular. Muy

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Container } from "./Container";
 import { HeroVideo } from "./HeroVideo";
-import { FondoHero, REJILLA_HERO, DEGRADADO_HERO } from "./FondoHero";
+import { FondoHero, DEGRADADO_HERO } from "./FondoHero";
 import { Breadcrumb, type BreadcrumbItem } from "./Breadcrumb";
 import { buttonVariants } from "./buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
@@ -23,17 +23,15 @@ export interface HeroProps {
   caption?: string;
   /**
    * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
-   * de heroes se quedan con la textura estática, que el propio documento da por
-   * válida como fallback.
+   * de heroes se quedan con su foto de slot.
    */
   video?: boolean;
   /**
-   * PRUEBA — id de slot con fotografía de fondo a sangre (ver `FondoHero`).
+   * Id de slot con fotografía de fondo a sangre (ver `FondoHero`).
    *
-   * El diseño aprobado no lleva foto en los heroes: su fondo es la trama CSS a
-   * propósito. Está a evaluación en todas las páginas que tienen hero. Si el
-   * slot no tiene archivo, el hero cae a la trama de siempre, así que pasarlo
-   * no cambia nada hasta que hay foto.
+   * Si el slot no tiene archivo, el hero se queda en tinta plana: es un estado
+   * provisional a la espera de la foto, no una alternativa de diseño. No se
+   * rellena con una trama para taparlo — ver la nota de `FondoHero`.
    *
    * No se combina con `video`: la portada usa vídeo y su imagen va de póster.
    */
@@ -46,15 +44,20 @@ const CTA_DELAY = 0.65;
 
 /**
  * Hero oscuro reutilizado en Home, Empresa, Productos, Categoria Microfibra,
- * Camisetas, Contacto, Subcategoria Dortmund Plus: fondo tinta con textura
- * de rejilla, eyebrow/migaja, titular grande, subtítulo, hasta dos CTA.
+ * Camisetas, Contacto, Subcategoria Dortmund Plus: fondo de tinta con foto a
+ * sangre, eyebrow/migaja, titular grande, subtítulo, hasta dos CTA.
  *
  * Motion v1 §06 — secuencia orquestada exacta:
- *   0ms textura ya visible · 150ms eyebrow fade+rise 16px · 300ms titular
+ *   0ms fondo ya visible · 150ms eyebrow fade+rise 16px · 300ms titular
  *   desenrolla por líneas (máscara, stagger 90ms) · 650ms CTA revela.
- * Con `video`, fondo de vídeo en bucle (§06); el póster cubre el "textura
- * visible desde el primer frame". Sin él, el fondo estático, que el propio
- * documento da por válido como fallback.
+ * Con `video`, fondo de vídeo en bucle (§06); el póster cubre el "visible desde
+ * el primer frame". Sin ninguna fuente, tinta plana con su degradado.
+ *
+ * NO REPONER LA REJILLA
+ * Estas cabeceras llevaron una rejilla CSS de 34px encima del fondo. Salía de
+ * los exports .dc.html, donde esa trama marcaba "aquí va una imagen": era un
+ * marcador de hueco del mockup y se transcribió como si fuera diseño, hasta
+ * quedar pintada también sobre fotografías reales. Se retiró. No reponerla.
  *
  * prefers-reduced-motion se resuelve vía <MotionConfig reducedMotion="user">
  * en el layout raíz — no se ramifica aquí (ver Reveal.tsx) para evitar un
@@ -73,8 +76,6 @@ export function Hero({
   video = false,
   imagen,
 }: HeroProps) {
-  // Con vídeo la rejilla va POR ENCIMA, no de fondo: si se queda debajo el
-  // vídeo la tapa y se pierde la textura que define el hero.
   const conFoto = Boolean(imagen && foto(imagen));
 
   // El póster sale del slot `hero-home-poster` si lo has cargado a mano; si no,
@@ -85,28 +86,15 @@ export function Hero({
 
   // `video` marca "esta es la portada", no "hay vídeo". La portada pinta su
   // banda con lo que tenga: vídeo si está procesado, póster si solo hay foto, y
-  // si no hay ninguno cae a la trama CSS como cualquier otro hero.
+  // si no hay ninguno se queda en tinta plana como cualquier otro hero vacío.
   const conBanda = video && Boolean(poster);
 
   return (
     <header
       className="relative overflow-hidden bg-ink text-paper"
-      style={
-        conBanda || conFoto
-          ? undefined
-          : { backgroundImage: `${REJILLA_HERO}, ${DEGRADADO_HERO}` }
-      }
+      style={conBanda || conFoto ? undefined : { backgroundImage: DEGRADADO_HERO }}
     >
-      {conBanda && poster && (
-        <>
-          <HeroVideo poster={poster} hayVideo={HERO_VIDEO_LISTO} />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{ backgroundImage: REJILLA_HERO }}
-          />
-        </>
-      )}
+      {conBanda && poster && <HeroVideo poster={poster} hayVideo={HERO_VIDEO_LISTO} />}
       {/* Portada sin póster ni vídeo: FondoHero no pinta fondo, pero marca el
           hueco en desarrollo igual que en las demás cabeceras. */}
       {video && !poster && <FondoHero slot="hero-home-poster" />}
