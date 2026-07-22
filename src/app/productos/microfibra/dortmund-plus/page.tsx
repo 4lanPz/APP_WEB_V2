@@ -69,7 +69,9 @@ export default async function SubcategoriaDortmundPlusPage() {
           <span className="mb-4 block font-mono text-xs uppercase tracking-widest text-graphite">
             Ficha técnica · valores nominales
           </span>
-          <RevealGroup className="mb-16 grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4">
+          <RevealGroup
+            variante="rejilla"
+            className="mb-16 grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4">
             {dortmundPlusStats.map((stat) => (
               <RevealItem key={stat.label} className="bg-paper p-6">
                 <p className="font-sans text-h2 font-medium text-ink">{stat.value}</p>
@@ -83,7 +85,9 @@ export default async function SubcategoriaDortmundPlusPage() {
           <span className="mb-4 block font-mono text-xs uppercase tracking-widest text-graphite">
             Por qué funciona en deporte
           </span>
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
             {dortmundPlusReasons.map((reason) => (
               <RevealItem key={reason.title} className="bg-paper p-8">
                 <span className="font-mono text-xs uppercase tracking-widest text-accent">
@@ -109,7 +113,9 @@ export default async function SubcategoriaDortmundPlusPage() {
             su ficha con carta completa y datos de tiraje; hoy publicamos la
             de Blancos como referencia.
           </p>
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
             {subcategory.tones?.map((tone, i) => (
               <RevealItem key={tone.slug}>
                 <SubcategoryTile

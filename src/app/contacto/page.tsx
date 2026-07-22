@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { PhotoCurtain } from "@/components/motion/Curtain";
 import { ContactForm } from "@/components/ui/ContactForm";
 import { LocationsMap } from "@/components/ui/LocationsMap";
 import { DraftNotice } from "@/components/ui/DraftNotice";
 import { buttonVariants } from "@/components/ui/buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
-import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { locations, comoLlegar, PENDING } from "@/data/locations";
 import { foto } from "@/data/imagenes";
@@ -42,21 +41,21 @@ export default function ContactoPage() {
           <SectionHeader index="01" title="Escríbenos" tag="Te responde un asesor" />
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.25fr_0.8fr] lg:gap-16">
             <ContactForm />
-            <Reveal className="order-first lg:order-last">
-              <ImagePlaceholder
-                dark
-                src={foto("retrato-asesor")?.ruta}
-                alt={foto("retrato-asesor")?.alt ?? ""}
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                label="Oficio · manos y máquina"
-                sublabel="Retrato de asesor comercial"
-                caption="Tu asesor · Asesoría técnica · Selección de tela y color"
-                className="aspect-4/3 min-h-[280px] lg:aspect-auto lg:h-full"
-              />
-            </Reveal>
+            <PhotoCurtain
+              dark
+              src={foto("retrato-asesor")?.ruta}
+              alt={foto("retrato-asesor")?.alt ?? ""}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              label="Oficio · manos y máquina"
+              sublabel="Retrato de asesor comercial"
+              caption="Tu asesor · Asesoría técnica · Selección de tela y color"
+              className="order-first aspect-4/3 min-h-[280px] lg:order-last lg:aspect-auto lg:h-full"
+            />
           </div>
 
-          <RevealGroup className="mt-12 grid grid-cols-1 gap-px border-y border-greige bg-greige sm:grid-cols-3">
+          <RevealGroup
+            variante="rejilla"
+            className="mt-12 grid grid-cols-1 gap-px border-y border-greige bg-greige sm:grid-cols-3">
             {directChannels.map((channel) => (
               <RevealItem key={channel.label} className="bg-paper p-6">
                 <p className="font-mono text-xs uppercase tracking-widest text-graphite">
@@ -107,7 +106,7 @@ export default function ContactoPage() {
             Ilustra la sección, no una sucursal concreta: no se sabe cuál de los
             cinco locales es, así que ni el caption ni el alt lo atribuyen.
           */}
-          <ImagePlaceholder
+          <PhotoCurtain
             src={foto("local-fachada")?.ruta}
             alt={foto("local-fachada")?.alt}
             sizes="(min-width: 1024px) 80vw, 100vw"

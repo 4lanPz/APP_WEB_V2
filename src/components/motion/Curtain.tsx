@@ -14,19 +14,26 @@ export interface CurtainProps {
 }
 
 /**
- * Técnica ausente del documento — verificada en el código real
- * (data-curtain / [data-shot] / [data-drape]): un panel sólido tinta cubre
- * el contenido y se retira (scaleX 1→0 desde la derecha, 760ms) mientras
- * el contenido entra con un leve zoom-out (scale 1.06→1, 900ms), en vez
- * del fade simple de `Reveal`. Mismo disparador de scroll (§03 del doc,
- * 25% visible, una sola vez) — con `prefers-reduced-motion` framer-motion
- * ya omite ambas transiciones vía `MotionConfig reducedMotion="user"`.
+ * ESTE es el gesto de la fotografía. No el fade.
  *
- * En el código real siempre envuelve una foto ([data-shot]), pero el gesto
- * no depende de eso — Contacto.dc.html lo aplica también al mapa
- * esquemático (`.tp-mapwrap`, gráfica CSS, no una foto), así que aquí se
- * expone como wrapper genérico; `PhotoCurtain` es la especialización para
- * `ImagePlaceholder`.
+ * Un panel sólido tinta cubre el contenido y se retira (scaleX 1→0 desde la
+ * derecha, 760ms) mientras el contenido entra con un leve zoom-out
+ * (scale 1.06→1, 900ms). Una foto que aparece por opacidad es una foto que
+ * llega tarde; una foto que se destapa por barrido es una foto que se
+ * presenta. Vivía en una sola sección de la Home — ahora envuelve toda
+ * fotografía del sitio (ver `MOTION.md`).
+ *
+ * `once: true` a propósito: las fotos NO revierten al volver a subir. Un
+ * barrido a media pantalla repetido cada vez que pasas por delante deja de
+ * subrayar y empieza a entretener.
+ *
+ * Anima solo transform, así que con `prefers-reduced-motion` framer omite
+ * ambas capas vía `MotionConfig reducedMotion="user"` y la foto queda visible
+ * y quieta.
+ *
+ * El gesto no depende de que dentro haya una foto —Contacto lo aplica también
+ * al mapa—, así que se expone como wrapper genérico; `PhotoCurtain` es la
+ * especialización para `ImagePlaceholder`.
  */
 export function Curtain({ children, className, style }: CurtainProps) {
   return (

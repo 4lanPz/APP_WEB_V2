@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Timeline } from "@/components/ui/Timeline";
 import { DraftNotice } from "@/components/ui/DraftNotice";
 import { foto } from "@/data/imagenes";
@@ -231,15 +232,13 @@ export default function EmpresaPage() {
                 ))}
               </RevealGroup>
             </div>
-            <Reveal>
-              <ImagePlaceholder
-                src={foto("oficio-taller-alangasi")?.ruta}
-                alt={foto("oficio-taller-alangasi")?.alt}
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                caption="Alangasí · el taller"
-                className="aspect-4/5"
-              />
-            </Reveal>
+            <PhotoCurtain
+              src={foto("oficio-taller-alangasi")?.ruta}
+              alt={foto("oficio-taller-alangasi")?.alt}
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              caption="Alangasí · el taller"
+              className="aspect-4/5"
+            />
           </div>
         </Container>
       </section>
@@ -271,7 +270,9 @@ export default function EmpresaPage() {
             infraestructura —luz lateral rasante, óptica fija, color fiel—
             cuando estén listas.
           </p>
-          <RevealGroup className="grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
+          <RevealGroup
+            variante="rejilla" fondo="bg-brand-deep"
+            className="grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
             <RevealItem className="sm:row-span-2">
               <ImagePlaceholder
                 dark

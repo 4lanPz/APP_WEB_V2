@@ -90,7 +90,9 @@ export default function ProductosPage() {
       <section id="categorias" className="py-16 sm:py-24">
         <Container>
           <SectionHeader index="03" title="Categorías" tag="Catálogo por familia" />
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-4">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((category) => (
               <RevealItem key={category.slug}>
                 <CategoryCard

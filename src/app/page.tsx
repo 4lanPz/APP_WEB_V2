@@ -8,6 +8,8 @@ import { MagneticLink } from "@/components/motion/MagneticLink";
 import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
+import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
+import { MASCARA } from "@/lib/motion";
 import { categories } from "@/data/taxonomy";
 import { foto } from "@/data/imagenes";
 
@@ -90,7 +92,10 @@ export default function Home() {
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHeader index="01" title="Textil Padilla en cifras" tag="Desde 1987" />
-          <RevealGroup className="grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4"
+          >
             {stats.map((stat) => (
               <RevealItem key={stat.label} className="bg-paper p-6">
                 <p className="font-sans text-h1 font-medium text-ink">
@@ -102,21 +107,24 @@ export default function Home() {
               </RevealItem>
             ))}
           </RevealGroup>
-          <div className="mt-10">
+          <Reveal className="mt-10" tipo="cuerpo">
             <p className="max-w-2xl font-serif text-body-m text-ink">
               Casi cuatro décadas seleccionando hilo, tejiendo rollo y
               afinando color. No hilamos: elegimos el mejor hilo disponible y
               lo convertimos en tela con la precisión de una ficha técnica y
               el criterio de quien conoce la materia por el tacto.
             </p>
-          </div>
+          </Reveal>
         </Container>
       </section>
 
       <section className="py-16 sm:py-24">
         <Container>
           <SectionHeader index="02" title="El oficio en tres verbos" tag="Seleccionar · Tejer · Teñir" />
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3"
+          >
             {verbos.map((verbo) => (
               <RevealItem key={verbo.title} className="bg-paper p-8">
                 <span className="font-mono text-xs uppercase tracking-widest text-accent">
@@ -136,15 +144,18 @@ export default function Home() {
 
       <section className="relative bg-brand-deep py-24 text-paper sm:py-32">
         <Container className="relative">
-          <Reveal>
+          <Reveal tipo="etiqueta">
             <span className="font-mono text-xs uppercase tracking-widest text-brand">
               Verdad material
             </span>
-            <p className="mt-6 max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em]">
-              La trama ampliada hasta que la tela deja de parecer tela y se
-              vuelve paisaje.
-            </p>
           </Reveal>
+          {/* Declaración, no párrafo: va por máscara como los titulares. */}
+          <LineasEnMascara
+            as="p"
+            delay={MASCARA.stagger}
+            lineas={["La trama ampliada hasta que la tela", "deja de parecer tela y se vuelve paisaje."]}
+            className="mt-6 max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em]"
+          />
         </Container>
         <PhotoCurtain
           dark
@@ -159,7 +170,10 @@ export default function Home() {
       <section id="categorias" className="py-16 sm:py-24">
         <Container>
           <SectionHeader index="03" title="Familias de tela" tag="Catálogo por familia" />
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-4">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-4"
+          >
             {categories.map((category) => (
               <RevealItem key={category.slug}>
                 <CategoryCard
@@ -188,14 +202,17 @@ export default function Home() {
 
       <section id="asesor" className="bg-brand-deep py-24 text-paper sm:py-32">
         <Container className="flex flex-col gap-6">
-          <Reveal className="flex flex-col gap-6">
+          <Reveal tipo="etiqueta">
             <span className="font-mono text-xs uppercase tracking-widest text-brand">
               Asesor virtual
             </span>
-            <h2 className="max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em]">
-              ¿No sabes qué tela necesitas? Te acompañamos hasta el color
-              exacto.
-            </h2>
+          </Reveal>
+          <LineasEnMascara
+            as="h2"
+            lineas={["¿No sabes qué tela necesitas?", "Te acompañamos hasta el color exacto."]}
+            className="max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em]"
+          />
+          <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
             <p className="max-w-xl font-serif text-body-l text-paper/80">
               Tres preguntas —qué prenda vas a producir, si la tela irá
               sublimada y si buscas alto rendimiento o uso casual— y un

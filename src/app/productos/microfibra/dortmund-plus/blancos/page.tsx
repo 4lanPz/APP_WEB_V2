@@ -105,7 +105,9 @@ export default async function ProductoDortmundPlusBlancosPage() {
       <section id="cuidados" className="bg-bone py-16 sm:py-24">
         <Container>
           <SectionHeader index="01" title="Cuidados de la tela" tag="Microfibra · uso deportivo" />
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-5">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-5">
             {cuidados.map((step) => (
               <RevealItem key={step.title} className="bg-paper p-6">
                 <h3 className="font-sans text-[15px] font-semibold text-ink">
@@ -127,7 +129,9 @@ export default async function ProductoDortmundPlusBlancosPage() {
       <section id="relacionados" className="py-16 sm:py-24">
         <Container>
           <SectionHeader index="02" title="Otras telas de Microfibra" tag="Misma microfibra" />
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
             {product.related.map((item) => (
               <RevealItem key={item.name} className="h-full">
                 <Link

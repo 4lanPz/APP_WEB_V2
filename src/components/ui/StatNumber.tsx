@@ -1,6 +1,6 @@
 "use client";
 
-import { useCountUp } from "@/components/motion/useCountUp";
+import { useDigitosAsentados } from "@/components/motion/useDigitosAsentados";
 
 export interface StatNumberProps {
   target: number;
@@ -9,13 +9,16 @@ export interface StatNumberProps {
 }
 
 /**
- * Cifra que cuenta desde 0 al cruzar el viewport, una sola vez (ver
- * useCountUp — pedido del cliente, presente en los exports aprobados). El
- * `min-width` en `ch` reserva el espacio del valor final para que el conteo
- * no produzca layout-shift mientras cambia de dígitos.
+ * Cifra que se asienta por dígitos al cruzar el viewport, una sola vez (ver
+ * `useDigitosAsentados`). Ya no cuenta desde 0: los dígitos giran revueltos y
+ * se fijan de izquierda a derecha.
+ *
+ * `tabular-nums` no es decorativo: sin ancho fijo por dígito, un 8 y un 1
+ * miden distinto y la cifra tiembla mientras gira. El `min-width` en `ch`
+ * reserva además el hueco del valor final para que nada empuje el layout.
  */
 export function StatNumber({ target, prefix = "", suffix = "" }: StatNumberProps) {
-  const { ref, display } = useCountUp(target, prefix, suffix);
+  const { ref, display } = useDigitosAsentados(target, prefix, suffix);
   const chars = prefix.length + String(target).length + suffix.length;
 
   return (

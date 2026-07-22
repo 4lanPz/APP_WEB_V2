@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { cn } from "@/lib/cn";
 import { foto } from "@/data/imagenes";
+import { VOCABULARIO } from "@/lib/motion";
 
 export interface TimelineItem {
   year: string;
@@ -62,7 +63,7 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
         if (!dot || !content) return;
 
         gsap.set(dot, { backgroundColor: "#F5F2EE", borderColor: "#C8C2B8" });
-        gsap.set(content, { opacity: 0, y: 20 });
+        gsap.set(content, { opacity: 0, y: VOCABULARIO.cuerpo.distancia });
 
         ScrollTrigger.create({
           trigger: item,
@@ -78,7 +79,7 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
             gsap.to(content, {
               opacity: 1,
               y: 0,
-              duration: 0.6,
+              duration: VOCABULARIO.cuerpo.duracion,
               delay: 0.08,
               ease: "power2.out",
             });

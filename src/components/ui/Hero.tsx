@@ -8,9 +8,10 @@ import { FondoHero, DEGRADADO_HERO } from "./FondoHero";
 import { Breadcrumb, type BreadcrumbItem } from "./Breadcrumb";
 import { buttonVariants } from "./buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
+import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
 import { foto } from "@/data/imagenes";
 import { HERO_VIDEO_LISTO } from "@/data/video.generado";
-import { EASE_REVELAR, EASE_DESENROLLAR, DURATION } from "@/lib/motion";
+import { EASE_REVELAR, DURATION, HERO_SECUENCIA } from "@/lib/motion";
 
 export interface HeroProps {
   eyebrow?: string;
@@ -38,18 +39,17 @@ export interface HeroProps {
   imagen?: string;
 }
 
-const HEADLINE_START = 0.3;
-const HEADLINE_STAGGER = 0.09;
-const CTA_DELAY = 0.65;
-
 /**
  * Hero oscuro reutilizado en Home, Empresa, Productos, Categoria Microfibra,
  * Camisetas, Contacto, Subcategoria Dortmund Plus: fondo de tinta con foto a
  * sangre, eyebrow/migaja, titular grande, subtítulo, hasta dos CTA.
  *
- * Motion v1 §06 — secuencia orquestada exacta:
- *   0ms fondo ya visible · 150ms eyebrow fade+rise 16px · 300ms titular
- *   desenrolla por líneas (máscara, stagger 90ms) · 650ms CTA revela.
+ * Secuencia orquestada (`HERO_SECUENCIA` en lib/motion.ts):
+ *   0ms fondo ya visible · 150ms eyebrow · 300ms titular desenrolla por líneas
+ *   (máscara, stagger 90ms) · 500ms subtítulo · 800ms CTA.
+ * El subtítulo estaba en 150ms, empatado con el eyebrow, así que entraba ANTES
+ * que el titular al que subtitula. Ahora arranca cuando la primera línea del
+ * titular ya está arriba, y el CTA cierra detrás.
  * Con `video`, fondo de vídeo en bucle (§06); el póster cubre el "visible desde
  * el primer frame". Sin ninguna fuente, tinta plana con su degradado.
  *
@@ -113,7 +113,11 @@ export function Hero({
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: DURATION.revelar, ease: EASE_REVELAR, delay: 0.15 }}
+          transition={{
+            duration: DURATION.revelar,
+            ease: EASE_REVELAR,
+            delay: HERO_SECUENCIA.eyebrow,
+          }}
         >
           {breadcrumb ? (
             <Breadcrumb items={breadcrumb} tone="dark" />
@@ -127,30 +131,23 @@ export function Hero({
           )}
         </motion.div>
 
-        <h1 className="max-w-3xl font-sans text-display font-medium tracking-[-0.03em] text-paper">
-          {headlineLines.map((line, i) => (
-            <span key={i} className="block overflow-hidden">
-              <motion.span
-                className="block"
-                initial={{ y: "100%" }}
-                animate={{ y: "0%" }}
-                transition={{
-                  duration: DURATION.desenrollar,
-                  ease: EASE_DESENROLLAR,
-                  delay: HEADLINE_START + i * HEADLINE_STAGGER,
-                }}
-              >
-                {line}
-              </motion.span>
-            </span>
-          ))}
-        </h1>
+        <LineasEnMascara
+          as="h1"
+          disparo="entrada"
+          delay={HERO_SECUENCIA.titular}
+          lineas={headlineLines}
+          className="max-w-3xl font-sans text-display font-medium tracking-[-0.03em] text-paper"
+        />
 
         <motion.p
           className="max-w-xl font-serif text-body-l text-paper/80"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: DURATION.revelar, ease: EASE_REVELAR, delay: 0.15 }}
+          transition={{
+            duration: DURATION.revelar,
+            ease: EASE_REVELAR,
+            delay: HERO_SECUENCIA.subhead,
+          }}
         >
           {subhead}
         </motion.p>
@@ -160,7 +157,11 @@ export function Hero({
             className="mt-2 flex flex-wrap items-center gap-6"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DURATION.revelar, ease: EASE_REVELAR, delay: CTA_DELAY }}
+            transition={{
+              duration: DURATION.revelar,
+              ease: EASE_REVELAR,
+              delay: HERO_SECUENCIA.cta,
+            }}
           >
             {primaryCta && (
               <MagneticLink

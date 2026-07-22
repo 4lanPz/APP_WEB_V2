@@ -53,7 +53,9 @@ export default async function CategoriaMicrofibraPage() {
             iremos publicando cada ficha con sus datos y su carta de color
             completa.
           </p>
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-3">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-3">
             {category.subcategories.map((sub, i) => {
               const estado = estadoFicha(sub.slug);
               return (

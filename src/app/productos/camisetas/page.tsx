@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { AsesorComercial } from "@/components/ui/AsesorComercial";
 import { StatNumber } from "@/components/ui/StatNumber";
 import { PhotoCurtain } from "@/components/motion/Curtain";
@@ -149,7 +148,9 @@ export default function CamisetasPage() {
               className="aspect-4/3"
             />
           </div>
-          <RevealGroup className="grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4">
             {stats.map((stat) => (
               <RevealItem key={stat.label} className="bg-paper p-6">
                 <p className="font-sans text-h2 font-medium text-ink">
@@ -175,20 +176,23 @@ export default function CamisetasPage() {
 
           <div className="flex flex-col gap-16">
             {fabrics.map((fabric, i) => (
-              <Reveal
+              /*
+               * Foto y ficha no comparten gesto: la foto se destapa por
+               * barrido y la ficha entra como cuerpo de texto, un poco
+               * después. Antes las dos hacían el mismo fade a la vez.
+               */
+              <div
                 key={fabric.name}
-                className={cn(
-                  "grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12",
-                )}
+                className={cn("grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12")}
               >
-                <ImagePlaceholder
+                <PhotoCurtain
                   src={foto(fabric.slot)?.ruta}
                   alt={foto(fabric.slot)?.alt ?? ""}
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   label={`${fabric.structure} · macro real`}
                   className={cn("aspect-4/3", i % 2 === 1 && "lg:order-2")}
                 />
-                <div>
+                <Reveal tipo="cuerpo" delay={0.12}>
                   <span className="font-mono text-xs uppercase tracking-widest text-accent">
                     {fabric.tag}
                   </span>
@@ -220,15 +224,17 @@ export default function CamisetasPage() {
                   >
                     Ver ficha técnica y colores →
                   </Link>
-                </div>
-              </Reveal>
+                </Reveal>
+              </div>
             ))}
           </div>
 
           <p className="mb-6 mt-16 font-mono text-xs uppercase tracking-widest text-graphite">
             También trabajamos para la camiseta
           </p>
-          <RevealGroup className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2">
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2">
             {complementary.map((item) => (
               <RevealItem key={item.name} className="bg-paper p-8">
                 <h3 className="font-sans text-[15px] font-semibold text-ink">
