@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -127,19 +127,65 @@ export function Navbar() {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
+  const disparadorRef = useRef<HTMLAnchorElement>(null);
+  const cierreTimer = useRef<number | null>(null);
   const reduceMotion = useReducedMotion();
+
+  /*
+   * Apertura por hover con RETARDO AL CERRAR, no por ampliar cajas invisibles.
+   *
+   * El problema clásico del desplegable: al ir del enlace al panel el cursor
+   * cruza un hueco vacío un instante y, si el cierre es inmediato, el menú se
+   * va antes de llegar. La solución es un único temporizador compartido: salir
+   * del enlace programa el cierre a 220ms (curva "asentar"), y entrar en el
+   * panel —que es descendiente en el DOM, así que dispara `pointerenter` del
+   * contenedor— lo cancela. El recorrido en diagonal cabe de sobra en 220ms.
+   */
+  const abrirMenu = useCallback(() => {
+    if (cierreTimer.current) {
+      clearTimeout(cierreTimer.current);
+      cierreTimer.current = null;
+    }
+    setMegaOpen(true);
+  }, []);
+
+  const cerrarMenu = useCallback(() => {
+    if (cierreTimer.current) {
+      clearTimeout(cierreTimer.current);
+      cierreTimer.current = null;
+    }
+    setMegaOpen(false);
+  }, []);
+
+  const cerrarConRetardo = useCallback(() => {
+    if (cierreTimer.current) clearTimeout(cierreTimer.current);
+    cierreTimer.current = window.setTimeout(() => {
+      cierreTimer.current = null;
+      setMegaOpen(false);
+    }, 220);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (cierreTimer.current) clearTimeout(cierreTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!megaOpen) return;
 
     function handlePointerDown(event: PointerEvent) {
       if (!megaRef.current?.contains(event.target as Node)) {
-        setMegaOpen(false);
+        cerrarMenu();
       }
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setMegaOpen(false);
+      if (event.key === "Escape") {
+        cerrarMenu();
+        // Escape devuelve el foco al disparador, no lo deja en un panel oculto.
+        disparadorRef.current?.focus();
+      }
     }
 
     document.addEventListener("pointerdown", handlePointerDown);
@@ -148,7 +194,7 @@ export function Navbar() {
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [megaOpen]);
+  }, [megaOpen, cerrarMenu]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -181,12 +227,42 @@ export function Navbar() {
           <NavLink href={primaryNavLinks[0].href} label={primaryNavLinks[0].label} />
           <NavLink href={primaryNavLinks[1].href} label={primaryNavLinks[1].label} />
 
-          <div ref={megaRef} className="relative">
-            <button
-              type="button"
-              onClick={() => setMegaOpen((v) => !v)}
+          {/*
+            El contenedor gobierna la apertura por hover y foco. `onPointerEnter`
+            solo abre con ratón (`pointerType === "mouse"`): en táctil no hay
+            hover y el evento no aplica, así que un toque en el enlace navega al
+            catálogo, como antes. `onFocus`/`onBlur` (que en React burbujean vía
+            focusin/focusout) abren y cierran para el teclado. El panel es
+            descendiente del contenedor, así que al entrar en él se dispara de
+            nuevo `onPointerEnter` y el cierre programado se cancela.
+          */}
+          <div
+            ref={megaRef}
+            className="relative"
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") abrirMenu();
+            }}
+            onPointerLeave={(e) => {
+              if (e.pointerType === "mouse") cerrarConRetardo();
+            }}
+            onFocus={abrirMenu}
+            onBlur={(e) => {
+              // Cierra solo si el foco sale del contenedor (no al saltar de
+              // enlace a enlace dentro del panel).
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) cerrarMenu();
+            }}
+          >
+            {/*
+              Disparador = ENLACE al catálogo. El clic directo lleva a /productos
+              igual que "Ver todo el catálogo"; el hover/foco abre el panel. Es
+              un enlace con `aria-expanded` porque además controla el desplegable.
+            */}
+            <Link
+              ref={disparadorRef}
+              href="/productos"
+              onClick={cerrarMenu}
               aria-expanded={megaOpen}
-              aria-haspopup="true"
+              aria-haspopup="menu"
               className={cn(
                 "group relative pb-1.75 font-sans text-[15px] text-ink hover:text-brand",
                 megaOpen && "text-brand",
@@ -200,7 +276,7 @@ export function Navbar() {
                   className="absolute inset-x-0 -bottom-px h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-220 ease-asentar group-hover:scale-x-100"
                 />
               )}
-            </button>
+            </Link>
 
             <AnimatePresence>
               {megaOpen && (
@@ -220,7 +296,7 @@ export function Navbar() {
                         <div key={category.label} className="min-w-0">
                           <Link
                             href={category.href}
-                            onClick={() => setMegaOpen(false)}
+                            onClick={cerrarMenu}
                             className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-[13px] font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand"
                           >
                             {category.label}
@@ -244,7 +320,7 @@ export function Navbar() {
                                     ? "Página en preparación"
                                     : undefined
                                 }
-                                onClick={() => setMegaOpen(false)}
+                                onClick={cerrarMenu}
                                 className="py-1.25 font-sans text-[14px] text-graphite hover:text-brand"
                               >
                                 {sub.label}
@@ -258,7 +334,7 @@ export function Navbar() {
                         <span>{catalogStats}</span>
                         <Link
                           href="/productos"
-                          onClick={() => setMegaOpen(false)}
+                          onClick={cerrarMenu}
                           className="font-sans text-sm font-medium text-ink hover:text-brand"
                         >
                           Ver todo el catálogo →
