@@ -26,12 +26,68 @@ export interface SlotImagen {
    * corresponde, se corrige aquí — no se deja un alt que miente.
    */
   alt: string;
-  /** Agrupación para `/admin/imagenes`. */
-  grupo: string;
+  /**
+   * Ruta de la PÁGINA donde vive el hueco. Es la clave con la que
+   * `/admin/imagenes` agrupa el inventario: entrar en una página y ver de un
+   * vistazo todo lo que tiene y lo que le falta, cabecera incluida.
+   *
+   * Antes esto era un `grupo` de texto libre ("Home", "Empresa · Oficio",
+   * "Cabeceras de página"…). El problema: las siete cabeceras vivían en su
+   * propio grupo, separadas de la página a la que pertenecen, así que Inicio
+   * figuraba con una imagen cuando tiene su hero MÁS las demás, y el hero
+   * aparecía listado en otro sitio. Atar el slot a la ruta lo impide: el hero
+   * de `/empresa` y los macros de `/empresa` caen juntos porque comparten ruta.
+   */
+  pagina: string;
+  /**
+   * Sub-sección opcional DENTRO de una página, cuando agrupa la lectura
+   * (Oficio vs. Línea de hitos en Empresa, el Recomendador en Productos, la
+   * segunda vista de la galería). Los huecos sin sección son el contenido
+   * principal de la página y se listan primero, con la cabecera al frente.
+   */
+  seccion?: string;
   /** Ancho máximo de salida en px. */
   ancho: number;
   /** Qué se espera ver, para el que dispara la foto. */
   nota?: string;
+}
+
+export interface Pagina {
+  /** Ruta real, y clave de agrupación de los slots. */
+  ruta: string;
+  /** Nombre visible de la página en el inventario. */
+  titulo: string;
+}
+
+/**
+ * Las páginas del sitio con huecos de imagen, en orden de navegación. El
+ * inventario de `/admin/imagenes` las lista en este orden; el índice de cada
+ * una decide su posición. Toda `pagina` de un slot debe existir aquí.
+ */
+export const PAGINAS: Pagina[] = [
+  { ruta: "/", titulo: "Inicio" },
+  { ruta: "/empresa", titulo: "Empresa" },
+  { ruta: "/productos", titulo: "Productos" },
+  { ruta: "/productos/microfibra", titulo: "Microfibra" },
+  { ruta: "/productos/microfibra/dortmund-plus", titulo: "Dortmund Plus" },
+  { ruta: "/productos/camisetas", titulo: "Camisetas" },
+  { ruta: "/productos/texturizado", titulo: "Texturizado" },
+  { ruta: "/productos/spun", titulo: "Spun" },
+  { ruta: "/productos/polialgodon", titulo: "Polialgodón" },
+  { ruta: "/asesor-virtual", titulo: "Asesor Virtual" },
+  { ruta: "/contacto", titulo: "Contacto" },
+];
+
+const ORDEN_PAGINA = new Map(PAGINAS.map((p, i) => [p.ruta, i]));
+
+/** Índice de la página en el orden de navegación, para ordenar el inventario. */
+export function ordenPagina(ruta: string): number {
+  return ORDEN_PAGINA.get(ruta) ?? PAGINAS.length;
+}
+
+/** Título visible de una página; su propia ruta si no está registrada. */
+export function tituloPagina(ruta: string): string {
+  return PAGINAS.find((p) => p.ruta === ruta)?.titulo ?? ruta;
 }
 
 /**
@@ -44,7 +100,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "macro-fibra-blanca",
     destino: "/macros/fibra-blanca.webp",
     alt: "Detalle de tejido de poliéster blanco enrollado en espiral, mostrando la trama y la caída del género.",
-    grupo: "Home",
+    pagina: "/",
     ancho: 1920,
     nota: "Macro de tejido claro, apaisada. Es la primera imagen de la portada.",
   },
@@ -52,21 +108,21 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "macro-tejido",
     destino: "/macros/tejido.webp",
     alt: "Macrofotografía de tejido de punto azul, con la estructura del piqué visible en los pliegues.",
-    grupo: "Productos",
+    pagina: "/productos",
     ancho: 1920,
   },
   {
     id: "macro-punto-camiseta",
     destino: "/macros/punto-camiseta.webp",
     alt: "Detalle de tejido de punto celeste dispuesto en espiral, mostrando el brillo y la elasticidad del género.",
-    grupo: "Camisetas",
+    pagina: "/productos/camisetas",
     ancho: 1920,
   },
   {
     id: "camisetas-jersey",
     destino: "/macros/jersey-peinado.webp",
     alt: "Macrofotografía de jersey de algodón peinado, con el punto liso visible de cerca.",
-    grupo: "Camisetas",
+    pagina: "/productos/camisetas",
     ancho: 1280,
     nota: "Macro real de single jersey. Acompaña a la ficha de la tela 01.",
   },
@@ -74,7 +130,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "camisetas-pique",
     destino: "/macros/pique.webp",
     alt: "Macrofotografía de piqué, con las celdas en relieve tipo panal.",
-    grupo: "Camisetas",
+    pagina: "/productos/camisetas",
     ancho: 1280,
     nota: "Macro real de piqué. Acompaña a la ficha de la tela 02.",
   },
@@ -82,14 +138,16 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "oficio-nave-tejido",
     destino: "/oficio/nave-tejido.webp",
     alt: "Nave de tejido de Textil Padilla: fileta de conos de hilo blanco alineados frente a máquinas de tejido circular.",
-    grupo: "Empresa · Oficio",
+    pagina: "/empresa",
+    seccion: "Oficio",
     ancho: 1920,
   },
   {
     id: "oficio-taller-alangasi",
     destino: "/oficio/taller-alangasi.webp",
     alt: "Rollos de tela terminados y embalados con el logotipo de Textil Padilla, apilados en bodega.",
-    grupo: "Empresa · Oficio",
+    pagina: "/empresa",
+    seccion: "Oficio",
     ancho: 1200,
     nota: "Vertical (4:5).",
   },
@@ -97,7 +155,8 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "oficio-tintoreria",
     destino: "/oficio/tintoreria.webp",
     alt: "Tintorería de Textil Padilla: barcas de teñido en proceso.",
-    grupo: "Empresa · Oficio",
+    pagina: "/empresa",
+    seccion: "Oficio",
     ancho: 1600,
     nota: "Área de tintorería en marcha. Apaisada (4:3). Es la que sostiene el argumento del teñido a demanda.",
   },
@@ -105,7 +164,8 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "oficio-carta-color",
     destino: "/oficio/carta-color.webp",
     alt: "Carta de color de Textil Padilla: muestras de tela teñidas ordenadas por tono.",
-    grupo: "Empresa · Oficio",
+    pagina: "/empresa",
+    seccion: "Oficio",
     ancho: 1600,
     nota: "Muestrario físico de colores. Apaisada (4:3).",
   },
@@ -113,14 +173,14 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "local-fachada",
     destino: "/locales/fachada.webp",
     alt: "Fachada de Textil Padilla e Hijos con su rótulo azul, y un camión de reparto en la entrada.",
-    grupo: "Contacto",
+    pagina: "/contacto",
     ancho: 1920,
   },
   {
     id: "retrato-asesor",
     destino: "/oficio/asesor.webp",
     alt: "Asesor comercial de Textil Padilla atendiendo en el mostrador, con muestrario de telas.",
-    grupo: "Contacto",
+    pagina: "/contacto",
     ancho: 1280,
     nota: "Retrato de una persona real del equipo. Requiere su autorización para salir en la web.",
   },
@@ -128,7 +188,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "dortmund-plus-cancha",
     destino: "/telas/dortmund-plus-cancha.webp",
     alt: "Prenda deportiva confeccionada en Dortmund Plus, en uso durante un partido.",
-    grupo: "Microfibra · Dortmund Plus",
+    pagina: "/productos/microfibra/dortmund-plus",
     ancho: 1600,
     nota: "Prenda hecha con la tela, en uso. Sin rótulos ni tipografía quemada.",
   },
@@ -136,7 +196,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "dortmund-plus-blancos-macro",
     destino: "/telas/dortmund-plus-blancos-macro.webp",
     alt: "Macrofotografía de la microfibra Dortmund Plus en blanco, con la textura del punto a contraluz.",
-    grupo: "Microfibra · Dortmund Plus",
+    pagina: "/productos/microfibra/dortmund-plus",
     ancho: 1920,
     nota: "Macro de textura, muy apaisada (21:9).",
   },
@@ -144,10 +204,12 @@ export const SLOTS_UNICOS: SlotImagen[] = [
   /**
    * Fondos fotográficos de cabecera, uno por página con hero.
    *
-   * Van todos al MISMO grupo a propósito. Repartidos por página quedaban en
-   * ocho grupos de un solo slot, perdidos entre los 87 huecos de
-   * `/admin/imagenes`, y esa página es la lista de tareas: si un hueco no se
-   * encuentra, no se llena.
+   * Cada uno vive en la PÁGINA a la que pertenece (su `pagina` es la ruta), no
+   * en un grupo aparte de "cabeceras". Hubo un momento en que estaban todos
+   * juntos en un solo grupo para no perderlos entre los huecos; el efecto
+   * lateral es que la página figuraba sin su propia cabecera y el hero salía
+   * listado lejos de lo demás. Atado a la ruta, el hero de cada página encabeza
+   * su inventario, que es como se pide el material a marketing.
    *
    * Mientras un slot esté vacío su hero se queda en tinta plana. Eso es "falta
    * la foto", no un diseño: el fondo de estas cabeceras es la fotografía. (Hubo
@@ -172,7 +234,8 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: `hero-${slug}`,
     destino: `/heroes/${slug}.webp`,
     alt,
-    grupo: "Cabeceras de página",
+    pagina: ruta,
+    seccion: "Cabecera",
     ancho: 2400,
     nota: `Cabecera de ${ruta}, a sangre. Tono bajo, sin detalle en el tercio izquierdo (ahí va el titular). Muy apaisada: se recorta a 70vh.`,
   })),
@@ -180,7 +243,8 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "hero-home-poster",
     destino: "/video/hero-poster-manual.webp",
     alt: "",
-    grupo: "Cabeceras de página",
+    pagina: "/",
+    seccion: "Cabecera",
     ancho: 1920,
     nota: "Cabecera de / (la portada). Mientras no haya vídeo procesado se ve ella sola, a sangre. Cuando corras `npm run video` pasa a ser el póster del bucle —lo que se ve mientras carga, si el navegador no reproduce, y con prefers-reduced-motion— y conviene que se parezca al primer fotograma o el salto se nota. Mismos requisitos que los demás heroes: tono bajo, sin detalle en el tercio izquierdo.",
   },
@@ -191,53 +255,63 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     id: "evento-feria-andina",
     destino: "/eventos/feria-andina.webp",
     alt: "Stand de Textil Padilla en la Feria Internacional del Textil Andino, con muestrario de telas.",
-    grupo: "Home · Encuentros",
+    pagina: "/",
+    seccion: "Encuentros",
     ancho: 1280,
   },
   {
     id: "evento-jornada-color",
     destino: "/eventos/jornada-color.webp",
     alt: "Jornada de color a demanda: cliente comparando su referencia contra una carta de color.",
-    grupo: "Home · Encuentros",
+    pagina: "/",
+    seccion: "Encuentros",
     ancho: 1280,
   },
   {
     id: "evento-alianza-retail",
     destino: "/eventos/alianza-retail.webp",
     alt: "Rollos de tela preparados para un cliente de retail premium.",
-    grupo: "Home · Encuentros",
+    pagina: "/",
+    seccion: "Encuentros",
     ancho: 1280,
   },
   {
     id: "evento-performknit-320",
     destino: "/eventos/performknit-320.webp",
     alt: "Presentación de la línea PerformKnit 320: detalle del tejido sobre la mesa de muestras.",
-    grupo: "Home · Encuentros",
+    pagina: "/",
+    seccion: "Encuentros",
     ancho: 1280,
   },
 
   // Recomendador de prenda de /productos. El id es la `key` de cada opción.
+  // El asesor virtual reutiliza estas tres para sus opciones de prenda: misma
+  // prenda, misma foto, un solo archivo que pedir.
   {
     id: "prenda-camiseta",
     destino: "/prendas/camiseta.webp",
     alt: "Camiseta confeccionada en jersey de algodón peinado, mostrando la caída del punto.",
-    grupo: "Productos · Recomendador",
+    pagina: "/productos",
+    seccion: "Recomendador",
     ancho: 1280,
   },
   {
     id: "prenda-chompa",
     destino: "/prendas/chompa.webp",
     alt: "Chompa en French Terry perchado, con el reverso afelpado a la vista.",
-    grupo: "Productos · Recomendador",
+    pagina: "/productos",
+    seccion: "Recomendador",
     ancho: 1280,
   },
   {
     id: "prenda-pantalon",
     destino: "/prendas/pantalon.webp",
     alt: "Pantalón deportivo en sarga stretch, mostrando la caída y la recuperación del tejido.",
-    grupo: "Productos · Recomendador",
+    pagina: "/productos",
+    seccion: "Recomendador",
     ancho: 1280,
   },
+
 ];
 
 /**
@@ -258,21 +332,24 @@ export const SLOTS_HITOS: SlotImagen[] = [
   id: `hito-${ref}`,
   destino: `/hitos/${ref}.webp`,
   alt: `Textil Padilla, ${titulo}.`,
-  grupo: "Empresa · Línea de hitos",
+  pagina: "/empresa",
+  seccion: "Línea de hitos",
   ancho: 900,
   nota: "Opcional: la línea de hitos funciona sin fotos. Formato 4:3.",
 }));
 
 /**
  * Un slot por tela del catálogo. El id es el slug, así que el nombre de archivo
- * de una tela nunca hay que buscarlo: es el que aparece en su URL.
+ * de una tela nunca hay que buscarlo: es el que aparece en su URL. Cada tela
+ * se inventaría bajo la página de su familia (`/productos/<categoria>`).
  */
 export const SLOTS_TELA: SlotImagen[] = categories.flatMap((c) =>
   c.subcategories.map((s) => ({
     id: s.slug,
     destino: `/telas/${s.slug}.webp`,
     alt: `Tela ${s.name} de ${c.name.toLowerCase()}, detalle del tejido.`,
-    grupo: c.name,
+    pagina: `/productos/${c.slug}`,
+    seccion: "Telas del catálogo",
     ancho: 1280,
   })),
 );

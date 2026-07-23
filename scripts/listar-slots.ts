@@ -7,20 +7,33 @@
  * levantar el servidor.
  */
 
-import { SLOTS } from "../src/data/slots-imagen";
+import { SLOTS, ordenPagina, tituloPagina } from "../src/data/slots-imagen";
 import { SLOTS_LLENOS } from "../src/data/imagenes.generado";
 
-const grupos = new Map<string, typeof SLOTS>();
+const porPagina = new Map<string, typeof SLOTS>();
 for (const slot of SLOTS) {
-  const lista = grupos.get(slot.grupo) ?? [];
+  const lista = porPagina.get(slot.pagina) ?? [];
   lista.push(slot);
-  grupos.set(slot.grupo, lista);
+  porPagina.set(slot.pagina, lista);
 }
 
-for (const [grupo, slots] of grupos) {
+const paginas = [...porPagina.entries()].sort(
+  ([a], [b]) => ordenPagina(a) - ordenPagina(b),
+);
+
+for (const [ruta, slots] of paginas) {
   const llenos = slots.filter((s) => SLOTS_LLENOS.has(s.id)).length;
-  console.log(`\n${grupo.toUpperCase()}  —  ${llenos} de ${slots.length}`);
-  for (const slot of slots) {
+  console.log(`\n${tituloPagina(ruta).toUpperCase()}  (${ruta})  —  ${llenos} de ${slots.length}`);
+  // La cabecera primero; el resto en orden de registro.
+  const ordenadas = [...slots].sort(
+    (a, b) => (a.seccion === "Cabecera" ? -1 : 0) - (b.seccion === "Cabecera" ? -1 : 0),
+  );
+  let seccionActual: string | undefined;
+  for (const slot of ordenadas) {
+    if (slot.seccion !== seccionActual) {
+      seccionActual = slot.seccion;
+      if (seccionActual) console.log(`  — ${seccionActual} —`);
+    }
     const marca = SLOTS_LLENOS.has(slot.id) ? "·" : "FALTA";
     console.log(`  ${marca.padEnd(6)} ${`${slot.id}.jpg`.padEnd(34)} ${slot.nota ?? ""}`);
   }
