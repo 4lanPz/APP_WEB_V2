@@ -6,7 +6,7 @@ import { GaleriaTela } from "@/components/ui/GaleriaTela";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { buttonVariants } from "@/components/ui/buttonVariants";
 import { valorEstandar, type FichaPublicable } from "@/data/fichas";
-import { galeriaDeTela } from "@/data/imagenes";
+import { vistasDeTela } from "@/data/imagenes";
 import type { Category, Subcategory } from "@/data/taxonomy";
 import { cn } from "@/lib/cn";
 
@@ -30,7 +30,7 @@ export function FichaSubcategoria({
   subcategory,
   ficha,
 }: Props) {
-  const fotos = galeriaDeTela(subcategory.slug);
+  const vistas = vistasDeTela(subcategory.slug);
 
   const rows = [
     { label: "Composición", value: ficha.composicion },
@@ -46,13 +46,13 @@ export function FichaSubcategoria({
 
       <div className="mt-8 grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
         {/*
-          Galería que degrada sola: con 0–1 fotos se comporta igual que el
-          placeholder de siempre; con varias vistas aparece la galería completa
-          (miniaturas, lupa en escritorio, visor con pellizco en móvil). Sin
-          foto identificable no se pone una "parecida": queda el hueco.
+          Galería: con ≥1 foto real aparece completa —principal + miniaturas,
+          con recuadros marcador para las vistas que faltan, lupa en escritorio
+          y visor con pellizco en móvil—. Sin ninguna foto real queda el hueco
+          de siempre. No se pone una foto "parecida" para rellenar.
         */}
         <GaleriaTela
-          fotos={fotos}
+          vistas={vistas}
           caption={`${subcategory.name} · ${category.name}`}
           sizes="(min-width: 1024px) 55vw, 100vw"
         />

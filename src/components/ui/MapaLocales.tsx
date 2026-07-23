@@ -141,15 +141,93 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
     // familia de superficie que la ficha del local, que también es papel—.
     <div className="bg-paper p-3 sm:p-4">
       {/*
-       * Índice de locales. No es un adorno: en el encuadre inicial —de Quito a
-       * Samborondón, unos 430 km— los cuatro locales de la sierra caen a pocos
-       * píxeles unos de otros y sus marcadores se tapan entre sí; medido con un
-       * navegador real, el marcador de Sangolquí intercepta el clic destinado al
-       * de Alangasí. Con el índice cada local se puede elegir siempre, se llega
-       * por teclado, y el mapa se acerca lo suficiente para que además el
-       * marcador sea pulsable.
+       * LEYENDA ARRIBA (encima del mapa). Los dos marcadores van cada uno en
+       * una caja de tamaño fijo (`size-3`) que centra el punto: la matriz lleva
+       * halo (box-shadow) y punto mayor que el local, y sin esa caja los dos
+       * textos arrancaban a distinta x y las líneas no cuadraban entre sí. El
+       * halo se pinta fuera de la caja sin empujar el texto.
        */}
-      <div className="mb-3 flex flex-wrap gap-px border border-greige bg-greige sm:mb-4">
+      <div className="mb-3 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-widest text-graphite sm:mb-4">
+        <span className="flex items-center gap-2.5">
+          <span className="flex size-3 shrink-0 items-center justify-center">
+            <span
+              className="block size-2 rounded-full bg-brand"
+              style={{ boxShadow: "0 0 0 4px rgba(51,162,220,0.18)" }}
+            />
+          </span>
+          Matriz de producción
+        </span>
+        <span className="flex items-center gap-2.5">
+          <span className="flex size-3 shrink-0 items-center justify-center">
+            <span className="block size-1.5 rounded-full bg-accent" />
+          </span>
+          Local de atención
+        </span>
+      </div>
+
+      {/* Hairline greige, sin sombra ni esquina redondeada — como el resto de
+          superficies del sitio. El z-0 mete a Leaflet en su propio contexto de
+          apilado: sus panes usan z-index altos y sin esto se montan sobre la
+          barra de navegación. */}
+      <div className="relative z-0 aspect-4/3 w-full border border-greige sm:aspect-video">
+        <div ref={contenedor} className="size-full bg-bone" />
+
+        {/*
+          Ficha en ESCRITORIO: flotante en la esquina inferior izquierda del
+          mapa, que ahí sobra sitio. En móvil no se pinta aquí —la caja del mapa
+          es baja (4:3) y la ficha la tapaba entera—; va debajo del mapa (fuera
+          de esta caja), ver más abajo.
+        */}
+        {activo && (
+          <FichaLocal
+            location={activo}
+            onCerrar={() => setActivo(null)}
+            className="absolute bottom-4 left-4 z-500 hidden max-w-xs border border-greige sm:block"
+          />
+        )}
+
+        {/* Grafito, no papel: sobre las teselas claras de Positron un texto claro
+            desaparece. A la derecha a propósito: a la izquierda lo tapa el
+            control de zoom de Leaflet. */}
+        {!activo && (
+          <span className="pointer-events-none absolute right-4 top-4 z-500 font-mono text-[10px] uppercase tracking-widest text-graphite">
+            Elige un local o pulsa un marcador
+          </span>
+        )}
+
+        {/* Atribución exigida por la licencia (ODbL de OSM + términos de CARTO):
+            NO es opcional, tiene que verse. Compacta en la esquina del mapa
+            —tipografía menor y color de menos peso, sobre un velo papel para
+            que se lea sobre las teselas— en vez de una fila propia que robaba
+            altura al mapa. `pointer-events-none` para no atrapar el mapa. */}
+        <span className="pointer-events-none absolute bottom-0 right-0 z-500 bg-paper/75 px-1.5 py-0.5 font-mono text-[10px] text-graphite/80">
+          {ATRIBUCION}
+        </span>
+      </div>
+
+      {/*
+        Ficha en MÓVIL: debajo del mapa, no encima. El mapa se centra en el
+        marcador elegido al seleccionar, así que queda entero a la vista con su
+        punto, y la ficha se lee debajo sin taparlo.
+      */}
+      {activo && (
+        <FichaLocal
+          location={activo}
+          onCerrar={() => setActivo(null)}
+          className="mt-3 border border-greige sm:hidden"
+        />
+      )}
+
+      {/*
+       * ÍNDICE DE LOCALES, ABAJO. No es un adorno: en el encuadre inicial —de
+       * Quito a Samborondón, unos 430 km— los cuatro locales de la sierra caen a
+       * pocos píxeles unos de otros y sus marcadores se tapan entre sí; medido
+       * con un navegador real, el marcador de Sangolquí intercepta el clic
+       * destinado al de Alangasí. Con el índice cada local se puede elegir
+       * siempre, se llega por teclado, y el mapa se acerca lo suficiente para
+       * que además el marcador sea pulsable.
+       */}
+      <div className="mt-3 flex flex-wrap gap-px border border-greige bg-greige sm:mt-4">
         {locations.map((location) => {
           const seleccionado = activo?.ref === location.ref;
           return (
@@ -176,46 +254,6 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
           );
         })}
       </div>
-
-      {/* Hairline greige, sin sombra ni esquina redondeada — como el resto de
-          superficies del sitio. El z-0 mete a Leaflet en su propio contexto de
-          apilado: sus panes usan z-index altos y sin esto se montan sobre la
-          barra de navegación. */}
-      <div className="relative z-0 aspect-4/3 w-full border border-greige sm:aspect-video">
-        <div ref={contenedor} className="size-full bg-bone" />
-
-        {activo && (
-          <FichaLocal location={activo} onCerrar={() => setActivo(null)} />
-        )}
-
-        {/* Grafito, no papel: sobre las teselas claras de Positron un texto claro
-            desaparece. A la derecha a propósito: a la izquierda lo tapa el
-            control de zoom de Leaflet. */}
-        {!activo && (
-          <span className="pointer-events-none absolute right-4 top-4 z-500 font-mono text-[10px] uppercase tracking-widest text-graphite">
-            Elige un local o pulsa un marcador
-          </span>
-        )}
-      </div>
-
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 sm:mt-4">
-        <div className="flex flex-wrap items-center gap-6 font-mono text-xs uppercase tracking-widest text-graphite">
-          <span className="flex items-center gap-2.5">
-            <span
-              className="block size-2 rounded-full bg-brand"
-              style={{ boxShadow: "0 0 0 4px rgba(51,162,220,0.18)" }}
-            />
-            Matriz de producción
-          </span>
-          <span className="flex items-center gap-2.5">
-            <span className="block size-1.5 rounded-full bg-accent" />
-            Local de atención
-          </span>
-        </div>
-        {/* Atribución exigida por la licencia de OSM/CARTO: visible, pero en la
-            tipografía del sitio y sin robar peso al mapa. */}
-        <span className="font-mono text-[11px] text-graphite">{ATRIBUCION}</span>
-      </div>
     </div>
   );
 }
@@ -228,12 +266,15 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
 function FichaLocal({
   location,
   onCerrar,
+  className,
 }: {
   location: Location;
   onCerrar: () => void;
+  /** Posición/estado: flotante sobre el mapa en escritorio, bloque debajo en móvil. */
+  className?: string;
 }) {
   return (
-    <div className="absolute inset-x-0 bottom-0 z-500 border-t border-greige bg-paper p-5 sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-xs sm:border">
+    <div className={cn("bg-paper p-5", className)}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <span className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-widest text-accent">

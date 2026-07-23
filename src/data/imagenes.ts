@@ -45,22 +45,28 @@ export function fotoDeTela(slug: string): Foto | undefined {
   return foto(slug);
 }
 
+/** Una vista de la galería de una tela: su foto, o `null` si el hueco está vacío. */
+export interface VistaTela {
+  /** Id del slot, para key estable. */
+  id: string;
+  /** La foto si el slot tiene archivo; `null` si es un hueco pendiente. */
+  foto: Foto | null;
+}
+
 /**
- * Todas las fotos disponibles de una tela para la galería, en orden: primero
- * el macro del tejido (`slug`), luego las vistas adicionales (`slug-caida`, …).
- * Devuelve solo las que tienen archivo, así que la galería degrada sola: con
- * una foto se comporta como una imagen fija; con dos o más aparece completa.
- *
- * Las vistas extra se descubren por convención de nombre desde los slots
- * registrados, no con una lista aparte: registrar `slug-caida` en
- * `slots-imagen.ts` basta para que la galería lo recoja cuando llegue el
- * archivo.
+ * Las vistas REGISTRADAS de una tela para la galería, en orden (macro base
+ * primero), incluidas las que aún no tienen foto. Se usa para pintar los huecos
+ * pendientes como miniatura-marcador —"aquí van más fotos"— en vez de
+ * esconderlos: con una sola foto por tela, ocultar los huecos dejaba la galería
+ * indistinguible de una imagen suelta. Solo incluye slots que existen en el
+ * registro (`slotPorId`), así que una tela sin segunda vista registrada no
+ * inventa huecos.
  */
-export function galeriaDeTela(slug: string): Foto[] {
+export function vistasDeTela(slug: string): VistaTela[] {
   const ids = [slug, ...SUFIJOS_GALERIA_TELA.map((sufijo) => `${slug}-${sufijo}`)];
   return ids
-    .map((id) => foto(id))
-    .filter((f): f is Foto => Boolean(f));
+    .filter((id) => slotPorId(id))
+    .map((id) => ({ id, foto: foto(id) ?? null }));
 }
 
 /** Slugs de tela con foto real — para informar de la cobertura. */

@@ -6,11 +6,14 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { cn } from "@/lib/cn";
 import { EASE_REVELAR } from "@/lib/motion";
-import type { Foto } from "@/data/imagenes";
+import type { Foto, VistaTela } from "@/data/imagenes";
 
 export interface GaleriaTelaProps {
-  /** Fotos disponibles de la tela, en orden (macro base primero). */
-  fotos: Foto[];
+  /**
+   * Vistas registradas de la tela, en orden: cada una con su foto o `null` si
+   * el hueco aún no tiene archivo.
+   */
+  vistas: VistaTela[];
   /** Caption sobre el hueco vacío / la foto (p. ej. "Chelsea · Microfibra"). */
   caption: string;
   /** Anchos servidos para la imagen principal. */
@@ -22,16 +25,19 @@ export interface GaleriaTelaProps {
 const LUPA_ZOOM = 2.2;
 
 /**
- * Galería de la página de tela. DEGRADA SOLA según cuántas fotos haya:
+ * Galería de la página de tela.
  *
- *  - 0 fotos → el hueco de siempre (`ImagePlaceholder`). Igual que antes.
- *  - 1 foto  → la imagen fija, sin miniaturas ni controles. Igual que antes.
- *  - ≥2      → galería: principal + miniaturas, lupa en escritorio, visor a
- *              pantalla completa con pellizco en móvil.
+ * MUESTRA LOS HUECOS cuando faltan fotos, no los esconde. Con una sola foto por
+ * tela, degradar a "una imagen suelta" dejaba la galería indistinguible de lo
+ * de siempre —ni miniaturas ni zoom— y la intención no se entendía. Ahora:
  *
- * Casi ninguna tela tiene hoy más de una foto, así que el camino de 0–1 es el
- * que se ve en producción y el que no puede cambiar. La galería solo aparece
- * cuando de verdad hay varias vistas que mirar.
+ *  - Sin ninguna foto real → el hueco de siempre (`ImagePlaceholder`): no hay
+ *    nada que enseñar todavía.
+ *  - Con ≥1 foto real → galería completa. La principal es la primera foto real;
+ *    debajo, la tira de miniaturas con las vistas que existen y RECUADROS
+ *    MARCADOR para las que faltan (se leen como "aquí van más fotos", no como
+ *    algo roto). Lupa en escritorio y visor con pellizco en móvil, ambos sobre
+ *    la foto real. Los huecos no son pulsables ni abren el visor.
  *
  * RENDIMIENTO
  * No hay ningún efecto permanente. La lupa solo existe mientras el cursor está
@@ -41,18 +47,19 @@ const LUPA_ZOOM = 2.2;
  *
  * Sin dependencias nuevas: lupa y pellizco son Pointer Events + transform.
  */
-export function GaleriaTela({ fotos, caption, sizes, className }: GaleriaTelaProps) {
+export function GaleriaTela({ vistas, caption, sizes, className }: GaleriaTelaProps) {
+  const reales = vistas.filter((v): v is VistaTela & { foto: Foto } => v.foto !== null);
   const [activa, setActiva] = useState(0);
   const [visorAbierto, setVisorAbierto] = useState(false);
   const reduceMotion = useReducedMotion();
 
-  // Degradación: 0 o 1 foto → comportamiento de siempre, sin galería.
-  if (fotos.length <= 1) {
-    const foto = fotos[0];
+  // Sin ninguna foto real todavía: el hueco de siempre. No hay galería que
+  // mostrar —ni principal ni miniatura llena— así que se deja el placeholder.
+  if (reales.length === 0) {
     return (
       <ImagePlaceholder
-        src={foto?.ruta}
-        alt={foto?.alt ?? ""}
+        src={undefined}
+        alt=""
         sizes={sizes}
         label="Foto pendiente"
         caption={caption}
@@ -61,7 +68,7 @@ export function GaleriaTela({ fotos, caption, sizes, className }: GaleriaTelaPro
     );
   }
 
-  const foto = fotos[Math.min(activa, fotos.length - 1)];
+  const foto = reales[Math.min(activa, reales.length - 1)].foto;
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
@@ -72,37 +79,57 @@ export function GaleriaTela({ fotos, caption, sizes, className }: GaleriaTelaPro
         onAbrirVisor={() => setVisorAbierto(true)}
       />
 
-      {/* Miniaturas: anillo azul en la activa, mismo gesto que el muestrario. */}
+      {/*
+        Miniaturas: una por vista REGISTRADA, exista o no su foto. Las llenas
+        son botones (anillo azul en la activa, mismo gesto que el muestrario);
+        las vacías son recuadros marcador, no interactivos, que dicen "aquí va
+        otra foto". `activa` indexa solo las fotos reales.
+      */}
       <div
         role="tablist"
         aria-label="Vistas de la tela"
         className="flex flex-wrap gap-2.5"
       >
-        {fotos.map((f, i) => (
-          <button
-            key={f.ruta}
-            type="button"
-            role="tab"
-            aria-selected={i === activa}
-            aria-label={`Vista ${i + 1}`}
-            onClick={() => setActiva(i)}
-            className="relative size-16 overflow-hidden transition-shadow duration-200 ease-asentar sm:size-18"
-            style={{
-              boxShadow:
-                i === activa
-                  ? "0 0 0 1px #C8C2B8, 0 0 0 3px #F5F2EE, 0 0 0 5px #33A2DC"
-                  : "0 0 0 1px #C8C2B8",
-            }}
-          >
-            <Image
-              src={f.ruta}
-              alt=""
-              fill
-              sizes="72px"
-              className="object-cover"
-            />
-          </button>
-        ))}
+        {vistas.map((v, i) => {
+          if (!v.foto) {
+            return (
+              <span
+                key={v.id}
+                aria-hidden
+                title="Foto pendiente"
+                className="flex size-16 items-center justify-center border border-dashed border-greige bg-bone sm:size-18"
+              >
+                <span className="font-mono text-lg leading-none text-greige">+</span>
+              </span>
+            );
+          }
+          const indiceReal = reales.findIndex((r) => r.id === v.id);
+          return (
+            <button
+              key={v.id}
+              type="button"
+              role="tab"
+              aria-selected={indiceReal === activa}
+              aria-label={`Vista ${i + 1}`}
+              onClick={() => setActiva(indiceReal)}
+              className="relative size-16 overflow-hidden transition-shadow duration-200 ease-asentar sm:size-18"
+              style={{
+                boxShadow:
+                  indiceReal === activa
+                    ? "0 0 0 1px #C8C2B8, 0 0 0 3px #F5F2EE, 0 0 0 5px #33A2DC"
+                    : "0 0 0 1px #C8C2B8",
+              }}
+            >
+              <Image
+                src={v.foto.ruta}
+                alt=""
+                fill
+                sizes="72px"
+                className="object-cover"
+              />
+            </button>
+          );
+        })}
       </div>
 
       <AnimatePresence>
