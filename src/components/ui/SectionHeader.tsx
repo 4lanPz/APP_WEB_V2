@@ -37,7 +37,14 @@ export function SectionHeader({
         className,
       )}
     >
-      <div className="flex items-baseline gap-5">
+      {/*
+        `flex-wrap`: la etiqueta baja a su propia línea bajo 640px. Lleva
+        `whitespace-nowrap`, así que compartiendo fila con un título largo le
+        robaba el ancho y desbordaba el viewport a 375 (p. ej. "Las
+        subcategorías" + "20 construcciones"). Desde 640 vuelve a la derecha en
+        la misma línea de base, que es la cabecera de siempre.
+      */}
+      <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
         <Reveal tipo="etiqueta">
           <span className={cn("font-mono text-mono", dark ? "text-brand" : "text-accent")}>
             {index}
@@ -52,7 +59,7 @@ export function SectionHeader({
           )}
         />
         {tag && (
-          <Reveal tipo="etiqueta" delay={MASCARA.stagger * 2} className="ml-auto">
+          <Reveal tipo="etiqueta" delay={MASCARA.stagger * 2} className="w-full sm:ml-auto sm:w-auto">
             <span
               className={cn(
                 "whitespace-nowrap font-mono text-xs uppercase tracking-widest",

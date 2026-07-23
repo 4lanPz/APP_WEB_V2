@@ -14,6 +14,7 @@
  */
 
 import { categories } from "./taxonomy";
+import { estadoFicha } from "./fichas";
 
 export interface SlotImagen {
   /** Id del slot = nombre del archivo a dejar en `entrega/`, sin extensión. */
@@ -312,6 +313,83 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     ancho: 1280,
   },
 
+  /*
+   * Ejemplo de aplicación de /productos/microfibra: una prenda deportiva
+   * terminada, para ilustrar para qué sirve la familia. Es un SLOT y no un
+   * archivo suelto a propósito: más adelante el bloque cambia a un objeto 3D
+   * interactivo y la página no debe enterarse. Hoy va una imagen generada para
+   * la demo — no es producto propio, así que su etiqueta es puramente
+   * ilustrativa (ver `BloqueAplicacion`).
+   */
+  {
+    id: "aplicacion-microfibra",
+    destino: "/aplicacion/microfibra.webp",
+    alt: "Camiseta deportiva sobre pedestal, fondo oscuro — ejemplo de aplicación de la microfibra en confección.",
+    pagina: "/productos/microfibra",
+    seccion: "Ejemplo de aplicación",
+    ancho: 1280,
+    nota: "Demo: prenda deportiva sobre pedestal, fondo oscuro y neutro. Imagen generada para la maqueta, NO es producto de Textil Padilla. Se reemplazará por el objeto 3D. Vertical (4:5).",
+  },
+
+  /*
+   * Opciones del cuestionario del asesor virtual que no reutilizan una prenda
+   * del recomendador. Miniaturas cuadradas pequeñas: acompañan a la opción, no
+   * la lideran. Sin foto, el hueco queda como plano de tinta intencional.
+   */
+  {
+    id: "asesor-prenda-otro",
+    destino: "/asesor/prenda-otro.webp",
+    alt: "Retales y muestras de distintas telas sobre la mesa del asesor.",
+    pagina: "/asesor-virtual",
+    seccion: "Opciones del cuestionario",
+    ancho: 640,
+    nota: "Cuadrada (1:1). Opción «Otro»: bodegón de muestras variadas, sin una prenda concreta.",
+  },
+  {
+    id: "asesor-sublimado-si",
+    destino: "/asesor/sublimado-si.webp",
+    alt: "Prenda deportiva con estampado sublimado a todo color.",
+    pagina: "/asesor-virtual",
+    seccion: "Opciones del cuestionario",
+    ancho: 640,
+    nota: "Cuadrada (1:1). Base clara con full-print sublimado.",
+  },
+  {
+    id: "asesor-sublimado-no",
+    destino: "/asesor/sublimado-no.webp",
+    alt: "Tela en color liso teñido a demanda, sin estampado.",
+    pagina: "/asesor-virtual",
+    seccion: "Opciones del cuestionario",
+    ancho: 640,
+    nota: "Cuadrada (1:1). Tono sólido, sin estampado.",
+  },
+  {
+    id: "asesor-uso-rendimiento",
+    destino: "/asesor/uso-rendimiento.webp",
+    alt: "Prenda deportiva de alto rendimiento en uso durante el gesto atlético.",
+    pagina: "/asesor-virtual",
+    seccion: "Opciones del cuestionario",
+    ancho: 640,
+    nota: "Cuadrada (1:1). Deporte de rendimiento, tela técnica.",
+  },
+  {
+    id: "asesor-uso-casual",
+    destino: "/asesor/uso-casual.webp",
+    alt: "Prenda casual de uso diario, de caída suave.",
+    pagina: "/asesor-virtual",
+    seccion: "Opciones del cuestionario",
+    ancho: 640,
+    nota: "Cuadrada (1:1). Básico de retail, mano suave.",
+  },
+  {
+    id: "asesor-uso-uniforme",
+    destino: "/asesor/uso-uniforme.webp",
+    alt: "Uniforme corporativo confeccionado en tela de color estable.",
+    pagina: "/asesor-virtual",
+    seccion: "Opciones del cuestionario",
+    ancho: 640,
+    nota: "Cuadrada (1:1). Uniforme corporativo, color estable al lavado.",
+  },
 ];
 
 /**
@@ -352,6 +430,53 @@ export const SLOTS_TELA: SlotImagen[] = categories.flatMap((c) =>
     seccion: "Telas del catálogo",
     ancho: 1280,
   })),
+);
+
+/**
+ * Sufijos de las vistas extra de galería de una tela, EN ORDEN de aparición
+ * tras el macro base. Hoy solo la caída del género; una segunda vista (p. ej.
+ * `"rollo"`) se añade aquí y su hueco aparece solo en el inventario.
+ *
+ * Es la fuente única del nombre: `galeriaDeTela` en `imagenes.ts` lee de aquí
+ * para recoger exactamente estos ids y no confundirse con telas de nombre más
+ * largo (`sevilla` vs. `sevilla-plus`), donde un match por prefijo fallaría.
+ */
+export const SUFIJOS_GALERIA_TELA = ["caida"] as const;
+
+const NOTA_VISTA_GALERIA: Record<(typeof SUFIJOS_GALERIA_TELA)[number], (nombre: string) => { alt: (fam: string) => string; nota: string }> = {
+  caida: (nombre) => ({
+    alt: (fam) => `Tela ${nombre} de ${fam}, el género en caída mostrando peso y drapeado.`,
+    nota: `Segunda foto de la galería de ${nombre}: el género drapeado o en caída, NO el macro plano del tejido. Fondo neutro, vertical (4:5).`,
+  }),
+};
+
+/**
+ * Vistas de galería de la página de tela. Solo para las telas que YA publican
+ * ficha (con página de contenido, no "en preparación"): sin ficha no hay
+ * galería que alimentar. Se derivan de `estadoFicha`, así que publicar una
+ * ficha nueva crea sus huecos de galería automáticamente.
+ *
+ * Hoy es UNA sola vista nueva por tela a propósito, no dos: es lo que se le
+ * pide a marketing de una tanda. Con dos fotos —esta más el macro— la galería
+ * ya se activa.
+ */
+export const SLOTS_GALERIA_TELA: SlotImagen[] = categories.flatMap((c) =>
+  c.subcategories
+    .filter((s) => estadoFicha(s.slug) !== "sin-ficha")
+    .flatMap((s) =>
+      SUFIJOS_GALERIA_TELA.map((sufijo) => {
+        const meta = NOTA_VISTA_GALERIA[sufijo](s.name);
+        return {
+          id: `${s.slug}-${sufijo}`,
+          destino: `/telas/${s.slug}-${sufijo}.webp`,
+          alt: meta.alt(c.name.toLowerCase()),
+          pagina: `/productos/${c.slug}`,
+          seccion: "Galería · segunda vista",
+          ancho: 1280,
+          nota: meta.nota,
+        };
+      }),
+    ),
 );
 
 /**
@@ -418,6 +543,7 @@ for (const slot of SLOTS_TELA) {
 export const SLOTS: SlotImagen[] = [
   ...SLOTS_UNICOS,
   ...SLOTS_TELA,
+  ...SLOTS_GALERIA_TELA,
   ...SLOTS_HITOS,
 ];
 

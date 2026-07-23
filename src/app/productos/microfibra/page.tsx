@@ -5,10 +5,12 @@ import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { SubcategoryTile } from "@/components/ui/SubcategoryTile";
 import { AsesorComercial } from "@/components/ui/AsesorComercial";
+import { BloqueAplicacion } from "@/components/ui/BloqueAplicacion";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { getCategory } from "@/data/taxonomy";
 import { estadoFicha } from "@/data/fichas";
-import { fotoDeTela } from "@/data/imagenes";
+import { fotoDeTela, foto } from "@/data/imagenes";
 
 export const metadata: Metadata = {
   title: "Microfibra — Textil Padilla",
@@ -38,6 +40,33 @@ export default async function CategoriaMicrofibraPage() {
         ]}
         subhead="Nuestra familia de tejidos de microfibra: hilos finos de poliéster que dan poco peso, secado rápido y alta recuperación. Una misma base con veinte construcciones —cada una afinada para un uso deportivo distinto."
         primaryCta={{ label: "Ver las subcategorías →", href: "#subcategorias" }}
+      />
+
+      {/*
+        Ejemplo de aplicación — entre el hero y la lista. El hero dice QUÉ es la
+        microfibra; antes de desglosar las veinte construcciones, esta banda
+        responde PARA QUÉ sirve (confección deportiva) con una prenda terminada.
+        Puesta después de la lista sería un cierre; puesta aquí da el contexto
+        con el que se leen las veinte fichas. No lleva índice de sección: es una
+        ilustración, no una tabla del catálogo, así que no desordena el 01/02.
+
+        La imagen es un slot registrado (`aplicacion-microfibra`), no un archivo
+        suelto: se reemplazará por un objeto 3D cambiando solo el `media` que se
+        le pasa aquí. `ImagePlaceholder` la degrada limpia mientras no llegue.
+      */}
+      <BloqueAplicacion
+        titulo="Para qué sirve la microfibra"
+        descripcion="Puesta en prenda, la microfibra es la base de la camiseta y el uniforme deportivo: ligera, de secado rápido y con recuperación. Así se ve el tipo de confección al que va destinada esta familia."
+        media={
+          <ImagePlaceholder
+            src={foto("aplicacion-microfibra")?.ruta}
+            alt={foto("aplicacion-microfibra")?.alt ?? ""}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            dark
+            label="Prenda de ejemplo"
+            className="aspect-4/5"
+          />
+        }
       />
 
       <section id="subcategorias" className="py-16 sm:py-24">

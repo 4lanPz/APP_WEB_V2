@@ -18,7 +18,7 @@
  * `ImagePlaceholder` — no se rellenan con una imagen "parecida".
  */
 
-import { SLOTS, SLOTS_TELA, slotPorId } from "./slots-imagen";
+import { SLOTS, SLOTS_TELA, SUFIJOS_GALERIA_TELA, slotPorId } from "./slots-imagen";
 import { SLOTS_LLENOS } from "./imagenes.generado";
 
 export interface Foto {
@@ -43,6 +43,24 @@ export function foto(id: string): Foto | undefined {
 /** Foto de una tela, por slug de subcategoría. El slug ES el id del slot. */
 export function fotoDeTela(slug: string): Foto | undefined {
   return foto(slug);
+}
+
+/**
+ * Todas las fotos disponibles de una tela para la galería, en orden: primero
+ * el macro del tejido (`slug`), luego las vistas adicionales (`slug-caida`, …).
+ * Devuelve solo las que tienen archivo, así que la galería degrada sola: con
+ * una foto se comporta como una imagen fija; con dos o más aparece completa.
+ *
+ * Las vistas extra se descubren por convención de nombre desde los slots
+ * registrados, no con una lista aparte: registrar `slug-caida` en
+ * `slots-imagen.ts` basta para que la galería lo recoja cuando llegue el
+ * archivo.
+ */
+export function galeriaDeTela(slug: string): Foto[] {
+  const ids = [slug, ...SUFIJOS_GALERIA_TELA.map((sufijo) => `${slug}-${sufijo}`)];
+  return ids
+    .map((id) => foto(id))
+    .filter((f): f is Foto => Boolean(f));
 }
 
 /** Slugs de tela con foto real — para informar de la cobertura. */

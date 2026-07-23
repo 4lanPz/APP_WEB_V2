@@ -2,11 +2,11 @@ import { Container } from "@/components/ui/Container";
 import { Breadcrumb, type BreadcrumbItem } from "@/components/ui/Breadcrumb";
 import { DraftNotice } from "@/components/ui/DraftNotice";
 import { FichaTecnica } from "@/components/ui/FichaTecnica";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { GaleriaTela } from "@/components/ui/GaleriaTela";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { buttonVariants } from "@/components/ui/buttonVariants";
 import { valorEstandar, type FichaPublicable } from "@/data/fichas";
-import { fotoDeTela } from "@/data/imagenes";
+import { galeriaDeTela } from "@/data/imagenes";
 import type { Category, Subcategory } from "@/data/taxonomy";
 import { cn } from "@/lib/cn";
 
@@ -30,7 +30,7 @@ export function FichaSubcategoria({
   subcategory,
   ficha,
 }: Props) {
-  const foto = fotoDeTela(subcategory.slug);
+  const fotos = galeriaDeTela(subcategory.slug);
 
   const rows = [
     { label: "Composición", value: ficha.composicion },
@@ -45,14 +45,16 @@ export function FichaSubcategoria({
       <Breadcrumb items={breadcrumb} />
 
       <div className="mt-8 grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
-        {/* Sin foto identificable no se pone una "parecida": queda el placeholder. */}
-        <ImagePlaceholder
-          src={foto?.ruta}
-          alt={foto?.alt ?? ""}
-          sizes="(min-width: 1024px) 55vw, 100vw"
-          label="Foto pendiente"
+        {/*
+          Galería que degrada sola: con 0–1 fotos se comporta igual que el
+          placeholder de siempre; con varias vistas aparece la galería completa
+          (miniaturas, lupa en escritorio, visor con pellizco en móvil). Sin
+          foto identificable no se pone una "parecida": queda el hueco.
+        */}
+        <GaleriaTela
+          fotos={fotos}
           caption={`${subcategory.name} · ${category.name}`}
-          className="aspect-4/3"
+          sizes="(min-width: 1024px) 55vw, 100vw"
         />
 
         <div className="flex flex-col gap-8">

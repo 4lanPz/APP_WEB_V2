@@ -2,10 +2,12 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { categories } from "@/data/taxonomy";
 import { estadoFicha } from "@/data/fichas";
+import { foto } from "@/data/imagenes";
 import { EASE_REVELAR, EASE_PLEGAR, EASE_ASENTAR } from "@/lib/motion";
 
 /**
@@ -27,35 +29,99 @@ type Producto = "camiseta" | "chompa" | "pantalon" | "otro";
 type Sublimado = "si" | "no";
 type Uso = "rendimiento" | "casual" | "uniforme";
 
-const PRODUCTOS: { key: Producto; title: string; sublabel: string }[] = [
-  { key: "camiseta", title: "Camiseta", sublabel: "punto / jersey" },
-  { key: "chompa", title: "Chompa / buzo", sublabel: "peso medio" },
-  { key: "pantalon", title: "Pantalón deportivo", sublabel: "movilidad / secado" },
-  { key: "otro", title: "Otro", sublabel: "lo vemos con el asesor" },
+/**
+ * `slot` es el id de imagen de cada opción (ver `slots-imagen.ts`). Las tres
+ * primeras prendas reutilizan la foto del recomendador de /productos —misma
+ * prenda, misma foto—; el resto tiene su propio slot. Sin archivo, la opción
+ * muestra un hueco intencional, no una imagen rota.
+ */
+const PRODUCTOS: { key: Producto; title: string; sublabel: string; slot: string }[] = [
+  { key: "camiseta", title: "Camiseta", sublabel: "punto / jersey", slot: "prenda-camiseta" },
+  { key: "chompa", title: "Chompa / buzo", sublabel: "peso medio", slot: "prenda-chompa" },
+  { key: "pantalon", title: "Pantalón deportivo", sublabel: "movilidad / secado", slot: "prenda-pantalon" },
+  { key: "otro", title: "Otro", sublabel: "lo vemos con el asesor", slot: "asesor-prenda-otro" },
 ];
 
-const SUBLIMADOS: { key: Sublimado; title: string; description: string }[] = [
-  { key: "si", title: "Sí, lleva sublimación", description: "Estampado full-print sobre base clara." },
-  { key: "no", title: "No, color liso o teñido", description: "Tono sólido, teñido a demanda." },
+const SUBLIMADOS: { key: Sublimado; title: string; description: string; slot: string }[] = [
+  { key: "si", title: "Sí, lleva sublimación", description: "Estampado full-print sobre base clara.", slot: "asesor-sublimado-si" },
+  { key: "no", title: "No, color liso o teñido", description: "Tono sólido, teñido a demanda.", slot: "asesor-sublimado-no" },
 ];
 
-const USOS: { key: Uso; title: string; description: string }[] = [
+const USOS: { key: Uso; title: string; description: string; slot: string }[] = [
   {
     key: "rendimiento",
     title: "Deportivo de alto rendimiento",
     description: "Seca rápido, aguanta el gesto, no pesa.",
+    slot: "asesor-uso-rendimiento",
   },
   {
     key: "casual",
     title: "Casual, día a día",
     description: "Mano suave, caída natural, básicos de retail.",
+    slot: "asesor-uso-casual",
   },
   {
     key: "uniforme",
     title: "Uniforme corporativo",
     description: "Color estable, resistente al lavado frecuente.",
+    slot: "asesor-uso-uniforme",
   },
 ];
+
+/**
+ * Opción del cuestionario con miniatura. La imagen es de tamaño FIJO y va a la
+ * izquierda: no le quita tamaño al área pulsable —la aumenta, toda la fila es
+ * el botón— ni encoge el texto, que conserva su tamaño y contraste. Sin foto,
+ * el hueco queda como plano de tinta con un punto de marca: se lee como parte
+ * del diseño, no como imagen rota.
+ */
+function OpcionConImagen({
+  slot,
+  title,
+  subtitle,
+  subtitleMono = false,
+  onClick,
+}: {
+  slot: string;
+  title: string;
+  subtitle: string;
+  subtitleMono?: boolean;
+  onClick: () => void;
+}) {
+  const f = foto(slot);
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex items-center gap-4 bg-brand-deep p-4 text-left transition-colors duration-220 ease-asentar hover:bg-paper/5 sm:p-5"
+    >
+      <span className="relative block size-16 shrink-0 overflow-hidden bg-paper/8 sm:size-18">
+        {f ? (
+          <Image src={f.ruta} alt="" fill sizes="72px" className="object-cover" />
+        ) : (
+          <span aria-hidden className="absolute inset-0 flex items-center justify-center">
+            <span className="block size-2 bg-brand/70" />
+          </span>
+        )}
+      </span>
+      <span className="min-w-0">
+        <span className="block font-sans text-[15px] font-semibold text-paper">
+          {title}
+        </span>
+        <span
+          className={cn(
+            "mt-1 block",
+            subtitleMono
+              ? "font-mono text-xs uppercase tracking-widest text-paper/50"
+              : "font-serif text-[15px] text-paper/60",
+          )}
+        >
+          {subtitle}
+        </span>
+      </span>
+    </button>
+  );
+}
 
 const PLABEL: Record<Producto, string> = {
   camiseta: "camisetas",
@@ -205,22 +271,17 @@ export function AsesorWizard() {
               </p>
               <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
                 {PRODUCTOS.map((p) => (
-                  <button
+                  <OpcionConImagen
                     key={p.key}
-                    type="button"
+                    slot={p.slot}
+                    title={p.title}
+                    subtitle={p.sublabel}
+                    subtitleMono
                     onClick={() => {
                       setProducto(p.key);
                       setStep(2);
                     }}
-                    className="bg-brand-deep p-6 text-left hover:bg-paper/5"
-                  >
-                    <p className="font-sans text-[15px] font-semibold text-paper">
-                      {p.title}
-                    </p>
-                    <p className="mt-1 font-mono text-xs uppercase tracking-widest text-paper/50">
-                      {p.sublabel}
-                    </p>
-                  </button>
+                  />
                 ))}
               </div>
             </motion.div>
@@ -246,22 +307,16 @@ export function AsesorWizard() {
               </p>
               <div className="mt-8 flex flex-col gap-px bg-paper/15">
                 {SUBLIMADOS.map((s) => (
-                  <button
+                  <OpcionConImagen
                     key={s.key}
-                    type="button"
+                    slot={s.slot}
+                    title={s.title}
+                    subtitle={s.description}
                     onClick={() => {
                       setSublimado(s.key);
                       setStep(3);
                     }}
-                    className="bg-brand-deep p-6 text-left hover:bg-paper/5"
-                  >
-                    <p className="font-sans text-[15px] font-semibold text-paper">
-                      {s.title}
-                    </p>
-                    <p className="mt-1 font-serif text-[15px] text-paper/60">
-                      {s.description}
-                    </p>
-                  </button>
+                  />
                 ))}
               </div>
               <button
@@ -294,22 +349,16 @@ export function AsesorWizard() {
               </p>
               <div className="mt-8 flex flex-col gap-px bg-paper/15">
                 {USOS.map((u) => (
-                  <button
+                  <OpcionConImagen
                     key={u.key}
-                    type="button"
+                    slot={u.slot}
+                    title={u.title}
+                    subtitle={u.description}
                     onClick={() => {
                       setUso(u.key);
                       setStep(4);
                     }}
-                    className="bg-brand-deep p-6 text-left hover:bg-paper/5"
-                  >
-                    <p className="font-sans text-[15px] font-semibold text-paper">
-                      {u.title}
-                    </p>
-                    <p className="mt-1 font-serif text-[15px] text-paper/60">
-                      {u.description}
-                    </p>
-                  </button>
+                  />
                 ))}
               </div>
               <button
