@@ -5,6 +5,7 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import { SectionHeader } from "./SectionHeader";
 import { Container } from "./Container";
+import { WHATSAPP_HREF, WHATSAPP_VISIBLE } from "@/data/whatsapp";
 
 export interface AsesorComercialProps {
   index: string;
@@ -14,8 +15,15 @@ export interface AsesorComercialProps {
   questionPlaceholder: string;
 }
 
+/*
+ * El canal de WhatsApp sale de `data/whatsapp.ts`, igual que el botón
+ * flotante. Aquí había un segundo número escrito a mano (+593 99 000 0000) que
+ * ya no coincidía con el del flotante: dos fuentes del mismo dato garantizan
+ * que al poner el real se cambie una y se olvide la otra. El resto de canales
+ * siguen aquí porque son datos distintos, no copias de este.
+ */
 const CONTACT_CHANNELS = [
-  { label: "WhatsApp · +593 99 000 0000", href: "https://wa.me/593990000000" },
+  { label: `WhatsApp · ${WHATSAPP_VISIBLE}`, href: WHATSAPP_HREF },
   { label: "Teléfono · +593 2 000 0000", href: "tel:+59320000000" },
   { label: "asesor@textilpadilla.ec", href: "mailto:asesor@textilpadilla.ec" },
 ];
