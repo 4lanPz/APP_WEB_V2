@@ -130,6 +130,15 @@ export function Navbar() {
   const disparadorRef = useRef<HTMLAnchorElement>(null);
   const cierreTimer = useRef<number | null>(null);
   const reduceMotion = useReducedMotion();
+  const pathname = usePathname();
+
+  // El disparador de catálogo está activo en /productos y en toda su rama
+  // (fichas de tela, categorías…), no solo en la coincidencia exacta que usan
+  // los demás enlaces. Así "Nuestros Productos" marca sección igual que el
+  // resto en cualquier página de producto.
+  const catalogoActivo =
+    pathname === "/productos" || pathname.startsWith("/productos/");
+  const disparadorMarcado = megaOpen || catalogoActivo;
 
   /*
    * Apertura por hover con RETARDO AL CERRAR, no por ampliar cajas invisibles.
@@ -238,7 +247,14 @@ export function Navbar() {
           */}
           <div
             ref={megaRef}
-            className="relative"
+            /*
+             * `flex`, no un div en bloque: sin él el enlace de dentro queda
+             * `inline` y su `pb-1.75` no cuenta para la altura del contenedor,
+             * así que el disparador medía menos que los demás enlaces y caía
+             * ~7px más abajo en la fila. Como flex, el enlace se blockifica y
+             * su caja iguala a la de los NavLink hermanos.
+             */
+            className="relative flex"
             onPointerEnter={(e) => {
               if (e.pointerType === "mouse") abrirMenu();
             }}
@@ -263,14 +279,17 @@ export function Navbar() {
               onClick={cerrarMenu}
               aria-expanded={megaOpen}
               aria-haspopup="menu"
+              aria-current={catalogoActivo ? "page" : undefined}
               className={cn(
                 "group relative pb-1.75 font-sans text-[15px] text-ink hover:text-brand",
-                megaOpen && "text-brand",
+                disparadorMarcado && "text-brand",
               )}
             >
               Nuestros Productos
-              <NavUnderline visible={megaOpen} />
-              {!megaOpen && (
+              {/* Igual que los NavLink: subrayado persistente cuando la sección
+                  está activa (o el menú abierto); subrayado de hover cuando no. */}
+              <NavUnderline visible={disparadorMarcado} />
+              {!disparadorMarcado && (
                 <span
                   aria-hidden
                   className="absolute inset-x-0 -bottom-px h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-220 ease-asentar group-hover:scale-x-100"

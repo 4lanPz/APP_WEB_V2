@@ -49,7 +49,14 @@ export default function ContactoPage() {
               label="Oficio · manos y máquina"
               sublabel="Retrato de asesor comercial"
               caption="Tu asesor · Asesoría técnica · Selección de tela y color"
-              className="order-first aspect-4/3 min-h-[280px] lg:order-last lg:aspect-auto lg:h-full"
+              /*
+                Sin `min-h-[280px]`: en móvil chocaba con `aspect-4/3`. El
+                min-height forzaba la altura a 280 y el aspect-ratio derivaba el
+                ancho de ella (280×4/3 = 373px), más ancho que la columna (322px
+                a 375), y desbordaba el viewport ~25px. Dejando solo `aspect-4/3`
+                el ancho manda (la columna) y la altura sale de él (~241px).
+              */
+              className="order-first aspect-4/3 lg:order-last lg:aspect-auto lg:h-full"
             />
           </div>
 
