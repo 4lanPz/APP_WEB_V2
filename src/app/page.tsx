@@ -41,6 +41,17 @@ const verbos = [
   },
 ];
 
+/*
+ * Los tres pasos del asesor, promovidos de rótulo suelto a contenido real: hoy
+ * rellenan el panel que ocupa la mitad que antes quedaba en negro. Mismo dato
+ * que el flujo de /asesor-virtual, resumido.
+ */
+const pasosAsesor = [
+  { index: "01", title: "Prenda", desc: "Qué vas a producir: camiseta, chompa, pantalón…" },
+  { index: "02", title: "Sublimado", desc: "Si lleva estampado full-print o color liso." },
+  { index: "03", title: "Uso", desc: "Alto rendimiento, casual o uniforme corporativo." },
+];
+
 const eventSlides = [
   {
     date: "Mar 2025 · Quito",
@@ -148,28 +159,60 @@ export default function Home() {
         </Container>
       </section>
 
-      <section className="relative bg-brand-deep py-24 text-paper sm:py-32">
-        <Container className="relative">
-          <Reveal tipo="etiqueta">
-            <span className="font-mono text-xs uppercase tracking-widest text-brand">
-              Verdad material
-            </span>
-          </Reveal>
-          {/* Declaración, no párrafo: va por máscara como los titulares. */}
-          <LineasEnMascara
-            as="p"
-            delay={MASCARA.stagger}
-            lineas={["La trama ampliada hasta que la tela", "deja de parecer tela y se vuelve paisaje."]}
-            className="mt-6 max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em]"
+      {/*
+        Verdad material — split a sangre. La macro va a la IZQUIERDA tocando el
+        borde y a la misma altura que el texto (`items-stretch`); la declaración
+        a la derecha. La foto ocupa el medio ancho que antes quedaba en negro:
+        es grande porque llena ese hueco, no porque se sume altura —la banda es
+        MÁS corta que los dos bloques de antes—. Y en una columna alta se ve
+        muchísima más trama que en la franja 21:9, que era justo lo que el texto
+        prometía enseñar.
+
+        El texto va AL LADO de la foto, no encima: cero riesgo de contraste, sin
+        DEGRADADO_HERO. La declaración sigue por máscara (`LineasEnMascara`) y la
+        foto por barrido (`Curtain`); sin gestos nuevos.
+
+        Los cortes de la declaración se reescriben en cuatro líneas cortas: la
+        más larga cabe con margen en la columna estrecha del split a 1024 (el
+        peor caso) y en 375, medido contra su line-height. Antes eran dos líneas
+        largas que envolvían y soltaban "tela" y "paisaje." huérfanas.
+      */}
+      <section id="verdad-material" className="bg-brand-deep text-paper">
+        <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+          <PhotoCurtain
+            dark
+            src={foto("macro-fibra-blanca")?.ruta}
+            alt={foto("macro-fibra-blanca")?.alt}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            className="min-h-[62vw] sm:min-h-[360px] lg:min-h-0 lg:h-full"
           />
-        </Container>
-        <PhotoCurtain
-          dark
-          src={foto("macro-fibra-blanca")?.ruta}
-          alt={foto("macro-fibra-blanca")?.alt}
-          sizes="100vw"
-          className="mt-12 aspect-21/9 w-full"
-        />
+          <div className="flex flex-col justify-center gap-5 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+            <Reveal tipo="etiqueta">
+              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+                Verdad material
+              </span>
+            </Reveal>
+            {/* Declaración, no párrafo: va por máscara como los titulares. */}
+            <LineasEnMascara
+              as="p"
+              delay={MASCARA.stagger}
+              lineas={[
+                "La trama ampliada",
+                "hasta que la tela deja",
+                "de parecer tela y se",
+                "vuelve paisaje.",
+              ]}
+              className="font-sans font-medium leading-[1.12] tracking-[-0.02em] text-[clamp(1.5rem,0.9rem_+_1.6vw,2.375rem)]"
+            />
+            <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
+              <p className="max-w-md font-serif text-body-m text-paper/70">
+                Macrofotografía de la trama: el mismo poliéster que tejemos y
+                teñimos, visto tan de cerca que la estructura se lee como
+                relieve.
+              </p>
+            </Reveal>
+          </div>
+        </div>
       </section>
 
       <section id="categorias" className="py-16 sm:py-24">
@@ -205,42 +248,85 @@ export default function Home() {
         </Container>
       </section>
 
-      <section id="asesor" className="bg-brand-deep py-24 text-paper sm:py-32">
-        <Container className="flex flex-col gap-6">
-          <Reveal tipo="etiqueta">
-            <span className="font-mono text-xs uppercase tracking-widest text-brand">
-              Asesor virtual
-            </span>
-          </Reveal>
-          <LineasEnMascara
-            as="h2"
-            lineas={["¿No sabes qué tela necesitas?", "Te acompañamos hasta el color exacto."]}
-            className="max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em]"
-          />
-          <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
-            <p className="max-w-xl font-serif text-body-l text-paper/80">
-              Tres preguntas —qué prenda vas a producir, si la tela irá
-              sublimada y si buscas alto rendimiento o uso casual— y un
-              asesor te devuelve una recomendación técnica concreta:
-              referencia, gramaje y tono, lista para pedir muestra.
-            </p>
-          </Reveal>
-          <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-widest">
-            <span className="text-brand">01 Prenda</span>
-            <span className="text-paper/30">→</span>
-            <span className="text-paper/50">02 Sublimado</span>
-            <span className="text-paper/30">→</span>
-            <span className="text-paper/50">03 Uso</span>
+      {/*
+        Asesor virtual — mismo criterio que "Verdad material" (llenar la mitad
+        que quedaba en negro, mismo peso a ambos lados), pero deliberadamente
+        DISTINTA para que no sean dos bloques oscuros gemelos: aquí la derecha no
+        es fotografía sino UI —el panel de los tres pasos con su barra de
+        progreso—, promovido de rótulo suelto a contenido real. Es una
+        herramienta, no una estampa, y se lee como tal.
+
+        Bloque contenido (no a sangre): la macro de arriba ya toca el borde;
+        repetirlo aquí volvería a acercarlos. El titular se reescribe en líneas
+        cortas por la misma razón que la declaración —caben en la media columna
+        del split sin envolver—.
+      */}
+      <section id="asesor" className="bg-brand-deep py-16 text-paper sm:py-20">
+        <Container>
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16">
+            <div className="flex flex-col gap-6">
+              <Reveal tipo="etiqueta">
+                <span className="font-mono text-xs uppercase tracking-widest text-brand">
+                  Asesor virtual
+                </span>
+              </Reveal>
+              <LineasEnMascara
+                as="h2"
+                lineas={[
+                  "¿No sabes qué",
+                  "tela necesitas?",
+                  "Te acompañamos hasta",
+                  "el color exacto.",
+                ]}
+                className="font-sans text-h2 font-medium tracking-[-0.01em]"
+              />
+              <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
+                <p className="max-w-md font-serif text-body-m text-paper/80">
+                  Tres preguntas —qué prenda vas a producir, si la tela irá
+                  sublimada y si buscas alto rendimiento o uso casual— y un
+                  asesor te devuelve una recomendación técnica concreta:
+                  referencia, gramaje y tono, lista para pedir muestra.
+                </p>
+              </Reveal>
+              <MagneticLink
+                href="/asesor-virtual"
+                className="mt-1 w-fit bg-brand px-7.5 py-4 font-sans text-base font-medium text-paper hover:bg-paper hover:text-brand-deep"
+              >
+                Iniciar con el asesor →
+              </MagneticLink>
+            </div>
+
+            <Reveal tipo="tarjeta">
+              <div className="border border-paper/15 bg-paper/3 p-5 sm:p-7">
+                <p className="font-mono text-xs uppercase tracking-widest text-paper/50">
+                  Tres pasos · una recomendación
+                </p>
+                <ol className="mt-5 flex flex-col divide-y divide-paper/12">
+                  {pasosAsesor.map((paso) => (
+                    <li key={paso.index} className="flex gap-4 py-3.5 first:pt-0 last:pb-0">
+                      <span className="font-mono text-mono text-brand">{paso.index}</span>
+                      <div>
+                        <p className="font-sans text-[15px] font-semibold text-paper">
+                          {paso.title}
+                        </p>
+                        <p className="mt-1 font-serif text-[14px] text-paper/65">
+                          {paso.desc}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="h-0.5 flex-1 bg-paper/15">
+                    <div className="h-0.5 w-1/3 bg-brand" />
+                  </div>
+                  <span className="font-mono text-xs uppercase tracking-widest text-paper/40">
+                    ~1 min
+                  </span>
+                </div>
+              </div>
+            </Reveal>
           </div>
-          <div className="h-0.5 w-full max-w-xs bg-paper/15">
-            <div className="h-0.5 w-1/3 bg-brand" />
-          </div>
-          <MagneticLink
-            href="/asesor-virtual"
-            className="mt-2 w-fit bg-brand px-7.5 py-4 font-sans text-base font-medium text-paper hover:bg-paper hover:text-brand-deep"
-          >
-            Iniciar con el asesor →
-          </MagneticLink>
         </Container>
       </section>
     </div>
