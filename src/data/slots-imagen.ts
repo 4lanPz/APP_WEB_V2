@@ -285,6 +285,42 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     ancho: 1280,
   },
 
+  /*
+   * Bloque "Asesor virtual" de la portada: una foto por paso del cuestionario
+   * (Prenda / Sublimado / Uso) que se cambia sola al avanzar el paso activo. Son
+   * tres slots propios y no los del recomendador (`prenda-*`) ni los del wizard
+   * (`asesor-*`): aquí la foto es grande, editorial y va sobre fondo claro, no
+   * una miniatura. Formato flexible —la caja recorta con object-cover—, así que
+   * marketing puede entregar apaisada o vertical sin romper el bloque.
+   */
+  {
+    id: "asesor-portada-prenda",
+    destino: "/asesor/paso-prenda.webp",
+    alt: "Prendas deportivas en confección: camisetas y buzos que definen el punto de partida de la asesoría.",
+    pagina: "/",
+    seccion: "Asesor virtual",
+    ancho: 1600,
+    nota: "Paso 01 (Prenda). Qué se va a producir: prenda deportiva terminada o en confección. Sin rótulos quemados. Formato flexible; se recorta a la caja del split.",
+  },
+  {
+    id: "asesor-portada-sublimado",
+    destino: "/asesor/paso-sublimado.webp",
+    alt: "Tela clara con estampado sublimado full-print, mostrando el color a sangre sobre la base.",
+    pagina: "/",
+    seccion: "Asesor virtual",
+    ancho: 1600,
+    nota: "Paso 02 (Sublimado). Base clara con estampado full-print, o el contraste liso/sublimado. Formato flexible; se recorta a la caja del split.",
+  },
+  {
+    id: "asesor-portada-uso",
+    destino: "/asesor/paso-uso.webp",
+    alt: "Tela en uso deportivo, mostrando el rendimiento y la caída del género en movimiento.",
+    pagina: "/",
+    seccion: "Asesor virtual",
+    ancho: 1600,
+    nota: "Paso 03 (Uso). El destino de la tela: alto rendimiento, casual o uniforme. Formato flexible; se recorta a la caja del split.",
+  },
+
   // Recomendador de prenda de /productos. El id es la `key` de cada opción.
   // El asesor virtual reutiliza estas tres para sus opciones de prenda: misma
   // prenda, misma foto, un solo archivo que pedir.

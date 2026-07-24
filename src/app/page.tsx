@@ -4,7 +4,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { CategoryCard } from "@/components/ui/CategoryCard";
 import { EventCarousel } from "@/components/ui/EventCarousel";
 import { StatNumber } from "@/components/ui/StatNumber";
-import { MagneticLink } from "@/components/motion/MagneticLink";
+import { AsesorPasos } from "@/components/ui/AsesorPasos";
 import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
@@ -42,14 +42,13 @@ const verbos = [
 ];
 
 /*
- * Los tres pasos del asesor, promovidos de rótulo suelto a contenido real: hoy
- * rellenan el panel que ocupa la mitad que antes quedaba en negro. Mismo dato
- * que el flujo de /asesor-virtual, resumido.
+ * Los tres pasos del asesor: cada uno gobierna una foto en el bloque de portada
+ * (ver `AsesorPasos`). El `slot` es su hueco de imagen registrado.
  */
 const pasosAsesor = [
-  { index: "01", title: "Prenda", desc: "Qué vas a producir: camiseta, chompa, pantalón…" },
-  { index: "02", title: "Sublimado", desc: "Si lleva estampado full-print o color liso." },
-  { index: "03", title: "Uso", desc: "Alto rendimiento, casual o uniforme corporativo." },
+  { index: "01", label: "Prenda", slot: "asesor-portada-prenda" },
+  { index: "02", label: "Sublimado", slot: "asesor-portada-sublimado" },
+  { index: "03", label: "Uso", slot: "asesor-portada-uso" },
 ];
 
 const eventSlides = [
@@ -249,117 +248,26 @@ export default function Home() {
       </section>
 
       {/*
-        Asesor virtual — mismo criterio que "Verdad material" (llenar la mitad
-        que quedaba en negro, mismo peso a ambos lados), pero deliberadamente
-        DISTINTA para que no sean dos bloques oscuros gemelos: aquí la derecha no
-        es fotografía sino UI —el panel de los tres pasos con su barra de
-        progreso—, promovido de rótulo suelto a contenido real. Es una
-        herramienta, no una estampa, y se lee como tal.
-
-        Bloque contenido (no a sangre): la macro de arriba ya toca el borde;
-        repetirlo aquí volvería a acercarlos. El titular se reescribe en líneas
-        cortas por la misma razón que la declaración —caben en la media columna
-        del split sin envolver—.
-
-        El split arranca a 768 (`md`), no a 1024: una tablet tiene ancho para
-        dos columnas, así que ahí también se GANA altura en vez de perderla. Por
-        debajo de 768 se apila, y entonces los tres pasos no van en el panel alto
-        sino en un stepper horizontal compacto (01 → 02 → 03 con su barra) —el
-        mismo patrón que la sección ya tenía—, que ocupa una fila en vez de una
-        columna. A `md` la copia lleva algo más de ancho que el panel para que el
-        titular no se apriete.
+        Asesor virtual — la mitad derecha lleva FOTO que cambia con el paso
+        activo (Prenda / Sublimado / Uso), no un panel. Toda la lógica —ciclo
+        automático, pausa al hover, fijar al pulsar, reduced-motion— vive en
+        `AsesorPasos`, que además pone la sección sobre fondo CLARO a propósito:
+        con "Verdad material" (oscuro con foto) y el footer (oscuro) delante y
+        detrás, otro bloque oscuro con foto los volvía gemelos y cerraba la
+        portada en tres bandas de tinta. Claro rompe las dos cosas.
       */}
-      <section id="asesor" className="bg-brand-deep py-16 text-paper sm:py-20">
-        <Container>
-          <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-2 lg:gap-16">
-            <div className="flex flex-col gap-6">
-              <Reveal tipo="etiqueta">
-                <span className="font-mono text-xs uppercase tracking-widest text-brand">
-                  Asesor virtual
-                </span>
-              </Reveal>
-              <LineasEnMascara
-                as="h2"
-                lineas={[
-                  "¿No sabes qué",
-                  "tela necesitas?",
-                  "Te acompañamos hasta",
-                  "el color exacto.",
-                ]}
-                className="font-sans text-h2 font-medium tracking-[-0.01em]"
-              />
-              <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
-                <p className="max-w-md font-serif text-body-m text-paper/80">
-                  Tres preguntas —qué prenda vas a producir, si la tela irá
-                  sublimada y si buscas alto rendimiento o uso casual— y un
-                  asesor te devuelve una recomendación técnica concreta:
-                  referencia, gramaje y tono, lista para pedir muestra.
-                </p>
-              </Reveal>
-              {/*
-                Stepper compacto: solo cuando la sección está apilada (bajo 768).
-                En el split lo sustituye el panel de la derecha, que dice lo mismo
-                con más aire. `flex-wrap` para que a 375 nunca desborde.
-              */}
-              <div className="flex flex-col gap-3 md:hidden">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-xs uppercase tracking-widest">
-                  {pasosAsesor.map((paso, i) => (
-                    <span key={paso.index} className="flex items-center gap-3">
-                      {i > 0 && <span className="text-paper/30">→</span>}
-                      <span className={i === 0 ? "text-brand" : "text-paper/50"}>
-                        {paso.index} {paso.title}
-                      </span>
-                    </span>
-                  ))}
-                </div>
-                <div className="h-0.5 w-full max-w-xs bg-paper/15">
-                  <div className="h-0.5 w-1/3 bg-brand" />
-                </div>
-              </div>
-              <MagneticLink
-                href="/asesor-virtual"
-                className="mt-1 w-fit bg-brand px-7.5 py-4 font-sans text-base font-medium text-paper hover:bg-paper hover:text-brand-deep"
-              >
-                Iniciar con el asesor →
-              </MagneticLink>
-            </div>
-
-            <Reveal tipo="tarjeta" className="hidden md:block">
-              <div className="border border-paper/15 bg-paper/3 p-5 sm:p-7">
-                {/* En la columna estrecha del split a 768 el sufijo envolvía
-                    partiendo la frase; solo aparece desde lg, donde el panel ya
-                    tiene ancho para una sola línea. */}
-                <p className="font-mono text-xs uppercase tracking-widest text-paper/50">
-                  Tres pasos<span className="hidden lg:inline"> · una recomendación</span>
-                </p>
-                <ol className="mt-5 flex flex-col divide-y divide-paper/12">
-                  {pasosAsesor.map((paso) => (
-                    <li key={paso.index} className="flex gap-4 py-3.5 first:pt-0 last:pb-0">
-                      <span className="font-mono text-mono text-brand">{paso.index}</span>
-                      <div>
-                        <p className="font-sans text-[15px] font-semibold text-paper">
-                          {paso.title}
-                        </p>
-                        <p className="mt-1 font-serif text-[14px] text-paper/65">
-                          {paso.desc}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-                <div className="mt-5 flex items-center gap-3">
-                  <div className="h-0.5 flex-1 bg-paper/15">
-                    <div className="h-0.5 w-1/3 bg-brand" />
-                  </div>
-                  <span className="font-mono text-xs uppercase tracking-widest text-paper/40">
-                    ~1 min
-                  </span>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+      <AsesorPasos
+        eyebrow="Asesor virtual"
+        titular={[
+          "¿No sabes qué",
+          "tela necesitas?",
+          "Te acompañamos hasta",
+          "el color exacto.",
+        ]}
+        parrafo="Tres preguntas y un asesor te devuelve una recomendación concreta: referencia, gramaje y tono, lista para pedir muestra."
+        cta={{ label: "Probar el asesor virtual →", href: "/asesor-virtual" }}
+        pasos={pasosAsesor}
+      />
     </div>
   );
 }
