@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+import { buttonVariants } from "./buttonVariants";
 import { cn } from "@/lib/cn";
 import { foto } from "@/data/imagenes";
 
@@ -91,21 +92,35 @@ export function GarmentRecommender() {
           <p className="font-serif text-[15px] text-graphite">
             {option.description}
           </p>
-          <Link
-            href={option.href}
-            className="mt-2 w-fit font-sans text-[15px] font-medium text-ink hover:text-brand"
-          >
-            Ver todas las telas para {option.label.toLowerCase()} →
-          </Link>
+          <div className="mt-2 flex flex-col gap-5">
+            <Link
+              href={option.href}
+              className={cn(buttonVariants({ variant: "ghost" }), "w-fit whitespace-normal")}
+            >
+              Ver todas las telas para {option.label.toLowerCase()} →
+            </Link>
+            {/*
+              El asesor sube desde el pie a la columna y pasa a botón. Como
+              el fill `primary` (azul) está reservado a un solo CTA por
+              pantalla —y esta página ya lo gasta en el hero y en "Hablar con
+              un asesor"— el asesor toma la variante `secondary` (borde) y
+              "Ver todas" queda en `ghost`: el asesor pesa más sin robar el
+              azul. Copy alineado con la portada ("Probar el asesor virtual").
+            */}
+            <div className="flex flex-col gap-2.5">
+              <span className="font-serif text-[15px] text-graphite">
+                ¿No sabes qué elegir?
+              </span>
+              <Link
+                href="/asesor-virtual"
+                className={cn(buttonVariants({ variant: "secondary" }), "w-fit")}
+              >
+                Probar el asesor virtual →
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
-
-      <p className="mt-8 font-serif text-caption italic text-graphite">
-        Una guía, no una regla: el asesor ajusta al proyecto.{" "}
-        <Link href="/asesor-virtual" className="not-italic text-ink hover:text-brand">
-          ¿No sabes qué elegir? Usa nuestro asistente virtual →
-        </Link>
-      </p>
     </div>
   );
 }
