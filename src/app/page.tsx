@@ -260,10 +260,18 @@ export default function Home() {
         repetirlo aquí volvería a acercarlos. El titular se reescribe en líneas
         cortas por la misma razón que la declaración —caben en la media columna
         del split sin envolver—.
+
+        El split arranca a 768 (`md`), no a 1024: una tablet tiene ancho para
+        dos columnas, así que ahí también se GANA altura en vez de perderla. Por
+        debajo de 768 se apila, y entonces los tres pasos no van en el panel alto
+        sino en un stepper horizontal compacto (01 → 02 → 03 con su barra) —el
+        mismo patrón que la sección ya tenía—, que ocupa una fila en vez de una
+        columna. A `md` la copia lleva algo más de ancho que el panel para que el
+        titular no se apriete.
       */}
       <section id="asesor" className="bg-brand-deep py-16 text-paper sm:py-20">
         <Container>
-          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16">
+          <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-2 lg:gap-16">
             <div className="flex flex-col gap-6">
               <Reveal tipo="etiqueta">
                 <span className="font-mono text-xs uppercase tracking-widest text-brand">
@@ -288,6 +296,26 @@ export default function Home() {
                   referencia, gramaje y tono, lista para pedir muestra.
                 </p>
               </Reveal>
+              {/*
+                Stepper compacto: solo cuando la sección está apilada (bajo 768).
+                En el split lo sustituye el panel de la derecha, que dice lo mismo
+                con más aire. `flex-wrap` para que a 375 nunca desborde.
+              */}
+              <div className="flex flex-col gap-3 md:hidden">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-xs uppercase tracking-widest">
+                  {pasosAsesor.map((paso, i) => (
+                    <span key={paso.index} className="flex items-center gap-3">
+                      {i > 0 && <span className="text-paper/30">→</span>}
+                      <span className={i === 0 ? "text-brand" : "text-paper/50"}>
+                        {paso.index} {paso.title}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+                <div className="h-0.5 w-full max-w-xs bg-paper/15">
+                  <div className="h-0.5 w-1/3 bg-brand" />
+                </div>
+              </div>
               <MagneticLink
                 href="/asesor-virtual"
                 className="mt-1 w-fit bg-brand px-7.5 py-4 font-sans text-base font-medium text-paper hover:bg-paper hover:text-brand-deep"
@@ -296,10 +324,13 @@ export default function Home() {
               </MagneticLink>
             </div>
 
-            <Reveal tipo="tarjeta">
+            <Reveal tipo="tarjeta" className="hidden md:block">
               <div className="border border-paper/15 bg-paper/3 p-5 sm:p-7">
+                {/* En la columna estrecha del split a 768 el sufijo envolvía
+                    partiendo la frase; solo aparece desde lg, donde el panel ya
+                    tiene ancho para una sola línea. */}
                 <p className="font-mono text-xs uppercase tracking-widest text-paper/50">
-                  Tres pasos · una recomendación
+                  Tres pasos<span className="hidden lg:inline"> · una recomendación</span>
                 </p>
                 <ol className="mt-5 flex flex-col divide-y divide-paper/12">
                   {pasosAsesor.map((paso) => (
