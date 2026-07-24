@@ -248,7 +248,7 @@ export default function EmpresaPage() {
           <div className="mb-6">
             <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
           </div>
-          <SectionHeader index="03" title="Línea de hitos" tag="Registro cronológico" />
+          <SectionHeader index="03" title="La vida de Textil Padilla" tag="Registro cronológico" />
           <p className="mb-10 max-w-xl font-serif text-caption italic text-graphite">
             Fechas y aperturas por confirmar con administración.
           </p>
