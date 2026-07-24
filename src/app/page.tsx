@@ -242,7 +242,7 @@ export default function Home() {
 
       <section className="py-16 sm:py-24">
         <Container>
-          <SectionHeader index="04" title="Dónde estuvimos" tag="Eventos recientes" />
+          <SectionHeader index="04" title="Encuentros" tag="Eventos recientes" />
           <EventCarousel slides={eventSlides} />
         </Container>
       </section>
