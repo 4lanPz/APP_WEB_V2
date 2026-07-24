@@ -55,19 +55,30 @@ export const SCROLL_REVEAL = {
  * Distancias y ritmos por tipo de contenido.
  *
  * `revierte` decide si el gesto se deshace al salir del viewport (volver a
- * subir el scroll lo vuelve a mostrar al bajar). El criterio: revierte lo
- * repetible y periférico —celdas, tarjetas, párrafos, etiquetas—; no revierte
- * lo que ancla la sección o ya se leyó —titulares, fotografías, cifras—.
- * Deshacer un barrido de foto a media pantalla cada vez que pasas por delante
- * es entretenimiento, no subrayado.
+ * subir el scroll lo vuelve a mostrar al bajar).
+ *
+ * CRITERIO (revisado v2.1): manda la AMPLITUD del gesto, no si el contenido es
+ * "periférico". Antes revertía todo lo repetible —incluida la tarjeta—, pero
+ * `tarjeta` es el gesto más grande del sistema (56px + escala + el barrido del
+ * panel de rejilla), y rehacerlo en cada pasada es justo lo que la marca llama
+ * "entretenimiento, no subrayado": lo mismo que ya no hacemos con fotos ni
+ * cifras. Además era el mayor coste medido de las caídas de fotogramas al
+ * hacer scroll (grillas de categorías y, sobre todo, las 20 fichas de
+ * microfibra). Así que ahora `tarjeta` ancla: se revela una vez.
+ *   - Revierten los gestos pequeños y baratos —`etiqueta` (solo opacidad) y
+ *     `cuerpo` (24px)—: rehacerlos es imperceptible y no cuesta.
+ *   - No revierten los gestos grandes o que anclan/ya se leyeron —`tarjeta`,
+ *     `ancla`, y (fuera de aquí) titulares, fotografías, cifras.
+ * Ver MOTION.md §"Reversión al subir el scroll". No revertir esto sin volver a
+ * medir: el re-disparo de `tarjeta` era el cuello de botella.
  */
 export const VOCABULARIO = {
   /** Etiqueta mono, eyebrow, dato suelto: solo opacidad, sin desplazar. */
   etiqueta: { distancia: 0, duracion: 0.35, escala: 1, revierte: true },
   /** Párrafo, cita, bloque de lectura: corto y rápido, tiene que poder leerse ya. */
   cuerpo: { distancia: 24, duracion: 0.5, escala: 1, revierte: true },
-  /** Tarjeta, tile, celda de grilla: recorrido largo y lento, se asienta. */
-  tarjeta: { distancia: 56, duracion: 0.7, escala: 0.985, revierte: true },
+  /** Tarjeta, tile, celda de grilla: recorrido largo y lento, se asienta una vez. */
+  tarjeta: { distancia: 56, duracion: 0.7, escala: 0.985, revierte: false },
   /** Bloque que ancla una sección y no debe parpadear al volver a pasar. */
   ancla: { distancia: 40, duracion: 0.65, escala: 1, revierte: false },
 } as const;

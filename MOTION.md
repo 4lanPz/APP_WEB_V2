@@ -23,10 +23,10 @@ describir el efecto. Si hay que mirar fijo para percibirlo, está mal calibrado.
 |---|---|---|---|
 | **Titulares** (h1 del hero, h2 de sección, declaraciones) | **Máscara por líneas** — cada línea sube desde debajo de un recorte, 90ms entre líneas. Sin opacidad: el texto no aparece, se destapa | `LineasEnMascara` | No |
 | **Fotografía** | **Barrido** — un panel de tinta se retira de derecha a izquierda mientras la foto entra con zoom-out 1.06→1 | `Curtain` / `PhotoCurtain` | No |
-| **Grids con hairline** (`gap-px` sobre fondo greige) | **La retícula se traza primero**: un panel del color del fondo destapa la grilla vacía de izquierda a derecha (550ms) y las celdas entran después, escalonadas 70ms | `RevealGroup variante="rejilla"` | Celdas sí, trazo no |
+| **Grids con hairline** (`gap-px` sobre fondo greige) | **La retícula se traza primero**: un panel del color del fondo destapa la grilla vacía de izquierda a derecha (550ms) y las celdas entran después, escalonadas 70ms | `RevealGroup variante="rejilla"` | No (una vez) |
 | **Cifras** | **Dígitos revueltos que se asientan de izquierda a derecha** — el 3 de `39` se fija mientras el 9 sigue girando | `StatNumber` / `useDigitosAsentados` | No |
 | **Cuerpos de texto** | Opacidad + 24px, 500ms. Corto y rápido: es texto, tiene que poder leerse ya | `Reveal tipo="cuerpo"` | Sí |
-| **Tarjetas** | Opacidad + 56px + escala 0.985→1, 700ms. Recorrido largo, se asienta | `Reveal tipo="tarjeta"` / celdas de `RevealGroup` | Sí |
+| **Tarjetas** | Opacidad + 56px + escala 0.985→1, 700ms. Recorrido largo, se asienta | `Reveal tipo="tarjeta"` / celdas de `RevealGroup` | No (una vez) |
 | **Etiquetas mono, eyebrows** | Solo opacidad, 350ms. No se desplazan: acompañan, no lideran | `Reveal tipo="etiqueta"` | Sí |
 | **Línea de hitos** | La línea vertical se dibuja atada al progreso de scroll (GSAP ScrollTrigger, único caso) y cada hito entra detrás de su punto | `Timeline` | No |
 | **Flotante de WhatsApp** | Escala 0.7→1 a los 1,5s, cuando la secuencia del hero ya terminó. **Solo transform, sin opacidad**: con `prefers-reduced-motion` la opacidad sí se seguiría animando y el encargo pedía entrada sin animación | `BotonWhatsApp` | No (no es de scroll) |
@@ -38,14 +38,27 @@ componente define duraciones ni distancias propias.**
 ## Reversión al subir el scroll
 
 v1 era `once: true` en todo: al volver a bajar no pasaba nada. Ahora depende
-del tipo, y el criterio es:
+del tipo. El criterio manda por **amplitud del gesto**, no por si el contenido
+es "periférico":
 
-- **Revierte** lo repetible y periférico: celdas, tarjetas, párrafos,
-  etiquetas. Volver a pasar por ahí y verlo entrar otra vez es coherente.
-- **No revierte** lo que ancla la sección o ya se leyó: titulares,
-  fotografías, cifras. Deshacer un barrido de foto a media pantalla cada vez
-  que pasas por delante deja de subrayar y empieza a entretener. Y una cifra
-  que se vuelve a desordenar sola es ruido, no dato.
+- **Revierten** los gestos pequeños y baratos: `etiqueta` (solo opacidad) y
+  `cuerpo` (24px). Volver a pasar y verlos re-entrar es imperceptible y no
+  cuesta nada.
+- **No revierten** los gestos grandes ni lo que ancla/ya se leyó: `tarjeta`
+  (celdas de grilla incluidas), titulares, fotografías, cifras. Se revelan una
+  vez. Deshacer un barrido de foto a media pantalla cada vez que pasas por
+  delante deja de subrayar y empieza a entretener; una cifra que se vuelve a
+  desordenar sola es ruido, no dato; y una grilla de tarjetas que se re-anima
+  en cada pasada es lo mismo.
+
+**Por qué `tarjeta` dejó de revertir (v2.1).** En v2 revertía —era el gesto más
+grande del sistema (56px + escala + el barrido del panel de rejilla)— y una
+auditoría de rendimiento lo señaló como el mayor coste de las caídas de
+fotogramas al hacer scroll: la ráfaga de framer-motion re-disparaba en **cada**
+pasada por la sección (grillas de categorías en /productos y, sobre todo, las
+20 fichas de /productos/microfibra). Apagar el re-disparo eliminó ese coste sin
+tocar el gesto en sí. No revertir este cambio sin volver a medir; el valor vive
+en `VOCABULARIO.tarjeta.revierte` de [`src/lib/motion.ts`](src/lib/motion.ts).
 
 ## Secuencia del hero
 
