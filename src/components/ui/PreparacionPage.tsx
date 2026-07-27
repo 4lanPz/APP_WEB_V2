@@ -32,7 +32,7 @@ export function PreparacionPage({
       <span className="font-mono text-xs uppercase tracking-[0.08em] text-accent">
         En preparación
       </span>
-      <h1 className="max-w-2xl font-sans text-h1 font-medium tracking-[-0.02em] text-ink">
+      <h1 className="max-w-2xl font-sans text-h1 font-medium text-ink">
         {title}
       </h1>
       <p className="max-w-xl font-serif text-body-l text-graphite">

@@ -15,7 +15,7 @@ export default function PoliticaDatosPage() {
   return (
     <Container className="flex flex-col gap-6 py-24">
       <span className="font-mono text-xs uppercase tracking-[0.08em] text-graphite">Legal</span>
-      <h1 className="max-w-2xl font-sans text-display font-medium tracking-[-0.03em] text-ink">
+      <h1 className="max-w-2xl font-sans text-display font-medium text-ink">
         Política de tratamiento de datos
       </h1>
       <p className="max-w-xl font-serif text-body-l text-graphite">

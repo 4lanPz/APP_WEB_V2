@@ -66,7 +66,7 @@ export default function AdminImagenesPage() {
         <span className="font-mono text-xs uppercase tracking-widest text-accent">
           Interno · solo desarrollo
         </span>
-        <h1 className="font-sans text-h1 font-medium tracking-[-0.02em] text-ink">
+        <h1 className="font-sans text-h1 font-medium text-ink">
           Estado de imágenes
         </h1>
         <p className="max-w-2xl font-serif text-body-m text-graphite">

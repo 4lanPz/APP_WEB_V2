@@ -54,7 +54,7 @@ export function SectionHeader({
           as="h2"
           lineas={[title]}
           className={cn(
-            "font-sans text-h2 font-medium tracking-[-0.01em]",
+            "font-sans text-h2 font-medium",
             dark ? "text-paper" : "text-ink",
           )}
         />

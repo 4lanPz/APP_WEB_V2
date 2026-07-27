@@ -98,7 +98,7 @@ export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPas
             <LineasEnMascara
               as="h2"
               lineas={titular}
-              className="font-sans text-h2 font-medium tracking-[-0.01em] text-ink"
+              className="font-sans text-h2 font-medium text-ink"
             />
             <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
               <p className="max-w-md font-serif text-body-m text-graphite">{parrafo}</p>

@@ -45,7 +45,7 @@ export function BloqueAplicacion({
             </span>
           </Reveal>
           <Reveal tipo="cuerpo">
-            <h2 className="font-sans text-h2 font-medium tracking-[-0.01em] text-ink">
+            <h2 className="font-sans text-h2 font-medium text-ink">
               {titulo}
             </h2>
           </Reveal>

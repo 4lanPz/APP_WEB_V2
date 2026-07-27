@@ -44,7 +44,7 @@ export default async function CategoriaPage({ params }: Props) {
         ]}
       />
       <DraftNotice>Categoría en preparación</DraftNotice>
-      <h1 className="font-sans text-h1 font-medium tracking-[-0.02em] text-ink">
+      <h1 className="font-sans text-h1 font-medium text-ink">
         {category.name}
       </h1>
       <p className="max-w-xl font-serif text-body-l text-graphite">

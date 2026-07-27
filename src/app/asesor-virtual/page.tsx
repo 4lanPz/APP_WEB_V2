@@ -22,7 +22,7 @@ export default function AsesorVirtualPage() {
           items={[{ label: "Inicio", href: "/" }, { label: "Asesor virtual" }]}
           className="mb-8"
         />
-        <h1 className="max-w-2xl font-sans text-display font-medium tracking-[-0.03em]">
+        <h1 className="max-w-2xl font-sans text-display font-medium">
           Tres preguntas.
           <br />
           <span className="text-brand">Tu tela exacta.</span>

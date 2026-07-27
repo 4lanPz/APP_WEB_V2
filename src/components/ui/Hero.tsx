@@ -132,7 +132,7 @@ export function Hero({
           disparo="entrada"
           delay={HERO_SECUENCIA.titular}
           lineas={headlineLines}
-          className="max-w-3xl font-sans text-display font-medium tracking-[-0.03em] text-paper"
+          className="max-w-3xl font-sans text-display font-medium text-paper"
         />
 
         <motion.p

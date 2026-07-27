@@ -71,7 +71,7 @@ export default async function ProductoDortmundPlusBlancosPage() {
               >
                 Dortmund Plus
               </Link>
-              <h1 className="mt-2 font-sans text-display font-medium tracking-[-0.03em] text-ink">
+              <h1 className="mt-2 font-sans text-display font-medium text-ink">
                 {product.title}
               </h1>
               <p className="mt-1 font-mono text-xs uppercase tracking-widest text-graphite">

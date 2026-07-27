@@ -62,7 +62,7 @@ export function FichaSubcategoria({
             <p className="font-mono text-xs uppercase tracking-widest text-graphite">
               {category.name}
             </p>
-            <h1 className="mt-3 font-sans text-h1 font-medium tracking-[-0.02em] text-ink">
+            <h1 className="mt-3 font-sans text-h1 font-medium text-ink">
               {subcategory.name}
             </h1>
           </div>
