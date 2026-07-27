@@ -442,6 +442,7 @@ export function Navbar() {
                   >
                     <summary className="flex cursor-pointer list-none items-center justify-between font-sans text-xl font-medium text-ink marker:content-none">
                       Nuestros Productos
+                      {/* eslint-disable-next-line no-restricted-syntax -- tamaño de glifo "+" del acordeón, no es texto (fase 3) */}
                       <span className="text-[24px] leading-none text-greige">+</span>
                     </summary>
                     <div className="mt-4 flex flex-col gap-4">

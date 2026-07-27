@@ -43,8 +43,10 @@ export function BotonWhatsApp() {
          * pero con su propio margen inferior.
          */
         "fixed bottom-4 right-4 z-900 flex size-14 items-center justify-center sm:bottom-6 sm:right-6 sm:size-15",
+        // eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp, marca ajena, no es color de paleta
         "rounded-md bg-[#25D366] text-white shadow-[0_4px_20px_rgba(28,25,23,0.22)]",
         "transition-[background-color,transform,box-shadow] duration-220 ease-asentar",
+        // eslint-disable-next-line no-restricted-syntax -- verde hover oficial de WhatsApp, marca ajena
         "hover:-translate-y-0.5 hover:bg-[#1DA851] hover:shadow-[0_8px_28px_rgba(28,25,23,0.3)]",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ink",
       )}

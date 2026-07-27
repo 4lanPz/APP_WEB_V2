@@ -81,6 +81,7 @@ export function CategoryCard({
         {indexLabel}
       </span>
       <div className="relative">
+        {/* eslint-disable-next-line no-restricted-syntax -- título de card: escala propia del componente, no de la escala editorial (fase 3) */}
         <h3 className="mb-2 font-sans text-[28px] font-medium tracking-[-0.01em] text-paper">
           {title}
         </h3>

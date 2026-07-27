@@ -51,6 +51,7 @@ export function ProductCard({
       </div>
       <div className="p-[clamp(22px,2.2vw,30px)]">
         <div className="mb-3.5 flex items-baseline justify-between gap-3">
+          {/* eslint-disable-next-line no-restricted-syntax -- título de card fluido: escala propia del componente, no editorial (fase 3) */}
           <h3 className="font-sans text-[clamp(21px,1.9vw,26px)] font-medium tracking-[-0.01em]">
             {title}
           </h3>

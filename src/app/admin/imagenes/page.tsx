@@ -186,6 +186,7 @@ export default function AdminImagenesPage() {
                             {slot.id}.jpg
                           </code>
                           {slot.nota && !lleno && (
+                            // eslint-disable-next-line no-restricted-syntax -- panel admin interno, no es UI pública del sitio (fase 3)
                             <p className="font-serif text-[12px] leading-snug text-graphite">
                               {slot.nota}
                             </p>

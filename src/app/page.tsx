@@ -201,6 +201,7 @@ export default function Home() {
                 "de parecer tela y se",
                 "vuelve paisaje.",
               ]}
+              // eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala editorial (fase 3)
               className="font-sans font-medium leading-[1.12] tracking-[-0.02em] text-[clamp(1.5rem,0.9rem_+_1.6vw,2.375rem)]"
             />
             <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>

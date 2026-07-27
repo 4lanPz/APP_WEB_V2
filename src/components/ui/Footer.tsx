@@ -27,6 +27,7 @@ export function Footer() {
                 Textil Padilla
               </span>
             </Link>
+            {/* eslint-disable-next-line no-restricted-syntax -- tagline itálica del footer, tamaño decorativo único (fase 3) */}
             <p className="max-w-[32ch] font-serif text-[19px] italic leading-normal text-greige">
               {footerBrandQuote}
             </p>
