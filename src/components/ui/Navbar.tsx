@@ -448,7 +448,7 @@ export function Navbar() {
                       {productCategories.map((category) => (
                         <div
                           key={category.label}
-                          className="border-b border-[#E1DBD1] py-4 last:border-b-0"
+                          className="border-b border-greige py-4 last:border-b-0"
                         >
                           <Link
                             href={category.href}
