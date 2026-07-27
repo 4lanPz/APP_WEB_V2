@@ -18,7 +18,7 @@ const ESCALAS = [
   "h2",
   "h3",
   "body-l",
-  "body-lead",
+  "body-ml",
   "body-m",
   "body-s",
   "caption",

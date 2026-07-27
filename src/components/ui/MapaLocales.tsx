@@ -287,7 +287,7 @@ function FichaLocal({
             />
             {location.zone}
           </span>
-          <h3 className="mt-2 font-sans text-body-lead font-semibold text-ink">
+          <h3 className="mt-2 font-sans text-body-ml font-semibold text-ink">
             {location.name}
           </h3>
         </div>

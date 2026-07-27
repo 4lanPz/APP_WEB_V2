@@ -227,7 +227,7 @@ export function Navbar() {
           onClick={() => setMobileOpen(false)}
         >
           <span className="block size-2.5 shrink-0 bg-brand" />
-          <span className="font-sans text-body-lead font-semibold tracking-[0.02em]">
+          <span className="font-sans text-body-ml font-semibold tracking-[0.02em]">
             Textil Padilla
           </span>
         </Link>

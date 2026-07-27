@@ -43,7 +43,7 @@ export function ContactForm() {
           required
           rows={4}
           placeholder="Uso previsto, gramaje aproximado, color o referencia Pantone, cantidad estimada…"
-          className="w-full resize-y border-0 border-b border-greige bg-transparent px-0.5 py-3 font-sans text-body-lead text-ink outline-none placeholder:text-graphite focus:border-brand"
+          className="w-full resize-y border-0 border-b border-greige bg-transparent px-0.5 py-3 font-sans text-body-ml text-ink outline-none placeholder:text-graphite focus:border-brand"
         />
       </div>
       <div className="flex flex-wrap items-center gap-5">

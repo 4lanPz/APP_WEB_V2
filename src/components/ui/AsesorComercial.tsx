@@ -115,7 +115,7 @@ export function AsesorComercial({
                     required
                     placeholder="Gramaje, color, cantidad, plazos… lo que necesites resolver"
                     rows={3}
-                    className="w-full resize-y border-0 border-b border-paper/25 bg-transparent px-0.5 py-3 font-sans text-body-lead text-paper outline-none placeholder:text-paper/40 focus:border-brand"
+                    className="w-full resize-y border-0 border-b border-paper/25 bg-transparent px-0.5 py-3 font-sans text-body-ml text-paper outline-none placeholder:text-paper/40 focus:border-brand"
                   />
                 </div>
                 <div className="flex flex-wrap items-center gap-5">

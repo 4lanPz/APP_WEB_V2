@@ -50,19 +50,22 @@
   --text-body-l--line-height: 1.6;
 
   /*
-   * 17px — campos de formulario (≥16px evita el zoom de iOS) y el wordmark.
-   * A propósito SIN --line-height/--letter-spacing: la utilidad debe aplicar
-   * solo font-size, para heredar el interlineado del contexto igual que hacía
-   * el text-[17px] a mano que reemplaza. No le añadas un line-height "por
-   * consistencia": desplazaría todos esos usos.
+   * NOTA — text-body-ml (17px) y text-body-s (15px) son los DOS únicos tokens
+   * de tipografía SIN --line-height ni --letter-spacing propios, a diferencia
+   * del resto de la escala. Es deliberado: la utilidad aplica solo font-size y
+   * hereda el interlineado del contexto (1.5), exactamente como hacían los
+   * text-[17px]/text-[15px] a mano que sustituyeron. Añadirles un --line-height
+   * "por consistencia" desplazaría todos esos usos. Si algún día se quiere, hay
+   * que reverificar el render en las 11 páginas.
    */
-  --text-body-lead: 1.0625rem; /* 17px */
+
+  /* 17px — campos de formulario (≥16px evita el zoom de iOS) y el wordmark. */
+  --text-body-ml: 1.0625rem; /* 17px */
 
   --text-body-m: 1rem; /* 16px */
   --text-body-m--line-height: 1.6;
 
-  /* 15px — texto UI/secundario (sans de interfaz y serif corto). Sin
-   * --line-height por el mismo motivo que --text-body-lead: solo font-size. */
+  /* 15px — texto UI/secundario (sans de interfaz y serif corto). */
   --text-body-s: 0.9375rem; /* 15px */
 
   --text-caption: 0.8125rem; /* 13px */
