@@ -138,8 +138,7 @@ export default function ContactoPage() {
                 <span className="font-mono text-micro text-accent">{location.ref}</span>
                 <span className="flex items-center gap-2.5 font-sans text-body-s font-semibold text-ink">
                   <span
-                    className="block size-1.5 shrink-0"
-                    style={{ backgroundColor: location.isMatriz ? "#33A2DC" : "#A0715A" }}
+                    className={`block size-1.5 shrink-0 ${location.isMatriz ? "bg-brand" : "bg-accent"}`}
                   />
                   {location.name}
                   <span className="font-mono text-label font-normal uppercase text-graphite">
