@@ -107,7 +107,7 @@ export function ImagePlaceholder({
             <>
               <span
                 className={cn(
-                  "font-mono text-xs uppercase tracking-widest",
+                  "font-mono text-label uppercase",
                   dark ? "text-brand" : "text-accent",
                 )}
               >
@@ -128,7 +128,7 @@ export function ImagePlaceholder({
         </div>
       )}
       {caption && (src || MARCAR_HUECO) && (
-        <span className="absolute bottom-0 left-0 p-4 font-mono text-xs uppercase tracking-widest text-paper mix-blend-difference">
+        <span className="absolute bottom-0 left-0 p-4 font-mono text-label uppercase text-paper mix-blend-difference">
           {caption}
         </span>
       )}

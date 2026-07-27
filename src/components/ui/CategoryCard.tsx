@@ -77,7 +77,7 @@ export function CategoryCard({
         className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-ink opacity-0 transition-[opacity,transform] duration-400 ease-asentar group-hover:scale-y-100 group-hover:opacity-45"
       />
 
-      <span className="relative font-mono text-xs tracking-widest text-brand">
+      <span className="relative font-mono text-label text-brand">
         {indexLabel}
       </span>
       <div className="relative">
@@ -87,7 +87,7 @@ export function CategoryCard({
         <p className="font-serif text-body-s leading-normal text-greige">
           {description}
         </p>
-        <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-brand">
+        <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-label uppercase text-brand">
           Ver más
           <span className="inline-block transition-transform duration-220 ease-asentar group-hover:translate-x-1.5">
             →

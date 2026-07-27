@@ -129,7 +129,7 @@ export default function EmpresaPage() {
           <SectionHeader index="01" title="Lo que nos mueve" tag="Misión · Visión · Valores" />
           <RevealGroup className="flex flex-col divide-y divide-greige">
             <RevealItem className="grid grid-cols-1 gap-4 py-10 sm:grid-cols-[0.42fr_1fr] sm:gap-10">
-              <span className="font-mono text-xs uppercase tracking-widest text-accent">
+              <span className="font-mono text-label uppercase text-accent">
                 Misión
               </span>
               <p className="font-serif text-body-l text-ink">
@@ -139,7 +139,7 @@ export default function EmpresaPage() {
               </p>
             </RevealItem>
             <RevealItem className="grid grid-cols-1 gap-4 py-10 sm:grid-cols-[0.42fr_1fr] sm:gap-10">
-              <span className="font-mono text-xs uppercase tracking-widest text-accent">
+              <span className="font-mono text-label uppercase text-accent">
                 Visión
               </span>
               <p className="font-serif text-body-l text-ink">
@@ -156,7 +156,7 @@ export default function EmpresaPage() {
 
       <section className="border-y border-greige bg-bone py-16 sm:py-24">
         <Container>
-          <p className="mb-10 font-mono text-xs uppercase tracking-widest text-graphite">
+          <p className="mb-10 font-mono text-label uppercase text-graphite">
             Los valores que no negociamos
           </p>
           <RevealGroup className="flex flex-col divide-y divide-greige">
@@ -225,7 +225,7 @@ export default function EmpresaPage() {
                     <p className="font-sans text-body-s font-semibold text-ink">
                       {item.value}
                     </p>
-                    <p className="mt-1 font-mono text-xs uppercase tracking-widest text-graphite">
+                    <p className="mt-1 font-mono text-label uppercase text-graphite">
                       {item.label}
                     </p>
                   </RevealItem>

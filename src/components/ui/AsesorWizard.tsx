@@ -112,7 +112,7 @@ function OpcionConImagen({
           className={cn(
             "mt-1 block",
             subtitleMono
-              ? "font-mono text-xs uppercase tracking-widest text-paper/50"
+              ? "font-mono text-label uppercase text-paper/50"
               : "font-serif text-body-s text-paper/60",
           )}
         >
@@ -205,7 +205,7 @@ export function AsesorWizard() {
 
   return (
     <div>
-      <div className="mb-10 flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-widest">
+      <div className="mb-10 flex flex-wrap items-center gap-3 font-mono text-label uppercase">
         {(["1", "2", "3", "4"] as const).map((key, i) => {
           const labels = ["01 Prenda", "02 Sublimado", "03 Uso", "Resultado"];
           const stepNum = i + 1;
@@ -234,7 +234,7 @@ export function AsesorWizard() {
             <p className="font-sans text-body-s font-semibold text-paper">
               Asesor Textil Padilla
             </p>
-            <p className="mt-1 font-mono text-xs uppercase tracking-widest text-paper/50">
+            <p className="mt-1 font-mono text-label uppercase text-paper/50">
               Guía de selección de tela
             </p>
           </div>
@@ -243,7 +243,7 @@ export function AsesorWizard() {
             recomendación concreta —gramaje, composición y tono— sobre telas
             que tejemos y teñimos de verdad.
           </p>
-          <p className="font-mono text-xs uppercase tracking-widest text-paper/40">
+          <p className="font-mono text-label uppercase text-paper/40">
             Seleccionamos · Tejemos · Teñimos
             <br />
             Quito · Guayaquil · Cuenca
@@ -260,7 +260,7 @@ export function AsesorWizard() {
               animate="center"
               exit="exit"
             >
-              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+              <span className="font-mono text-label uppercase text-brand">
                 Pregunta 01
               </span>
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
@@ -295,7 +295,7 @@ export function AsesorWizard() {
               animate="center"
               exit="exit"
             >
-              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+              <span className="font-mono text-label uppercase text-brand">
                 Pregunta 02
               </span>
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
@@ -337,7 +337,7 @@ export function AsesorWizard() {
               animate="center"
               exit="exit"
             >
-              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+              <span className="font-mono text-label uppercase text-brand">
                 Pregunta 03
               </span>
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
@@ -379,7 +379,7 @@ export function AsesorWizard() {
               animate="center"
               exit="exit"
             >
-              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+              <span className="font-mono text-label uppercase text-brand">
                 Recomendación
               </span>
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
@@ -390,7 +390,7 @@ export function AsesorWizard() {
               <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-3">
                 {results.map(({ category, sub }) => (
                   <div key={sub.slug} className="bg-brand-deep p-6">
-                    <span className="font-mono text-xs uppercase tracking-widest text-paper/50">
+                    <span className="font-mono text-label uppercase text-paper/50">
                       Familia {category.name}
                     </span>
                     <h3 className="mt-3 font-sans text-body-s font-semibold text-paper">

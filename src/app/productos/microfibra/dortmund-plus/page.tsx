@@ -66,7 +66,7 @@ export default async function SubcategoriaDortmundPlusPage() {
             </p>
           </div>
 
-          <span className="mb-4 block font-mono text-xs uppercase tracking-widest text-graphite">
+          <span className="mb-4 block font-mono text-label uppercase text-graphite">
             Ficha técnica · valores nominales
           </span>
           <RevealGroup
@@ -75,14 +75,14 @@ export default async function SubcategoriaDortmundPlusPage() {
             {dortmundPlusStats.map((stat) => (
               <RevealItem key={stat.label} className="bg-paper p-6">
                 <p className="font-sans text-h2 font-medium text-ink">{stat.value}</p>
-                <p className="mt-2 font-mono text-xs uppercase tracking-widest text-graphite">
+                <p className="mt-2 font-mono text-label uppercase text-graphite">
                   {stat.label}
                 </p>
               </RevealItem>
             ))}
           </RevealGroup>
 
-          <span className="mb-4 block font-mono text-xs uppercase tracking-widest text-graphite">
+          <span className="mb-4 block font-mono text-label uppercase text-graphite">
             Por qué funciona en deporte
           </span>
           <RevealGroup
@@ -90,7 +90,7 @@ export default async function SubcategoriaDortmundPlusPage() {
             className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
             {dortmundPlusReasons.map((reason) => (
               <RevealItem key={reason.title} className="bg-paper p-8">
-                <span className="font-mono text-xs uppercase tracking-widest text-accent">
+                <span className="font-mono text-label uppercase text-accent">
                   {reason.eyebrow}
                 </span>
                 <h3 className="mt-4 font-sans text-h3 font-semibold text-ink">

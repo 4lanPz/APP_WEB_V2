@@ -117,7 +117,7 @@ export default function Home() {
                 <p className="font-sans text-h1 font-medium text-ink">
                   <StatNumber target={stat.target} prefix={stat.prefix} suffix={stat.suffix} />
                 </p>
-                <p className="mt-2 font-mono text-xs uppercase tracking-widest text-graphite">
+                <p className="mt-2 font-mono text-label uppercase text-graphite">
                   {stat.label}
                 </p>
               </RevealItem>
@@ -143,7 +143,7 @@ export default function Home() {
           >
             {verbos.map((verbo) => (
               <RevealItem key={verbo.title} className="bg-paper p-8">
-                <span className="font-mono text-xs uppercase tracking-widest text-accent">
+                <span className="font-mono text-label uppercase text-accent">
                   Verbo {verbo.index}
                 </span>
                 <h3 className="mt-4 font-sans text-h3 font-semibold text-ink">
@@ -187,7 +187,7 @@ export default function Home() {
           />
           <div className="flex flex-col justify-center gap-5 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
             <Reveal tipo="etiqueta">
-              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+              <span className="font-mono text-label uppercase text-brand">
                 Verdad material
               </span>
             </Reveal>

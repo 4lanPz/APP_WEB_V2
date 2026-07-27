@@ -63,7 +63,7 @@ export default function AdminImagenesPage() {
   return (
     <Container className="flex flex-col gap-12 py-16">
       <header className="flex flex-col gap-3">
-        <span className="font-mono text-xs uppercase tracking-widest text-accent">
+        <span className="font-mono text-label uppercase text-accent">
           Interno · solo desarrollo
         </span>
         <h1 className="font-sans text-h1 font-medium text-ink">
@@ -82,7 +82,7 @@ export default function AdminImagenesPage() {
             {llenos}
             <span className="text-graphite">/{SLOTS.length}</span>
           </span>
-          <span className="font-mono text-xs uppercase tracking-widest text-graphite">
+          <span className="font-mono text-label uppercase text-graphite">
             {pct}% con imagen
           </span>
         </div>
@@ -95,7 +95,7 @@ export default function AdminImagenesPage() {
             <a
               key={ruta}
               href={`#pagina-${ruta === "/" ? "inicio" : ruta.replace(/\//g, "-")}`}
-              className="font-mono text-xs uppercase tracking-widest text-graphite hover:text-brand"
+              className="font-mono text-label uppercase text-graphite hover:text-brand"
             >
               {tituloPagina(ruta)}
             </a>
@@ -127,7 +127,7 @@ export default function AdminImagenesPage() {
               </div>
               <span
                 className={cn(
-                  "font-mono text-xs uppercase tracking-widest",
+                  "font-mono text-label uppercase",
                   llenosPagina === slots.length ? "text-brand" : "text-graphite",
                 )}
               >
@@ -142,7 +142,7 @@ export default function AdminImagenesPage() {
               return (
                 <div key={seccion || "principal"} className="flex flex-col gap-3">
                   {seccion && (
-                    <h3 className="font-mono text-xs uppercase tracking-widest text-graphite">
+                    <h3 className="font-mono text-label uppercase text-graphite">
                       {seccion}
                     </h3>
                   )}

@@ -91,7 +91,7 @@ export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPas
         <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col gap-5">
             <Reveal tipo="etiqueta">
-              <span className="font-mono text-xs uppercase tracking-widest text-brand">
+              <span className="font-mono text-label uppercase text-brand">
                 {eyebrow}
               </span>
             </Reveal>
@@ -111,7 +111,7 @@ export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPas
               pero orienta igual).
             */}
             <div className="flex flex-col gap-3">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-xs uppercase tracking-widest">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-label uppercase">
                 {pasos.map((paso, i) => (
                   <span key={paso.slot} className="flex items-center gap-3">
                     {i > 0 && (

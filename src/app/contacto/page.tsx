@@ -65,7 +65,7 @@ export default function ContactoPage() {
             className="mt-12 grid grid-cols-1 gap-px border-y border-greige bg-greige sm:grid-cols-3">
             {directChannels.map((channel) => (
               <RevealItem key={channel.label} className="bg-paper p-6">
-                <p className="font-mono text-xs uppercase tracking-widest text-graphite">
+                <p className="font-mono text-label uppercase text-graphite">
                   {channel.label}
                 </p>
                 {channel.href ? (
@@ -121,7 +121,7 @@ export default function ContactoPage() {
             className="mb-10 aspect-21/9"
           />
 
-          <div className="hidden grid-cols-[40px_1.1fr_1.4fr_1fr_auto] gap-4 border-b border-ink pb-3 font-mono text-xs uppercase tracking-widest text-graphite sm:grid">
+          <div className="hidden grid-cols-[40px_1.1fr_1.4fr_1fr_auto] gap-4 border-b border-ink pb-3 font-mono text-label uppercase text-graphite sm:grid">
             <span>Ref</span>
             <span>Local</span>
             <span>Sector · dirección</span>
@@ -142,7 +142,7 @@ export default function ContactoPage() {
                     style={{ backgroundColor: location.isMatriz ? "#33A2DC" : "#A0715A" }}
                   />
                   {location.name}
-                  <span className="font-mono text-xs font-normal uppercase tracking-widest text-graphite">
+                  <span className="font-mono text-label font-normal uppercase text-graphite">
                     {location.zone}
                   </span>
                 </span>

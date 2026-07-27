@@ -112,7 +112,7 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               className="aspect-4/3"
             />
             <div className="flex flex-col justify-center gap-4">
-              <span className="font-mono text-xs uppercase tracking-widest text-accent">
+              <span className="font-mono text-label uppercase text-accent">
                 {slide.date}
               </span>
               <h3 className="font-sans text-h3 font-semibold text-ink">

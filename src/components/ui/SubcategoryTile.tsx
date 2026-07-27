@@ -99,7 +99,7 @@ export function SubcategoryTile({
         <div className="flex items-center justify-between gap-3 border-t border-greige pt-3.75">
           <span
             className={cn(
-              "font-mono text-xs uppercase tracking-widest",
+              "font-mono text-label uppercase",
               etiqueta.tono,
             )}
           >

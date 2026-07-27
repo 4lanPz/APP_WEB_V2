@@ -59,7 +59,7 @@ export function FichaSubcategoria({
 
         <div className="flex flex-col gap-8">
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-graphite">
+            <p className="font-mono text-label uppercase text-graphite">
               {category.name}
             </p>
             <h1 className="mt-3 font-sans text-h1 font-medium text-ink">
@@ -81,7 +81,7 @@ export function FichaSubcategoria({
           <FichaTecnica rows={rows} />
 
           <div>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-graphite">
+            <p className="mb-3 font-mono text-label uppercase text-graphite">
               Sublimación
             </p>
             <div className="border-t border-greige">
@@ -90,7 +90,7 @@ export function FichaSubcategoria({
                   key={fila.gramaje}
                   className="flex items-center justify-between gap-4 border-b border-greige py-3"
                 >
-                  <span className="font-mono text-xs uppercase tracking-widest text-graphite">
+                  <span className="font-mono text-label uppercase text-graphite">
                     {fila.gramaje}
                   </span>
                   <span className="text-right font-sans text-body-s text-ink">
@@ -102,7 +102,7 @@ export function FichaSubcategoria({
           </div>
 
           <div>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-graphite">
+            <p className="mb-3 font-mono text-label uppercase text-graphite">
               Cuidados
             </p>
             <ul className="flex flex-col gap-2">

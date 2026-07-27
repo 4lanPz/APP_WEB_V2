@@ -147,7 +147,7 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
        * textos arrancaban a distinta x y las líneas no cuadraban entre sí. El
        * halo se pinta fuera de la caja sin empujar el texto.
        */}
-      <div className="mb-3 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-widest text-graphite sm:mb-4">
+      <div className="mb-3 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-label uppercase text-graphite sm:mb-4">
         <span className="flex items-center gap-2.5">
           <span className="flex size-3 shrink-0 items-center justify-center">
             <span

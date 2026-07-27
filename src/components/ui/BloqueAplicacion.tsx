@@ -39,7 +39,7 @@ export function BloqueAplicacion({
       <div className="mx-auto grid max-w-padilla grid-cols-1 items-center gap-8 px-[clamp(24px,7vw,120px)] py-16 sm:py-20 lg:grid-cols-2 lg:gap-16">
         <div className="order-2 flex flex-col gap-5 lg:order-1">
           <Reveal tipo="etiqueta">
-            <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-brand">
+            <span className="inline-flex items-center gap-2 font-mono text-label uppercase text-brand">
               <span aria-hidden className="block size-1.5 bg-brand" />
               {eyebrow}
             </span>

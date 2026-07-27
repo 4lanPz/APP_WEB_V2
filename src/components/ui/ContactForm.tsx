@@ -34,7 +34,7 @@ export function ContactForm() {
       <div className="flex flex-col gap-2">
         <label
           htmlFor="tp-mensaje"
-          className="font-mono text-xs uppercase tracking-widest text-graphite"
+          className="font-mono text-label uppercase text-graphite"
         >
           Mensaje
         </label>

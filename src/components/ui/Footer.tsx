@@ -33,7 +33,7 @@ export function Footer() {
           </div>
 
           <nav>
-            <div className="mb-5 font-mono text-xs uppercase tracking-widest text-graphite">
+            <div className="mb-5 font-mono text-label uppercase text-graphite">
               Empresa
             </div>
             <div className="flex flex-col">
@@ -50,7 +50,7 @@ export function Footer() {
           </nav>
 
           <div>
-            <div className="mb-5 font-mono text-xs uppercase tracking-widest text-graphite">
+            <div className="mb-5 font-mono text-label uppercase text-graphite">
               Contacto
             </div>
             <div className="font-mono text-caption leading-[1.9] text-greige">

@@ -119,7 +119,7 @@ export function Hero({
             <Breadcrumb items={breadcrumb} tone="dark" />
           ) : (
             eyebrow && (
-              <span className="flex items-center gap-2.5 font-mono text-xs uppercase tracking-widest text-paper/70">
+              <span className="flex items-center gap-2.5 font-mono text-label uppercase text-paper/70">
                 <span className="block size-1.5 shrink-0 bg-brand" />
                 {eyebrow}
               </span>

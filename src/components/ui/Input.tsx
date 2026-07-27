@@ -33,7 +33,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <div className="flex flex-col gap-2">
         <label
           htmlFor={inputId}
-          className="font-mono text-xs uppercase tracking-widest text-graphite"
+          className="font-mono text-label uppercase text-graphite"
         >
           {label}
         </label>

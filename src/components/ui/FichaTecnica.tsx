@@ -27,7 +27,7 @@ export interface FichaTecnicaProps {
 export function FichaTecnica({ rows, title = "Ficha técnica" }: FichaTecnicaProps) {
   return (
     <div>
-      <p className="mb-3 font-mono text-xs uppercase tracking-widest text-graphite">
+      <p className="mb-3 font-mono text-label uppercase text-graphite">
         {title}
       </p>
       <div className="border-t border-greige">
@@ -36,7 +36,7 @@ export function FichaTecnica({ rows, title = "Ficha técnica" }: FichaTecnicaPro
             key={row.label}
             className="flex items-center justify-between gap-4 border-b border-greige py-3.75"
           >
-            <span className="font-mono text-xs uppercase tracking-widest text-graphite">
+            <span className="font-mono text-label uppercase text-graphite">
               {row.label}
             </span>
             {row.value === null ? (

@@ -71,8 +71,13 @@
   --text-caption: 0.8125rem; /* 13px */
   --text-caption--line-height: 1.5;
 
+  /* Etiqueta/eyebrow mono. Valores fijados para igualar EXACTAMENTE el patrón
+   * histórico "text-xs + tracking-widest" (12px · line-height 16px · 0.1em),
+   * de modo que `font-mono text-label uppercase` lo sustituya sin mover nada.
+   * El letter-spacing pasó de 0.08em a 0.1em por esta unificación (fase 3). */
   --text-label: 0.75rem; /* 12px */
-  --text-label--letter-spacing: 0.08em;
+  --text-label--line-height: calc(1 / 0.75); /* 16px a 12px, = text-xs */
+  --text-label--letter-spacing: 0.1em; /* = tracking-widest */
 
   --text-mono: 0.875rem; /* 14px */
   --text-mono--line-height: 1.55;

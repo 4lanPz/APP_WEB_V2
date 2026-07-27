@@ -67,14 +67,14 @@ export default async function ProductoDortmundPlusBlancosPage() {
             <div>
               <Link
                 href="/productos/microfibra/dortmund-plus"
-                className="font-mono text-xs uppercase tracking-widest text-graphite hover:text-brand"
+                className="font-mono text-label uppercase text-graphite hover:text-brand"
               >
                 Dortmund Plus
               </Link>
               <h1 className="mt-2 font-sans text-display font-medium text-ink">
                 {product.title}
               </h1>
-              <p className="mt-1 font-mono text-xs uppercase tracking-widest text-graphite">
+              <p className="mt-1 font-mono text-label uppercase text-graphite">
                 {product.subtitle}
               </p>
               <p className="mt-4 font-serif text-body-m text-graphite">
@@ -149,7 +149,7 @@ export default async function ProductoDortmundPlusBlancosPage() {
                       <h3 className="font-sans text-body-s font-semibold text-ink">
                         {item.name}
                       </h3>
-                      <span className="whitespace-nowrap font-mono text-xs uppercase tracking-widest text-graphite">
+                      <span className="whitespace-nowrap font-mono text-label uppercase text-graphite">
                         En preparación
                       </span>
                     </div>

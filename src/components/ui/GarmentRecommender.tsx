@@ -83,7 +83,7 @@ export function GarmentRecommender() {
           className="aspect-4/3"
         />
         <div className="flex flex-col justify-center gap-3">
-          <span className="font-mono text-xs uppercase tracking-widest text-accent">
+          <span className="font-mono text-label uppercase text-accent">
             {option.recommendedFor}
           </span>
           <h3 className="font-sans text-h3 font-semibold text-ink">

@@ -59,7 +59,7 @@ export function AsesorComercial({
               <p className="font-sans text-body-s font-semibold text-paper">
                 Andrés Padilla
               </p>
-              <p className="font-mono text-xs uppercase tracking-widest text-paper/60">
+              <p className="font-mono text-label uppercase text-paper/60">
                 Asesor técnico textil
               </p>
             </div>
@@ -81,7 +81,7 @@ export function AsesorComercial({
           <div>
             {sent ? (
               <div className="border border-brand bg-paper/5 p-8">
-                <p className="mb-2 font-mono text-xs uppercase tracking-widest text-brand">
+                <p className="mb-2 font-mono text-label uppercase text-brand">
                   Consulta recibida
                 </p>
                 <p className="font-serif text-body-m text-paper/85">
@@ -106,7 +106,7 @@ export function AsesorComercial({
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="tp-consulta"
-                    className="font-mono text-xs uppercase tracking-widest text-paper/60"
+                    className="font-mono text-label uppercase text-paper/60"
                   >
                     Tu consulta técnica
                   </label>

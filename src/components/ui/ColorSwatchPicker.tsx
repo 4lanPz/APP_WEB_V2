@@ -18,7 +18,7 @@ export function ColorSwatchPicker({ swatches, active, onChange }: ColorSwatchPic
   return (
     <div>
       <div className="mb-3 flex items-baseline justify-between">
-        <span className="font-mono text-xs uppercase tracking-widest text-graphite">
+        <span className="font-mono text-label uppercase text-graphite">
           Colores del muestrario
         </span>
         <span className="font-mono text-caption text-ink">{swatches[active].name}</span>

@@ -62,7 +62,7 @@ export function SectionHeader({
           <Reveal tipo="etiqueta" delay={MASCARA.stagger * 2} className="w-full sm:ml-auto sm:w-auto">
             <span
               className={cn(
-                "whitespace-nowrap font-mono text-xs uppercase tracking-widest",
+                "whitespace-nowrap font-mono text-label uppercase",
                 dark ? "text-paper/60" : "text-graphite",
               )}
             >

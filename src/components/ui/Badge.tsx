@@ -14,7 +14,7 @@ export function Badge({ className, active = false, ...props }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-sm border px-2.5 py-1 font-mono text-xs uppercase tracking-widest",
+        "inline-flex items-center rounded-sm border px-2.5 py-1 font-mono text-label uppercase",
         active ? "border-brand text-brand" : "border-greige text-graphite",
         className,
       )}

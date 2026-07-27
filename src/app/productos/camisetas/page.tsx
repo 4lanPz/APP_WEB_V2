@@ -90,7 +90,7 @@ const complementary = [
 function DotRating({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="font-mono text-xs uppercase tracking-widest text-graphite">
+      <span className="font-mono text-label uppercase text-graphite">
         {label}
       </span>
       <span className="flex items-center gap-1">
@@ -156,7 +156,7 @@ export default function CamisetasPage() {
                 <p className="font-sans text-h2 font-medium text-ink">
                   <StatNumber target={stat.target} prefix={stat.prefix} suffix={stat.suffix} />
                 </p>
-                <p className="mt-2 font-mono text-xs uppercase tracking-widest text-graphite">
+                <p className="mt-2 font-mono text-label uppercase text-graphite">
                   {stat.label}
                 </p>
               </RevealItem>
@@ -193,7 +193,7 @@ export default function CamisetasPage() {
                   className={cn("aspect-4/3", i % 2 === 1 && "lg:order-2")}
                 />
                 <Reveal tipo="cuerpo" delay={0.12}>
-                  <span className="font-mono text-xs uppercase tracking-widest text-accent">
+                  <span className="font-mono text-label uppercase text-accent">
                     {fabric.tag}
                   </span>
                   <h3 className="mt-2 font-sans text-h3 font-semibold text-ink">
@@ -229,7 +229,7 @@ export default function CamisetasPage() {
             ))}
           </div>
 
-          <p className="mb-6 mt-16 font-mono text-xs uppercase tracking-widest text-graphite">
+          <p className="mb-6 mt-16 font-mono text-label uppercase text-graphite">
             También trabajamos para la camiseta
           </p>
           <RevealGroup
