@@ -396,7 +396,7 @@ export function AsesorWizard() {
                     <h3 className="mt-3 font-sans text-body-s font-semibold text-paper">
                       {sub.name}
                     </h3>
-                    <p className="mt-2 font-serif text-[14px] text-paper/70">
+                    <p className="mt-2 font-serif text-mono text-paper/70">
                       {category.description}
                     </p>
                     <div className="mt-4 flex items-center justify-between gap-3 border-t border-paper/15 pt-3.75">

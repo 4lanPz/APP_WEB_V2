@@ -54,7 +54,7 @@
    * de tipografía SIN --line-height ni --letter-spacing propios, a diferencia
    * del resto de la escala. Es deliberado: la utilidad aplica solo font-size y
    * hereda el interlineado del contexto (1.5), exactamente como hacían los
-   * text-[17px]/text-[15px] a mano que sustituyeron. Añadirles un --line-height
+   * 17px/15px a mano que sustituyeron. Añadirles un --line-height
    * "por consistencia" desplazaría todos esos usos. Si algún día se quiere, hay
    * que reverificar el render en las 11 páginas.
    */
@@ -76,6 +76,10 @@
 
   --text-mono: 0.875rem; /* 14px */
   --text-mono--line-height: 1.55;
+
+  /* 11px — micro-etiquetas mono: refs, contadores, badges de mapa/imagen.
+   * El escalón más pequeño. Sin --line-height propio (como body-s/ml). */
+  --text-micro: 0.6875rem; /* 11px */
 
   /*
    * Espaciado: la escala base-4 de Tailwind (space-1…space-32) ya coincide

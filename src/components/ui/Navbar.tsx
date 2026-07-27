@@ -319,7 +319,7 @@ export function Navbar() {
                             className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-caption font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand"
                           >
                             {category.label}
-                            <span className="font-mono text-[11px] font-normal tracking-normal text-accent">
+                            <span className="font-mono text-micro font-normal tracking-normal text-accent">
                               {category.count}
                             </span>
                           </Link>
@@ -340,7 +340,7 @@ export function Navbar() {
                                     : undefined
                                 }
                                 onClick={cerrarMenu}
-                                className="py-1.25 font-sans text-[14px] text-graphite hover:text-brand"
+                                className="py-1.25 font-sans text-mono text-graphite hover:text-brand"
                               >
                                 {sub.label}
                               </Link>
@@ -456,7 +456,7 @@ export function Navbar() {
                             className="mb-3 inline-flex items-baseline gap-2.25 font-sans text-sm font-semibold uppercase tracking-[0.06em] text-ink"
                           >
                             {category.label}
-                            <span className="font-mono text-[11px] font-normal tracking-normal text-accent">
+                            <span className="font-mono text-micro font-normal tracking-normal text-accent">
                               {category.count}
                             </span>
                           </Link>

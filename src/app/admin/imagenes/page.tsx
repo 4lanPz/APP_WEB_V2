@@ -169,7 +169,7 @@ export default function AdminImagenesPage() {
                               />
                             ) : (
                               <div className="flex h-full items-center justify-center">
-                                <span className="font-mono text-[11px] uppercase tracking-widest text-graphite">
+                                <span className="font-mono text-micro uppercase tracking-widest text-graphite">
                                   vacío
                                 </span>
                               </div>
@@ -179,7 +179,7 @@ export default function AdminImagenesPage() {
                               y en mono para poder copiarlo. */}
                           <code
                             className={cn(
-                              "select-all break-all font-mono text-[11px]",
+                              "select-all break-all font-mono text-micro",
                               lleno ? "text-graphite" : "text-ink",
                             )}
                           >

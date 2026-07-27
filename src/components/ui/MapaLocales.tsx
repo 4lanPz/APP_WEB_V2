@@ -190,7 +190,7 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
             desaparece. A la derecha a propósito: a la izquierda lo tapa el
             control de zoom de Leaflet. */}
         {!activo && (
-          <span className="pointer-events-none absolute right-4 top-4 z-500 font-mono text-[10px] uppercase tracking-widest text-graphite">
+          <span className="pointer-events-none absolute right-4 top-4 z-500 font-mono text-micro uppercase tracking-widest text-graphite">
             Elige un local o pulsa un marcador
           </span>
         )}
@@ -200,7 +200,7 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
             —tipografía menor y color de menos peso, sobre un velo papel para
             que se lea sobre las teselas— en vez de una fila propia que robaba
             altura al mapa. `pointer-events-none` para no atrapar el mapa. */}
-        <span className="pointer-events-none absolute bottom-0 right-0 z-500 bg-paper/75 px-1.5 py-0.5 font-mono text-[10px] text-graphite/80">
+        <span className="pointer-events-none absolute bottom-0 right-0 z-500 bg-paper/75 px-1.5 py-0.5 font-mono text-micro text-graphite/80">
           {ATRIBUCION}
         </span>
       </div>
@@ -237,7 +237,7 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
               onClick={() => setActivo(seleccionado ? null : location)}
               aria-pressed={seleccionado}
               className={cn(
-                "flex grow items-center justify-center gap-2 px-4 py-2.5 font-mono text-[11px] uppercase tracking-widest transition-colors",
+                "flex grow items-center justify-center gap-2 px-4 py-2.5 font-mono text-micro uppercase tracking-widest transition-colors",
                 seleccionado
                   ? "bg-ink text-paper"
                   : "bg-bone text-graphite hover:text-ink",
@@ -277,7 +277,7 @@ function FichaLocal({
     <div className={cn("bg-paper p-5", className)}>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <span className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-widest text-accent">
+          <span className="flex items-center gap-2.5 font-mono text-micro uppercase tracking-widest text-accent">
             {location.ref}
             <span
               className={cn(

@@ -251,7 +251,7 @@ function PrincipalConLupa({
       )}
 
       {/* Pista discreta, solo en táctil (con hover se ve la propia lupa). */}
-      <span className="pointer-events-none absolute bottom-0 right-0 m-3 bg-ink/70 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-paper sm:hidden">
+      <span className="pointer-events-none absolute bottom-0 right-0 m-3 bg-ink/70 px-2 py-1 font-mono text-micro uppercase tracking-widest text-paper sm:hidden">
         Toca para ampliar
       </span>
     </div>

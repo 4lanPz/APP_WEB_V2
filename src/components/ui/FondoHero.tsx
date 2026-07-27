@@ -57,7 +57,7 @@ export function FondoHero({
         aria-hidden
         className="pointer-events-none absolute inset-0 border border-dashed border-paper/15"
       >
-        <span className="absolute bottom-5 right-5 border border-dashed border-paper/25 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-widest text-paper/45">
+        <span className="absolute bottom-5 right-5 border border-dashed border-paper/25 px-2.5 py-1.5 font-mono text-micro uppercase tracking-widest text-paper/45">
           Cabecera vacía · deja {slot}.jpg en entrega/
         </span>
       </div>

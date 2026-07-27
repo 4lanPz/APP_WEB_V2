@@ -24,6 +24,7 @@ const ESCALAS = [
   "caption",
   "label",
   "mono",
+  "micro",
 ];
 
 const twMerge = extendTailwindMerge({

@@ -135,7 +135,7 @@ export default function ContactoPage() {
                 key={location.ref}
                 className="grid grid-cols-1 gap-2 border-b border-greige py-5 sm:grid-cols-[40px_1.1fr_1.4fr_1fr_auto] sm:items-baseline sm:gap-4"
               >
-                <span className="font-mono text-[11px] text-accent">{location.ref}</span>
+                <span className="font-mono text-micro text-accent">{location.ref}</span>
                 <span className="flex items-center gap-2.5 font-sans text-body-s font-semibold text-ink">
                   <span
                     className="block size-1.5 shrink-0"

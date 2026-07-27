@@ -54,7 +54,7 @@ export function ProductCard({
           <h3 className="font-sans text-[clamp(21px,1.9vw,26px)] font-medium tracking-[-0.01em]">
             {title}
           </h3>
-          <span className="whitespace-nowrap font-mono text-[11px] text-accent">
+          <span className="whitespace-nowrap font-mono text-micro text-accent">
             {reference}
           </span>
         </div>

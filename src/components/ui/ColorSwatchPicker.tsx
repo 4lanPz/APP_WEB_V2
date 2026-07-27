@@ -42,7 +42,7 @@ export function ColorSwatchPicker({ swatches, active, onChange }: ColorSwatchPic
           />
         ))}
       </div>
-      <p className="mt-3 font-mono text-[11px] text-graphite">
+      <p className="mt-3 font-mono text-micro text-graphite">
         <span className="text-accent">●</span> Familia Blancos · se tiñe a
         pedido y se muestra como color plano hasta tener foto real.
       </p>

@@ -23,7 +23,7 @@ const MapaLocales = dynamic(
       // tiene el mismo tamaño y color que el mapa ya montado y no hay salto.
       <div className="bg-paper p-3 sm:p-4">
         <div className="relative aspect-4/3 w-full border border-greige bg-bone sm:aspect-video">
-          <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-widest text-graphite">
+          <span className="absolute left-4 top-4 font-mono text-micro uppercase tracking-widest text-graphite">
             Cargando mapa…
           </span>
         </div>
