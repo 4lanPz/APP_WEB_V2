@@ -175,9 +175,13 @@ function Dato({
   return (
     <span className="flex gap-1.5">
       <dt>{nombre}</dt>
+      {/* `font-medium` y no `font-semibold`: IBM Plex Mono se carga solo en 400
+          y 500 (ver layout.tsx), así que un 600 lo sintetiza el navegador y a
+          11px los glifos se solapan —el «#008069» de la tabla de verdes salía
+          pareciendo tachado—. */}
       <dd
         className={cn(
-          "font-semibold",
+          "font-medium",
           exento ? (oscuro ? "text-paper/70" : "text-graphite") : ok ? (oscuro ? "text-paper" : "text-ink") : "text-accent",
         )}
       >
@@ -203,6 +207,7 @@ export function Muestra({
   children,
   sinLimite = false,
   exento = false,
+  umbral,
   className,
 }: {
   tono: Tono;
@@ -210,6 +215,12 @@ export function Muestra({
   children: React.ReactNode;
   sinLimite?: boolean;
   exento?: boolean;
+  /**
+   * Fuerza el mínimo. Hace falta para los controles de SOLO ICONO: el medidor
+   * deduce el umbral del tamaño de fuente, pero un glifo no es texto y su
+   * mínimo es el no textual de 1.4.11 (3:1), no 4,5:1.
+   */
+  umbral?: number;
   className?: string;
 }) {
   const caja = useRef<HTMLDivElement>(null);
@@ -250,7 +261,13 @@ export function Muestra({
           <span>midiendo…</span>
         ) : (
           <>
-            <Dato nombre="texto" valor={l.texto} minimo={l.umbralTexto} oscuro={oscuro} exento={exento} />
+            <Dato
+              nombre={umbral === 3 ? "glifo" : "texto"}
+              valor={l.texto}
+              minimo={umbral ?? l.umbralTexto}
+              oscuro={oscuro}
+              exento={exento}
+            />
             {!sinLimite && l.limite !== null && (
               <Dato nombre={l.queLimite} valor={l.limite} minimo={3} oscuro={oscuro} exento={exento} />
             )}

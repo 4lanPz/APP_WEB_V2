@@ -2,10 +2,10 @@ import { cn } from "@/lib/cn";
 import { Muestra } from "./Medidor";
 import {
   BASE,
-  FLOTANTE_HOY,
-  FLOTANTE_PROPUESTO,
+  FLOTANTE_CAJA,
   HOY,
   PROPUESTA,
+  VERDES,
   type Estado,
   type Tono,
 } from "./variantes";
@@ -146,8 +146,9 @@ function Mapa({
     <tr className="border-b border-greige align-top">
       <td className="py-3 pr-6 font-sans text-body-s font-medium text-ink">{gesto}</td>
       <td className="py-3 pr-6 font-serif text-body-s text-graphite">{hoy}</td>
-      <td className="py-3 pr-6 font-mono text-mono text-ink">{a}</td>
-      <td className="py-3 font-mono text-mono text-ink">{b}</td>
+      <td className="py-3 pr-6 font-mono text-mono text-graphite line-through">{a}</td>
+      {/* font-medium: la mono no tiene 600 cargado y el navegador lo sintetiza. */}
+      <td className="py-3 font-mono text-mono font-medium text-ink">{b}</td>
     </tr>
   );
 }
@@ -273,35 +274,141 @@ export function PropuestaBotones() {
 
       {/* ─────────────────────────────────────────────────────────────── */}
       <Titulo
-        n="B · El flotante"
-        nota="Está en las 13 vistas. Solo cambia el color del glifo; ni el verde, ni el tamaño, ni la posición se tocan."
+        n="B · WhatsApp, tres opciones"
+        nota="Cada opción en sus dos formas —flotante de solo icono y botón con texto— y sobre las dos superficies. El umbral no es el mismo: 3:1 para el glifo, 4,5:1 en cuanto lleva texto. «relleno» es el límite del botón contra la página."
       >
-        Botón flotante de WhatsApp
+        Qué verde y qué color de glifo
       </Titulo>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {(["claro", "oscuro"] as Tono[]).map((tono) => (
-          <Muestra key={`hoy-${tono}`} tono={tono} etiqueta={`hoy · glifo blanco · ${tono}`}>
-            <span data-medir className={FLOTANTE_HOY}>
-              <GlifoWhatsApp className="size-7" />
-            </span>
-          </Muestra>
-        ))}
-        {(["claro", "oscuro"] as Tono[]).map((tono) => (
-          <Muestra key={`prop-${tono}`} tono={tono} etiqueta={`propuesta · glifo tinta · ${tono}`}>
-            <span data-medir className={FLOTANTE_PROPUESTO}>
-              <GlifoWhatsApp className="size-7" />
-            </span>
-          </Muestra>
-        ))}
+      <div className="mb-8 min-w-0 overflow-x-auto">
+        <table className="w-full table-fixed border-collapse text-left">
+          <thead>
+            <tr className="border-b border-ink">
+              <th className="pb-3 pr-4 font-mono text-label uppercase text-graphite">Verde</th>
+              <th className="pb-3 pr-4 font-mono text-label uppercase text-graphite">Blanco</th>
+              <th className="pb-3 pr-4 font-mono text-label uppercase text-graphite">vs paper</th>
+              <th className="pb-3 pr-4 font-mono text-label uppercase text-graphite">vs ink</th>
+              <th className="pb-3 font-mono text-label uppercase text-graphite">De dónde sale</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["#25D366", "1,98", "1,78", "8,82", "Verde primario. El que usa el sitio hoy.", false],
+              ["#1DA851", "3,10", "2,78", "5,64", "Verde de hover, ya en BotonWhatsApp.tsx.", false],
+              ["#00A884", "3,03", "2,71", "5,77", "Teal del interfaz actual de la app.", false],
+              ["#008069", "4,89", "4,38", "3,57", "Cabecera de WhatsApp Web y Business.", true],
+              ["#128C7E", "4,14", "3,71", "4,23", "Teal Green, paleta clásica de marca.", false],
+              ["#075E54", "7,67", "6,87", "2,28", "Teal Green Dark, paleta clásica.", false],
+              ["#005C4B", "7,98", "7,15", "2,19", "Burbuja saliente en modo oscuro.", false],
+            ].map(([hex, bl, vp, vi, origen, elegido]) => (
+              <tr
+                key={hex as string}
+                className={cn(
+                  "border-b border-greige align-top",
+                  elegido && "bg-bone",
+                )}
+              >
+                {/* Sin `<strong>`: la mono no tiene 700 cargado y a este
+                    tamaño la negrita sintética solapa los glifos. La fila
+                    elegida se marca con el plano `bone` y un cuadro de acento. */}
+                <td className="py-2.5 pr-4 font-mono text-mono text-ink">
+                  <span className="flex items-center gap-2">
+                    <span
+                      aria-hidden
+                      className={cn("block size-1.5 shrink-0", elegido ? "bg-accent" : "bg-transparent")}
+                    />
+                    {hex}
+                  </span>
+                </td>
+                <td className={cn("py-2.5 pr-4 font-mono text-mono", Number(String(bl).replace(",", ".")) >= 4.5 ? "text-ink" : "text-accent")}>
+                  {bl}
+                </td>
+                <td className={cn("py-2.5 pr-4 font-mono text-mono", Number(String(vp).replace(",", ".")) >= 3 ? "text-ink" : "text-accent")}>
+                  {vp}
+                </td>
+                <td className={cn("py-2.5 pr-4 font-mono text-mono", Number(String(vi).replace(",", ".")) >= 3 ? "text-ink" : "text-accent")}>
+                  {vi}
+                </td>
+                <td className="py-2.5 font-serif text-body-s text-graphite">{origen}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <p className="mt-4 max-w-3xl font-serif text-body-m text-graphite">
-        El glifo no es texto, así que su mínimo es el no textual (3:1):{" "}
-        <strong className="text-ink">blanco sobre #25D366 da 1,98:1</strong> y tinta sobre
-        #25D366 da 8,82:1. El «relleno 1,78:1» de la columna clara es otra cosa: es el
-        verde contra la página. Ahí lo que separa el botón del fondo es la sombra que
-        lleva el componente real, y una sombra no entra en la fórmula de WCAG. Queda
-        anotado, pero no es lo que se propone cambiar.
+
+      <p className="mb-10 max-w-3xl font-serif text-body-m text-graphite">
+        Con glifo blanco hay que cumplir cuatro condiciones a la vez y{" "}
+        <strong className="text-ink">solo #008069 las cumple</strong>. Los dos más
+        profundos dan un blanco magnífico —7,67:1 y 7,98:1— pero contra{" "}
+        <code className="font-mono text-mono text-ink">ink</code> caen a 2,2:1: sobre la
+        banda oscura de un hero el botón se quedaría sin límite y habría que ponerle
+        filete, que es justo lo que se quería evitar.{" "}
+        <strong className="text-ink">
+          Y tu hipótesis se confirma: #008069 contra paper da 4,38:1, así que no necesita
+          borde en claro.
+        </strong>{" "}
+        El de hoy necesita 1,78:1 → sí lo necesitaría.
+      </p>
+
+      {(
+        [
+          ["hoy", "01 · Hoy — #25D366 + glifo blanco"],
+          ["tinta", "02 · Mi propuesta anterior — #25D366 + glifo tinta"],
+          ["profundo", "03 · Nueva — #008069 + glifo blanco"],
+        ] as const
+      ).map(([clave, titulo]) => {
+        const v = VERDES[clave];
+        return (
+          <div key={clave} className="mb-10">
+            <div className="mb-4 flex flex-col gap-1">
+              <h4 className="font-sans text-body-l font-medium text-ink">{titulo}</h4>
+              <p className="font-serif text-body-m text-graphite">{v.origen}</p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-4">
+              {(["claro", "oscuro"] as Tono[]).map((tono) => (
+                <Muestra
+                  key={`f-${tono}`}
+                  tono={tono}
+                  etiqueta={`flotante · solo icono · ${tono}`}
+                  umbral={3}
+                >
+                  <span
+                    data-medir
+                    className={cn(FLOTANTE_CAJA, v.relleno, v.texto, tono === "claro" && v.bordeClaro)}
+                  >
+                    <GlifoWhatsApp className="size-7" />
+                  </span>
+                </Muestra>
+              ))}
+              {(["claro", "oscuro"] as Tono[]).map((tono) => (
+                <Muestra key={`b-${tono}`} tono={tono} etiqueta={`botón con texto · ${tono}`}>
+                  <button
+                    type="button"
+                    data-medir
+                    className={cn(
+                      BASE,
+                      "h-12 border px-7.5",
+                      v.relleno,
+                      v.texto,
+                      tono === "claro" ? v.bordeClaro : "border-transparent",
+                    )}
+                  >
+                    <GlifoWhatsApp />
+                    Escribir por WhatsApp
+                  </button>
+                </Muestra>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      <p className="max-w-3xl font-serif text-body-m text-graphite">
+        Una advertencia de procedencia: <code className="font-mono text-mono text-ink">#008069</code>{" "}
+        lo he tomado de la interfaz de WhatsApp Web y WhatsApp Business, no de un kit de
+        marca que pueda verificar desde aquí. Lo que sí está medido es que es el único de
+        los siete que cumple las cuatro condiciones. Conviene confirmarlo contra los
+        recursos oficiales antes de publicar.
       </p>
 
       {/* ─────────────────────────────────────────────────────────────── */}
@@ -319,26 +426,26 @@ export function PropuestaBotones() {
             <span aria-hidden className="absolute inset-x-0 -bottom-px block h-0.5 bg-brand" />
           </span>
         </Muestra>
-        <Muestra tono="claro" etiqueta="propuesta · tinta + filete accent" sinLimite>
-          <span data-medir className="relative pb-1.75 font-sans text-body-s font-medium text-ink">
-            Nuestros Productos
-            <span aria-hidden className="absolute inset-x-0 -bottom-px block h-0.5 bg-accent" />
-          </span>
-        </Muestra>
-        <Muestra tono="claro" etiqueta="alternativa · tinta + filete tinta" sinLimite>
+        <Muestra tono="claro" etiqueta="ELEGIDA · tinta + filete tinta" sinLimite>
           <span data-medir className="relative pb-1.75 font-sans text-body-s font-medium text-ink">
             Nuestros Productos
             <span aria-hidden className="absolute inset-x-0 -bottom-px block h-0.5 bg-ink" />
+          </span>
+        </Muestra>
+        <Muestra tono="claro" etiqueta="descartada · tinta + filete accent" sinLimite>
+          <span data-medir className="relative pb-1.75 font-sans text-body-s font-medium text-ink">
+            Nuestros Productos
+            <span aria-hidden className="absolute inset-x-0 -bottom-px block h-0.5 bg-accent" />
           </span>
         </Muestra>
       </div>
       <p className="mt-4 max-w-3xl font-serif text-body-m text-graphite">
         El subrayado ya existe en el navbar, pero está en{" "}
         <code className="font-mono text-mono text-ink">bg-brand</code>: como marca visible
-        contra paper da 2,56:1 y necesita 3:1. En{" "}
-        <code className="font-mono text-mono text-ink">accent</code> da 3,76:1 y es
-        exactamente para lo que globals.css lo reserva («énfasis puntual»). En tinta da
-        15,67:1 pero pierde el color.
+        contra paper da 2,56:1 y necesita 3:1. El filete pasa a tinta (15,67:1).{" "}
+        <code className="font-mono text-mono text-ink">accent</code> también pasaba
+        —3,76:1—, pero queda descartado: el terracota ya significa etiqueta mono y
+        numeración de sección, y darle un segundo papel lo diluye.
       </p>
 
       <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -366,18 +473,20 @@ export function PropuestaBotones() {
 
       {/* ─────────────────────────────────────────────────────────────── */}
       <Titulo
-        n="D · La decisión"
-        nota="Mismas cuatro variantes en las dos opciones. Lo que cambia no es el repertorio, es qué significa el relleno."
+        n="D · Decidido: opción B"
+        nota="Mismas cuatro variantes en las dos opciones. Lo que cambiaba no era el repertorio, era qué significa el relleno. Se queda B: el relleno marca compromiso. A se deja a la vista para poder volver sobre ella."
       >
-        ¿El envío de formulario se distingue?
+        ¿El envío de formulario se distingue? Sí
       </Titulo>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         {/* Opción A */}
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <span className="font-mono text-label uppercase text-graphite">Opción A</span>
-            <h4 className="font-sans text-body-l font-medium text-ink">
+            <span className="font-mono text-label uppercase text-graphite">
+              Opción A · descartada
+            </span>
+            <h4 className="font-sans text-body-l font-medium text-graphite">
               El relleno marca jerarquía
             </h4>
             <p className="font-serif text-body-m text-graphite">
@@ -416,7 +525,7 @@ export function PropuestaBotones() {
         {/* Opción B */}
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <span className="font-mono text-label uppercase text-graphite">Opción B</span>
+            <span className="font-mono text-label uppercase text-accent">Opción B · ELEGIDA</span>
             <h4 className="font-sans text-body-l font-medium text-ink">
               El relleno marca compromiso
             </h4>
@@ -454,7 +563,7 @@ export function PropuestaBotones() {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center gap-5 bg-paper p-6 outline outline-1 outline-greige">
+      <div className="mt-8 flex flex-wrap items-center gap-5 bg-paper p-6 outline-1 outline-greige">
         <button type="button" className={cn(BASE, PROPUESTA.whatsapp.claro.reposo)}>
           <GlifoWhatsApp />
           Escribir por WhatsApp
@@ -492,10 +601,10 @@ export function PropuestaBotones() {
 
       {/* ─────────────────────────────────────────────────────────────── */}
       <Titulo
-        n="F · El escalón de color que falta"
-        nota="El sistema de botones NO lo necesita: con texto oscuro sobre los rellenos, todo pasa con los tokens de hoy. Lo necesita el resto del sitio."
+        n="F · Token nuevo, aprobado"
+        nota="Ya está en globals.css. No lo usa ninguna página todavía: entra para que los quince hover:text-brand sobre claro tengan a dónde ir cuando se aplique el sistema."
       >
-        ¿Hace falta un azul de texto?
+        <code className="font-mono">--color-brand-ink: #1a6d99</code>
       </Titulo>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -504,29 +613,25 @@ export function PropuestaBotones() {
             Hablar con un asesor →
           </span>
         </Muestra>
-        <Muestra tono="claro" etiqueta="opción 1 · sin token nuevo, subrayado" sinLimite>
-          <span data-medir className="border-b border-ink pb-0.5 font-sans text-body-s font-medium text-ink">
+        <Muestra tono="claro" etiqueta="token nuevo · text-brand-ink" sinLimite>
+          <span data-medir className="font-sans text-body-s font-medium text-brand-ink">
             Hablar con un asesor →
           </span>
         </Muestra>
-        <Muestra tono="claro" etiqueta="opción 2 · token nuevo brand-ink #1a6d99" sinLimite>
-          {/* eslint-disable-next-line no-restricted-syntax -- muestra del token PROPUESTO, aún no existe en globals.css */}
-          <span data-medir className="font-sans text-body-s font-medium text-[#1a6d99]">
+        <Muestra tono="claro" etiqueta="alternativa sin token · subrayado en tinta" sinLimite>
+          <span data-medir className="border-b border-ink pb-0.5 font-sans text-body-s font-medium text-ink">
             Hablar con un asesor →
           </span>
         </Muestra>
       </div>
       <p className="mt-4 max-w-3xl font-serif text-body-m text-graphite">
-        La paleta no tiene ningún azul que pueda ser texto sobre fondo claro:{" "}
+        La paleta no tenía ningún azul que pudiera ser texto sobre fondo claro:{" "}
         <code className="font-mono text-mono text-ink">brand</code> da 2,56:1 y{" "}
         <code className="font-mono text-mono text-ink">brand-deep</code> pasa con 13,37:1
-        pero se lee como negro, no como azul. Eso deja sin arreglo los quince{" "}
-        <code className="font-mono text-mono text-ink">hover:text-brand</code> repartidos
-        por el sitio. Si se quiere conservar el azul como color de enlace en claro, iría en{" "}
-        <code className="font-mono text-mono text-ink">globals.css</code> junto a{" "}
-        <code className="font-mono text-mono text-ink">--color-brand-deep</code>, como{" "}
-        <code className="font-mono text-mono text-ink">--color-brand-ink: #1a6d99</code>. Si
-        no, el subrayado resuelve sin añadir nada.
+        pero se lee como negro, no como azul.{" "}
+        <strong className="text-ink">Solo como color de texto o de icono sobre claro</strong>
+        : como relleno no aporta nada que no dé ya{" "}
+        <code className="font-mono text-mono text-ink">brand-deep</code>.
       </p>
 
       {/* ─────────────────────────────────────────────────────────────── */}
@@ -546,8 +651,10 @@ export function PropuestaBotones() {
             <tr className="border-b border-ink">
               <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">Gesto</th>
               <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">Hoy</th>
-              <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">A · jerarquía</th>
-              <th className="pb-3 font-mono text-label uppercase text-graphite">B · compromiso</th>
+              <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">
+                A · descartada
+              </th>
+              <th className="pb-3 font-mono text-label uppercase text-accent">B · ELEGIDA</th>
             </tr>
           </thead>
           <tbody>
@@ -589,10 +696,29 @@ export function PropuestaBotones() {
       </div>
 
       <p className="mt-6 max-w-3xl font-serif text-body-m text-graphite">
-        La diferencia entre A y B cabe en una fila: el CTA de hero. En A lleva relleno
-        porque es lo más importante de la pantalla; en B no lo lleva nunca porque solo
-        navega. Todo lo demás es idéntico —y ninguna de las dos añade variantes.
+        La diferencia entre A y B cabía en una fila: el CTA de hero. En A llevaba relleno
+        porque era lo más importante de la pantalla; en B no lo lleva nunca porque solo
+        navega. Todo lo demás es idéntico —ninguna de las dos añadía variantes.
       </p>
+      <div className="mt-8 border-t border-ink pt-6">
+        <span className="font-mono text-label uppercase text-accent">Estado</span>
+        <ul className="mt-3 flex max-w-3xl flex-col gap-1.5 font-serif text-body-m text-graphite">
+          <li>
+            <strong className="text-ink">Decidido:</strong> opción B · filete del navbar
+            activo en tinta · token <code className="font-mono text-mono">brand-ink</code>{" "}
+            (ya en globals.css).
+          </li>
+          <li>
+            <strong className="text-ink">Pendiente:</strong> qué verde de WhatsApp (§B) ·
+            el filete de tinta de la sólida clara · la inversión de polaridad del hover ·
+            la sólida en tinta de §E.
+          </li>
+          <li>
+            La variante <code className="font-mono text-mono">whatsapp</code> de §A/05
+            sigue con el verde de hoy a propósito: cambia sola en cuanto se elija en §B.
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }

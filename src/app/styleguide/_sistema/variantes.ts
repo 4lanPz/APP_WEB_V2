@@ -229,12 +229,62 @@ export const HOY: Record<string, Record<Tono, Record<Estado, string>>> = {
   },
 };
 
-/** Flotante de WhatsApp tal cual está publicado hoy, para medirlo al lado. */
-export const FLOTANTE_HOY =
-  // eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp
-  "flex size-14 items-center justify-center rounded-md bg-[#25D366] text-white";
+/**
+ * LOS TRES VERDES A COMPARAR.
+ *
+ * Ninguno inventado: los siete candidatos medidos salen de la paleta de
+ * WhatsApp. Con glifo BLANCO —que es lo que hace que el botón se reconozca sin
+ * leer— hay que cumplir cuatro condiciones a la vez, y solo una las cumple:
+ *
+ *   verde      blanco  vs paper  vs ink   de dónde sale
+ *   #25D366     1,98     1,78     8,82    primario, el que usa el sitio hoy
+ *   #1DA851     3,10     2,78     5,64    hover, ya en BotonWhatsApp.tsx
+ *   #00A884     3,03     2,71     5,77    teal del interfaz actual
+ *   #008069     4,89     4,38     3,57    cabecera de WhatsApp Web / Business
+ *   #128C7E     4,14     3,71     4,23    Teal Green, paleta clásica
+ *   #075E54     7,67     6,87     2,28    Teal Green Dark, paleta clásica
+ *   #005C4B     7,98     7,15     2,19    burbuja saliente en modo oscuro
+ *
+ * Los dos más profundos dan un blanco magnífico, pero contra `ink` caen a
+ * 2,2-2,3:1: sobre la banda oscura de un hero el botón dejaría de tener límite
+ * y habría que ponerle filete. `#008069` es el único que pasa las cuatro.
+ */
+type OpcionVerde = {
+  hex: string;
+  relleno: string;
+  texto: string;
+  /** Filete solo si el relleno no se separa por sí solo de la página clara. */
+  bordeClaro: string;
+  origen: string;
+};
 
-/** El mismo flotante con el glifo en tinta. */
-export const FLOTANTE_PROPUESTO =
-  // eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp
-  "flex size-14 items-center justify-center rounded-md bg-[#25D366] text-ink";
+export const VERDES: Record<"hoy" | "tinta" | "profundo", OpcionVerde> = {
+  hoy: {
+    hex: "#25D366",
+    // eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp
+    relleno: "bg-[#25D366]",
+    texto: "text-white",
+    bordeClaro: "border border-transparent",
+    origen: "Verde primario de WhatsApp. Lo que está publicado.",
+  },
+  tinta: {
+    hex: "#25D366",
+    // eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp
+    relleno: "bg-[#25D366]",
+    texto: "text-ink",
+    bordeClaro: "border border-ink",
+    origen: "El mismo verde primario, con el glifo en tinta.",
+  },
+  profundo: {
+    hex: "#008069",
+    // eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web
+    relleno: "bg-[#008069]",
+    texto: "text-white",
+    bordeClaro: "border border-transparent",
+    origen: "Teal de la cabecera de WhatsApp Web y WhatsApp Business.",
+  },
+};
+
+/** Caja del flotante, sin el color: lo pone cada opción. */
+export const FLOTANTE_CAJA =
+  "flex size-14 items-center justify-center rounded-md shadow-[0_4px_20px_rgba(28,25,23,0.22)]";
