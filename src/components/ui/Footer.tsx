@@ -23,7 +23,7 @@ export function Footer() {
           <div>
             <Link href="/" className="mb-5.5 flex items-center gap-3">
               <span className="block size-2.5 shrink-0 bg-brand" />
-              <span className="font-sans text-[17px] font-semibold tracking-[0.02em]">
+              <span className="font-sans text-body-lead font-semibold tracking-[0.02em]">
                 Textil Padilla
               </span>
             </Link>
@@ -41,7 +41,7 @@ export function Footer() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="py-1.5 font-sans text-[15px] text-bone hover:text-paper"
+                  className="py-1.5 font-sans text-body-s text-bone hover:text-paper"
                 >
                   {link.label}
                 </Link>

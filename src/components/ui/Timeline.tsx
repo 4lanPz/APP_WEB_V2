@@ -164,7 +164,7 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
                   <span className="font-mono text-xs uppercase tracking-widest text-accent">
                     {item.ref}
                   </span>
-                  <h3 className="mt-1 font-sans text-[15px] font-semibold text-ink">
+                  <h3 className="mt-1 font-sans text-body-s font-semibold text-ink">
                     {item.title}
                   </h3>
                   <p className="mt-1.5 max-w-md font-serif text-body-m text-graphite">

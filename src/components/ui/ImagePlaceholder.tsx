@@ -116,7 +116,7 @@ export function ImagePlaceholder({
               {sublabel && (
                 <span
                   className={cn(
-                    "font-sans text-[15px] font-medium",
+                    "font-sans text-body-s font-medium",
                     dark ? "text-paper" : "text-ink",
                   )}
                 >

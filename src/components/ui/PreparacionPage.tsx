@@ -45,7 +45,7 @@ export function PreparacionPage({
         </Link>
         <Link
           href="/asesor-virtual"
-          className="font-sans text-[15px] font-medium text-ink hover:text-brand"
+          className="font-sans text-body-s font-medium text-ink hover:text-brand"
         >
           Hablar con el asesor virtual →
         </Link>

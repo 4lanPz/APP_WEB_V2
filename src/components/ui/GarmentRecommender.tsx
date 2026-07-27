@@ -62,7 +62,7 @@ export function GarmentRecommender() {
             onClick={() => setActive(o.key)}
             aria-pressed={active === o.key}
             className={cn(
-              "border-b-2 px-1 py-3 font-sans text-[15px] font-medium",
+              "border-b-2 px-1 py-3 font-sans text-body-s font-medium",
               active === o.key
                 ? "border-brand text-brand"
                 : "border-transparent text-graphite hover:text-ink",
@@ -89,7 +89,7 @@ export function GarmentRecommender() {
           <h3 className="font-sans text-h3 font-semibold text-ink">
             {option.title}
           </h3>
-          <p className="font-serif text-[15px] text-graphite">
+          <p className="font-serif text-body-s text-graphite">
             {option.description}
           </p>
           <div className="mt-2 flex flex-col gap-5">
@@ -108,7 +108,7 @@ export function GarmentRecommender() {
               azul. Copy alineado con la portada ("Probar el asesor virtual").
             */}
             <div className="flex flex-col gap-2.5">
-              <span className="font-serif text-[15px] text-graphite">
+              <span className="font-serif text-body-s text-graphite">
                 ¿No sabes qué elegir?
               </span>
               <Link

@@ -110,7 +110,7 @@ export default async function ProductoDortmundPlusBlancosPage() {
             className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-5">
             {cuidados.map((step) => (
               <RevealItem key={step.title} className="bg-paper p-6">
-                <h3 className="font-sans text-[15px] font-semibold text-ink">
+                <h3 className="font-sans text-body-s font-semibold text-ink">
                   {step.title}
                 </h3>
                 <p className="mt-2 font-serif text-caption text-graphite">
@@ -146,14 +146,14 @@ export default async function ProductoDortmundPlusBlancosPage() {
                   />
                   <div className="p-6">
                     <div className="mb-2 flex items-baseline justify-between gap-3">
-                      <h3 className="font-sans text-[15px] font-semibold text-ink">
+                      <h3 className="font-sans text-body-s font-semibold text-ink">
                         {item.name}
                       </h3>
                       <span className="whitespace-nowrap font-mono text-xs uppercase tracking-widest text-graphite">
                         En preparación
                       </span>
                     </div>
-                    <p className="mb-3 font-serif text-[15px] text-graphite">
+                    <p className="mb-3 font-serif text-body-s text-graphite">
                       {item.description}
                     </p>
                     <span className="font-sans text-[13px] font-medium text-ink">

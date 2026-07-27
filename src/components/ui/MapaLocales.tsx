@@ -287,7 +287,7 @@ function FichaLocal({
             />
             {location.zone}
           </span>
-          <h3 className="mt-2 font-sans text-[17px] font-semibold text-ink">
+          <h3 className="mt-2 font-sans text-body-lead font-semibold text-ink">
             {location.name}
           </h3>
         </div>
@@ -318,7 +318,7 @@ function FichaLocal({
         href={comoLlegar(location)}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 inline-block font-sans text-[15px] font-medium text-ink hover:text-brand"
+        className="mt-4 inline-block font-sans text-body-s font-medium text-ink hover:text-brand"
       >
         Cómo llegar ↗
       </a>

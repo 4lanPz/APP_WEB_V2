@@ -149,7 +149,7 @@ export default function Home() {
                 <h3 className="mt-4 font-sans text-h3 font-semibold text-ink">
                   {verbo.title}
                 </h3>
-                <p className="mt-3 font-serif text-[15px] text-graphite">
+                <p className="mt-3 font-serif text-body-s text-graphite">
                   {verbo.description}
                 </p>
               </RevealItem>

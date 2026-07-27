@@ -70,7 +70,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-paper border border-greige" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Papel
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -81,7 +81,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-bone" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Hueso
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -92,7 +92,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-greige" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Greige
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -103,7 +103,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-graphite" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Grafito
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -114,7 +114,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-ink" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Tinta
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -125,7 +125,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-brand" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Azul Padilla
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -136,7 +136,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-brand-deep" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Azul profundo
               </p>
               <p className="font-mono text-mono text-graphite">
@@ -147,7 +147,7 @@ export default function StyleguidePage() {
           <div className="flex flex-col gap-16 bg-paper p-6">
             <div className="h-16 w-full bg-accent" />
             <div>
-              <p className="font-sans text-[15px] font-medium text-ink">
+              <p className="font-sans text-body-s font-medium text-ink">
                 Terracota
               </p>
               <p className="font-mono text-mono text-graphite">

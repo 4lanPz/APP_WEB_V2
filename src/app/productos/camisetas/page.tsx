@@ -220,7 +220,7 @@ export default function CamisetasPage() {
                   <Link
                     href="/productos/microfibra#en-preparacion"
                     title="Página en preparación"
-                    className="mt-5 inline-block font-sans text-[15px] font-medium text-ink hover:text-brand"
+                    className="mt-5 inline-block font-sans text-body-s font-medium text-ink hover:text-brand"
                   >
                     Ver ficha técnica y colores →
                   </Link>
@@ -237,10 +237,10 @@ export default function CamisetasPage() {
             className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2">
             {complementary.map((item) => (
               <RevealItem key={item.name} className="bg-paper p-8">
-                <h3 className="font-sans text-[15px] font-semibold text-ink">
+                <h3 className="font-sans text-body-s font-semibold text-ink">
                   {item.name}
                 </h3>
-                <p className="mt-2 font-serif text-[15px] text-graphite">
+                <p className="mt-2 font-serif text-body-s text-graphite">
                   {item.description}
                 </p>
               </RevealItem>

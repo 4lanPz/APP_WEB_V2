@@ -61,7 +61,7 @@ export function ProductCard({
         <p className="mb-4.5 font-mono text-[13px] text-graphite">
           {specs.join(" · ")}
         </p>
-        <p className="mb-4.5 font-serif text-[15px] leading-[1.6] text-graphite">
+        <p className="mb-4.5 font-serif text-body-s leading-[1.6] text-graphite">
           {description}
         </p>
         <div className="flex items-center justify-end gap-2.25 border-t border-greige pt-3.75">

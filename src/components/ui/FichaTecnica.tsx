@@ -44,7 +44,7 @@ export function FichaTecnica({ rows, title = "Ficha técnica" }: FichaTecnicaPro
                 {PENDIENTE}
               </span>
             ) : (
-              <span className="text-right font-sans text-[15px] font-medium text-ink">
+              <span className="text-right font-sans text-body-s font-medium text-ink">
                 {row.value}
               </span>
             )}

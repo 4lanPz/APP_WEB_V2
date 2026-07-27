@@ -49,8 +49,21 @@
   --text-body-l: 1.25rem; /* 20px */
   --text-body-l--line-height: 1.6;
 
+  /*
+   * 17px — campos de formulario (≥16px evita el zoom de iOS) y el wordmark.
+   * A propósito SIN --line-height/--letter-spacing: la utilidad debe aplicar
+   * solo font-size, para heredar el interlineado del contexto igual que hacía
+   * el text-[17px] a mano que reemplaza. No le añadas un line-height "por
+   * consistencia": desplazaría todos esos usos.
+   */
+  --text-body-lead: 1.0625rem; /* 17px */
+
   --text-body-m: 1rem; /* 16px */
   --text-body-m--line-height: 1.6;
+
+  /* 15px — texto UI/secundario (sans de interfaz y serif corto). Sin
+   * --line-height por el mismo motivo que --text-body-lead: solo font-size. */
+  --text-body-s: 0.9375rem; /* 15px */
 
   --text-caption: 0.8125rem; /* 13px */
   --text-caption--line-height: 1.5;

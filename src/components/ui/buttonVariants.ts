@@ -28,7 +28,7 @@ export const buttonVariants = cva(
         secondary:
           "h-12 border border-greige px-7.5 text-ink hover:border-ink hover:bg-bone",
         ghost:
-          "gap-2.25 border-b border-transparent px-0.5 py-1.5 text-[15px] text-ink hover:border-ink rounded-none",
+          "gap-2.25 border-b border-transparent px-0.5 py-1.5 text-body-s text-ink hover:border-ink rounded-none",
       },
     },
     defaultVariants: {

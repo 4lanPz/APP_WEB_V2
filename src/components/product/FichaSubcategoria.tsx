@@ -93,7 +93,7 @@ export function FichaSubcategoria({
                   <span className="font-mono text-xs uppercase tracking-widest text-graphite">
                     {fila.gramaje}
                   </span>
-                  <span className="text-right font-sans text-[15px] text-ink">
+                  <span className="text-right font-sans text-body-s text-ink">
                     {fila.temperatura} · {fila.tiempo}
                   </span>
                 </div>

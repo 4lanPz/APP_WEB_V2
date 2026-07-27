@@ -53,7 +53,7 @@ function NavLink({
       rel={external ? "noopener noreferrer" : undefined}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "group relative pb-1.75 font-sans text-[15px] text-ink hover:text-brand",
+        "group relative pb-1.75 font-sans text-body-s text-ink hover:text-brand",
         isActive && "text-brand",
         className,
       )}
@@ -227,7 +227,7 @@ export function Navbar() {
           onClick={() => setMobileOpen(false)}
         >
           <span className="block size-2.5 shrink-0 bg-brand" />
-          <span className="font-sans text-[17px] font-semibold tracking-[0.02em]">
+          <span className="font-sans text-body-lead font-semibold tracking-[0.02em]">
             Textil Padilla
           </span>
         </Link>
@@ -281,7 +281,7 @@ export function Navbar() {
               aria-haspopup="menu"
               aria-current={catalogoActivo ? "page" : undefined}
               className={cn(
-                "group relative pb-1.75 font-sans text-[15px] text-ink hover:text-brand",
+                "group relative pb-1.75 font-sans text-body-s text-ink hover:text-brand",
                 disparadorMarcado && "text-brand",
               )}
             >
@@ -471,7 +471,7 @@ export function Navbar() {
                                     : undefined
                                 }
                                 onClick={() => setMobileOpen(false)}
-                                className="font-sans text-[15px] text-graphite"
+                                className="font-sans text-body-s text-graphite"
                               >
                                 {sub.label}
                               </Link>

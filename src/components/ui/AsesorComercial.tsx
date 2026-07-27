@@ -56,7 +56,7 @@ export function AsesorComercial({
           <div className="flex flex-col gap-8">
             <p className="max-w-md font-serif text-body-l text-paper/85">{intro}</p>
             <div>
-              <p className="font-sans text-[15px] font-semibold text-paper">
+              <p className="font-sans text-body-s font-semibold text-paper">
                 Andrés Padilla
               </p>
               <p className="font-mono text-xs uppercase tracking-widest text-paper/60">
@@ -115,7 +115,7 @@ export function AsesorComercial({
                     required
                     placeholder="Gramaje, color, cantidad, plazos… lo que necesites resolver"
                     rows={3}
-                    className="w-full resize-y border-0 border-b border-paper/25 bg-transparent px-0.5 py-3 font-sans text-[17px] text-paper outline-none placeholder:text-paper/40 focus:border-brand"
+                    className="w-full resize-y border-0 border-b border-paper/25 bg-transparent px-0.5 py-3 font-sans text-body-lead text-paper outline-none placeholder:text-paper/40 focus:border-brand"
                   />
                 </div>
                 <div className="flex flex-wrap items-center gap-5">

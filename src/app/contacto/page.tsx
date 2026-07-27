@@ -71,12 +71,12 @@ export default function ContactoPage() {
                 {channel.href ? (
                   <a
                     href={channel.href}
-                    className="mt-1 block font-sans text-[15px] font-medium text-ink hover:text-brand"
+                    className="mt-1 block font-sans text-body-s font-medium text-ink hover:text-brand"
                   >
                     {channel.value}
                   </a>
                 ) : (
-                  <p className="mt-1 font-sans text-[15px] font-medium text-graphite">
+                  <p className="mt-1 font-sans text-body-s font-medium text-graphite">
                     {channel.value}
                   </p>
                 )}
@@ -136,7 +136,7 @@ export default function ContactoPage() {
                 className="grid grid-cols-1 gap-2 border-b border-greige py-5 sm:grid-cols-[40px_1.1fr_1.4fr_1fr_auto] sm:items-baseline sm:gap-4"
               >
                 <span className="font-mono text-[11px] text-accent">{location.ref}</span>
-                <span className="flex items-center gap-2.5 font-sans text-[15px] font-semibold text-ink">
+                <span className="flex items-center gap-2.5 font-sans text-body-s font-semibold text-ink">
                   <span
                     className="block size-1.5 shrink-0"
                     style={{ backgroundColor: location.isMatriz ? "#33A2DC" : "#A0715A" }}
@@ -157,7 +157,7 @@ export default function ContactoPage() {
                   href={comoLlegar(location)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-[15px] font-medium text-ink hover:text-brand"
+                  className="font-sans text-body-s font-medium text-ink hover:text-brand"
                 >
                   Cómo llegar ↗
                 </a>
@@ -171,7 +171,7 @@ export default function ContactoPage() {
             </MagneticLink>
             <Link
               href="/productos"
-              className="font-sans text-[15px] font-medium text-ink hover:text-brand"
+              className="font-sans text-body-s font-medium text-ink hover:text-brand"
             >
               Ver catálogo de telas →
             </Link>

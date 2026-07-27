@@ -105,7 +105,7 @@ function OpcionConImagen({
         )}
       </span>
       <span className="min-w-0">
-        <span className="block font-sans text-[15px] font-semibold text-paper">
+        <span className="block font-sans text-body-s font-semibold text-paper">
           {title}
         </span>
         <span
@@ -113,7 +113,7 @@ function OpcionConImagen({
             "mt-1 block",
             subtitleMono
               ? "font-mono text-xs uppercase tracking-widest text-paper/50"
-              : "font-serif text-[15px] text-paper/60",
+              : "font-serif text-body-s text-paper/60",
           )}
         >
           {subtitle}
@@ -231,7 +231,7 @@ export function AsesorWizard() {
       <motion.div layout className="grid grid-cols-1 gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         <div className="flex flex-col gap-6 border-t border-paper/15 pt-8 lg:border-t-0 lg:pt-0">
           <div>
-            <p className="font-sans text-[15px] font-semibold text-paper">
+            <p className="font-sans text-body-s font-semibold text-paper">
               Asesor Textil Padilla
             </p>
             <p className="mt-1 font-mono text-xs uppercase tracking-widest text-paper/50">
@@ -393,7 +393,7 @@ export function AsesorWizard() {
                     <span className="font-mono text-xs uppercase tracking-widest text-paper/50">
                       Familia {category.name}
                     </span>
-                    <h3 className="mt-3 font-sans text-[15px] font-semibold text-paper">
+                    <h3 className="mt-3 font-sans text-body-s font-semibold text-paper">
                       {sub.name}
                     </h3>
                     <p className="mt-2 font-serif text-[14px] text-paper/70">
@@ -430,7 +430,7 @@ export function AsesorWizard() {
                 type="button"
                 onClick={reset}
                 className={cn(
-                  "mt-6 font-sans text-[15px] font-medium text-paper hover:text-brand",
+                  "mt-6 font-sans text-body-s font-medium text-paper hover:text-brand",
                 )}
               >
                 ↻ Empezar de nuevo

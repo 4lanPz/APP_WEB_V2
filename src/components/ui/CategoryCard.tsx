@@ -84,7 +84,7 @@ export function CategoryCard({
         <h3 className="mb-2 font-sans text-[28px] font-medium tracking-[-0.01em] text-paper">
           {title}
         </h3>
-        <p className="font-serif text-[15px] leading-normal text-greige">
+        <p className="font-serif text-body-s leading-normal text-greige">
           {description}
         </p>
         <span className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-brand">

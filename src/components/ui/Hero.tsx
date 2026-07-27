@@ -170,7 +170,7 @@ export function Hero({
             {secondaryCta && (
               <Link
                 href={secondaryCta.href}
-                className="font-sans text-[15px] font-medium text-paper hover:text-brand"
+                className="font-sans text-body-s font-medium text-paper hover:text-brand"
               >
                 {secondaryCta.label}
               </Link>

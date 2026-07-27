@@ -168,7 +168,7 @@ export default function EmpresaPage() {
                 <h3 className="font-sans text-h3 font-semibold text-ink">
                   {valor.title}
                 </h3>
-                <p className="max-w-2xl font-serif text-[15px] text-graphite">
+                <p className="max-w-2xl font-serif text-body-s text-graphite">
                   {valor.description}
                 </p>
               </RevealItem>
@@ -222,7 +222,7 @@ export default function EmpresaPage() {
                   { label: "Carácter", value: "Familiar" },
                 ].map((item) => (
                   <RevealItem key={item.label}>
-                    <p className="font-sans text-[15px] font-semibold text-ink">
+                    <p className="font-sans text-body-s font-semibold text-ink">
                       {item.value}
                     </p>
                     <p className="mt-1 font-mono text-xs uppercase tracking-widest text-graphite">
@@ -308,7 +308,7 @@ export default function EmpresaPage() {
             </MagneticLink>
             <Link
               href="/productos"
-              className="font-sans text-[15px] font-medium text-paper hover:text-brand"
+              className="font-sans text-body-s font-medium text-paper hover:text-brand"
             >
               Ver catálogo de telas →
             </Link>

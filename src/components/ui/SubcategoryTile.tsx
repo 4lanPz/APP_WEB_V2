@@ -92,7 +92,7 @@ export function SubcategoryTile({
           </span>
         </div>
         {description && (
-          <p className="mb-4.5 max-w-[40ch] font-serif text-[15px] leading-normal text-graphite">
+          <p className="mb-4.5 max-w-[40ch] font-serif text-body-s leading-normal text-graphite">
             {description}
           </p>
         )}

@@ -118,12 +118,12 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               <h3 className="font-sans text-h3 font-semibold text-ink">
                 {slide.title}
               </h3>
-              <p className="font-serif text-[15px] text-graphite">
+              <p className="font-serif text-body-s text-graphite">
                 {slide.description}
               </p>
               <button
                 type="button"
-                className="w-fit font-sans text-[15px] font-medium text-ink hover:text-brand"
+                className="w-fit font-sans text-body-s font-medium text-ink hover:text-brand"
               >
                 Ver evento →
               </button>
