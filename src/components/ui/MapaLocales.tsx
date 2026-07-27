@@ -301,7 +301,7 @@ function FichaLocal({
         </button>
       </div>
 
-      <dl className="mt-3 flex flex-col gap-1.5 font-mono text-[13px]">
+      <dl className="mt-3 flex flex-col gap-1.5 font-mono text-caption">
         <div>
           <dt className="sr-only">Sector</dt>
           <dd className="text-ink">{location.sector}</dd>

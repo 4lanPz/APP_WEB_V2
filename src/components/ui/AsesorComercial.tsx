@@ -68,7 +68,7 @@ export function AsesorComercial({
                 <li key={channel.label}>
                   <a
                     href={channel.href}
-                    className="inline-flex items-center gap-2.5 font-mono text-[13px] text-paper/80 hover:text-paper"
+                    className="inline-flex items-center gap-2.5 font-mono text-caption text-paper/80 hover:text-paper"
                   >
                     <span className="block size-1.5 shrink-0 bg-brand" />
                     {channel.label}

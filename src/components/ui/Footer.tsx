@@ -53,7 +53,7 @@ export function Footer() {
             <div className="mb-5 font-mono text-xs uppercase tracking-widest text-graphite">
               Contacto
             </div>
-            <div className="font-mono text-[13px] leading-[1.9] text-greige">
+            <div className="font-mono text-caption leading-[1.9] text-greige">
               <a href={`mailto:${footerContact.email}`} className="block hover:text-paper">
                 {footerContact.email}
               </a>

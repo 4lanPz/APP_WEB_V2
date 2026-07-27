@@ -322,7 +322,7 @@ export function AsesorWizard() {
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="mt-6 font-sans text-[13px] font-medium text-paper/50 hover:text-paper"
+                className="mt-6 font-sans text-caption font-medium text-paper/50 hover:text-paper"
               >
                 ← Volver a la pregunta anterior
               </button>
@@ -364,7 +364,7 @@ export function AsesorWizard() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="mt-6 font-sans text-[13px] font-medium text-paper/50 hover:text-paper"
+                className="mt-6 font-sans text-caption font-medium text-paper/50 hover:text-paper"
               >
                 ← Volver a la pregunta anterior
               </button>
@@ -406,13 +406,13 @@ export function AsesorWizard() {
                             ? `/productos/${category.slug}/${sub.slug}#en-preparacion`
                             : `/productos/${category.slug}/${sub.slug}`
                         }
-                        className="font-sans text-[13px] font-medium text-paper hover:text-brand"
+                        className="font-sans text-caption font-medium text-paper hover:text-brand"
                       >
                         Ver ficha →
                       </Link>
                       <Link
                         href="/contacto"
-                        className="font-sans text-[13px] font-medium text-paper/60 hover:text-brand"
+                        className="font-sans text-caption font-medium text-paper/60 hover:text-brand"
                       >
                         Hablar →
                       </Link>

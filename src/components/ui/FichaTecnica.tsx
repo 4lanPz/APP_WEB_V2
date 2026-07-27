@@ -40,7 +40,7 @@ export function FichaTecnica({ rows, title = "Ficha técnica" }: FichaTecnicaPro
               {row.label}
             </span>
             {row.value === null ? (
-              <span className="text-right font-mono text-[13px] text-graphite">
+              <span className="text-right font-mono text-caption text-graphite">
                 {PENDIENTE}
               </span>
             ) : (

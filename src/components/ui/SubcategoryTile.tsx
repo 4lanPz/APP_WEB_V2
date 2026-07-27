@@ -105,7 +105,7 @@ export function SubcategoryTile({
           >
             {etiqueta.estado}
           </span>
-          <span className="font-sans text-[13px] font-medium text-ink">
+          <span className="font-sans text-caption font-medium text-ink">
             {etiqueta.accion}
           </span>
         </div>

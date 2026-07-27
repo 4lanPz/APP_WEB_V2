@@ -316,7 +316,7 @@ export function Navbar() {
                           <Link
                             href={category.href}
                             onClick={cerrarMenu}
-                            className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-[13px] font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand"
+                            className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-caption font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand"
                           >
                             {category.label}
                             <span className="font-mono text-[11px] font-normal tracking-normal text-accent">

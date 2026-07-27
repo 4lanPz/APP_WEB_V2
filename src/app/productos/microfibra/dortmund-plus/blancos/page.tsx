@@ -156,7 +156,7 @@ export default async function ProductoDortmundPlusBlancosPage() {
                     <p className="mb-3 font-serif text-body-s text-graphite">
                       {item.description}
                     </p>
-                    <span className="font-sans text-[13px] font-medium text-ink">
+                    <span className="font-sans text-caption font-medium text-ink">
                       Próximamente →
                     </span>
                   </div>

@@ -199,7 +199,7 @@ export default function CamisetasPage() {
                   <h3 className="mt-2 font-sans text-h3 font-semibold text-ink">
                     {fabric.name}
                   </h3>
-                  <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-[13px] text-graphite">
+                  <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-caption text-graphite">
                     <dt>Estructura</dt>
                     <dd className="text-ink">{fabric.structure}</dd>
                     <dt>Gramaje</dt>

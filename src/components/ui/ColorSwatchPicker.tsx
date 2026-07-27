@@ -21,7 +21,7 @@ export function ColorSwatchPicker({ swatches, active, onChange }: ColorSwatchPic
         <span className="font-mono text-xs uppercase tracking-widest text-graphite">
           Colores del muestrario
         </span>
-        <span className="font-mono text-[13px] text-ink">{swatches[active].name}</span>
+        <span className="font-mono text-caption text-ink">{swatches[active].name}</span>
       </div>
       <div className="flex flex-wrap gap-3">
         {swatches.map((swatch, i) => (

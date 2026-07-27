@@ -148,11 +148,11 @@ export default function ContactoPage() {
                 </span>
                 {/* El sector está confirmado (ficha de Google + OSM); la calle y
                     el número no llegaron, así que ese campo sigue pendiente. */}
-                <span className="flex flex-col font-mono text-[13px]">
+                <span className="flex flex-col font-mono text-caption">
                   <span className="text-ink">{location.sector}</span>
                   <span className="text-graphite">{PENDING}</span>
                 </span>
-                <span className="font-mono text-[13px] text-graphite">{PENDING}</span>
+                <span className="font-mono text-caption text-graphite">{PENDING}</span>
                 <a
                   href={comoLlegar(location)}
                   target="_blank"
