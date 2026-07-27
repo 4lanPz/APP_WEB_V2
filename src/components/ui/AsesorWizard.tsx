@@ -71,11 +71,41 @@ const USOS: { key: Uso; title: string; description: string; slot: string }[] = [
 ];
 
 /**
+ * Superficie de las tarjetas de esta página —opciones y resultado.
+ *
+ * ANTES ERA `bg-brand-deep` Y NO SEPARABA. La página es `bg-ink` (#1c1917,
+ * oscuro cálido) y `brand-deep` es #0d2937 (oscuro frío): 1,17:1 entre las dos
+ * superficies, ΔL* ≈ 6,6. Luminosidad casi igual y temperatura opuesta, así que
+ * el ojo no lee "dos planos", lee suciedad. `brand-deep` no está mal en sí —en
+ * el resto del sitio es la banda oscura sobre página `paper` y ahí funciona—;
+ * está mal CONTRA `ink`.
+ *
+ * AHORA: misma familia que el fondo y separación por claridad. Un velo de
+ * `paper` sobre `ink` da rgb(67,64,62): 1,69:1 de superficie, ΔL* ≈ 18 —casi el
+ * triple de salto. No hace falta un token nuevo; es el mismo recurso que ya usa
+ * este componente para los huecos de imagen (`bg-paper/8`).
+ *
+ * EL TECHO LO PONE EL TEXTO, no el gusto. Con el secundario a `paper/70`,
+ * subir el velo por encima de ~/26 tira ese texto por debajo de 4,5:1. /18 base
+ * y /24 en hover dejan 5,52:1 y 4,69:1. No subir sin volver a medir.
+ *
+ * OJO CON EL APILADO: al ser translúcidas, las tarjetas componen con lo que
+ * tengan detrás. Las rejillas `gap-px` de esta página van SIN `bg-paper/15`
+ * justamente por eso —la línea de separación ahora es el fondo `ink` que se ve
+ * por el hueco, no un filete claro encima de la tarjeta.
+ */
+const TARJETA = "bg-paper/18";
+const TARJETA_HOVER = "hover:bg-paper/24";
+
+/**
  * Opción del cuestionario con miniatura. La imagen es de tamaño FIJO y va a la
  * izquierda: no le quita tamaño al área pulsable —la aumenta, toda la fila es
  * el botón— ni encoge el texto, que conserva su tamaño y contraste. Sin foto,
  * el hueco queda como plano de tinta con un punto de marca: se lee como parte
  * del diseño, no como imagen rota.
+ *
+ * SUPERFICIE: ver `TARJETA` arriba. El hover sube el mismo velo en vez de
+ * cambiar de color: el estado es "más claro", no "otro tono".
  */
 function OpcionConImagen({
   slot,
@@ -95,9 +125,16 @@ function OpcionConImagen({
     <button
       type="button"
       onClick={onClick}
-      className="group flex items-center gap-4 bg-brand-deep p-4 text-left transition-colors duration-220 ease-asentar hover:bg-paper/5 sm:p-5"
+      className={cn(
+        "group flex items-center gap-4 p-4 text-left transition-colors duration-220 ease-asentar sm:p-5",
+        TARJETA,
+        TARJETA_HOVER,
+      )}
     >
-      <span className="relative block size-16 shrink-0 overflow-hidden bg-paper/8 sm:size-18">
+      {/* El hueco va MÁS OSCURO que la tarjeta, no más claro como antes: sobre
+          una tarjeta ya levantada, un cuadro aún más claro añadía un tercer
+          plano. En tinta se lee como agujero, que es lo que es. */}
+      <span className="relative block size-16 shrink-0 overflow-hidden bg-ink/40 sm:size-18">
         {f ? (
           <Image src={f.ruta} alt="" fill sizes="72px" className="object-cover" />
         ) : (
@@ -110,12 +147,20 @@ function OpcionConImagen({
         <span className="block font-sans text-body-s font-semibold text-paper">
           {title}
         </span>
+        {/*
+         * Ambos subtítulos a /70 y no a /50 y /60 como antes. Sobre la tarjeta
+         * nueva —más clara que `brand-deep`— /50 caía a 3,x:1 y /60 a 4,3:1.
+         * A /70 son 5,52:1 en reposo y 4,69:1 con el hover levantado. De paso
+         * arregla el /50 mono, que ya venía fallando por poco (4,46:1) sobre
+         * `brand-deep`. La jerarquía la marcan la fuente y la caja alta, no la
+         * opacidad.
+         */}
         <span
           className={cn(
-            "mt-1 block",
+            "mt-1 block text-paper/70",
             subtitleMono
-              ? "font-mono text-label uppercase text-paper/50"
-              : "font-serif text-body-s text-paper/60",
+              ? "font-mono text-label uppercase"
+              : "font-serif text-body-s",
           )}
         >
           {subtitle}
@@ -254,7 +299,12 @@ export function AsesorWizard() {
           const stepNum = i + 1;
           return (
             <span key={key} className="flex items-center gap-3">
-              {i > 0 && <span className="text-paper/20">→</span>}
+              {/* Decorativa de verdad: no dice nada que no diga el orden de
+                  lectura, y a `paper/20` da 1,81:1 —no llegaría nunca a 4,5
+                  sin competir con las etiquetas. Marcada como tal en vez de
+                  inflada, y de paso el lector de pantalla deja de leer
+                  "flecha" entre cada paso. */}
+              {i > 0 && <span aria-hidden className="text-paper/20">→</span>}
               {/* /50 y no /40: sobre la banda de tinta plana, paper/40 da
                   3,54:1 y un paso todavía por responder es información, no
                   adorno. A /50 son 4,80:1. */}
@@ -294,7 +344,10 @@ export function AsesorWizard() {
               <p className="mx-auto mt-3 max-w-md font-serif text-body-m text-paper/70">
                 Partamos de la prenda. Define desde dónde miramos la tela.
               </p>
-              <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
+              {/* `gap-px` sin `bg-paper/15`: la tarjeta es translúcida y el
+                  filete claro se le colaba por debajo. El hueco enseña el
+                  `ink` de la página y esa línea oscura ya separa. */}
+              <div className="mt-8 grid grid-cols-1 gap-px sm:grid-cols-2">
                 {PRODUCTOS.map((p) => (
                   <OpcionConImagen
                     key={p.key}
@@ -331,7 +384,7 @@ export function AsesorWizard() {
                 La sublimación pide una base clara y con presencia de
                 poliéster. Saberlo ahora acota la carta.
               </p>
-              <div className="mt-8 flex flex-col gap-px bg-paper/15">
+              <div className="mt-8 flex flex-col gap-px">
                 {SUBLIMADOS.map((s) => (
                   <OpcionConImagen
                     key={s.key}
@@ -374,7 +427,7 @@ export function AsesorWizard() {
                 El uso define el tacto y el gramaje. Elige lo que más se
                 acerca y afinamos la recomendación.
               </p>
-              <div className="mt-8 flex flex-col gap-px bg-paper/15">
+              <div className="mt-8 flex flex-col gap-px">
                 {USOS.map((u) => (
                   <OpcionConImagen
                     key={u.key}
@@ -416,10 +469,10 @@ export function AsesorWizard() {
                 {summary}
               </p>
 
-              <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 text-left sm:grid-cols-3">
+              <div className="mt-8 grid grid-cols-1 gap-px text-left sm:grid-cols-3">
                 {results.map(({ category, sub }) => (
-                  <div key={sub.slug} className="bg-brand-deep p-6">
-                    <span className="font-mono text-label uppercase text-paper/50">
+                  <div key={sub.slug} className={cn("p-6", TARJETA)}>
+                    <span className="font-mono text-label uppercase text-paper/70">
                       Familia {category.name}
                     </span>
                     <h3 className="mt-3 font-sans text-body-s font-semibold text-paper">
@@ -428,6 +481,19 @@ export function AsesorWizard() {
                     <p className="mt-2 font-serif text-mono text-paper/70">
                       {category.description}
                     </p>
+                    {/*
+                     * NINGUNO DE LOS DOS VUELVE A `hover:text-brand`. Sobre la
+                     * tarjeta aclarada, `#33a2dc` da 3,67:1 y necesita 4,5 a
+                     * 13px: el azul de marca solo es legible sobre planos casi
+                     * negros —es el mismo límite que obligó a quitarlo del
+                     * titular del hero. En vez de bajar el velo hasta que quepa
+                     * el azul (haría falta ~/11 y volveríamos al fondo turbio),
+                     * el estado se marca como ya lo marca el resto de enlaces
+                     * sobre oscuro en el sitio: subiendo a `paper` (Footer,
+                     * AsesorComercial, los "← Volver" de aquí mismo). El
+                     * primario, que ya está a `paper` y no tiene a dónde subir,
+                     * se subraya.
+                     */}
                     <div className="mt-4 flex items-center justify-between gap-3 border-t border-paper/15 pt-3.75">
                       <Link
                         href={
@@ -435,13 +501,13 @@ export function AsesorWizard() {
                             ? `/productos/${category.slug}/${sub.slug}#en-preparacion`
                             : `/productos/${category.slug}/${sub.slug}`
                         }
-                        className="font-sans text-caption font-medium text-paper hover:text-brand"
+                        className="font-sans text-caption font-medium text-paper hover:underline hover:underline-offset-4"
                       >
                         Ver ficha →
                       </Link>
                       <Link
                         href="/contacto"
-                        className="font-sans text-caption font-medium text-paper/60 hover:text-brand"
+                        className="font-sans text-caption font-medium text-paper/70 hover:text-paper"
                       >
                         Hablar →
                       </Link>
