@@ -16,10 +16,23 @@ export const WHATSAPP_NUMERO = "593999999999";
 /** Mensaje que llega ya escrito en la caja de texto de WhatsApp. */
 export const WHATSAPP_MENSAJE = "Hola, escribo desde la web de Textil Padilla.";
 
-/** URL final. wa.me se encarga de abrir app o web según el dispositivo. */
-export const WHATSAPP_HREF = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(
-  WHATSAPP_MENSAJE,
-)}`;
+/**
+ * Enlace a WhatsApp con el mensaje ya escrito en la caja de texto.
+ *
+ * Existe para que quien necesite un mensaje DISTINTO al genérico —el asesor
+ * virtual manda las telas que acaba de recomendar— no tenga que volver a
+ * escribir la forma de la URL. El número sale de `WHATSAPP_NUMERO` igual que
+ * siempre: esto añade una segunda fuente del MENSAJE, nunca del número.
+ *
+ * El texto viaja en la URL, así que se mantiene corto a propósito: nombres de
+ * tela, no descripciones. wa.me abre app o web según el dispositivo.
+ */
+export function whatsappHref(mensaje: string = WHATSAPP_MENSAJE) {
+  return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
+}
+
+/** URL final del canal genérico (flotante, asesor comercial, contacto). */
+export const WHATSAPP_HREF = whatsappHref();
 
 /**
  * El mismo número, escrito para leerse: `+593 99 999 9999`.

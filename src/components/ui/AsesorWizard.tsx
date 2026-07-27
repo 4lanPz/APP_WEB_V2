@@ -8,6 +8,8 @@ import { cn } from "@/lib/cn";
 import { categories } from "@/data/taxonomy";
 import { estadoFicha } from "@/data/fichas";
 import { foto } from "@/data/imagenes";
+import { whatsappHref } from "@/data/whatsapp";
+import { buttonVariants } from "./buttonVariants";
 import { EASE_REVELAR, EASE_PLEGAR, EASE_ASENTAR } from "@/lib/motion";
 
 /**
@@ -179,6 +181,32 @@ function buildResults(uso: Uso) {
   );
 }
 
+/** "Dortmund Plus, Athletic y Titanium" — enumeración en español, con "y". */
+function enumerar(nombres: string[]) {
+  if (nombres.length === 0) return "";
+  if (nombres.length === 1) return nombres[0];
+  return `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`;
+}
+
+/**
+ * Mensaje que llega ya escrito en WhatsApp al pulsar el cierre del resultado.
+ *
+ * Va PRECARGADO con las telas recomendadas para que el asesor no tenga que
+ * preguntar de qué le hablan. Los nombres salen de `taxonomy.ts` (`sub.name`),
+ * no escritos a mano: si una tela se renombra, el mensaje la sigue.
+ *
+ * Se queda corto a propósito —solo nombres, sin gramajes ni descripciones—
+ * porque viaja en la query de la URL. Si `buildResults` no devolvió ninguna
+ * tela (un slug renombrado que ya no resuelve), cae al mensaje genérico en vez
+ * de mandar una frase con el hueco vacío.
+ */
+function mensajeAsesor(nombres: string[]) {
+  const lista = enumerar(nombres);
+  return lista
+    ? `Hola, usé el asesor virtual y me recomendó ${lista}. Quisiera más información.`
+    : undefined;
+}
+
 export function AsesorWizard() {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [producto, setProducto] = useState<Producto | null>(null);
@@ -189,6 +217,12 @@ export function AsesorWizard() {
   const progress = { 1: 25, 2: 50, 3: 75, 4: 100 }[step];
 
   const results = useMemo(() => buildResults(uso ?? "casual"), [uso]);
+
+  /** Mensaje precargado del cierre, con los nombres de las telas de arriba. */
+  const mensajeWhatsApp = useMemo(
+    () => mensajeAsesor(results.map(({ sub }) => sub.name)),
+    [results],
+  );
 
   const summary = uso
     ? `Para ${producto ? PLABEL[producto] : "tu prenda"} de uso ${ULABEL[uso]}${
@@ -204,22 +238,34 @@ export function AsesorWizard() {
   }
 
   return (
-    <div>
-      <div className="mb-10 flex flex-wrap items-center gap-3 font-mono text-label uppercase">
+    <div className="mx-auto max-w-4xl">
+      {/*
+       * Indicador de pasos. A 375 la fila completa con flechas partía en dos
+       * líneas y dejaba "→ Resultado" colgando solo, así que por debajo de `sm`
+       * se sustituye por un contador. No es un rótulo distinto: es el mismo
+       * dato en el ancho que cabe.
+       */}
+      <p className="text-center font-mono text-label uppercase text-paper/60 sm:hidden">
+        {step < 4 ? `Paso 0${step} de 03` : "Resultado"}
+      </p>
+      <div className="hidden flex-wrap items-center justify-center gap-3 font-mono text-label uppercase sm:flex">
         {(["1", "2", "3", "4"] as const).map((key, i) => {
           const labels = ["01 Prenda", "02 Sublimado", "03 Uso", "Resultado"];
           const stepNum = i + 1;
           return (
             <span key={key} className="flex items-center gap-3">
               {i > 0 && <span className="text-paper/20">→</span>}
-              <span className={stepNum <= step ? "text-brand" : "text-paper/40"}>
+              {/* /50 y no /40: sobre la banda de tinta plana, paper/40 da
+                  3,54:1 y un paso todavía por responder es información, no
+                  adorno. A /50 son 4,80:1. */}
+              <span className={stepNum <= step ? "text-brand" : "text-paper/50"}>
                 {labels[i]}
               </span>
             </span>
           );
         })}
       </div>
-      <div className="mb-12 h-0.5 w-full max-w-sm origin-left bg-paper/15">
+      <div className="mx-auto mb-12 mt-5 h-0.5 w-full max-w-sm origin-left bg-paper/15">
         <motion.div
           className="h-0.5 origin-left bg-brand"
           initial={false}
@@ -228,29 +274,7 @@ export function AsesorWizard() {
         />
       </div>
 
-      <motion.div layout className="grid grid-cols-1 gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
-        <div className="flex flex-col gap-6 border-t border-paper/15 pt-8 lg:border-t-0 lg:pt-0">
-          <div>
-            <p className="font-sans text-body-s font-semibold text-paper">
-              Asesor Textil Padilla
-            </p>
-            <p className="mt-1 font-mono text-label uppercase text-paper/50">
-              Guía de selección de tela
-            </p>
-          </div>
-          <p className="max-w-xs font-serif text-body-m text-paper/80">
-            No es un chat que da vueltas. Son tres preguntas rectas y una
-            recomendación concreta —gramaje, composición y tono— sobre telas
-            que tejemos y teñimos de verdad.
-          </p>
-          <p className="font-mono text-label uppercase text-paper/40">
-            Seleccionamos · Tejemos · Teñimos
-            <br />
-            Quito · Guayaquil · Cuenca
-          </p>
-        </div>
-
-        <div>
+      <motion.div layout className="text-center">
         <AnimatePresence mode="wait" initial={false}>
           {step === 1 && (
             <motion.div
@@ -259,6 +283,7 @@ export function AsesorWizard() {
               initial="enter"
               animate="center"
               exit="exit"
+              className="mx-auto max-w-2xl"
             >
               <span className="font-mono text-label uppercase text-brand">
                 Pregunta 01
@@ -266,7 +291,7 @@ export function AsesorWizard() {
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
                 ¿Qué prenda vas a producir?
               </h2>
-              <p className="mt-3 font-serif text-body-m text-paper/70">
+              <p className="mx-auto mt-3 max-w-md font-serif text-body-m text-paper/70">
                 Partamos de la prenda. Define desde dónde miramos la tela.
               </p>
               <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
@@ -294,6 +319,7 @@ export function AsesorWizard() {
               initial="enter"
               animate="center"
               exit="exit"
+              className="mx-auto max-w-2xl"
             >
               <span className="font-mono text-label uppercase text-brand">
                 Pregunta 02
@@ -301,7 +327,7 @@ export function AsesorWizard() {
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
                 ¿La tela irá sublimada?
               </h2>
-              <p className="mt-3 font-serif text-body-m text-paper/70">
+              <p className="mx-auto mt-3 max-w-md font-serif text-body-m text-paper/70">
                 La sublimación pide una base clara y con presencia de
                 poliéster. Saberlo ahora acota la carta.
               </p>
@@ -336,6 +362,7 @@ export function AsesorWizard() {
               initial="enter"
               animate="center"
               exit="exit"
+              className="mx-auto max-w-2xl"
             >
               <span className="font-mono text-label uppercase text-brand">
                 Pregunta 03
@@ -343,7 +370,7 @@ export function AsesorWizard() {
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
                 ¿Cómo se va a usar?
               </h2>
-              <p className="mt-3 font-serif text-body-m text-paper/70">
+              <p className="mx-auto mt-3 max-w-md font-serif text-body-m text-paper/70">
                 El uso define el tacto y el gramaje. Elige lo que más se
                 acerca y afinamos la recomendación.
               </p>
@@ -385,9 +412,11 @@ export function AsesorWizard() {
               <h2 className="mt-3 font-sans text-h2 font-medium text-paper">
                 Estas telas encajan con lo que buscas.
               </h2>
-              <p className="mt-3 font-serif text-body-m text-paper/70">{summary}</p>
+              <p className="mx-auto mt-3 max-w-lg font-serif text-body-m text-paper/70">
+                {summary}
+              </p>
 
-              <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-3">
+              <div className="mt-8 grid grid-cols-1 gap-px bg-paper/15 text-left sm:grid-cols-3">
                 {results.map(({ category, sub }) => (
                   <div key={sub.slug} className="bg-brand-deep p-6">
                     <span className="font-mono text-label uppercase text-paper/50">
@@ -421,16 +450,61 @@ export function AsesorWizard() {
                 ))}
               </div>
 
-              <p className="mt-8 font-serif text-caption italic text-paper/60">
+              <p className="mx-auto mt-8 max-w-md font-serif text-caption italic text-paper/60">
                 Una recomendación no reemplaza el tacto. Pide muestra o habla
                 con una persona antes de decidir la tirada.
               </p>
+
+              {/*
+               * CIERRE. Este bloque —la identidad del asesor y el "no es un
+               * chat que da vueltas"— estaba ARRIBA, junto a la primera
+               * pregunta, donde describía lo que la persona ya estaba a punto
+               * de hacer. Aquí sí tiene trabajo: ya hay tres telas concretas
+               * sobre la mesa y la conversación tiene asunto.
+               *
+               * Vive dentro del `motion.div` del paso 4, así que entra con el
+               * gesto que ya tiene el wizard: no añade movimiento nuevo, y
+               * `prefers-reduced-motion` lo sigue resolviendo el `MotionConfig`
+               * de la raíz.
+               */}
+              <div className="mt-14 border-t border-paper/15 pt-10">
+                <p className="font-mono text-label uppercase text-paper/50">
+                  Asesor Textil Padilla
+                </p>
+                <h3 className="mx-auto mt-3 max-w-lg text-balance font-sans text-h2 font-medium text-paper">
+                  ¿Quieres hablar de estas telas con un asesor?
+                </h3>
+                <p className="mx-auto mt-4 max-w-md text-pretty font-serif text-body-m text-paper/80">
+                  No es un chat que da vueltas. Estas tres salieron de tus
+                  respuestas; un asesor las confirma contra tu tirada, tu color
+                  y tu plazo —sobre telas que tejemos y teñimos de verdad.
+                </p>
+
+                <div className="mt-8">
+                  <a
+                    href={whatsappHref(mensajeWhatsApp)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(buttonVariants({ variant: "primary" }))}
+                  >
+                    Escribir por WhatsApp →
+                  </a>
+                </div>
+
+                {/* /50 y no el /40 que traía del bloque original: sobre tinta
+                    plana /40 se queda en 3,54:1. A /50 son 4,80:1. */}
+                <p className="mt-8 font-mono text-label uppercase text-paper/50">
+                  Seleccionamos · Tejemos · Teñimos
+                  <br />
+                  Quito · Guayaquil · Cuenca
+                </p>
+              </div>
 
               <button
                 type="button"
                 onClick={reset}
                 className={cn(
-                  "mt-6 font-sans text-body-s font-medium text-paper hover:text-brand",
+                  "mt-10 font-sans text-body-s font-medium text-paper hover:text-brand",
                 )}
               >
                 ↻ Empezar de nuevo
@@ -438,7 +512,6 @@ export function AsesorWizard() {
             </motion.div>
           )}
         </AnimatePresence>
-        </div>
       </motion.div>
     </div>
   );
