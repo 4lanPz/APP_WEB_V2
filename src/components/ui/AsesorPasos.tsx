@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { Container } from "./Container";
+import { buttonVariants } from "./buttonVariants";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { Reveal } from "@/components/motion/Reveal";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
@@ -142,7 +143,7 @@ export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPas
 
             <MagneticLink
               href={cta.href}
-              className="mt-1 w-fit bg-brand px-7.5 py-4 font-sans text-base font-medium text-paper hover:bg-brand-deep"
+              className={cn(buttonVariants({ variant: "primary" }), "mt-1 w-fit")}
             >
               {cta.label}
             </MagneticLink>

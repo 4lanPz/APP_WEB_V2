@@ -5,6 +5,8 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { CategoryCard } from "@/components/ui/CategoryCard";
 import { GarmentRecommender } from "@/components/ui/GarmentRecommender";
 import { MagneticLink } from "@/components/motion/MagneticLink";
+import { buttonVariants } from "@/components/ui/buttonVariants";
+import { cn } from "@/lib/cn";
 import { PhotoCurtain } from "@/components/motion/Curtain";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { categories } from "@/data/taxonomy";
@@ -140,7 +142,7 @@ export default function ProductosPage() {
           </RevealGroup>
           <MagneticLink
             href="/#asesor"
-            className="mt-10 inline-block bg-brand px-7.5 py-4 font-sans text-base font-medium text-paper hover:bg-paper hover:text-brand-deep"
+            className={cn(buttonVariants({ variant: "primary" }), "mt-10")}
           >
             Hablar con un asesor →
           </MagneticLink>
