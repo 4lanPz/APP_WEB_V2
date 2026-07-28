@@ -22,15 +22,6 @@ export interface HeroProps {
   primaryCta?: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
   /**
-   * Clases del CTA principal, para sustituir el `primary` de hoy sin tocar las
-   * otras seis cabeceras. Existe por el sistema de botones nuevo: en la portada
-   * ese CTA pasa a `contorno` —opción B, la navegación nunca lleva relleno— y
-   * el resto de páginas se quedan como están hasta que se apruebe.
-   *
-   * Sin valor, el hero pinta exactamente lo de siempre.
-   */
-  primaryCtaClassName?: string;
-  /**
    * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
    * de heroes se quedan con su foto de slot.
    */
@@ -87,7 +78,6 @@ export function Hero({
   subhead,
   primaryCta,
   secondaryCta,
-  primaryCtaClassName,
   video = false,
   imagen,
 }: HeroProps) {
@@ -169,19 +159,23 @@ export function Hero({
               delay: HERO_SECUENCIA.cta,
             }}
           >
+            {/*
+              CONTORNO, no relleno. El CTA de una cabecera solo NAVEGA, y en el
+              sistema el relleno está reservado a lo que compromete algo. La
+              banda es `bg-ink`, así que la variante se pinta sola en su forma
+              oscura —borde y texto en papel— sin que este componente sepa nada
+              del tono.
+            */}
             {primaryCta && (
               <MagneticLink
                 href={primaryCta.href}
-                className={primaryCtaClassName ?? buttonVariants({ variant: "primary" })}
+                className={buttonVariants({ variant: "contorno" })}
               >
                 {primaryCta.label}
               </MagneticLink>
             )}
             {secondaryCta && (
-              <Link
-                href={secondaryCta.href}
-                className="font-sans text-body-s font-medium text-paper hover:text-brand"
-              >
+              <Link href={secondaryCta.href} className={buttonVariants({ variant: "enlace" })}>
                 {secondaryCta.label}
               </Link>
             )}

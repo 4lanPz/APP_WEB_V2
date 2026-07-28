@@ -154,6 +154,90 @@
 }
 
 /*
+ * ══════════════════════════════════════════════════════════════════════════
+ *  SUPERFICIE — qué hay debajo de un control.
+ * ══════════════════════════════════════════════════════════════════════════
+ *
+ * Las variantes de botón (`buttonVariants.ts`) no llevan colores propios: leen
+ * estas variables. Una sólida es relleno `--sup-tinta` con texto `--sup-papel`,
+ * y eso da tinta-sobre-claro en una sección clara y papel-sobre-oscuro en una
+ * banda oscura, sin que el sitio de uso elija nada.
+ *
+ * LA CLASE DE SUPERFICIE NO SE PONE A MANO. Quien declara el tono es la propia
+ * utilidad que pinta el fondo: `bg-ink` y `bg-brand-deep` SON la superficie
+ * oscura, `bg-paper` y `bg-bone` la clara. Pintar el fondo y declarar el tono
+ * es el mismo gesto, así que no hay dos cosas que puedan divergir — que era la
+ * pega de hacerlo con una clase aparte.
+ *
+ * Esto se apoya en que los colores de fondo SIEMPRE salen de una utilidad de
+ * token y nunca de un arbitrario: lo garantiza el guardarraíl de eslint que
+ * prohíbe `bg-[#…]` (ver eslint.config.mjs). Si algún día se levanta esa regla,
+ * este mecanismo se queda ciego ante el fondo escrito a mano.
+ *
+ * Los velos translúcidos NO son superficie y no deben marcarla: `bg-ink/[0.28]`
+ * es otra clase distinta de `bg-ink` y no entra aquí, que es justo lo que se
+ * quiere — un velo del 28% no cambia el tono de lo que hay debajo.
+ *
+ * `superficie-clara` / `superficie-oscura` son la vía de escape para las bandas
+ * cuyo fondo no lo pinta una de esas cuatro utilidades (una foto a sangre, un
+ * degradado). Van al final para ganar por orden a igual especificidad.
+ */
+@layer components {
+  :root,
+  .bg-paper,
+  .bg-bone {
+    --sup-tinta: var(--color-ink);
+    --sup-papel: var(--color-paper);
+    --sup-borde: var(--color-graphite);
+    --sup-velo: var(--color-bone);
+    --sup-inhab-borde: var(--color-greige);
+    --sup-inhab-relleno: var(--color-bone);
+    --sup-inhab-texto: var(--color-graphite);
+  }
+
+  .bg-ink,
+  .bg-brand-deep {
+    --sup-tinta: var(--color-paper);
+    --sup-papel: var(--color-ink);
+    /*
+     * BORDE OPACO EN OSCURO, no `paper/50`. Medido sobre las siete cabeceras a
+     * 375 y 1440, el filete al 50% se queda entre 2,02:1 y 2,78:1 contra los
+     * píxeles claros de la fotografía —por debajo del 3:1 que pide el límite de
+     * un control—. A opacidad plena sube a 4,4:1 en el peor punto medido. En
+     * las bandas planas (`brand-deep`) da igual: allí el /50 ya cumplía.
+     *
+     * El hover deja de distinguirse por el color del filete, que ya era papel:
+     * lo marcan el velo y la elevación de 2px.
+     */
+    --sup-borde: var(--color-paper);
+    --sup-velo: color-mix(in oklab, var(--color-paper) 10%, transparent);
+    --sup-inhab-borde: color-mix(in oklab, var(--color-paper) 20%, transparent);
+    --sup-inhab-relleno: color-mix(in oklab, var(--color-paper) 10%, transparent);
+    --sup-inhab-texto: color-mix(in oklab, var(--color-paper) 60%, transparent);
+  }
+
+  .superficie-clara {
+    --sup-tinta: var(--color-ink);
+    --sup-papel: var(--color-paper);
+    --sup-borde: var(--color-graphite);
+    --sup-velo: var(--color-bone);
+    --sup-inhab-borde: var(--color-greige);
+    --sup-inhab-relleno: var(--color-bone);
+    --sup-inhab-texto: var(--color-graphite);
+  }
+
+  .superficie-oscura {
+    --sup-tinta: var(--color-paper);
+    --sup-papel: var(--color-ink);
+    --sup-borde: var(--color-paper);
+    --sup-velo: color-mix(in oklab, var(--color-paper) 10%, transparent);
+    --sup-inhab-borde: color-mix(in oklab, var(--color-paper) 20%, transparent);
+    --sup-inhab-relleno: color-mix(in oklab, var(--color-paper) 10%, transparent);
+    --sup-inhab-texto: color-mix(in oklab, var(--color-paper) 60%, transparent);
+  }
+}
+
+/*
  * Motion Architecture v1 §02/§05 — micro-interacciones en CSS puro.
  * Curva "Interacción · Asentar" (0.40,0,0.20,1), 220ms — botones, subrayado
  * de nav, anillo de swatch. Un solo lugar para el valor: si cambia, cambia

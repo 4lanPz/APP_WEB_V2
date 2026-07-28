@@ -133,22 +133,22 @@ function Bloque({
 /** Fila de la tabla final de mapeo. */
 function Mapa({
   gesto,
-  hoy,
-  a,
-  b,
+  antes,
+  ahora,
+  nota,
 }: {
   gesto: string;
-  hoy: string;
-  a: string;
-  b: string;
+  antes: string;
+  ahora: string;
+  nota?: string;
 }) {
   return (
     <tr className="border-b border-greige align-top">
       <td className="py-3 pr-6 font-sans text-body-s font-medium text-ink">{gesto}</td>
-      <td className="py-3 pr-6 font-serif text-body-s text-graphite">{hoy}</td>
-      <td className="py-3 pr-6 font-mono text-mono text-graphite line-through">{a}</td>
+      <td className="py-3 pr-6 font-serif text-body-s text-graphite">{antes}</td>
       {/* font-medium: la mono no tiene 600 cargado y el navegador lo sintetiza. */}
-      <td className="py-3 font-mono text-mono font-medium text-ink">{b}</td>
+      <td className="py-3 pr-6 font-mono text-mono font-medium text-ink">{ahora}</td>
+      <td className="py-3 font-serif text-body-s text-graphite">{nota}</td>
     </tr>
   );
 }
@@ -158,17 +158,19 @@ export function PropuestaBotones() {
     <div className="border-t border-ink py-16">
       <div className="mb-4 flex flex-col gap-2">
         <span className="font-mono text-label uppercase text-accent">
-          Propuesta · sistema de botones y CTA
+          Sistema de botones y CTA · aplicado
         </span>
         <h2 className="font-sans text-display font-medium text-ink">
           Cuatro variantes
         </h2>
       </div>
       <p className="mb-6 max-w-3xl font-serif text-body-l text-graphite">
-        Nada de esto está aplicado al sitio. Hoy hay tres variantes declaradas y{" "}
+        Esto es lo que pintan las doce rutas. Antes había tres variantes declaradas y{" "}
         <strong className="text-ink">cinco tratamientos distintos solo para navegación
-        interna</strong>; WhatsApp no tiene ninguno. La propuesta baja a cuatro y cubre
-        los cinco gestos del inventario.
+        interna</strong>; WhatsApp no tenía ninguno. El sistema baja a cuatro y cubre los
+        cinco gestos del inventario. Las columnas «hoy» de más abajo son{" "}
+        <strong className="text-ink">lo que había antes</strong>, conservadas para poder
+        comparar contra lo que se publicó.
       </p>
       <p className="mb-10 max-w-3xl font-serif text-body-m text-graphite">
         Los números bajo cada muestra los mide el navegador en vivo sobre lo que hay
@@ -650,47 +652,66 @@ export function PropuestaBotones() {
           <thead>
             <tr className="border-b border-ink">
               <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">Gesto</th>
-              <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">Hoy</th>
-              <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">
-                A · descartada
-              </th>
-              <th className="pb-3 font-mono text-label uppercase text-accent">B · ELEGIDA</th>
+              <th className="pb-3 pr-6 font-mono text-label uppercase text-graphite">Antes</th>
+              <th className="pb-3 pr-6 font-mono text-label uppercase text-accent">Variante</th>
+              <th className="pb-3 font-mono text-label uppercase text-graphite">Dónde</th>
             </tr>
           </thead>
           <tbody>
             <Mapa
               gesto="Navegación interna · CTA de hero"
-              hoy="primary (6 páginas) o enlace a mano (Contacto)"
-              a="solida"
-              b="contorno"
+              antes="primary (6 páginas) o enlace a mano (Contacto)"
+              ahora="contorno"
+              nota="Las 7 cabeceras. Solo navega: nunca lleva relleno."
             />
             <Mapa
               gesto="Navegación interna · CTA de sección"
-              hoy="primary, secondary o ghost, según página"
-              a="contorno"
-              b="contorno"
+              antes="primary, secondary o ghost, según página"
+              ahora="contorno"
+              nota="Empresa, Productos, Blancos, ficha de subcategoría, asesor de la portada."
             />
             <Mapa
               gesto="Navegación interna · dentro del texto"
-              hoy="enlace a mano, 3 implementaciones"
-              a="enlace"
-              b="enlace"
+              antes="enlace a mano, 3 implementaciones"
+              ahora="enlace"
+              nota="Contacto, Empresa, Camisetas, Preparación, mapa de locales, «Ver evento»."
             />
             <Mapa
               gesto="Navegación interna · tarjeta de catálogo"
-              hoy="tarjeta enlazada + «Ver ficha →» a mano"
-              a="tarjeta + enlace"
-              b="tarjeta + enlace"
+              antes="tarjeta enlazada + «Ver ficha →» a mano"
+              ahora="tarjeta + enlace"
+              nota="La tarjeta entera sigue siendo el área pulsable; el «Ver más →» es su señal."
             />
-            <Mapa gesto="Acción en la página" hoy="enlace a mano o tarjeta pulsable" a="contorno" b="contorno" />
-            <Mapa gesto="Envío de formulario" hoy="primary" a="solida" b="solida" />
             <Mapa
-              gesto="WhatsApp"
-              hoy="flotante de icono + enlace mono 13px"
-              a="whatsapp"
-              b="whatsapp"
+              gesto="Acción en la página"
+              antes="enlace a mano o tarjeta pulsable"
+              ahora="contorno"
+              nota="Recomendador de prendas, wizard del asesor."
             />
-            <Mapa gesto="Enlace externo" hoy="enlace a mano" a="enlace + ↗" b="enlace + ↗" />
+            <Mapa
+              gesto="Envío de formulario"
+              antes="primary"
+              ahora="solida"
+              nota="Contacto (claro) y asesor comercial (oscuro): mismas clases, dos formas."
+            />
+            <Mapa
+              gesto="WhatsApp · CTA"
+              antes="flotante de icono + nada más"
+              ahora="whatsapp"
+              nota="Cierre de la portada y del wizard. Flotante en el mismo #008069."
+            />
+            <Mapa
+              gesto="WhatsApp · dato de contacto"
+              antes="enlace mono 13px"
+              ahora="texto, como el resto"
+              nota="En la lista de canales va junto al teléfono y al correo: es un dato, no un CTA. Hacerlo botón rompería la lista y le daría un peso que los otros dos no tienen."
+            />
+            <Mapa
+              gesto="Enlace externo"
+              antes="enlace a mano"
+              ahora="enlace + ↗"
+              nota="Portal de clientes, «Cómo llegar»."
+            />
           </tbody>
         </table>
       </div>
@@ -698,24 +719,33 @@ export function PropuestaBotones() {
       <p className="mt-6 max-w-3xl font-serif text-body-m text-graphite">
         La diferencia entre A y B cabía en una fila: el CTA de hero. En A llevaba relleno
         porque era lo más importante de la pantalla; en B no lo lleva nunca porque solo
-        navega. Todo lo demás es idéntico —ninguna de las dos añadía variantes.
+        navega. Todo lo demás era idéntico —ninguna de las dos añadía variantes.
       </p>
       <div className="mt-8 border-t border-ink pt-6">
-        <span className="font-mono text-label uppercase text-accent">Estado</span>
+        <span className="font-mono text-label uppercase text-accent">Estado · cerrado</span>
         <ul className="mt-3 flex max-w-3xl flex-col gap-1.5 font-serif text-body-m text-graphite">
           <li>
-            <strong className="text-ink">Decidido:</strong> opción B · filete del navbar
-            activo en tinta · token <code className="font-mono text-mono">brand-ink</code>{" "}
-            (ya en globals.css).
+            <strong className="text-ink">Aplicado a las doce rutas.</strong>{" "}
+            <code className="font-mono text-mono">primary</code>,{" "}
+            <code className="font-mono text-mono">secondary</code> y{" "}
+            <code className="font-mono text-mono">ghost</code> ya no existen.
           </li>
           <li>
-            <strong className="text-ink">Pendiente:</strong> qué verde de WhatsApp (§B) ·
-            el filete de tinta de la sólida clara · la inversión de polaridad del hover ·
-            la sólida en tinta de §E.
+            <strong className="text-ink">La sólida tiene dos formas</strong> — tinta sobre
+            claro, claro sobre oscuro— y las resuelve sola: lee{" "}
+            <code className="font-mono text-mono">--sup-tinta</code> y{" "}
+            <code className="font-mono text-mono">--sup-papel</code>, que declara la propia
+            utilidad que pinta el fondo. No hay clase de tono que se pueda olvidar.
           </li>
           <li>
-            La variante <code className="font-mono text-mono">whatsapp</code> de §A/05
-            sigue con el verde de hoy a propósito: cambia sola en cuanto se elija en §B.
+            <strong className="text-ink">WhatsApp en #008069</strong> con glifo blanco, en
+            la variante y en el flotante. Un solo verde en todo el sitio.
+          </li>
+          <li>
+            El azul de marca <strong className="text-ink">ya no rellena ningún botón</strong>
+            : contra <code className="font-mono text-mono">paper</code> daba 2,56:1 y contra
+            el píxel claro de una foto de cabecera 1,71:1. Queda para lo que{" "}
+            <code className="font-mono text-mono">globals.css</code> dice que es.
           </li>
         </ul>
       </div>

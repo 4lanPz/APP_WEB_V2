@@ -29,16 +29,9 @@ export interface AsesorPasosProps {
   parrafo: string;
   cta: { label: string; href: string };
   /**
-   * Clases del CTA. Sin valor, el `primary` de siempre. La portada le pasa el
-   * `contorno` del sistema nuevo: navegar no compromete nada y en la opción B
-   * la navegación no lleva relleno.
-   */
-  ctaClassName?: string;
-  /**
    * Acciones que acompañan al CTA en la misma fila. Este bloque es el cierre de
-   * la portada y es donde vive el único relleno legítimo de la página —el de
-   * WhatsApp—, pero los botones se montan fuera para que las decisiones abiertas
-   * del sistema no se repartan por los componentes.
+   * la portada y es donde vive su único relleno legítimo, el de WhatsApp: el
+   * CTA de al lado solo navega y va en contorno.
    */
   acciones?: React.ReactNode;
   pasos: PasoAsesor[];
@@ -71,7 +64,6 @@ export function AsesorPasos({
   titular,
   parrafo,
   cta,
-  ctaClassName,
   acciones,
   pasos,
 }: AsesorPasosProps) {
@@ -168,7 +160,7 @@ export function AsesorPasos({
             <div className="mt-1 flex flex-wrap items-center gap-4">
               <MagneticLink
                 href={cta.href}
-                className={cn(ctaClassName ?? buttonVariants({ variant: "primary" }), "w-fit")}
+                className={cn(buttonVariants({ variant: "contorno" }), "w-fit")}
               >
                 {cta.label}
               </MagneticLink>

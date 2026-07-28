@@ -551,7 +551,7 @@ export function AsesorWizard() {
                     href={whatsappHref(mensajeWhatsApp)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={cn(buttonVariants({ variant: "primary" }))}
+                    className={buttonVariants({ variant: "whatsapp" })}
                   >
                     Escribir por WhatsApp →
                   </a>
@@ -570,7 +570,7 @@ export function AsesorWizard() {
                 type="button"
                 onClick={reset}
                 className={cn(
-                  "mt-10 font-sans text-body-s font-medium text-paper hover:text-brand",
+                  buttonVariants({ variant: "enlace" }), "mt-10",
                 )}
               >
                 ↻ Empezar de nuevo

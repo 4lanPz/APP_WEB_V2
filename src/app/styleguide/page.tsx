@@ -286,24 +286,70 @@ export default function StyleguidePage() {
       </Section>
 
       <Section eyebrow="05 · Componente" title="Botones">
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-wrap items-center gap-6">
-            <Button variant="primary">Solicitar muestra</Button>
-            <Button variant="secondary">Ver ficha técnica</Button>
-            <Button variant="ghost">Descargar catálogo</Button>
+        <p className="mb-8 max-w-3xl font-serif text-body-m text-graphite">
+          Cuatro variantes, y ninguna elige su forma a mano. Las dos filas de
+          abajo pintan <strong className="text-ink">exactamente las mismas
+          clases</strong>: lo único que cambia es el fondo sobre el que caen. La
+          superficie la declara la propia utilidad que pinta ese fondo —{" "}
+          <code className="font-mono text-mono text-ink">bg-paper</code> y{" "}
+          <code className="font-mono text-mono text-ink">bg-bone</code> son clara,{" "}
+          <code className="font-mono text-mono text-ink">bg-ink</code> y{" "}
+          <code className="font-mono text-mono text-ink">bg-brand-deep</code>{" "}
+          oscura—, así que no hay una clase de tono que se pueda olvidar.
+        </p>
+        <div className="flex flex-col gap-px bg-greige">
+          <div className="flex flex-col gap-6 bg-paper p-8">
+            <span className="font-mono text-label uppercase text-graphite">
+              Superficie clara
+            </span>
+            <div className="flex flex-wrap items-center gap-6">
+              <Button variant="solida">Enviar mensaje →</Button>
+              <Button variant="contorno">Ver ficha técnica →</Button>
+              <Button variant="enlace">Descargar catálogo →</Button>
+              <Button variant="whatsapp">Escribir por WhatsApp</Button>
+            </div>
+            <div className="flex flex-wrap items-center gap-6">
+              <Button variant="solida" disabled>
+                Enviar mensaje →
+              </Button>
+              <Button variant="contorno" disabled>
+                Ver ficha técnica →
+              </Button>
+              <Button variant="enlace" disabled>
+                Descargar catálogo →
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-6">
-            <Button variant="primary" disabled>
-              Solicitar muestra
-            </Button>
-            <Button variant="secondary" disabled>
-              Ver ficha técnica
-            </Button>
-            <Button variant="ghost" disabled>
-              Descargar catálogo
-            </Button>
+          <div className="flex flex-col gap-6 bg-brand-deep p-8">
+            <span className="font-mono text-label uppercase text-paper/70">
+              Superficie oscura · mismas clases
+            </span>
+            <div className="flex flex-wrap items-center gap-6">
+              <Button variant="solida">Enviar mensaje →</Button>
+              <Button variant="contorno">Ver ficha técnica →</Button>
+              <Button variant="enlace">Descargar catálogo →</Button>
+              <Button variant="whatsapp">Escribir por WhatsApp</Button>
+            </div>
+            <div className="flex flex-wrap items-center gap-6">
+              <Button variant="solida" disabled>
+                Enviar mensaje →
+              </Button>
+              <Button variant="contorno" disabled>
+                Ver ficha técnica →
+              </Button>
+              <Button variant="enlace" disabled>
+                Descargar catálogo →
+              </Button>
+            </div>
           </div>
         </div>
+        <p className="mt-6 max-w-3xl font-serif text-body-m text-graphite">
+          La sólida es la que más se mueve: sobre claro es relleno de tinta con
+          texto papel; sobre oscuro se da la vuelta. No es una variante nueva —
+          la tinta sobre una banda oscura da 1,15:1 y desaparece. La única que
+          NO se adapta es WhatsApp: el verde identifica el canal, y adaptarlo
+          sería dejar de identificarlo.
+        </p>
       </Section>
 
       {/*

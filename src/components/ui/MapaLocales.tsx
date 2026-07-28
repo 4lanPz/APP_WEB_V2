@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { comoLlegar, PENDING, type Location } from "@/data/locations";
+import { buttonVariants } from "./buttonVariants";
 import { cn } from "@/lib/cn";
 
 /**
@@ -318,7 +319,7 @@ function FichaLocal({
         href={comoLlegar(location)}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 inline-block font-sans text-body-s font-medium text-ink hover:text-brand"
+        className={cn(buttonVariants({ variant: "enlace" }), "mt-4")}
       >
         Cómo llegar ↗
       </a>

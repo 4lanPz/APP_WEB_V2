@@ -1,40 +1,124 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 /**
- * Design System v1.1 §04 — Botones. Motion Architecture v1 §05 — verbo
- * "asentar" (220ms, curva 0.40,0,0.20,1) para las tres variantes:
+ * SISTEMA DE BOTONES — cuatro variantes, y ninguna elige su forma a mano.
  *
- * - Primario: bg azul→azul profundo + eleva 2px.
- * - Secundario: el doc de motion completa la interacción del design system
- *   ("hover: borde pasa a azul") con un tratamiento distinto — "el borde y
- *   el texto pasan a tinta; el fondo, a hueso" — que solo tiene sentido si
- *   el reposo NO es ya tinta. Se interpreta borde de reposo greige (no
- *   tinta) para que la transición a tinta sea real; ver informe de fase.
- * - Ghost: no está en la tabla de micro-interacciones — se le aplica el
- *   mismo timing "asentar" por consistencia, sin inventar un nuevo gesto.
+ * Sustituye a `primary` / `secondary` / `ghost`. El inventario medido
+ * (`docs/inventario-botones-cta.md`) encontró cinco tratamientos distintos solo
+ * para navegación interna, ninguno para WhatsApp, y un `primary` a 2,56:1 en
+ * reposo. La propuesta y las mediciones viven en `/styleguide`.
  *
- * Vive fuera de `Button.tsx` (que es "use client" por el gesto magnético)
- * porque varias páginas Server Component la llaman directamente sobre un
- * `<Link>` en vez de renderizar `<Button>` — una función pura de un
- * archivo cliente no se puede invocar desde el servidor.
+ * ── QUÉ SIGNIFICA EL RELLENO (opción B) ────────────────────────────────────
+ * COMPROMISO, no jerarquía. Sólida solo para lo que compromete algo: enviar
+ * datos y abrir WhatsApp. La navegación nunca lleva relleno por importante que
+ * sea, heroes incluidos. Así el relleno significa una única cosa en todo el
+ * sitio.
+ *
+ * ── LA SÓLIDA TIENE DOS FORMAS, NO UNA ─────────────────────────────────────
+ * Sobre claro es relleno de tinta con texto papel (14,41:1 sobre hueso). Sobre
+ * oscuro se da la vuelta: relleno claro con texto tinta, porque la tinta sobre
+ * una banda oscura da 1,15:1 y desaparece. No es una variante nueva: es la
+ * misma adaptándose, igual que el contorno.
+ *
+ * Ninguna clase de aquí lleva un color escrito. Todas leen `--sup-*`, que
+ * declara la superficie desde `globals.css` — y la declara la propia utilidad
+ * que pinta el fondo (`bg-ink`, `bg-brand-deep`, `bg-paper`, `bg-bone`), así
+ * que no hay nada que emparejar a mano ni que se pueda quedar sin marcar.
+ * El hover invierte la polaridad sin más que intercambiar las dos variables.
+ *
+ * ── POR QUÉ VIVE FUERA DE `Button.tsx` ─────────────────────────────────────
+ * `Button.tsx` es "use client" por el gesto magnético, y seis páginas Server
+ * Component llaman esta función directamente sobre un `<Link>`. Una función
+ * pura de un archivo cliente no se puede invocar desde el servidor — y por lo
+ * mismo la superficie se resuelve en CSS y no con contexto de React, que no
+ * existe en el servidor.
+ *
+ * Motion Architecture v1 §05 — verbo "asentar" (220ms, curva 0.40,0,0.20,1)
+ * y elevación de 2px en hover para las variantes con caja.
  */
-export const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap font-sans text-base font-medium transition-[background-color,border-color,color,transform] duration-220 ease-asentar focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:pointer-events-none disabled:opacity-40 rounded-sm",
-  {
-    variants: {
-      variant: {
-        primary:
-          "h-12 bg-brand px-7.5 text-paper hover:-translate-y-0.5 hover:bg-brand-deep",
-        secondary:
-          "h-12 border border-greige px-7.5 text-ink hover:border-ink hover:bg-bone",
-        ghost:
-          "gap-2.25 border-b border-transparent px-0.5 py-1.5 text-body-s text-ink hover:border-ink rounded-none",
-      },
-    },
-    defaultVariants: {
-      variant: "primary",
+
+/**
+ * El anillo de foco iba en `outline-brand`: sobre `paper` da 2,53:1 y el mínimo
+ * no textual es 3:1. Pasa a `--sup-tinta`, que es 15,67:1 sobre las dos
+ * superficies sin tener que pensarlo.
+ */
+const BASE =
+  "inline-flex items-center justify-center gap-2.25 whitespace-nowrap rounded-sm " +
+  "font-sans text-base font-medium " +
+  "transition-[background-color,border-color,color,transform] duration-220 ease-asentar " +
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 " +
+  "focus-visible:outline-(color:--sup-tinta) disabled:pointer-events-none";
+
+const CAJA = "h-12 border px-7.5";
+
+/**
+ * Inhabilitado deja de ser `opacity-40`. WCAG exime a los controles inactivos
+ * de los mínimos de contraste, pero "exento" no es "utilizable": el `primary`
+ * inhabilitado se quedaba en 1,45:1 porque el `opacity` fundía el texto papel
+ * contra la página papel. Se sustituye por un plano muerto, sin color de marca,
+ * que se sigue leyendo: 4,75:1 en claro y 5,92:1 en oscuro.
+ */
+const INHABILITADO =
+  "disabled:border-(color:--sup-inhab-borde) disabled:bg-(--sup-inhab-relleno) " +
+  "disabled:text-(color:--sup-inhab-texto)";
+
+/*
+ * WHATSAPP — el verde y el glifo son de marca ajena y no entran en el tema:
+ * viven aquí, en la única variante que los usa, para que nadie los tome por
+ * color de paleta. Es la misma decisión que ya documentaba `BotonWhatsApp.tsx`.
+ *
+ *   #008069  blanco 4,89:1 · vs paper 4,38:1 · vs ink 3,57:1 — cabecera de
+ *            WhatsApp Web y Business. De los siete verdes medidos es el único
+ *            que cumple las cuatro condiciones a la vez con glifo blanco, y el
+ *            único que no necesita filete sobre claro.
+ *   #075E54  blanco 7,67:1 · vs paper 6,87:1 — Teal Green Dark, paleta clásica.
+ *            Hover: más profundo y también suyo.
+ *
+ * Es la única variante que NO cambia con la superficie: el verde identifica el
+ * canal, y si se adaptara dejaría de hacerlo.
+ */
+const WHATSAPP =
+  // eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena
+  "border-transparent bg-[#008069] text-white hover:-translate-y-0.5 " +
+  // eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena
+  "hover:bg-[#075E54]";
+
+export const buttonVariants = cva(BASE, {
+  variants: {
+    variant: {
+      /**
+       * SÓLIDA — la acción con más peso. Solo compromiso: envío de formulario.
+       * Relleno y texto son las dos caras de la superficie, así que el hover no
+       * necesita colores propios: se limita a intercambiarlas.
+       */
+      solida: `${CAJA} border-(color:--sup-tinta) bg-(--sup-tinta) text-(color:--sup-papel) hover:-translate-y-0.5 hover:bg-(--sup-papel) hover:text-(color:--sup-tinta) ${INHABILITADO}`,
+
+      /**
+       * CONTORNO — el caballo de batalla: toda la navegación, heroes incluidos.
+       * El borde pasa de `greige` a `graphite` en claro: en un botón sin relleno
+       * el borde ES el botón, y greige contra paper da 1,59:1. Y estrena versión
+       * oscura, que antes no existía —`secondary` era `text-ink` y sobre tinta
+       * daba 1:1, que es por lo que todos los heroes acababan tirando del azul.
+       */
+      contorno: `${CAJA} border-(color:--sup-borde) text-(color:--sup-tinta) hover:-translate-y-0.5 hover:border-(color:--sup-tinta) hover:bg-(--sup-velo) ${INHABILITADO}`,
+
+      /**
+       * ENLACE — terciario, dentro del flujo de lectura. Absorbe el `ghost` y
+       * los enlaces de texto escritos a mano que hacían de CTA. El hover ya no
+       * va a `text-brand` (2,53:1 sobre claro): lo marca el subrayado, que ya
+       * era el gesto del ghost.
+       */
+      enlace:
+        "gap-2.25 rounded-none border-b border-transparent px-0.5 py-1.5 text-body-s " +
+        "text-(color:--sup-tinta) hover:border-(color:--sup-tinta) disabled:text-(color:--sup-inhab-texto)",
+
+      /** WHATSAPP — se sale de la web a una conversación. Ver arriba. */
+      whatsapp: `${CAJA} ${WHATSAPP}`,
     },
   },
-);
+  defaultVariants: {
+    variant: "contorno",
+  },
+});
 
 export type ButtonVariantProps = VariantProps<typeof buttonVariants>;

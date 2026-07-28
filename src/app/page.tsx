@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -10,77 +9,11 @@ import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
-import {
-  CONTORNO_CLARO,
-  CONTORNO_OSCURO,
-  WHATSAPP_CLARO,
-  solidaClara,
-} from "@/components/ui/sistemaPortada";
+import { buttonVariants } from "@/components/ui/buttonVariants";
 import { MASCARA } from "@/lib/motion";
 import { categories } from "@/data/taxonomy";
 import { foto } from "@/data/imagenes";
 import { WHATSAPP_HREF } from "@/data/whatsapp";
-
-/* ══════════════════════════════════════════════════════════════════════════════
- *
- *   PORTADA — SISTEMA DE BOTONES NUEVO, A PRUEBA. NINGUNA OTRA PÁGINA LO USA.
- *
- *   Las once rutas restantes siguen con `buttonVariants.ts` intacto. Lo único
- *   compartido que cambia es el filete activo del navbar (styleguide §C), que
- *   se ve en todas pero no obligó a tocar ningún otro fichero.
- *
- * ──────────────────────────────────────────────────────────────────────────────
- *
- *   LAS TRES DECISIONES ABIERTAS — CAMBIA EL VALOR, GUARDA Y RECARGA
- *
- *   Las tres gobiernan el MISMO botón: la sólida clara, que en esta página es
- *   «Solicitar muestra →», en el bloque del asesor virtual (el último de la
- *   portada, sobre fondo hueso), justo al lado del verde de WhatsApp.
- *
- *   ┌ FILETE_EN_SOLIDA ─────────────────────────────────────────────────────┐
- *   │ true   filete de tinta alrededor del relleno.                         │
- *   │ false  sin filete.                                                    │
- *   │                                                                       │
- *   │ Qué está en juego: el relleno azul contra `paper` da 2,56:1 y el       │
- *   │ límite de un control pide 3:1 — sin filete el botón no tiene borde     │
- *   │ reconocible, aunque su texto se lea perfectamente (6,11:1).           │
- *   │ Con SOLIDA_EN_TINTA en true no se aprecia: borde y relleno coinciden.  │
- *   └───────────────────────────────────────────────────────────────────────┘
- *
- *   ┌ HOVER_INVIERTE_POLARIDAD ─────────────────────────────────────────────┐
- *   │ true   al pasar el cursor el fondo se va a oscuro y el texto a claro.  │
- *   │ false  el fondo se mantiene claro y el texto oscuro; el hover solo     │
- *   │        aclara un paso el relleno (y el botón se levanta, como todos).  │
- *   │                                                                       │
- *   │ Qué está en juego: es el gesto más llamativo de todo el sistema. Con   │
- *   │ inversión el botón «se enciende»; sin ella el hover es casi mudo, pero │
- *   │ el botón no cambia de personalidad a mitad de interacción.             │
- *   └───────────────────────────────────────────────────────────────────────┘
- *
- *   ┌ SOLIDA_EN_TINTA ──────────────────────────────────────────────────────┐
- *   │ false  relleno azul de marca + texto tinta (propuesta principal).      │
- *   │ true   relleno tinta + texto papel (styleguide §E).                    │
- *   │                                                                       │
- *   │ Qué está en juego: en tinta pasa todo con margen y el azul queda libre │
- *   │ para lo que globals.css dice que es —logo y énfasis—. A cambio, el     │
- *   │ botón más importante del sitio deja de llevar el color de la marca.    │
- *   │                                                                       │
- *   │ OJO al mirar el verde: con `true` desaparece el único azul de esa fila │
- *   │ y se pierde la comparación teal/#33A2DC. Para juzgar los verdes,       │
- *   │ déjalo en `false`.                                                     │
- *   └───────────────────────────────────────────────────────────────────────┘
- *
- * ────────────────────────────────────────────────────────────────────────── */
-
-const FILETE_EN_SOLIDA = true;
-const HOVER_INVIERTE_POLARIDAD = true;
-const SOLIDA_EN_TINTA = false;
-
-const SOLIDA = solidaClara({
-  filete: FILETE_EN_SOLIDA,
-  hoverInvierte: HOVER_INVIERTE_POLARIDAD,
-  tinta: SOLIDA_EN_TINTA,
-});
 
 /** Glifo oficial de WhatsApp, el mismo que usa el flotante. */
 function GlifoWhatsApp() {
@@ -191,7 +124,6 @@ export default function Home() {
         headlineLines={["Tela deportiva", "premium, tejida", "y teñida a tu", "color exacto."]}
         subhead="Seleccionamos el hilo, tejemos el rollo y lo teñimos al tono que tu marca necesita. Rigor de ingeniería, mano de taller —desde Ecuador para marcas, distribuidores y retail premium."
         primaryCta={{ label: "Ver catálogo de telas →", href: "/productos" }}
-        primaryCtaClassName={CONTORNO_OSCURO}
       />
 
       <section className="py-16 sm:py-24">
@@ -356,26 +288,8 @@ export default function Home() {
         ]}
         parrafo="Tres preguntas y un asesor te devuelve una recomendación concreta: referencia, gramaje y tono, lista para pedir muestra."
         cta={{ label: "Probar el asesor virtual →", href: "/asesor-virtual" }}
-        ctaClassName={CONTORNO_CLARO}
         acciones={
           <>
-            {/*
-              LA SÓLIDA — el botón que gobiernan las tres constantes de arriba.
-
-              Aviso de honestidad: en opción B pura este botón NO existiría en
-              la portada. B reserva el relleno para lo que compromete algo
-              —enviar datos, abrir WhatsApp— y la portada no tiene formulario,
-              así que su único relleno legítimo sería el verde. Está aquí porque
-              hacen falta las dos cosas que pediste y este es el sitio donde se
-              juzgan juntas: ver la sólida en la página real (no en una rejilla
-              de muestras) y tener el azul de marca pegado al teal.
-
-              Se quita entero borrando este bloque; no lo usa nada más.
-            */}
-            <Link href="/contacto" className={SOLIDA}>
-              Solicitar muestra →
-            </Link>
-
             {/*
               WHATSAPP — opción 3: #008069 con glifo blanco.
 
@@ -392,7 +306,7 @@ export default function Home() {
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
-              className={WHATSAPP_CLARO}
+              className={buttonVariants({ variant: "whatsapp" })}
             >
               <GlifoWhatsApp />
               Escribir por WhatsApp

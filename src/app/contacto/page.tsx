@@ -7,6 +7,7 @@ import { ContactForm } from "@/components/ui/ContactForm";
 import { LocationsMap } from "@/components/ui/LocationsMap";
 import { DraftNotice } from "@/components/ui/DraftNotice";
 import { buttonVariants } from "@/components/ui/buttonVariants";
+import { cn } from "@/lib/cn";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { locations, comoLlegar, PENDING } from "@/data/locations";
@@ -71,7 +72,7 @@ export default function ContactoPage() {
                 {channel.href ? (
                   <a
                     href={channel.href}
-                    className="mt-1 block font-sans text-body-s font-medium text-ink hover:text-brand"
+                    className={cn(buttonVariants({ variant: "enlace" }), "mt-1")}
                   >
                     {channel.value}
                   </a>
@@ -156,7 +157,7 @@ export default function ContactoPage() {
                   href={comoLlegar(location)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-body-s font-medium text-ink hover:text-brand"
+                  className={buttonVariants({ variant: "enlace" })}
                 >
                   Cómo llegar ↗
                 </a>
@@ -165,12 +166,12 @@ export default function ContactoPage() {
           </RevealGroup>
 
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <MagneticLink href="#escribenos" className={buttonVariants({ variant: "primary" })}>
+            <MagneticLink href="#escribenos" className={buttonVariants({ variant: "contorno" })}>
               Escríbenos ahora →
             </MagneticLink>
             <Link
               href="/productos"
-              className="font-sans text-body-s font-medium text-ink hover:text-brand"
+              className={buttonVariants({ variant: "enlace" })}
             >
               Ver catálogo de telas →
             </Link>

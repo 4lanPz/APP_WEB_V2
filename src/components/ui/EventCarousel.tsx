@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
-import { ENLACE_CLARO } from "./sistemaPortada";
+import { buttonVariants } from "./buttonVariants";
 import { cn } from "@/lib/cn";
 import { EASE_REVELAR } from "@/lib/motion";
 import { foto } from "@/data/imagenes";
@@ -125,7 +125,7 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               {/* Variante `enlace`: era uno de los CTA escritos a mano, con el
                   hover en `text-brand` (2,53:1 sobre bone). Ahora el hover lo
                   marca el subrayado y el texto no cambia de color. */}
-              <button type="button" className={cn(ENLACE_CLARO, "w-fit")}>
+              <button type="button" className={cn(buttonVariants({ variant: "enlace" }), "w-fit")}>
                 Ver evento →
               </button>
             </div>

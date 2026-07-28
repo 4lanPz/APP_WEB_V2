@@ -125,13 +125,13 @@ export function FichaSubcategoria({
           <div className="flex flex-col gap-4">
             <MagneticLink
               href="/contacto"
-              className={cn(buttonVariants({ variant: "primary" }), "w-fit")}
+              className={cn(buttonVariants({ variant: "contorno" }), "w-fit")}
             >
               Pedir muestra →
             </MagneticLink>
             <MagneticLink
               href={`/productos/${category.slug}`}
-              className={cn(buttonVariants({ variant: "secondary" }), "w-fit")}
+              className={cn(buttonVariants({ variant: "enlace" }), "w-fit")}
             >
               Ver {category.name} →
             </MagneticLink>
