@@ -10,8 +10,6 @@ import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
-// ▼ BANCO — temporal. Se va con los cuatro bloques marcados igual.
-import { BancoCTA } from "@/components/ui/BancoCTA";
 import {
   CONTORNO_CLARO,
   CONTORNO_OSCURO,
@@ -76,7 +74,7 @@ import { WHATSAPP_HREF } from "@/data/whatsapp";
 
 const FILETE_EN_SOLIDA = true;
 const HOVER_INVIERTE_POLARIDAD = true;
-const SOLIDA_EN_TINTA = true;
+const SOLIDA_EN_TINTA = false;
 
 const SOLIDA = solidaClara({
   filete: FILETE_EN_SOLIDA,
@@ -194,14 +192,6 @@ export default function Home() {
         subhead="Seleccionamos el hilo, tejemos el rollo y lo teñimos al tono que tu marca necesita. Rigor de ingeniería, mano de taller —desde Ecuador para marcas, distribuidores y retail premium."
         primaryCta={{ label: "Ver catálogo de telas →", href: "/productos" }}
         primaryCtaClassName={CONTORNO_OSCURO}
-        /* ▼ BANCO · 1 de 4 — el caso difícil: foto con textura bajo el botón. */
-        banco={
-          <BancoCTA
-            superficie="foto"
-            etiqueta="Ver catálogo de telas →"
-            nota="Las cifras salen del peor píxel de la foto que hay realmente debajo de cada botón, no de la tinta plana del <header>: la imagen es un <img> hermano con su opacidad y su velo, y subir por el árbol de fondos la ignoraría."
-          />
-        }
       />
 
       <section className="py-16 sm:py-24">
@@ -230,18 +220,6 @@ export default function Home() {
               el criterio de quien conoce la materia por el tacto.
             </p>
           </Reveal>
-        </Container>
-      </section>
-
-      {/* ▼ BANCO · 2 de 4 — superficie PAPEL, el fondo de página. Va suelto y no
-          dentro de una sección con contenido para que se pueda borrar de un
-          tirón; el plano de debajo es el mismo `paper` que el resto. */}
-      <section className="pb-10">
-        <Container>
-          <BancoCTA
-            superficie="papel"
-            nota="El fondo de página. Aquí la 03 debería desaparecer: relleno papel sobre papel es 1:1 y sin filete no queda nada que delimite el botón."
-          />
         </Container>
       </section>
 
@@ -324,14 +302,6 @@ export default function Home() {
             </Reveal>
           </div>
         </div>
-
-        {/* ▼ BANCO · 3 de 4 — superficie BRAND-DEEP, dentro de la banda real. */}
-        <Container className="pb-14">
-          <BancoCTA
-            superficie="brand-deep"
-            nota="Plano oscuro sin textura. Es donde la 02 se juega su papel: azul de marca sobre azul profundo, con el filete de tinta como único límite."
-          />
-        </Container>
       </section>
 
       <section id="categorias" className="py-16 sm:py-24">
@@ -376,17 +346,6 @@ export default function Home() {
         detrás, otro bloque oscuro con foto los volvía gemelos y cerraba la
         portada en tres bandas de tinta. Claro rompe las dos cosas.
       */}
-      {/* ▼ BANCO · 4 de 4 — superficie HUESO. Va pegado al bloque del asesor,
-          que es de hueso: los dos leen como una sola banda. */}
-      <section className="bg-bone pt-14">
-        <Container>
-          <BancoCTA
-            superficie="hueso"
-            nota="La superficie donde ya probaste la sólida en tinta. La 03 aquí es papel sobre hueso: se separa, pero por poco."
-          />
-        </Container>
-      </section>
-
       <AsesorPasos
         eyebrow="Asesor virtual"
         titular={[

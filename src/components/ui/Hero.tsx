@@ -31,11 +31,6 @@ export interface HeroProps {
    */
   primaryCtaClassName?: string;
   /**
-   * TEMPORAL — banco de pruebas de CTA de la portada, dentro de la banda de la
-   * foto. Se retira junto con `BancoCTA.tsx`; ninguna otra cabecera lo pasa.
-   */
-  banco?: React.ReactNode;
-  /**
    * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
    * de heroes se quedan con su foto de slot.
    */
@@ -93,7 +88,6 @@ export function Hero({
   primaryCta,
   secondaryCta,
   primaryCtaClassName,
-  banco,
   video = false,
   imagen,
 }: HeroProps) {
@@ -193,9 +187,6 @@ export function Hero({
             )}
           </motion.div>
         )}
-
-        {/* ▼ BANCO — temporal, solo la portada lo pasa. Ver `BancoCTA.tsx`. */}
-        {banco}
       </Container>
     </header>
   );
