@@ -67,7 +67,7 @@ export default async function ProductoDortmundPlusBlancosPage() {
             <div>
               <Link
                 href="/productos/microfibra/dortmund-plus"
-                className="font-mono text-label uppercase text-graphite hover:text-brand"
+                className="font-mono text-label uppercase text-graphite hover:text-brand-ink"
               >
                 Dortmund Plus
               </Link>
@@ -87,13 +87,13 @@ export default async function ProductoDortmundPlusBlancosPage() {
             <div className="flex flex-col gap-4">
               <MagneticLink
                 href="/productos/microfibra/dortmund-plus#en-preparacion"
-                className={buttonVariants({ variant: "primary" })}
+                className={buttonVariants({ variant: "contorno" })}
               >
                 Solicitar muestra de este color →
               </MagneticLink>
               <Link
                 href="/productos/microfibra/dortmund-plus"
-                className={cn(buttonVariants({ variant: "ghost" }), "w-fit")}
+                className={cn(buttonVariants({ variant: "enlace" }), "w-fit")}
               >
                 Ver Dortmund Plus →
               </Link>

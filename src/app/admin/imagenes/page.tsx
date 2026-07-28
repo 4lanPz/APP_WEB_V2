@@ -95,7 +95,7 @@ export default function AdminImagenesPage() {
             <a
               key={ruta}
               href={`#pagina-${ruta === "/" ? "inicio" : ruta.replace(/\//g, "-")}`}
-              className="font-mono text-label uppercase text-graphite hover:text-brand"
+              className="font-mono text-label uppercase text-graphite hover:text-brand-ink"
             >
               {tituloPagina(ruta)}
             </a>

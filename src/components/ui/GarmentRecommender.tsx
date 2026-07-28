@@ -95,7 +95,7 @@ export function GarmentRecommender() {
           <div className="mt-2 flex flex-col gap-5">
             <Link
               href={option.href}
-              className={cn(buttonVariants({ variant: "ghost" }), "w-fit whitespace-normal")}
+              className={cn(buttonVariants({ variant: "enlace" }), "w-fit whitespace-normal")}
             >
               Ver todas las telas para {option.label.toLowerCase()} →
             </Link>
@@ -113,7 +113,7 @@ export function GarmentRecommender() {
               </span>
               <Link
                 href="/asesor-virtual"
-                className={cn(buttonVariants({ variant: "secondary" }), "w-fit")}
+                className={cn(buttonVariants({ variant: "contorno" }), "w-fit")}
               >
                 Probar el asesor virtual →
               </Link>

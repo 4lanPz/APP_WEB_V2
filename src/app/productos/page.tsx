@@ -142,7 +142,7 @@ export default function ProductosPage() {
           </RevealGroup>
           <MagneticLink
             href="/#asesor"
-            className={cn(buttonVariants({ variant: "primary" }), "mt-10")}
+            className={cn(buttonVariants({ variant: "contorno" }), "mt-10")}
           >
             Hablar con un asesor →
           </MagneticLink>

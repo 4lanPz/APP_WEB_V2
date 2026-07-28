@@ -8,6 +8,7 @@ import { StatNumber } from "@/components/ui/StatNumber";
 import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
+import { buttonVariants } from "@/components/ui/buttonVariants";
 import { cn } from "@/lib/cn";
 import { foto } from "@/data/imagenes";
 
@@ -220,7 +221,7 @@ export default function CamisetasPage() {
                   <Link
                     href="/productos/microfibra#en-preparacion"
                     title="Página en preparación"
-                    className="mt-5 inline-block font-sans text-body-s font-medium text-ink hover:text-brand"
+                    className={cn(buttonVariants({ variant: "enlace" }), "mt-5")}
                   >
                     Ver ficha técnica y colores →
                   </Link>

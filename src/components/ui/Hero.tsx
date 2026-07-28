@@ -159,19 +159,23 @@ export function Hero({
               delay: HERO_SECUENCIA.cta,
             }}
           >
+            {/*
+              CONTORNO, no relleno. El CTA de una cabecera solo NAVEGA, y en el
+              sistema el relleno está reservado a lo que compromete algo. La
+              banda es `bg-ink`, así que la variante se pinta sola en su forma
+              oscura —borde y texto en papel— sin que este componente sepa nada
+              del tono.
+            */}
             {primaryCta && (
               <MagneticLink
                 href={primaryCta.href}
-                className={buttonVariants({ variant: "primary" })}
+                className={buttonVariants({ variant: "contorno" })}
               >
                 {primaryCta.label}
               </MagneticLink>
             )}
             {secondaryCta && (
-              <Link
-                href={secondaryCta.href}
-                className="font-sans text-body-s font-medium text-paper hover:text-brand"
-              >
+              <Link href={secondaryCta.href} className={buttonVariants({ variant: "enlace" })}>
                 {secondaryCta.label}
               </Link>
             )}

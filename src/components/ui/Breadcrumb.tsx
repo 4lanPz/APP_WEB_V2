@@ -31,8 +31,11 @@ export function Breadcrumb({ items, tone = "light", className }: BreadcrumbProps
         const isLast = index === items.length - 1;
         return (
           <span key={item.label} className="flex items-center gap-3">
+            {/* La flecha sube de `greige`/`paper/30` a `graphite`/`paper/50`:
+                como marca visible, greige contra paper daba 1,59:1 y el /30
+                sobre tinta 2,54:1 (styleguide §C). */}
             {index > 0 && (
-              <span className={dark ? "text-paper/30" : "text-greige"}>→</span>
+              <span className={dark ? "text-paper/50" : "text-graphite"}>→</span>
             )}
             {isLast || !item.href ? (
               <span
@@ -49,8 +52,10 @@ export function Breadcrumb({ items, tone = "light", className }: BreadcrumbProps
             ) : (
               <Link
                 href={item.href}
+                /* El hover iba a `text-brand`: 2,53:1 sobre claro. Va al color
+                   de la superficie, que es tinta en claro y papel en oscuro. */
                 className={cn(
-                  "hover:text-brand",
+                  "hover:text-(color:--sup-tinta)",
                   dark ? "text-paper/60" : "text-graphite",
                 )}
               >

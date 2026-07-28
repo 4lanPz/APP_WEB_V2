@@ -28,6 +28,12 @@ export interface AsesorPasosProps {
   titular: string[];
   parrafo: string;
   cta: { label: string; href: string };
+  /**
+   * Acciones que acompañan al CTA en la misma fila. Este bloque es el cierre de
+   * la portada y es donde vive su único relleno legítimo, el de WhatsApp: el
+   * CTA de al lado solo navega y va en contorno.
+   */
+  acciones?: React.ReactNode;
   pasos: PasoAsesor[];
 }
 
@@ -53,7 +59,14 @@ const CICLO_MS = 4000;
  * transición entre fotos (la regla global de `globals.css` colapsa la transición
  * de opacidad a instantánea). Queda el primer paso y se navega pulsando.
  */
-export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPasosProps) {
+export function AsesorPasos({
+  eyebrow,
+  titular,
+  parrafo,
+  cta,
+  acciones,
+  pasos,
+}: AsesorPasosProps) {
   const [activo, setActivo] = useState(0);
   /** El usuario pulsó un paso: toma el control y el auto-avance no vuelve. */
   const [detenido, setDetenido] = useState(false);
@@ -141,12 +154,18 @@ export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPas
               </div>
             </div>
 
-            <MagneticLink
-              href={cta.href}
-              className={cn(buttonVariants({ variant: "primary" }), "mt-1 w-fit")}
-            >
-              {cta.label}
-            </MagneticLink>
+            {/* Fila de acciones: el CTA del bloque y lo que le acompañe. A 375
+                envuelve; los botones miden 48 de alto y el gap los separa lo
+                mismo en las dos direcciones. */}
+            <div className="mt-1 flex flex-wrap items-center gap-4">
+              <MagneticLink
+                href={cta.href}
+                className={cn(buttonVariants({ variant: "contorno" }), "w-fit")}
+              >
+                {cta.label}
+              </MagneticLink>
+              {acciones}
+            </div>
           </div>
 
           {/*

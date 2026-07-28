@@ -9,12 +9,23 @@ import { EASE_REVELAR, FLOTANTE } from "@/lib/motion";
  * Botón flotante de WhatsApp, presente en todas las páginas.
  *
  * DÓNDE SE APARTA DEL DESIGN SYSTEM, Y POR QUÉ
- * El verde (#25D366) y el glifo son de WhatsApp, no nuestros, y no pasan por
- * `globals.css`: viven aquí, en el único sitio que los usa, para que nadie los
- * tome por color de marca. Aquí la identificación inmediata pesa más que la
- * coherencia de paleta — quien busca el botón de WhatsApp busca ese verde.
- * Lo demás sí es del sistema: radio de 4px, curva "asentar", elevación de 2px
- * en hover, igual que el botón primario.
+ * El verde y el glifo son de WhatsApp, no nuestros, y no pasan por
+ * `globals.css`: viven aquí y en la variante `whatsapp` de `buttonVariants.ts`,
+ * los dos únicos sitios que los usan, para que nadie los tome por color de
+ * marca. Aquí la identificación inmediata pesa más que la coherencia de paleta
+ * — quien busca el botón de WhatsApp busca ese verde. Lo demás sí es del
+ * sistema: radio de 4px, curva "asentar", elevación de 2px en hover.
+ *
+ * EL VERDE YA NO ES #25D366
+ * Se midieron los siete de la paleta de WhatsApp. Con glifo blanco hay que
+ * cumplir cuatro condiciones a la vez y solo #008069 —el de la cabecera de
+ * WhatsApp Web y Business— las cumple: 4,89:1 contra el glifo, 4,38:1 contra
+ * `paper` y 3,57:1 contra `ink`, así que se sostiene sobre las dos superficies
+ * sin filete. El anterior dejaba el glifo en 1,98:1, por debajo incluso del
+ * mínimo no textual de 3:1 que le corresponde a un control de solo icono.
+ *
+ * Va en el mismo verde que la variante `whatsapp`, a propósito: dos verdes
+ * distintos para el mismo canal en la misma página era lo que había antes.
  *
  * NO ES REDONDO A PROPÓSITO. El FAB circular es la convención, pero
  * `globals.css` prohíbe `rounded-full` por norma de marca ("escala permitida:
@@ -43,11 +54,22 @@ export function BotonWhatsApp() {
          * pero con su propio margen inferior.
          */
         "fixed bottom-4 right-4 z-900 flex size-14 items-center justify-center sm:bottom-6 sm:right-6 sm:size-15",
-        // eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp, marca ajena, no es color de paleta
-        "rounded-md bg-[#25D366] text-white shadow-[0_4px_20px_rgba(28,25,23,0.22)]",
+        /*
+         * ARO DE PAPEL. El flotante no tiene detrás una superficie conocida:
+         * pasa por encima de fotos, del mapa de Contacto y de cualquier
+         * sección. Medido con `npm run botones`, sobre fondos de luminancia
+         * parecida a la del verde el límite del control caía a 1,07:1 —el
+         * relleno se confundía con lo que hubiera debajo—. Con el aro, el
+         * botón se separa siempre: sobre fondo medio u oscuro lo delimita el
+         * aro, y sobre fondo claro el propio verde (4,38:1 contra `paper`).
+         * La sombra no cuenta para 1.4.11, así que no bastaba con ella.
+         */
+        "border-2 border-paper",
+        // eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena, no es color de paleta
+        "rounded-md bg-[#008069] text-white shadow-[0_4px_20px_rgba(28,25,23,0.22)]",
         "transition-[background-color,transform,box-shadow] duration-220 ease-asentar",
-        // eslint-disable-next-line no-restricted-syntax -- verde hover oficial de WhatsApp, marca ajena
-        "hover:-translate-y-0.5 hover:bg-[#1DA851] hover:shadow-[0_8px_28px_rgba(28,25,23,0.3)]",
+        // eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena
+        "hover:-translate-y-0.5 hover:bg-[#075E54] hover:shadow-[0_8px_28px_rgba(28,25,23,0.3)]",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ink",
       )}
       /*

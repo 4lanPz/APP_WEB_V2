@@ -11,7 +11,8 @@
     "imagenes:slots": "npx tsx scripts/listar-slots.ts",
     "imagenes:telas-pw": "npx tsx scripts/preparar-imagenes.ts",
     "catalogo": "npx tsx scripts/verificar-catalogo.ts",
-    "video": "npx tsx scripts/preparar-video.ts"
+    "video": "npx tsx scripts/preparar-video.ts",
+    "botones": "node scripts/verificar-botones.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -33,6 +34,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "playwright": "^1.62.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

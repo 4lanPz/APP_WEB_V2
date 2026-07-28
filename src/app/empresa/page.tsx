@@ -303,12 +303,12 @@ export default function EmpresaPage() {
             </RevealItem>
           </RevealGroup>
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <MagneticLink href="/#asesor" className={buttonVariants({ variant: "primary" })}>
+            <MagneticLink href="/#asesor" className={buttonVariants({ variant: "contorno" })}>
               Hablar con un asesor →
             </MagneticLink>
             <Link
               href="/productos"
-              className="font-sans text-body-s font-medium text-paper hover:text-brand"
+              className={buttonVariants({ variant: "enlace" })}
             >
               Ver catálogo de telas →
             </Link>

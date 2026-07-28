@@ -40,12 +40,12 @@ export function PreparacionPage({
           "Todavía no publicamos la ficha de esta referencia. Se tiñe y se produce a pedido, como el resto del catálogo — iremos sumando datos y fotografía real."}
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-6">
-        <Link href={backHref} className={buttonVariants({ variant: "secondary" })}>
+        <Link href={backHref} className={buttonVariants({ variant: "contorno" })}>
           {backLabel}
         </Link>
         <Link
           href="/asesor-virtual"
-          className="font-sans text-body-s font-medium text-ink hover:text-brand"
+          className={buttonVariants({ variant: "enlace" })}
         >
           Hablar con el asesor virtual →
         </Link>

@@ -1,16 +1,20 @@
 /**
- * PROPUESTA de sistema de botones. Vive dentro de `/styleguide` a propósito:
- * todavía NO la usa ninguna página del sitio. Cuando se apruebe, esto se
- * mueve a `src/components/ui/` y `buttonVariants.ts` pasa a leer de aquí.
+ * EL SISTEMA APLICADO, escrito de otra forma. Ya no es una propuesta: lo usan
+ * las doce rutas desde `src/components/ui/buttonVariants.ts`.
  *
- * Las clases van como datos y no como `cva` porque el styleguide necesita
- * pintar cada estado —reposo, hover, foco, inhabilitado— de forma ESTÁTICA,
- * uno al lado del otro. Con `hover:` no se pueden comparar cuatro estados en
- * una misma pantalla, y sin comparar no hay decisión que tomar.
+ * ESPEJO ESTÁTICO, Y POR QUÉ EXISTE. El sistema real resuelve dos cosas en
+ * tiempo de pintado que aquí hay que fijar a mano: el ESTADO —con `hover:` no
+ * se pueden comparar reposo, hover, foco e inhabilitado en una misma pantalla,
+ * y sin comparar no hay nada que medir— y la SUPERFICIE, que allí llega por
+ * herencia de las variables `--sup-*` y aquí se escribe resuelta en sus dos
+ * formas para poder ponerlas una al lado de la otra.
+ *
+ * Es duplicación consciente. Si tocas `buttonVariants.ts`, toca esto: la
+ * columna «propuesta» de la styleguide deja de decir la verdad en silencio.
  *
  * CUATRO VARIANTES, NO MÁS. Ver `docs/inventario-botones-cta.md` para el
- * porqué de cada una; en resumen: hoy hay cinco tratamientos distintos solo
- * para "navegación interna" y ninguno para WhatsApp.
+ * porqué de cada una; en resumen: antes había cinco tratamientos distintos
+ * solo para "navegación interna" y ninguno para WhatsApp.
  */
 
 export type Tono = "claro" | "oscuro";
@@ -55,37 +59,41 @@ const INHAB_OSCURO = `${CAJA} border-paper/20 bg-paper/10 text-paper/60`;
 
 // El verde y el glifo son de WhatsApp, marca ajena: no entran en globals.css.
 // Es la misma decisión (y el mismo motivo) que ya documenta BotonWhatsApp.tsx.
-// eslint-disable-next-line no-restricted-syntax -- verde oficial de WhatsApp
-const VERDE = "bg-[#25D366]";
-// eslint-disable-next-line no-restricted-syntax -- verde hover oficial de WhatsApp
-const VERDE_HOVER = "bg-[#1DA851]";
+// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web
+const VERDE = "bg-[#008069]";
+// eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp
+const VERDE_HOVER = "bg-[#075E54]";
 
 export const PROPUESTA: Record<Variante, Record<Tono, Record<Estado, string>>> = {
   /**
-   * SÓLIDA — relleno de color con texto OSCURO.
+   * SÓLIDA — TIENE DOS FORMAS, NO UNA. Es lo último que se decidió, y se
+   * decidió mirándola sobre las cuatro superficies de la portada.
    *
-   * El giro respecto a hoy: `text-ink` en vez de `text-paper`. Sobre el azul de
-   * marca eso pasa de 2,56:1 a 6,11:1. El azul es un color claro; solo admite
-   * texto oscuro, igual que el verde de WhatsApp.
+   * Sobre claro: relleno de TINTA con texto papel — 14,41:1 sobre hueso.
+   * Sobre oscuro se da la vuelta: relleno CLARO con texto tinta, porque la
+   * tinta sobre una banda oscura da 1,15:1 y el botón desaparece.
    *
-   * En claro lleva filete de tinta porque el relleno azul contra `paper` da
-   * 2,56:1 y el límite de un control pide 3:1: sin el filete el botón no tiene
-   * borde reconocible. Sobre `ink` no hace falta: el propio relleno da 6,11:1.
+   * No es una variante nueva ni dos: es la misma leyendo `--sup-tinta` y
+   * `--sup-papel`, que son las dos caras de la superficie. Por eso el hover no
+   * necesita colores propios — invierte la polaridad intercambiándolas, y eso
+   * vale igual en claro que en oscuro.
    *
-   * El hover invierte la polaridad (fondo oscuro, texto claro) en claro, y la
-   * enciende en oscuro. Es el punto que más conviene mirar con el ojo.
+   * El azul de marca se descartó como relleno: contra `paper` da 2,56:1 y
+   * contra el píxel claro de una foto de hero 1,71:1, así que necesitaba filete
+   * sí o sí. El azul queda para lo que dice `globals.css` que es —logo y
+   * énfasis— y el relleno pasa a ser acromático.
    */
   solida: {
     claro: {
-      reposo: `${CAJA} border-ink bg-brand text-ink`,
-      hover: `${CAJA} border-ink bg-brand-deep text-paper -translate-y-0.5`,
-      foco: `${CAJA} border-ink bg-brand text-ink ${FOCO_CLARO}`,
+      reposo: `${CAJA} border-ink bg-ink text-paper`,
+      hover: `${CAJA} border-ink bg-paper text-ink -translate-y-0.5`,
+      foco: `${CAJA} border-ink bg-ink text-paper ${FOCO_CLARO}`,
       inhabilitado: INHAB_CLARO,
     },
     oscuro: {
-      reposo: `${CAJA} border-transparent bg-brand text-ink`,
-      hover: `${CAJA} border-transparent bg-paper text-ink -translate-y-0.5`,
-      foco: `${CAJA} border-transparent bg-brand text-ink ${FOCO_OSCURO}`,
+      reposo: `${CAJA} border-paper bg-paper text-ink`,
+      hover: `${CAJA} border-paper bg-ink text-paper -translate-y-0.5`,
+      foco: `${CAJA} border-paper bg-paper text-ink ${FOCO_OSCURO}`,
       inhabilitado: INHAB_OSCURO,
     },
   },
@@ -145,21 +153,26 @@ export const PROPUESTA: Record<Variante, Record<Tono, Record<Estado, string>>> =
    * conversación. Hoy eso está señalado con un icono flotante y con tres
    * enlaces mono de 13px escondidos entre el teléfono y el correo.
    *
-   * Texto en tinta, no en blanco. El blanco sobre #25D366 da 1,98:1 —el
-   * flotante actual ya no cumple ni el mínimo no textual de 3:1—. Con tinta son
-   * 8,82:1. El hover usa el verde oscuro oficial, también con tinta (5,64:1).
+   * Verde #008069 con glifo BLANCO. De los siete verdes medidos de la paleta de
+   * WhatsApp es el único que cumple las cuatro condiciones a la vez: 4,89:1
+   * contra el glifo, 4,38:1 contra `paper` y 3,57:1 contra `ink`. Eso último es
+   * lo que le permite ir SIN FILETE sobre las dos superficies. El hover usa
+   * #075E54 (Teal Green Dark), también suyo y más profundo.
+   *
+   * ES LA ÚNICA QUE NO SE ADAPTA A LA SUPERFICIE, a propósito: el verde
+   * identifica el canal, y si cambiara con el fondo dejaría de identificarlo.
    */
   whatsapp: {
     claro: {
-      reposo: `${CAJA} border-ink ${VERDE} text-ink`,
-      hover: `${CAJA} border-ink ${VERDE_HOVER} text-ink -translate-y-0.5`,
-      foco: `${CAJA} border-ink ${VERDE} text-ink ${FOCO_CLARO}`,
+      reposo: `${CAJA} border-transparent ${VERDE} text-white`,
+      hover: `${CAJA} border-transparent ${VERDE_HOVER} text-white -translate-y-0.5`,
+      foco: `${CAJA} border-transparent ${VERDE} text-white ${FOCO_CLARO}`,
       inhabilitado: INHAB_CLARO,
     },
     oscuro: {
-      reposo: `${CAJA} border-transparent ${VERDE} text-ink`,
-      hover: `${CAJA} border-transparent ${VERDE_HOVER} text-ink -translate-y-0.5`,
-      foco: `${CAJA} border-transparent ${VERDE} text-ink ${FOCO_OSCURO}`,
+      reposo: `${CAJA} border-transparent ${VERDE} text-white`,
+      hover: `${CAJA} border-transparent ${VERDE_HOVER} text-white -translate-y-0.5`,
+      foco: `${CAJA} border-transparent ${VERDE} text-white ${FOCO_OSCURO}`,
       inhabilitado: INHAB_OSCURO,
     },
   },

@@ -47,7 +47,7 @@ export function ContactForm() {
         />
       </div>
       <div className="flex flex-wrap items-center gap-5">
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="solida">
           Enviar mensaje →
         </Button>
         <span className="font-serif text-caption italic text-graphite">
