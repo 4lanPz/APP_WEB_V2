@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { CategoryCard } from "@/components/ui/CategoryCard";
+import { PropuestaBotones } from "./_sistema/PropuestaBotones";
 
 export const metadata: Metadata = {
   title: "Styleguide — Textil Padilla",
@@ -304,6 +305,20 @@ export default function StyleguidePage() {
           </div>
         </div>
       </Section>
+
+      {/*
+       * PROPUESTA del sistema de botones. Va aquí, justo después de los botones
+       * actuales, para poder bajar la vista de lo que hay a lo que se propone
+       * sin cambiar de página. No la usa nada del sitio todavía.
+       */}
+      {/* `min-w-0` va en el Container y no dentro: el Container es el ítem flex
+          de esta página, y un ítem flex tiene `min-width:auto`, así que no
+          encoge por debajo del min-content de su contenido —ni con un scroll
+          container de por medio—. Sin esto, la tabla de mapeo ponía la página
+          entera en 481px a 375. */}
+      <Container className="min-w-0">
+        <PropuestaBotones />
+      </Container>
 
       <Section eyebrow="06 · Componente" title="Input de texto">
         <div className="grid max-w-md gap-8">

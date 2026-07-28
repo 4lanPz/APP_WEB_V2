@@ -15,6 +15,20 @@
   /* ---- Color · marca Azul Padilla (disciplinado y restringido: identifica, no decora) ---- */
   --color-brand: #33a2dc; /* logo, CTA principal (máx. uno por pantalla), estado activo */
   --color-brand-deep: #0d2937; /* contornos de logo, fondos oscuros de contraste puntual */
+  /*
+   * Azul de TEXTO sobre superficie clara. No es un tono decorativo: existe
+   * porque ni `brand` ni `brand-deep` sirven para escribir sobre `paper`
+   * —el primero da 2,56:1 y el segundo pasa con 13,37:1 pero se lee como
+   * negro, no como azul—. Sobre `paper` da 5,10:1 y sobre `bone` 4,75:1.
+   *
+   * SOLO como color de texto o de icono sobre fondo claro. Como relleno no
+   * aporta nada que no dé ya `brand-deep`. Ver `/styleguide` §F.
+   *
+   * Hoy no lo usa ninguna página: entra para que los quince
+   * `hover:text-brand` sobre claro tengan a dónde ir cuando se aplique el
+   * sistema de botones nuevo.
+   */
+  --color-brand-ink: #1a6d99;
 
   /* ---- Color · acento cálido Terracota (puntuación, nunca >5% de una superficie) ---- */
   --color-accent: #a0715a; /* numeración de sección, filetes editoriales, énfasis puntual */
