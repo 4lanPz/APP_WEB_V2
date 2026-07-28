@@ -16,15 +16,40 @@ import {
 
 const NAV_HEIGHT = "68px";
 
+/*
+ * ESTADO ACTIVO DEL NAVBAR — styleguide §C, decidido.
+ *
+ * El subrayado ya existía, pero en `bg-brand`: como marca visible contra
+ * `paper` da 2,56:1 y el mínimo no textual es 3:1. Pasa a tinta (15,67:1).
+ * `accent` también pasaba —3,76:1— pero queda descartado: el terracota ya
+ * significa etiqueta mono y numeración de sección.
+ *
+ * El hover va detrás por coherencia: `hover:text-brand` sobre claro da 2,53:1,
+ * y para eso entró `brand-ink` en globals.css (5,10:1 sobre paper). El
+ * subrayado es la decoración del propio enlace —span aparte solo para poder
+ * animar el scaleX—, así que toma el color del texto que subraya.
+ *
+ * ES EL ÚNICO COMPONENTE COMPARTIDO QUE CAMBIA. Se ve en las doce rutas, pero
+ * no obliga a tocar ningún otro fichero.
+ */
+const FILETE = "absolute inset-x-0 -bottom-px h-0.5 origin-left transition-transform duration-220 ease-asentar";
+
 /** Motion v1 §05 — subrayado activo: scaleX 0→1, origin left, 220ms, asentar. El texto no se mueve. */
 function NavUnderline({ visible }: { visible: boolean }) {
   return (
     <span
       aria-hidden
-      className={cn(
-        "absolute inset-x-0 -bottom-px h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-220 ease-asentar",
-        visible && "scale-x-100",
-      )}
+      className={cn(FILETE, "scale-x-0 bg-ink", visible && "scale-x-100")}
+    />
+  );
+}
+
+/** El mismo filete, en el azul de texto, mientras el cursor está encima. */
+function NavUnderlineHover() {
+  return (
+    <span
+      aria-hidden
+      className={cn(FILETE, "scale-x-0 bg-brand-ink group-hover:scale-x-100")}
     />
   );
 }
@@ -53,20 +78,15 @@ function NavLink({
       rel={external ? "noopener noreferrer" : undefined}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "group relative pb-1.75 font-sans text-body-s text-ink hover:text-brand",
-        isActive && "text-brand",
+        "group relative pb-1.75 font-sans text-body-s text-ink hover:text-brand-ink",
+        isActive && "font-medium text-ink",
         className,
       )}
     >
       {label}
       {external && <span className="ml-0.75 inline-block">↗</span>}
       <NavUnderline visible={isActive} />
-      {!isActive && (
-        <span
-          aria-hidden
-          className="absolute inset-x-0 -bottom-px h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-220 ease-asentar group-hover:scale-x-100"
-        />
-      )}
+      {!isActive && <NavUnderlineHover />}
     </Link>
   );
 }
@@ -281,20 +301,15 @@ export function Navbar() {
               aria-haspopup="menu"
               aria-current={catalogoActivo ? "page" : undefined}
               className={cn(
-                "group relative pb-1.75 font-sans text-body-s text-ink hover:text-brand",
-                disparadorMarcado && "text-brand",
+                "group relative pb-1.75 font-sans text-body-s text-ink hover:text-brand-ink",
+                disparadorMarcado && "font-medium text-ink",
               )}
             >
               Nuestros Productos
               {/* Igual que los NavLink: subrayado persistente cuando la sección
                   está activa (o el menú abierto); subrayado de hover cuando no. */}
               <NavUnderline visible={disparadorMarcado} />
-              {!disparadorMarcado && (
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 -bottom-px h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-220 ease-asentar group-hover:scale-x-100"
-                />
-              )}
+              {!disparadorMarcado && <NavUnderlineHover />}
             </Link>
 
             <AnimatePresence>
@@ -316,7 +331,7 @@ export function Navbar() {
                           <Link
                             href={category.href}
                             onClick={cerrarMenu}
-                            className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-caption font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand"
+                            className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-caption font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand-ink"
                           >
                             {category.label}
                             <span className="font-mono text-micro font-normal tracking-normal text-accent">
@@ -340,7 +355,7 @@ export function Navbar() {
                                     : undefined
                                 }
                                 onClick={cerrarMenu}
-                                className="py-1.25 font-sans text-mono text-graphite hover:text-brand"
+                                className="py-1.25 font-sans text-mono text-graphite hover:text-brand-ink"
                               >
                                 {sub.label}
                               </Link>
@@ -354,7 +369,7 @@ export function Navbar() {
                         <Link
                           href="/productos"
                           onClick={cerrarMenu}
-                          className="font-sans text-sm font-medium text-ink hover:text-brand"
+                          className="font-sans text-sm font-medium text-ink hover:text-brand-ink"
                         >
                           Ver todo el catálogo →
                         </Link>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -9,9 +10,86 @@ import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
+import {
+  CONTORNO_CLARO,
+  CONTORNO_OSCURO,
+  WHATSAPP_CLARO,
+  solidaClara,
+} from "@/components/ui/sistemaPortada";
 import { MASCARA } from "@/lib/motion";
 import { categories } from "@/data/taxonomy";
 import { foto } from "@/data/imagenes";
+import { WHATSAPP_HREF } from "@/data/whatsapp";
+
+/* ══════════════════════════════════════════════════════════════════════════════
+ *
+ *   PORTADA — SISTEMA DE BOTONES NUEVO, A PRUEBA. NINGUNA OTRA PÁGINA LO USA.
+ *
+ *   Las once rutas restantes siguen con `buttonVariants.ts` intacto. Lo único
+ *   compartido que cambia es el filete activo del navbar (styleguide §C), que
+ *   se ve en todas pero no obligó a tocar ningún otro fichero.
+ *
+ * ──────────────────────────────────────────────────────────────────────────────
+ *
+ *   LAS TRES DECISIONES ABIERTAS — CAMBIA EL VALOR, GUARDA Y RECARGA
+ *
+ *   Las tres gobiernan el MISMO botón: la sólida clara, que en esta página es
+ *   «Solicitar muestra →», en el bloque del asesor virtual (el último de la
+ *   portada, sobre fondo hueso), justo al lado del verde de WhatsApp.
+ *
+ *   ┌ FILETE_EN_SOLIDA ─────────────────────────────────────────────────────┐
+ *   │ true   filete de tinta alrededor del relleno.                         │
+ *   │ false  sin filete.                                                    │
+ *   │                                                                       │
+ *   │ Qué está en juego: el relleno azul contra `paper` da 2,56:1 y el       │
+ *   │ límite de un control pide 3:1 — sin filete el botón no tiene borde     │
+ *   │ reconocible, aunque su texto se lea perfectamente (6,11:1).           │
+ *   │ Con SOLIDA_EN_TINTA en true no se aprecia: borde y relleno coinciden.  │
+ *   └───────────────────────────────────────────────────────────────────────┘
+ *
+ *   ┌ HOVER_INVIERTE_POLARIDAD ─────────────────────────────────────────────┐
+ *   │ true   al pasar el cursor el fondo se va a oscuro y el texto a claro.  │
+ *   │ false  el fondo se mantiene claro y el texto oscuro; el hover solo     │
+ *   │        aclara un paso el relleno (y el botón se levanta, como todos).  │
+ *   │                                                                       │
+ *   │ Qué está en juego: es el gesto más llamativo de todo el sistema. Con   │
+ *   │ inversión el botón «se enciende»; sin ella el hover es casi mudo, pero │
+ *   │ el botón no cambia de personalidad a mitad de interacción.             │
+ *   └───────────────────────────────────────────────────────────────────────┘
+ *
+ *   ┌ SOLIDA_EN_TINTA ──────────────────────────────────────────────────────┐
+ *   │ false  relleno azul de marca + texto tinta (propuesta principal).      │
+ *   │ true   relleno tinta + texto papel (styleguide §E).                    │
+ *   │                                                                       │
+ *   │ Qué está en juego: en tinta pasa todo con margen y el azul queda libre │
+ *   │ para lo que globals.css dice que es —logo y énfasis—. A cambio, el     │
+ *   │ botón más importante del sitio deja de llevar el color de la marca.    │
+ *   │                                                                       │
+ *   │ OJO al mirar el verde: con `true` desaparece el único azul de esa fila │
+ *   │ y se pierde la comparación teal/#33A2DC. Para juzgar los verdes,       │
+ *   │ déjalo en `false`.                                                     │
+ *   └───────────────────────────────────────────────────────────────────────┘
+ *
+ * ────────────────────────────────────────────────────────────────────────── */
+
+const FILETE_EN_SOLIDA = true;
+const HOVER_INVIERTE_POLARIDAD = true;
+const SOLIDA_EN_TINTA = false;
+
+const SOLIDA = solidaClara({
+  filete: FILETE_EN_SOLIDA,
+  hoverInvierte: HOVER_INVIERTE_POLARIDAD,
+  tinta: SOLIDA_EN_TINTA,
+});
+
+/** Glifo oficial de WhatsApp, el mismo que usa el flotante. */
+function GlifoWhatsApp() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="currentColor" className="size-5">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.695.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 016.988 2.898 9.825 9.825 0 012.892 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+  );
+}
 
 const stats = [
   { target: 39, prefix: "", suffix: "", label: "Años de oficio" },
@@ -96,6 +174,16 @@ export default function Home() {
         única salida del hero, no puede tener menos peso que el secundario que
         acompañaba antes, y así la portada usa el mismo patrón que las otras
         seis cabeceras (botón primario + nada).
+
+        OPCIÓN B — el CTA pierde el relleno. Solo navega: lleva al catálogo, no
+        compromete nada. En contorno oscuro sigue siendo la única acción de la
+        pantalla, y el relleno azul deja de significar dos cosas a la vez. Es la
+        variante que hoy no existe: `secondary` es `text-ink` y sobre la banda
+        de tinta del hero daría 1:1 — por eso las siete cabeceras acababan
+        tirando del azul.
+
+        El `primaryCtaClassName` es la vía para que esto pase SOLO aquí: las
+        otras seis cabeceras no lo pasan y siguen pintando el `primary` de hoy.
       */}
       <Hero
         video
@@ -103,6 +191,7 @@ export default function Home() {
         headlineLines={["Tela deportiva", "premium, tejida", "y teñida a tu", "color exacto."]}
         subhead="Seleccionamos el hilo, tejemos el rollo y lo teñimos al tono que tu marca necesita. Rigor de ingeniería, mano de taller —desde Ecuador para marcas, distribuidores y retail premium."
         primaryCta={{ label: "Ver catálogo de telas →", href: "/productos" }}
+        primaryCtaClassName={CONTORNO_OSCURO}
       />
 
       <section className="py-16 sm:py-24">
@@ -267,6 +356,49 @@ export default function Home() {
         ]}
         parrafo="Tres preguntas y un asesor te devuelve una recomendación concreta: referencia, gramaje y tono, lista para pedir muestra."
         cta={{ label: "Probar el asesor virtual →", href: "/asesor-virtual" }}
+        ctaClassName={CONTORNO_CLARO}
+        acciones={
+          <>
+            {/*
+              LA SÓLIDA — el botón que gobiernan las tres constantes de arriba.
+
+              Aviso de honestidad: en opción B pura este botón NO existiría en
+              la portada. B reserva el relleno para lo que compromete algo
+              —enviar datos, abrir WhatsApp— y la portada no tiene formulario,
+              así que su único relleno legítimo sería el verde. Está aquí porque
+              hacen falta las dos cosas que pediste y este es el sitio donde se
+              juzgan juntas: ver la sólida en la página real (no en una rejilla
+              de muestras) y tener el azul de marca pegado al teal.
+
+              Se quita entero borrando este bloque; no lo usa nada más.
+            */}
+            <Link href="/contacto" className={SOLIDA}>
+              Solicitar muestra →
+            </Link>
+
+            {/*
+              WHATSAPP — opción 3: #008069 con glifo blanco.
+
+              Va aquí y no en el hero por dos motivos. Es el cierre de la página
+              y el único gesto que sale del sitio, que es lo que en opción B
+              justifica el relleno. Y sobre claro es donde el verde tiene que
+              demostrar lo suyo: 4,38:1 contra `paper` es lo que le permite ir
+              SIN filete, que era la hipótesis a confirmar. El flotante de la
+              esquina sigue con el verde de hoy (#25D366): es compartido por las
+              doce rutas y no se ha tocado, así que en esta página se ven los dos
+              verdes a la vez y se pueden comparar.
+            */}
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={WHATSAPP_CLARO}
+            >
+              <GlifoWhatsApp />
+              Escribir por WhatsApp
+            </a>
+          </>
+        }
         pasos={pasosAsesor}
       />
     </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+import { ENLACE_CLARO } from "./sistemaPortada";
 import { cn } from "@/lib/cn";
 import { EASE_REVELAR } from "@/lib/motion";
 import { foto } from "@/data/imagenes";
@@ -121,10 +122,10 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               <p className="font-serif text-body-s text-graphite">
                 {slide.description}
               </p>
-              <button
-                type="button"
-                className="w-fit font-sans text-body-s font-medium text-ink hover:text-brand"
-              >
+              {/* Variante `enlace`: era uno de los CTA escritos a mano, con el
+                  hover en `text-brand` (2,53:1 sobre bone). Ahora el hover lo
+                  marca el subrayado y el texto no cambia de color. */}
+              <button type="button" className={cn(ENLACE_CLARO, "w-fit")}>
                 Ver evento →
               </button>
             </div>
@@ -172,9 +173,12 @@ export function EventCarousel({ slides }: EventCarouselProps) {
                 type="button"
                 aria-label={`Ir al evento ${i + 1}`}
                 onClick={() => irManual(i, i > index ? 1 : -1)}
+                /* El punto activo iba en `brand`: como marca no textual contra
+                   `paper` da 2,56:1 y necesita 3:1. Pasa a tinta, igual que el
+                   filete activo del navbar (styleguide §C). */
                 className={cn(
-                  "size-2 border border-greige transition-colors duration-220 ease-asentar",
-                  i === index && "border-brand bg-brand",
+                  "size-2 border border-graphite transition-colors duration-220 ease-asentar",
+                  i === index && "border-ink bg-ink",
                 )}
               />
             ))}
@@ -184,7 +188,7 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               type="button"
               aria-label="Evento anterior"
               onClick={() => irManual(index - 1, -1)}
-              className="flex size-9 items-center justify-center border border-greige text-ink transition-colors duration-220 ease-asentar hover:border-ink"
+              className="flex size-9 items-center justify-center border border-graphite text-ink transition-colors duration-220 ease-asentar hover:border-ink"
             >
               ←
             </button>
@@ -192,7 +196,7 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               type="button"
               aria-label="Evento siguiente"
               onClick={() => irManual(index + 1, 1)}
-              className="flex size-9 items-center justify-center border border-greige text-ink transition-colors duration-220 ease-asentar hover:border-ink"
+              className="flex size-9 items-center justify-center border border-graphite text-ink transition-colors duration-220 ease-asentar hover:border-ink"
             >
               →
             </button>

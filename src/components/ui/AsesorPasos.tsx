@@ -28,6 +28,19 @@ export interface AsesorPasosProps {
   titular: string[];
   parrafo: string;
   cta: { label: string; href: string };
+  /**
+   * Clases del CTA. Sin valor, el `primary` de siempre. La portada le pasa el
+   * `contorno` del sistema nuevo: navegar no compromete nada y en la opción B
+   * la navegación no lleva relleno.
+   */
+  ctaClassName?: string;
+  /**
+   * Acciones que acompañan al CTA en la misma fila. Este bloque es el cierre de
+   * la portada y es donde vive el único relleno legítimo de la página —el de
+   * WhatsApp—, pero los botones se montan fuera para que las decisiones abiertas
+   * del sistema no se repartan por los componentes.
+   */
+  acciones?: React.ReactNode;
   pasos: PasoAsesor[];
 }
 
@@ -53,7 +66,15 @@ const CICLO_MS = 4000;
  * transición entre fotos (la regla global de `globals.css` colapsa la transición
  * de opacidad a instantánea). Queda el primer paso y se navega pulsando.
  */
-export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPasosProps) {
+export function AsesorPasos({
+  eyebrow,
+  titular,
+  parrafo,
+  cta,
+  ctaClassName,
+  acciones,
+  pasos,
+}: AsesorPasosProps) {
   const [activo, setActivo] = useState(0);
   /** El usuario pulsó un paso: toma el control y el auto-avance no vuelve. */
   const [detenido, setDetenido] = useState(false);
@@ -141,12 +162,18 @@ export function AsesorPasos({ eyebrow, titular, parrafo, cta, pasos }: AsesorPas
               </div>
             </div>
 
-            <MagneticLink
-              href={cta.href}
-              className={cn(buttonVariants({ variant: "primary" }), "mt-1 w-fit")}
-            >
-              {cta.label}
-            </MagneticLink>
+            {/* Fila de acciones: el CTA del bloque y lo que le acompañe. A 375
+                envuelve; los botones miden 48 de alto y el gap los separa lo
+                mismo en las dos direcciones. */}
+            <div className="mt-1 flex flex-wrap items-center gap-4">
+              <MagneticLink
+                href={cta.href}
+                className={cn(ctaClassName ?? buttonVariants({ variant: "primary" }), "w-fit")}
+              >
+                {cta.label}
+              </MagneticLink>
+              {acciones}
+            </div>
           </div>
 
           {/*

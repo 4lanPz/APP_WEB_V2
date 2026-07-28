@@ -22,6 +22,15 @@ export interface HeroProps {
   primaryCta?: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
   /**
+   * Clases del CTA principal, para sustituir el `primary` de hoy sin tocar las
+   * otras seis cabeceras. Existe por el sistema de botones nuevo: en la portada
+   * ese CTA pasa a `contorno` —opción B, la navegación nunca lleva relleno— y
+   * el resto de páginas se quedan como están hasta que se apruebe.
+   *
+   * Sin valor, el hero pinta exactamente lo de siempre.
+   */
+  primaryCtaClassName?: string;
+  /**
    * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
    * de heroes se quedan con su foto de slot.
    */
@@ -78,6 +87,7 @@ export function Hero({
   subhead,
   primaryCta,
   secondaryCta,
+  primaryCtaClassName,
   video = false,
   imagen,
 }: HeroProps) {
@@ -162,7 +172,7 @@ export function Hero({
             {primaryCta && (
               <MagneticLink
                 href={primaryCta.href}
-                className={buttonVariants({ variant: "primary" })}
+                className={primaryCtaClassName ?? buttonVariants({ variant: "primary" })}
               >
                 {primaryCta.label}
               </MagneticLink>
