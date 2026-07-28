@@ -30,13 +30,41 @@
  *  3. Contraste de TEXTO: se compone el color resuelto sobre CADA píxel de
  *     fondo de la máscara y se reporta el peor. Componer en vez de leer la
  *     captura evita que el antialiasing del borde del glifo invente mínimos.
- *  4. LÍMITE del control (WCAG 1.4.11): se recorre el perímetro; en cada punto
- *     se compara el píxel de dentro (borde y relleno) con el de fuera a 4px, y
- *     se toma el mejor de los dos —un botón puede estar delimitado por su
- *     relleno O por su borde—. El límite del botón es el peor de esos puntos.
+ *  4. LÍMITE del control (WCAG 1.4.11): se recorre el perímetro. De FUERA se
+ *     muestrea el píxel real de la página a 4px; de DENTRO no se lee la
+ *     captura, se componen los colores DECLARADOS del relleno y del borde
+ *     sobre ese fondo. En cada punto vale el mejor de los dos —un botón puede
+ *     estar delimitado por su relleno O por su borde— y el límite es el decil
+ *     inferior de los puntos, no el mínimo estricto.
  *  5. Umbral por tamaño real: 3:1 si ≥24px o ≥18,66px con peso ≥700; 4,5:1 en
  *     el resto. Los controles de solo icono van contra el mínimo no textual de
  *     3:1.
+ *
+ * SI TE SALE UN 1,00:1, ES UN FALLO DEL ARNÉS Y YA NO DEBERÍA PASAR
+ * Hubo una tanda de lecturas de 1,00:1 en botones que a mano miden 5,15:1 y
+ * 15,7:1. Todas venían de leer el interior de la captura: acertar el píxel de
+ * un filete de 1px depende del redondeo del rectángulo, del antialiasing de la
+ * esquina y de que nada se esté moviendo, y al fallar se leía el mismo plano
+ * por dentro y por fuera. Desde que el interior se compone (punto 4) no puede
+ * volver a ocurrir. Un 1,00:1 hoy significa que el relleno y el borde son
+ * literalmente del color del fondo, y eso sí es un fallo de verdad.
+ *
+ * LOS CINCO FALLOS QUE TUVO ESTE ARNÉS, POR SI VUELVEN
+ *  · `fullPage` redimensiona el viewport, y con medidas en `vh` la maqueta
+ *    entera se desplaza respecto a los rectángulos del navegador.
+ *  · Los puntos del perímetro caían en las esquinas y muestreaban fuera.
+ *  · El borde se leía a 1px de profundidad, que en un filete de 1px ya es
+ *    relleno.
+ *  · Un `data-*` para reidentificar controles sobrevive a los re-renders de
+ *    React sobre nodos reutilizados: el mapa de Contacto le prestaba su
+ *    rectángulo al botón de enviar.
+ *  · `srv.kill()` no mata el `next start` de dentro del `npx`, así que quedaban
+ *    servidores viejos sirviendo builds cuyo CSS ya no existe y las páginas se
+ *    medían SIN ESTILOS. De ahí la comprobación de salud del tema.
+ *
+ * Los tres primeros daban suspensos falsos a gritos; los dos últimos, en
+ * silencio. Si tocas la medición, comprueba a mano un botón que sepas que está
+ * bien antes de creerte una lista de fallos.
  *
  * Además audita que no quede NINGÚN control con el azul de marca de relleno ni
  * con texto claro sobre azul.
@@ -65,7 +93,10 @@ const RUTAS = [
   "/politica-datos",
 ];
 
-const ANCHOS = [375, 1440];
+const ANCHOS = (process.env.ANCHOS || "375,1440").split(",").map(Number);
+
+/** `RUTAS=/empresa,/productos npm run botones` para iterar sobre unas pocas. */
+const SOLO = process.env.RUTAS ? process.env.RUTAS.split(",") : null;
 
 /** Azul de marca, para la auditoría de rellenos. */
 const BRAND = [51, 162, 220];
@@ -175,6 +206,11 @@ function recoger() {
         r.left >= 2 &&
         r.right <= window.innerWidth - 2,
       color: resolver(cs.color),
+      /* Colores DECLARADOS del límite. El barrido de píxeles se usa solo para
+         el fondo de fuera; el de dentro se compone a partir de estos. */
+      relleno: resolver(cs.backgroundColor),
+      borde: resolver(cs.borderTopColor),
+      anchoBorde: parseFloat(cs.borderTopWidth) || 0,
       fs: parseFloat(cs.fontSize) || 16,
       fw: parseInt(cs.fontWeight, 10) || 400,
       soloIcono: texto === "",
@@ -328,11 +364,19 @@ function medirControl(A, B, info) {
   let queLimite = "";
   const puntos = [];
   /*
-   * Los extremos del recorrido NO llegan a las esquinas. Con t de 0 a 1 el
-   * punto de la arista superior caía en x0+w —ya fuera de la caja por la
-   * derecha—, así que «dentro» y «fuera» leían los dos el fondo de la página y
-   * el cociente salía 1,00:1. Como el límite es el PEOR de los puntos, ese
-   * único punto envenenado suspendía todos los botones del sitio.
+   * EL LÍMITE NO SE LEE DE LOS PÍXELES DE DENTRO, se compone.
+   *
+   * De fuera se muestrea la página de verdad —que es lo que obliga a
+   * fotografiar: sobre una cabecera con foto el fondo no se puede deducir—.
+   * De dentro se usan los colores DECLARADOS del relleno y del borde,
+   * compuestos sobre ese fondo real.
+   *
+   * Leer también el interior de la captura era el origen de las lecturas de
+   * 1,00:1 en botones que a mano miden 5,15:1 y 15,7:1: acertar el píxel de un
+   * filete de 1px depende del redondeo del rectángulo, del antialiasing de la
+   * esquina y de que nada se esté moviendo, y cuando se falla se lee el mismo
+   * plano por dentro y por fuera. Componiendo, el interior deja de depender de
+   * la geometría y el exterior sigue siendo el fondo real.
    */
   const N = 12;
   for (let i = 1; i < N; i++) {
@@ -348,45 +392,22 @@ function medirControl(A, B, info) {
   for (const p of puntos) {
     const fuera = px(B.data, p.x + p.dx * 4, p.y + p.dy * 4);
     if (!fuera) continue;
-
-    /*
-     * El borde se barre en los TRES primeros píxeles hacia dentro, no en uno.
-     * Leyendo solo a 1px, en un filete de 1px se cae ya en el relleno: los
-     * contornos de hero salían a 1,00:1 —fondo contra el mismo fondo— cuando su
-     * filete de papel está a 4,89:1. Con el barrido se absorben además el
-     * redondeo del rectángulo y los bordes de 2px.
-     */
     let mejor = 0;
     let que = "";
-    for (const d of [0, 1, 2]) {
-      const c = px(B.data, p.x - p.dx * d, p.y - p.dy * d);
-      if (!c) continue;
-      const r = ratio(c, fuera);
-      if (r > mejor) {
-        mejor = r;
-        que = "borde";
-      }
+    if (info.relleno.alpha > 0.05) {
+      const v = ratio(sobre(info.relleno, fuera), fuera);
+      if (v > mejor) { mejor = v; que = "relleno"; }
     }
-    const relleno = px(B.data, p.x - p.dx * 10, p.y - p.dy * 10);
-    if (relleno) {
-      const r = ratio(relleno, fuera);
-      if (r > mejor) {
-        mejor = r;
-        que = "relleno";
-      }
+    if (info.anchoBorde > 0 && info.borde.alpha > 0.05) {
+      const v = ratio(sobre(info.borde, fuera), fuera);
+      if (v > mejor) { mejor = v; que = "borde"; }
     }
     if (que) valores.push({ v: mejor, que });
   }
 
-  /*
-   * El límite se reporta como el DECIL INFERIOR de los puntos del perímetro, no
-   * como el mínimo estricto. El mínimo lo decide un solo píxel, y basta con que
-   * uno caiga en una esquina redondeada, en la sombra de un elemento vecino o a
-   * medio frame de una animación para suspender un botón que está a 15:1 en
-   * todo su contorno —pasó con el envío de Contacto—. Un borde realmente débil
-   * falla a lo largo de todo el perímetro, no en un punto: las cabeceras daban
-   * 2,0-2,8:1 de forma consistente y el decil las delata igual.
-   */
+  /* Decil inferior y no mínimo estricto: un solo punto que caiga en la sombra
+     de un vecino no debe suspender un botón bien delimitado en todo su
+     contorno. Un borde realmente débil falla a lo largo del perímetro entero. */
   valores.sort((a, b) => a.v - b.v);
   const peor = valores[Math.floor(valores.length * 0.1)] ?? valores[0];
   const peorLimite = peor ? peor.v : Infinity;
@@ -437,7 +458,7 @@ async function main() {
       });
       const page = await ctx.newPage();
 
-      for (const ruta of RUTAS) {
+      for (const ruta of SOLO ?? RUTAS) {
         await prepararPagina(page, BASE + ruta);
 
         const vistas = new Set();

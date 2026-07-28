@@ -77,17 +77,34 @@ export function FondoHero({
       {/*
        * Legibilidad en dos capas, en este orden a propósito:
        *
-       *  1. Suelo plano de tinta al 32%. El degradado baja al 15% en el extremo
+       *  1. Suelo plano de tinta. El degradado baja al 15% en el extremo
        *     derecho, y sobre una foto cualquiera eso no basta. Sin este suelo el
        *     contraste dependería de qué imagen se cargue, y quien la carga no lo
        *     va a medir.
        *  2. El degradado, sin tocar: es el tratamiento que ya usan los heroes y
        *     lo que mantiene el peso a la izquierda, bajo el titular.
        *
-       * Medido sobre foto real de planta: 10,9:1 en el titular y 6,7:1 en la
-       * zona más clara. AA con margen incluso donde la foto casi es blanca.
+       * EL SUELO SUBE SOLO EN MÓVIL. `object-fit: cover` recorta distinto según
+       * la forma del viewport: a 375 la banda es casi cuadrada y encuadra una
+       * zona más clara de la foto justo donde caen la migaja y el CTA. Medido
+       * con `npm run botones`, a 375 el texto papel del CTA se quedaba entre
+       * 3,98:1 y 4,41:1 y la migaja `paper/60` entre 4,12:1 y 4,21:1 —por
+       * debajo del 4,5:1— mientras que a 1440 no fallaba ninguna de las seis
+       * cabeceras.
+       *
+       * Por eso el 32% se queda tal cual desde `tablet` (900px, el mismo
+       * breakpoint donde el sitio pasa a escritorio) y solo por debajo sube.
+       * Oscurecer también el escritorio sería deshacer lo que se ganó al
+       * retirar la rejilla: que la fotografía se vea.
+       *
+       * El 45% se buscó midiendo, no a ojo. El caso más apretado es la migaja
+       * de Microfibra, que es `paper/60` y por tanto lo peor que hay: 40% la
+       * dejaba en 4,36:1 y 42% en 4,43:1, los dos por debajo. Pasa a partir del
+       * 44%; se deja en 45 porque las fotos de cabecera son slots que se
+       * reemplazan y quedarse clavado en el umbral significa que la siguiente
+       * foto que entre lo rompe sin que nadie se entere.
        */}
-      <div className="absolute inset-0 bg-ink/[0.32]" />
+      <div className="absolute inset-0 bg-ink/45 tablet:bg-ink/[0.32]" />
       <div className="absolute inset-0" style={{ backgroundImage: DEGRADADO_HERO }} />
     </div>
   );

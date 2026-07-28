@@ -54,6 +54,17 @@ export function BotonWhatsApp() {
          * pero con su propio margen inferior.
          */
         "fixed bottom-4 right-4 z-900 flex size-14 items-center justify-center sm:bottom-6 sm:right-6 sm:size-15",
+        /*
+         * ARO DE PAPEL. El flotante no tiene detrás una superficie conocida:
+         * pasa por encima de fotos, del mapa de Contacto y de cualquier
+         * sección. Medido con `npm run botones`, sobre fondos de luminancia
+         * parecida a la del verde el límite del control caía a 1,07:1 —el
+         * relleno se confundía con lo que hubiera debajo—. Con el aro, el
+         * botón se separa siempre: sobre fondo medio u oscuro lo delimita el
+         * aro, y sobre fondo claro el propio verde (4,38:1 contra `paper`).
+         * La sombra no cuenta para 1.4.11, así que no bastaba con ella.
+         */
+        "border-2 border-paper",
         // eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena, no es color de paleta
         "rounded-md bg-[#008069] text-white shadow-[0_4px_20px_rgba(28,25,23,0.22)]",
         "transition-[background-color,transform,box-shadow] duration-220 ease-asentar",
