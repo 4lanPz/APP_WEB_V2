@@ -28,12 +28,6 @@ export interface AsesorPasosProps {
   titular: string[];
   parrafo: string;
   cta: { label: string; href: string };
-  /**
-   * Acciones que acompañan al CTA en la misma fila. Este bloque es el cierre de
-   * la portada y es donde vive su único relleno legítimo, el de WhatsApp: el
-   * CTA de al lado solo navega y va en contorno.
-   */
-  acciones?: React.ReactNode;
   pasos: PasoAsesor[];
 }
 
@@ -64,7 +58,6 @@ export function AsesorPasos({
   titular,
   parrafo,
   cta,
-  acciones,
   pasos,
 }: AsesorPasosProps) {
   const [activo, setActivo] = useState(0);
@@ -154,9 +147,9 @@ export function AsesorPasos({
               </div>
             </div>
 
-            {/* Fila de acciones: el CTA del bloque y lo que le acompañe. A 375
-                envuelve; los botones miden 48 de alto y el gap los separa lo
-                mismo en las dos direcciones. */}
+            {/* Fila del CTA. Un solo control: el bloque solo navega al asesor,
+                así que va en contorno y sin relleno que le compita. Se mantiene
+                `flex-wrap` porque a 375 el texto del CTA envuelve. */}
             <div className="mt-1 flex flex-wrap items-center gap-4">
               <MagneticLink
                 href={cta.href}
@@ -164,7 +157,6 @@ export function AsesorPasos({
               >
                 {cta.label}
               </MagneticLink>
-              {acciones}
             </div>
           </div>
 

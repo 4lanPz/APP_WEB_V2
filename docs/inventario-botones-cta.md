@@ -284,6 +284,14 @@ Con la ironía de que es la página cuyo objetivo es que la persona actúe. Y de
 el único hero cuyo CTA **sí cumple contraste** (7,56:1), precisamente por no ser el
 botón azul.
 
+> **Resuelto.** Este apartado es el estado ANTERIOR al sistema de botones y se conserva
+> como diagnóstico; las medidas de arriba son las de entonces. Al aplicar el sistema se
+> convirtió `primaryCta` a `contorno` y Contacto, que no pasaba ninguno, se quedó con su
+> enlace de texto: fuera del patrón de las otras seis cabeceras. Ahora pasa su CTA por
+> `primaryCta` y el prop `secondaryCta` **se ha retirado de `Hero`** —era el hueco que
+> permitía la divergencia—. Medido de nuevo con `npm run botones`: **5,20:1 a 375 y
+> 7,22:1 a 1440** de texto, y 5,50:1 / 7,83:1 de límite de borde.
+
 Las otras seis vistas no usan `<Hero>`: Texturizado y Athletic montan
 `PreparacionPage`/`FichaSubcategoria`, Blancos tiene cabecera propia, y el asesor
 virtual y Política de datos no tienen cabecera con CTA.

@@ -34,7 +34,7 @@ export default function ContactoPage() {
         eyebrow="Contacto · Escríbenos o visita un local · Ecuador"
         headlineLines={["Hablemos de tu", "tela, tu color,", "tu referencia."]}
         subhead="Detrás del formulario hay un asesor comercial, no un buzón. Cuéntanos qué buscas —uso, gramaje, tono— y te respondemos con criterio de taller. O acércate a cualquiera de nuestros locales en Ecuador."
-        secondaryCta={{ label: "Ver nuestros locales →", href: "#mapa" }}
+        primaryCta={{ label: "Ver nuestros locales →", href: "#mapa" }}
       />
 
       <section id="escribenos" className="py-16 sm:py-24">

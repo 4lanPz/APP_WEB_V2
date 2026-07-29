@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { Container } from "./Container";
 import { HeroVideo } from "./HeroVideo";
@@ -19,8 +18,19 @@ export interface HeroProps {
   /** Cada elemento es una línea del titular (para la máscara con stagger 90ms). */
   headlineLines: React.ReactNode[];
   subhead: string;
+  /**
+   * El único CTA de la cabecera. Se pinta en `contorno` (ver abajo).
+   *
+   * NO REPONER EL SEGUNDO CTA
+   * Aquí hubo un `secondaryCta` que se pintaba como enlace de texto. Lo usaba
+   * una sola página —Contacto, y sin pasar `primaryCta`—, así que al aplicar el
+   * sistema de botones se convirtió la vía principal y ese hero se quedó con su
+   * enlace de texto mientras las otras seis cabeceras pasaban a contorno. El
+   * prop era la trampa: ofrecía un segundo hueco cuyo tratamiento estaba escrito
+   * a mano y fuera del sistema. Si algún día una cabecera necesita dos destinos,
+   * la segunda va también en `contorno` y se decide entonces, no por defecto.
+   */
   primaryCta?: { label: string; href: string };
-  secondaryCta?: { label: string; href: string };
   /**
    * Fondo de vídeo en bucle (Motion v1 §06). Solo lo usa la portada; el resto
    * de heroes se quedan con su foto de slot.
@@ -41,7 +51,7 @@ export interface HeroProps {
 /**
  * Hero oscuro reutilizado en Home, Empresa, Productos, Categoria Microfibra,
  * Camisetas, Contacto, Subcategoria Dortmund Plus: fondo de tinta con foto a
- * sangre, eyebrow/migaja, titular grande, subtítulo, hasta dos CTA.
+ * sangre, eyebrow/migaja, titular grande, subtítulo y un CTA de contorno.
  *
  * Secuencia orquestada (`HERO_SECUENCIA` en lib/motion.ts):
  *   0ms fondo ya visible · 150ms eyebrow · 300ms titular desenrolla por líneas
@@ -77,7 +87,6 @@ export function Hero({
   headlineLines,
   subhead,
   primaryCta,
-  secondaryCta,
   video = false,
   imagen,
 }: HeroProps) {
@@ -148,7 +157,7 @@ export function Hero({
           {subhead}
         </motion.p>
 
-        {(primaryCta || secondaryCta) && (
+        {primaryCta && (
           <motion.div
             className="mt-2 flex flex-wrap items-center gap-6"
             initial={{ opacity: 0, y: 16 }}
@@ -166,19 +175,12 @@ export function Hero({
               oscura —borde y texto en papel— sin que este componente sepa nada
               del tono.
             */}
-            {primaryCta && (
-              <MagneticLink
-                href={primaryCta.href}
-                className={buttonVariants({ variant: "contorno" })}
-              >
-                {primaryCta.label}
-              </MagneticLink>
-            )}
-            {secondaryCta && (
-              <Link href={secondaryCta.href} className={buttonVariants({ variant: "enlace" })}>
-                {secondaryCta.label}
-              </Link>
-            )}
+            <MagneticLink
+              href={primaryCta.href}
+              className={buttonVariants({ variant: "contorno" })}
+            >
+              {primaryCta.label}
+            </MagneticLink>
           </motion.div>
         )}
       </Container>

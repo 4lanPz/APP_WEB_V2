@@ -245,7 +245,7 @@ export function PropuestaBotones() {
         nombre="Enlace de texto escrito a mano → absorbido por «enlace»"
         porQue={
           <>
-            Es el <code className="font-mono text-mono">secondaryCta</code> del hero y los «Ver
+            Era el <code className="font-mono text-mono">secondaryCta</code> del hero y los «Ver
             ficha →» de las tarjetas: mismo gesto, tres implementaciones distintas y ninguna
             variante. Su hover en <code className="font-mono text-mono">text-brand</code> falla
             sobre claro.

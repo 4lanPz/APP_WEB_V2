@@ -13,7 +13,16 @@
   --color-ink: #1c1917; /* texto principal, títulos */
 
   /* ---- Color · marca Azul Padilla (disciplinado y restringido: identifica, no decora) ---- */
-  --color-brand: #33a2dc; /* logo, CTA principal (máx. uno por pantalla), estado activo */
+  /*
+   * YA NO ES RELLENO DE BOTÓN. Decía "CTA principal (máx. uno por pantalla)":
+   * la norma se quedó colgada de este token cuando el sistema de botones dejó
+   * de usarlo como fondo, y así se cumplía sola sin vigilar nada. La norma vive
+   * ahora donde vive el peso — el relleno—, en el bloque SUPERFICIE de abajo.
+   * Aquí `brand` es identidad y señalización: logo, viñetas, numeración de
+   * paso, estado activo. Como texto sobre claro se queda en 2,56:1, así que
+   * para escribir se usa `brand-ink`.
+   */
+  --color-brand: #33a2dc; /* logo, viñetas, estado activo — nunca relleno de CTA */
   --color-brand-deep: #0d2937; /* contornos de logo, fondos oscuros de contraste puntual */
   /*
    * Azul de TEXTO sobre superficie clara. No es un tono decorativo: existe
@@ -181,6 +190,40 @@
  * `superficie-clara` / `superficie-oscura` son la vía de escape para las bandas
  * cuyo fondo no lo pinta una de esas cuatro utilidades (una foto a sangre, un
  * degradado). Van al final para ganar por orden a igual especificidad.
+ *
+ * ──────────────────────────────────────────────────────────────────────────
+ *  NORMA DE PESO — UN SOLO RELLENO DE CUERPO POR PANTALLA
+ * ──────────────────────────────────────────────────────────────────────────
+ *
+ * Esta norma estaba escrita sobre `--color-brand` ("CTA principal, máx. uno
+ * por pantalla") y ahí no vigilaba nada, porque ese token dejó de ser fondo de
+ * botón. El peso lo da el RELLENO, así que la norma vive aquí, junto a las
+ * variables que lo pintan.
+ *
+ * Rellenar es declarar COMPROMISO, no importancia. Solo lo llevan las dos
+ * variantes que comprometen algo (`buttonVariants.ts`): `solida` —enviar
+ * datos— y `whatsapp` —salir del sitio a una conversación—. La navegación no
+ * lleva relleno por importante que sea, heroes incluidos: van en `contorno`.
+ *
+ * LA REGLA, en dos partes, porque el flotante no se puede contar igual:
+ *
+ *  1. En el CUERPO de una vista, como máximo UN relleno. Medido con
+ *     `npm run botones`, hoy se cumple en las trece: cuatro `solida` (los
+ *     cuatro envíos de formulario) y una `whatsapp` (el resultado del asesor,
+ *     que manda la recomendación ya escrita). Siete vistas no llevan ninguno.
+ *
+ *  2. El flotante de WhatsApp (`BotonWhatsApp.tsx`) está en las trece desde
+ *     `layout.tsx` y también es relleno. NO cuenta contra el punto 1 mientras
+ *     el gesto y el destino sean distintos de los del relleno de cuerpo: una
+ *     `solida` oscura que envía un formulario y un flotante verde que abre
+ *     WhatsApp son dos acciones distintas y conviven sin competir. Cuenta —y
+ *     entonces sobra uno de los dos— cuando coinciden. Fue exactamente el caso
+ *     de la portada: un botón `whatsapp` de cuerpo con el mismo verde y el
+ *     mismo `WHATSAPP_HREF` genérico que el flotante. Se retiró; el flotante
+ *     ya lo cubría.
+ *
+ * Dicho corto: si en una pantalla hay dos rellenos, tienen que llevar a sitios
+ * distintos y pedir cosas distintas. Si no, es duplicado, no jerarquía.
  */
 @layer components {
   :root,

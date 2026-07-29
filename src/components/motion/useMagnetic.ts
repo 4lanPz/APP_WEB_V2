@@ -8,8 +8,24 @@ import { DURATION, MAGNETIC_STRENGTH, CSS_EASE_ASENTAR } from "@/lib/motion";
  * Técnica ausente del documento — verificada en el código real
  * (data-magnetic): el botón se desplaza levemente hacia el cursor
  * (translate proporcional al offset del centro, fuerza 0.28) y vuelve a su
- * lugar al salir (300ms, curva "asentar"). Solo se aplica a los CTA
- * primarios (bg-brand) en el código real — nunca a secundario/ghost.
+ * lugar al salir (300ms, curva "asentar").
+ *
+ * DÓNDE SE CONECTA, HOY. Este comentario decía "solo a los CTA primarios
+ * (bg-brand), nunca a secundario/ghost": esas tres variantes ya no existen y
+ * `bg-brand` no es relleno de ningún botón. Lo que hay ahora son DOS caminos,
+ * y no aplican el mismo criterio:
+ *
+ *  - `Button.tsx` (elementos `<button>`) lo condiciona a `variant === "solida"`
+ *    — el gesto acompaña al compromiso, que es enviar un formulario.
+ *  - `MagneticLink.tsx` (elementos `<Link>`) lo aplica SIEMPRE, sin mirar la
+ *    variante. Sus usos de hoy son siete `contorno` (los heroes, el cierre de
+ *    Empresa, Productos, Contacto, Blancos y el bloque del asesor de portada)
+ *    y un `enlace` (`FichaSubcategoria`).
+ *
+ * Es decir: el gesto no está atado a la variante, está atado al elemento. Se
+ * deja escrito porque no es lo que parece desde `Button.tsx`. Si algún día se
+ * unifica, el sitio a tocar es `MagneticLink`, no este archivo — aquí solo
+ * vive la mecánica del desplazamiento.
  *
  * El offset inicial siempre es {0,0} en servidor y cliente (mousemove solo
  * puede ocurrir tras hidratar), así que ramificar la lógica sobre

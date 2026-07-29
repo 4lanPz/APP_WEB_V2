@@ -98,6 +98,16 @@ const ANCHOS = (process.env.ANCHOS || "375,1440").split(",").map(Number);
 /** `RUTAS=/empresa,/productos npm run botones` para iterar sobre unas pocas. */
 const SOLO = process.env.RUTAS ? process.env.RUTAS.split(",") : null;
 
+/**
+ * `DETALLE=1` imprime la medida de TODOS los controles, no solo la de los que
+ * suspenden. Por defecto un aprobado no deja número, y entonces "cumple" es lo
+ * único que queda escrito: no se puede saber si un control pasó con 12:1 o con
+ * 4,51:1, que es la diferencia entre un margen y un empate. Hace falta cada vez
+ * que se cambia un control sobre foto —el recorte de `object-fit` decide el
+ * fondo y el fondo decide la medida— y para poder citar la cifra en un informe.
+ */
+const DETALLE = process.env.DETALLE === "1";
+
 /** Azul de marca, para la auditoría de rellenos. */
 const BRAND = [51, 162, 220];
 
@@ -537,6 +547,15 @@ async function main() {
             medidos++;
             const malTexto = l.texto !== null && l.texto < l.umbralTexto - 0.005;
             const malLimite = l.limite !== null && l.limite < 3 - 0.005;
+            if (DETALLE) {
+              const t = l.texto === null ? "     —" : `${f(l.texto)}:1`;
+              const b = l.limite === null ? "     —" : `${f(l.limite)}:1`;
+              console.log(
+                `     ${ruta}@${ancho}  texto ${t.padStart(8)} /${f(l.umbralTexto)}` +
+                  `  ${(l.queLimite || "límite").padEnd(7)} ${b.padStart(8)} /3,00` +
+                  `  «${info.texto || "(solo icono)"}»`,
+              );
+            }
             if (malTexto || malLimite) fallos.push({ ruta, ancho, info, l, malTexto, malLimite });
           }
         }

@@ -125,7 +125,7 @@ export const PROPUESTA: Record<Variante, Record<Tono, Record<Estado, string>>> =
   /**
    * ENLACE — terciario, dentro del flujo de lectura. Absorbe el `ghost` de hoy
    * y también los enlaces de texto escritos a mano que hacen de CTA (el
-   * `secondaryCta` del hero, los "Ver ficha →" de las tarjetas). Hoy ese mismo
+   * `secondaryCta` que tenía el hero, los "Ver ficha →" de las tarjetas). Ese mismo
    * gesto está implementado de tres formas distintas.
    *
    * El hover NO vuelve a `text-brand`: sobre claro da 2,53:1. Se marca con el
@@ -225,7 +225,7 @@ export const HOY: Record<string, Record<Tono, Record<Estado, string>>> = {
       inhabilitado: `${BASE_ENLACE} border-transparent text-ink opacity-40`,
     },
   },
-  /** El `secondaryCta` del hero y los "Ver ficha →": escritos a mano, sin variante. */
+  /** El `secondaryCta` que tenía el hero y los "Ver ficha →": escritos a mano, sin variante. */
   enlaceTexto: {
     claro: {
       reposo: "font-sans text-body-s font-medium text-ink",
