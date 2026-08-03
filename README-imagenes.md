@@ -110,6 +110,30 @@ de pantalla.
 En `src/data/slots-imagen.ts`, a `SLOTS_UNICOS`. Los de tela salen solos de
 `taxonomy.ts`: añadir una tela al catálogo crea su slot sin tocar nada.
 
+### Decir si la foto es la buena — `PROCEDENCIA_FOTO`
+
+Que un hueco tenga archivo no quiere decir que esté resuelto: media docena de
+las que hay puestas son de maqueta. Por eso el registro lleva, al final de
+`slots-imagen.ts`, la procedencia de cada foto publicada: `definitiva` si es
+material real, o `maqueta` / `relleno` / `generada` / `banco` si hay que
+reemplazarla.
+
+**Una foto que no figure ahí cuenta como `sin-clasificar`, y eso es
+provisional.** Es a propósito: así una foto nueva entra sola en la pila de
+revisión y el silencio nunca se lee como "es la buena". Cuando pongas una,
+clasifícala — con la evidencia en el campo `segun`, que es lo que se imprime en
+el documento para que se pueda comprobar.
+
+Los dos documentos de fotografía se ordenan por eso:
+
+| Documento | Para qué |
+|---|---|
+| `docs/requisitos-fotografia.md` | agrupado por tipo de toma: cada bloque es una sesión. Es la vista de salir a fotografiar |
+| `docs/requisitos-fotografia-por-pagina.md` | agrupado por página y sección. Es la vista de revisar el sitio |
+
+Los dos listan los mismos huecos en tres estados —falta, provisional,
+definitiva— y salen del mismo comando.
+
 ---
 
 ## 2. Vídeo del hero
@@ -181,7 +205,7 @@ si el navegador no sabe reproducir ninguno de los dos formatos.
 |---|---|
 | `npm run imagenes` | procesa `entrega/` y actualiza el manifiesto |
 | `npm run imagenes:slots` | lista los nombres válidos en terminal |
-| `npm run imagenes:requisitos` | genera `docs/requisitos-fotografia.md` — lo que se le manda a marketing |
+| `npm run imagenes:requisitos` | genera los dos documentos de fotografía — lo que se le manda a marketing |
 | `npm run video -- <archivo>` | comprime el vídeo del hero y saca el póster |
 | `npm run catalogo` | verifica el catálogo y genera los pedidos pendientes |
 | `npm run imagenes:telas-pw` | regenera las fotos que salen de `Telas_PW/` |

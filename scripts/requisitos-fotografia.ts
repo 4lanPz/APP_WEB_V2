@@ -5,10 +5,19 @@
  *   npm run imagenes:requisitos  ->  docs/requisitos-fotografia.md
  *                                ->  docs/requisitos-fotografia-por-pagina.md
  *
- * Es el inventario de los slots VACÍOS —los que faltan— agrupados por el tipo de
- * toma que requieren, porque con 88 huecos una lista plana no es un encargo: es
- * una lista de tareas sin prioridad que nadie sabe por dónde empezar. Agrupados
- * por tipo, cada bloque es una sesión de fotos.
+ * Es el inventario de TODOS los huecos de imagen del sitio en sus tres estados
+ * —falta, provisional, definitiva—, agrupado por el tipo de toma que requiere
+ * cada uno: con casi cien fotos por conseguir, una lista plana no es un encargo
+ * sino una lista de tareas sin prioridad por la que nadie sabe empezar.
+ * Agrupadas por tipo, cada bloque es una sesión de fotos.
+ *
+ * LOS TRES ESTADOS, y por qué no bastaba con "lleno" y "vacío". El manifiesto
+ * solo sabe si el archivo existe, así que una imagen puesta para poder maquetar
+ * contaba igual que el macro real de la tela: el documento la daba por hecha y
+ * dejaba de pedirla. Eso dejaba fuera del encargo justo el material que hay que
+ * reemplazar antes de publicar. El estado sale de cruzar el manifiesto con
+ * `PROCEDENCIA_FOTO` del registro (`estadoHueco`), y una foto sin clasificar
+ * cuenta como provisional: hasta que alguien la mire no se puede dar por buena.
  *
  * LAS DOS VISTAS SON EL MISMO CONJUNTO DE HUECOS, ordenado de dos formas, y
  * responden a dos preguntas distintas que se hacen en dos momentos distintos:
@@ -52,9 +61,65 @@ import {
   SLOTS_HITOS,
   tituloPagina,
   ordenPagina,
+  estadoHueco,
+  procedenciaDe,
+  type EstadoHueco,
   type SlotImagen,
 } from "../src/data/slots-imagen";
 import { SLOTS_LLENOS } from "../src/data/imagenes.generado";
+
+/** El estado de un hueco, resuelto contra el manifiesto. */
+function estado(s: SlotImagen): EstadoHueco {
+  return estadoHueco(s.id, SLOTS_LLENOS.has(s.id));
+}
+
+/** Los que hay que fotografiar: falta la foto, o la que hay no vale. */
+function esPendiente(s: SlotImagen): boolean {
+  return estado(s) !== "definitiva";
+}
+
+/**
+ * El rótulo de estado que se imprime pegado a cada hueco. Va en mayúsculas y
+ * delante del nombre del archivo a propósito: es lo primero que hay que saber
+ * de un hueco, y a media lista uno deja de mirar en qué bloque estaba.
+ */
+function rotulo(s: SlotImagen): string {
+  const e = estado(s);
+  if (e === "falta") return "**FALTA**";
+  if (e === "definitiva") return "**DEFINITIVA**";
+  const p = procedenciaDe(s.id)?.procedencia;
+  return p === "sin-clasificar"
+    ? "**PROVISIONAL · PENDIENTE DE CLASIFICAR**"
+    : "**PROVISIONAL**";
+}
+
+/**
+ * Por qué una foto que ya existe no cierra su hueco. Se imprime con la
+ * evidencia detrás —el commit, el md5, la receta— para que quien lo lea pueda
+ * comprobarlo en vez de creérselo: es el dato que decide si se repite una
+ * sesión, y una afirmación sin respaldo no aguanta esa decisión.
+ */
+function motivoProvisional(s: SlotImagen): string[] {
+  const foto = procedenciaDe(s.id);
+  if (!foto) {
+    return [
+      "> **⚠ HAY FOTO, PERO NO CONSTA DE DÓNDE SALE.** No está clasificada en " +
+        "`PROCEDENCIA_FOTO`. Hasta que alguien la mire no se puede dar por buena.",
+    ];
+  }
+  const que: Record<string, string> = {
+    maqueta: "Puesta solo para maquetar o valorar el tratamiento.",
+    relleno: "Relleno, para que el hueco no se viera vacío.",
+    generada: "Generada por IA.",
+    banco: "De banco de imágenes.",
+    "sin-clasificar": "NO CONSTA de dónde salió: hay que mirarla antes de decidir.",
+  };
+  const cabecera =
+    foto.procedencia === "sin-clasificar"
+      ? "**⚠ PENDIENTE DE CLASIFICAR.**"
+      : "**⚠ HAY FOTO, PERO ES PROVISIONAL.**";
+  return [`> ${cabecera} ${que[foto.procedencia]} Según: ${foto.segun}`];
+}
 
 const RAIZ = join(import.meta.dirname, "..");
 const SALIDA = join(RAIZ, "docs", "requisitos-fotografia.md");
@@ -250,22 +315,34 @@ interface Clasificado {
   slots: SlotImagen[];
 }
 
-function clasificar(vacios: SlotImagen[]) {
+/**
+ * Reparte TODOS los slots en sus sesiones, no solo los que faltan: el documento
+ * lista los tres estados, así que una sesión tiene que poder enseñar también lo
+ * que ya está resuelto. Lo que cambia según el estado es cuánto se escribe de
+ * cada hueco, y eso lo decide `bloque()`.
+ */
+function clasificar(todos: SlotImagen[]) {
   const porGrupo: Clasificado[] = GRUPOS.map((grupo) => ({ grupo, slots: [] }));
   const sueltos: SlotImagen[] = [];
-  const sinClasificar: SlotImagen[] = [];
+  const sinTipoDeToma: SlotImagen[] = [];
+  const resueltasSueltas: SlotImagen[] = [];
 
-  for (const slot of vacios) {
+  for (const slot of todos) {
     const destino = porGrupo.find((g) => g.grupo.pertenece(slot));
     if (destino) {
       destino.slots.push(slot);
+    } else if (!esPendiente(slot)) {
+      // Ya resuelta y sin sesión con la que agruparse. No se pide, así que no
+      // tiene sentido meterla en el encargo: se lista al final para que el
+      // documento siga cuadrando con los 133.
+      resueltasSueltas.push(slot);
     } else if (slot.nota) {
       // Sin grupo pero con nota: el encargo se entiende igual.
       sueltos.push(slot);
     } else {
       // Sin grupo y sin nota. NO se adivina el tipo por el nombre ni por el
       // alt: se marca aparte para que alguien escriba la nota que falta.
-      sinClasificar.push(slot);
+      sinTipoDeToma.push(slot);
     }
   }
 
@@ -273,9 +350,46 @@ function clasificar(vacios: SlotImagen[]) {
     ordenPagina(a.pagina) - ordenPagina(b.pagina) || a.id.localeCompare(b.id);
   for (const g of porGrupo) g.slots.sort(orden);
   sueltos.sort(orden);
-  sinClasificar.sort(orden);
+  sinTipoDeToma.sort(orden);
+  resueltasSueltas.sort(orden);
 
-  return { porGrupo: porGrupo.filter((g) => g.slots.length), sueltos, sinClasificar };
+  return {
+    porGrupo: porGrupo.filter((g) => g.slots.length),
+    sueltos,
+    sinTipoDeToma,
+    resueltasSueltas,
+  };
+}
+
+/** Cuenta de los tres estados en un conjunto de huecos. */
+function cuenta(slots: SlotImagen[]) {
+  const n = { falta: 0, provisional: 0, definitiva: 0 };
+  for (const s of slots) n[estado(s)]++;
+  return n;
+}
+
+/**
+ * «1 provisionales» delata que el documento lo escribió una máquina, y con eso
+ * se le empieza a creer menos el resto.
+ */
+function conteo(n: ReturnType<typeof cuenta>): string {
+  return (
+    `${n.falta} ${n.falta === 1 ? "falta" : "faltan"} · ` +
+    `${n.provisional} provisional${n.provisional === 1 ? "" : "es"} · ` +
+    `${n.definitiva} definitiva${n.definitiva === 1 ? "" : "s"}`
+  );
+}
+
+/** Los que no se han podido clasificar: hay foto y no consta de dónde sale. */
+function sinClasificarProcedencia(slots: SlotImagen[]): SlotImagen[] {
+  return slots.filter(
+    (s) =>
+      estado(s) === "provisional" &&
+      procedenciaDe(s.id)?.procedencia !== "maqueta" &&
+      procedenciaDe(s.id)?.procedencia !== "relleno" &&
+      procedenciaDe(s.id)?.procedencia !== "generada" &&
+      procedenciaDe(s.id)?.procedencia !== "banco",
+  );
 }
 
 function ubicacion(s: SlotImagen): string {
@@ -288,7 +402,7 @@ function ficha(s: SlotImagen): string[] {
   // ficha convierte el bloque en ruido que se deja de leer.
   const vista = VISUALIZACION_SUELTA[s.id];
   return [
-    `#### \`${s.id}\``,
+    `#### ${rotulo(s)} \`${s.id}\``,
     "",
     `- **Nombre del archivo a entregar:** \`${s.id}.jpg\``,
     `- **Dónde va:** ${ubicacion(s)}`,
@@ -298,9 +412,10 @@ function ficha(s: SlotImagen): string[] {
     `- **Ancho mínimo de entrega:** ${s.ancho} px`,
     `- **Qué debe verse:** ${s.alt || "—"}`,
     ...(s.nota ? [`- **Nota:** ${s.nota}`] : []),
-    // Fuera de la lista y en negrita, a propósito: es lo único de la ficha que
+    // Fuera de la lista y en negrita, a propósito: son lo único de la ficha que
     // hay que resolver ANTES de ir a fotografiar, y como un punto más de la
-    // lista se lee al mismo nivel que el ancho de entrega.
+    // lista se leen al mismo nivel que el ancho de entrega.
+    ...(estado(s) === "provisional" ? ["", ...motivoProvisional(s)] : []),
     ...(s.porConfirmar
       ? ["", `> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** ${s.porConfirmar}`]
       : []),
@@ -310,40 +425,195 @@ function ficha(s: SlotImagen): string[] {
 
 function tabla(slots: SlotImagen[]): string[] {
   return [
-    "| Archivo a entregar | Dónde va | Ancho mín. | Qué debe verse |",
-    "|---|---|---|---|",
+    "| Estado | Archivo a entregar | Dónde va | Ancho mín. | Qué debe verse |",
+    "|---|---|---|---|---|",
     ...slots.map(
       (s) =>
-        `| \`${s.id}.jpg\` | ${tituloPagina(s.pagina)} | ${s.ancho} px | ${s.alt || "—"} |`,
+        `| ${rotulo(s)} | \`${s.id}.jpg\` | ${tituloPagina(s.pagina)} | ${s.ancho} px | ` +
+        `${s.alt || "—"} |`,
     ),
     "",
   ];
 }
 
+/**
+ * Las que ya están resueltas, en una línea cada una. No llevan ficha a
+ * propósito: no se piden, así que el encuadre y el ancho de entrega no le hacen
+ * falta a nadie. Están para que el bloque diga cuánto de la sesión queda hecho.
+ */
+function resueltas(slots: SlotImagen[]): string[] {
+  if (!slots.length) return [];
+  return [
+    `**Ya resueltas — ${slots.length}.** No se piden.`,
+    "",
+    ...slots.map((s) => `- \`${s.id}.jpg\` — ${tituloPagina(s.pagina)}`),
+    "",
+  ];
+}
+
 function bloque(grupo: Grupo, slots: SlotImagen[]): string[] {
+  // La sesión es lo PENDIENTE: lo que falta más lo que hay que repetir porque
+  // la foto que ocupa el hueco es provisional. Lo ya resuelto se lista al final
+  // del bloque, en una línea por foto.
+  const pendientes = slots.filter(esPendiente);
+  const hechas = slots.filter((s) => !esPendiente(s));
+  const n = cuenta(slots);
+
   const l: string[] = [
-    `## ${grupo.tipo} — ${slots.length} ${slots.length === 1 ? "foto" : "fotos"}`,
+    `## ${grupo.tipo} — ${pendientes.length} ${pendientes.length === 1 ? "foto" : "fotos"}`,
     "",
     grupo.resumen,
     "",
     `- **Se ve a:** ${grupo.seVeA}`,
     `- **Proporción:** ${grupo.proporcion}`,
+    `- **Estado:** ${conteo(n)}`,
     "",
   ];
-  if (grupo.formato === "tabla") {
+
+  if (!pendientes.length) {
+    l.push("**Sesión completa: no hay nada que pedir en este bloque.**", "");
+  } else if (grupo.formato === "tabla") {
     // La especificación sale de la nota del registro cuando todas la comparten.
     // Así lo que lee marketing y lo que dice `slots-imagen.ts` no pueden
     // divergir: son el mismo texto.
-    const comun = slots.every((s) => s.nota && s.nota === slots[0].nota)
-      ? slots[0].nota
+    const comun = pendientes.every((s) => s.nota && s.nota === pendientes[0].nota)
+      ? pendientes[0].nota
       : grupo.spec;
     if (comun) l.push(`**Qué se necesita, igual para todas:** ${comun}`, "");
-    l.push(...tabla(slots));
+    l.push(...tabla(pendientes));
+    // Las provisionales de un grupo de tabla no caben en la fila: el motivo y
+    // su evidencia son un párrafo. Van debajo, y solo si las hay.
+    for (const s of pendientes.filter((x) => estado(x) === "provisional")) {
+      l.push(`\`${s.id}.jpg\` —`, ...motivoProvisional(s), "");
+    }
   } else {
-    for (const s of slots) l.push(...ficha(s));
+    for (const s of pendientes) l.push(...ficha(s));
   }
+
+  l.push(...resueltas(hechas));
   l.push(`> Clasificadas según ${grupo.segun}`, "");
   return l;
+}
+
+/**
+ * La leyenda de los tres estados, en los dos documentos.
+ *
+ * Va arriba y no en un apéndice porque cambia lo que significa el documento:
+ * antes listaba lo que faltaba, y «tiene foto» se leía como «hecho». La mitad
+ * de las fotos que hay puestas son provisionales, así que esa lectura dejaba
+ * fuera del encargo justo el material que hay que reemplazar.
+ */
+function leyendaDeEstados(): string[] {
+  return [
+    "## Los tres estados",
+    "",
+    "Aquí están **todos** los huecos del sitio, tengan foto o no. Que un hueco",
+    "tenga imagen no quiere decir que esté resuelto:",
+    "",
+    "| Estado | Qué significa | ¿Se pide? |",
+    "|---|---|---|",
+    "| **FALTA** | No hay archivo. El sitio dibuja el marcador de hueco. | Sí |",
+    "| **PROVISIONAL** | Hay foto, pero es de relleno, de maqueta, generada o de banco. Hay que reemplazarla. | Sí |",
+    "| **DEFINITIVA** | Material real, en su sitio. | No |",
+    "",
+    "Las provisionales llevan debajo **por qué** lo son y **según qué** se ha",
+    "determinado —el commit, el md5 o la receta—, para que se pueda comprobar en",
+    "vez de creérselo.",
+    "",
+    "**PENDIENTE DE CLASIFICAR** es una provisional de la que no consta de dónde",
+    "salió. No se ha adivinado a propósito: una clasificación inventada se lee",
+    "igual que una comprobada y ya nadie vuelve a revisarla. Hay que mirarla y",
+    "decidir.",
+    "",
+  ];
+}
+
+/**
+ * Cómo se dispara y cómo se entrega. Es lo mismo para los 133 huecos, así que
+ * no cabe en la nota de ninguno: va una vez, al final, en los dos documentos.
+ *
+ * VIVÍA SOLO EN EL PDF que se mandó a marketing, y por eso se pierde: el PDF no
+ * se regenera, así que el día que cambie el proceso habrá dos versiones y la
+ * que se lee será la vieja. Aquí se genera con lo demás.
+ */
+function procesoDeEntrega(): string[] {
+  return [
+    "## Proceso de entrega",
+    "",
+    "Vale para todas las fotos de este documento. Son cinco cosas, y ninguna es",
+    "de gusto: cada una tapa un fallo concreto que ya ha pasado.",
+    "",
+    "### 1. El nombre del archivo es lo único que hay que acertar",
+    "",
+    "Cada hueco espera un archivo con **su nombre exacto** (`athletic.jpg`,",
+    "`hero-empresa.jpg`…), el que aparece en su ficha aquí. La extensión da igual",
+    "—`.jpg`, `.png`, `.webp`, `.tif`—; el nombre, no.",
+    "",
+    "Con el nombre bien puesto la foto entra en la web sin tocar código. Mal",
+    "puesto **no da error**: deja el hueco vacío y parece un fallo de la web. Por",
+    "eso el nombre va en cada ficha y por eso se pide así de literal.",
+    "",
+    "### 2. El original de cámara, sin re-exportar ni comprimir",
+    "",
+    "Se entrega el archivo **tal y como sale de la cámara**. Sin re-exportar, sin",
+    "volver a comprimir y sin redimensionar.",
+    "",
+    "El sitio genera sus propios tamaños y su propio WebP a partir de lo que",
+    "llegue. Un JPEG que ya venía comprimido y se vuelve a comprimir pierde dos",
+    "veces, y esa pérdida no se recupera después: se ve como grano sucio en los",
+    "macros de tejido, que es justo donde hay que leer la trama. El ancho mínimo",
+    "de cada ficha es sobre el original, no sobre una copia reducida.",
+    "",
+    "### 3. Sin editar",
+    "",
+    "Sin filtros, sin virados, sin recortes «para que quede mejor», y **sin",
+    "rótulos, logotipos ni tipografía quemados sobre la imagen**. Un rótulo",
+    "quemado no se quita con un recorte y deja la foto inservible para la web.",
+    "",
+    "El recorte lo hace el sitio, que sabe a qué proporción va cada hueco y que",
+    "recorta distinto el mismo archivo según dónde se use —hay fotos que salen",
+    "apaisadas en un sitio y cuadradas en otro—. Una foto ya recortada a mano",
+    "solo sirve para uno de los dos.",
+    "",
+    "### 4. Trípode, con exposición y enfoque bloqueados",
+    "",
+    "Dentro de una misma serie —las telas del catálogo son la serie grande— las",
+    "tomas tienen que ser **comparables entre sí**. Si la cámara vuelve a medir y",
+    "a enfocar en cada disparo, dos telas del mismo lote salen con luminancias",
+    "distintas y la ficha las enseña como si fueran géneros distintos, cuando lo",
+    "único que cambió fue el automatismo.",
+    "",
+    "En las telas que alimentan la simulación de color esto además decide si la",
+    "foto sirve o no: el recoloreo multiplica canal a canal, así que la",
+    "exposición y la dominante de la toma son el resultado, no un ajuste",
+    "posterior.",
+    "",
+    "### 5. Entrega por la carpeta compartida",
+    "",
+    "Un archivo por hueco, con su nombre, en la carpeta compartida.",
+    "",
+    "**No por correo ni por mensajería.** Los dos recomprimen y bajan la",
+    "resolución «para que quepa», que es exactamente lo que pide evitar el punto",
+    "2 — y lo hacen en silencio, así que el archivo llega con aspecto correcto y",
+    "la mitad de la información.",
+    "",
+    "### Y una restricción que no es de fotografía",
+    "",
+    "**Un hueco que afirma algo nuestro no admite imagen generada ni de banco.**",
+    "Si el hueco dice «nuestra planta», «nuestros clientes» o «nuestro asesor»,",
+    "la imagen tiene que documentar eso de verdad. Una imagen generada puede",
+    "estar perfectamente licenciada y seguir siendo una afirmación falsa sobre la",
+    "empresa; la licencia resuelve el derecho a usarla, no el que diga la verdad.",
+    "Para huecos de ambiente, sin afirmación, no hay problema.",
+    "",
+    "**Una persona real identificable necesita su autorización**, que no es lo",
+    "mismo que una licencia de stock: marketing puede tener la licencia y seguir",
+    "faltando el permiso de quien sale en la foto.",
+    "",
+    "El registro completo de qué material está bloqueado y por qué está en",
+    "`README-imagenes.md` §5 y en `npm run catalogo`.",
+    "",
+  ];
 }
 
 // ---------------------------------------------------------------------------
@@ -407,17 +677,25 @@ function seccionesDe(slots: SlotImagen[]): { titulo: string; slots: SlotImagen[]
 /**
  * Ficha de un hueco en la vista por página. A diferencia de `ficha()`, aquí el
  * tamaño y la proporción van SIEMPRE: son el motivo de esta vista.
+ *
+ * Las definitivas salen en una línea. No es que importen menos: es que no se
+ * piden, y una ficha entera de encuadre y ancho de entrega para una foto que ya
+ * está hecha es ruido entre las que sí hay que disparar.
  */
 function fichaPorPagina(s: SlotImagen): string[] {
+  if (!esPendiente(s)) {
+    return [`#### ${rotulo(s)} \`${s.id}.jpg\``, "", "No se pide: ya está resuelta.", ""];
+  }
   const { seVeA, proporcion } = visualizacion(s);
   return [
-    `#### \`${s.id}.jpg\``,
+    `#### ${rotulo(s)} \`${s.id}.jpg\``,
     "",
     `- **Se ve a:** ${seVeA}`,
     `- **Proporción:** ${proporcion}`,
     `- **Ancho mínimo de entrega:** ${s.ancho} px`,
     `- **Qué debe verse:** ${s.alt || "—"}`,
     ...(s.nota ? [`- **Nota:** ${s.nota}`] : []),
+    ...(estado(s) === "provisional" ? ["", ...motivoProvisional(s)] : []),
     ...(s.porConfirmar
       ? ["", `> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** ${s.porConfirmar}`]
       : []),
@@ -426,19 +704,12 @@ function fichaPorPagina(s: SlotImagen): string[] {
 }
 
 /**
- * El documento por página. Recibe los mismos `vacios` que la vista por tipo —no
- * los recalcula— para que las dos no puedan contar cosas distintas.
+ * El documento por página. Recibe los mismos slots que la vista por tipo —no los
+ * recalcula— para que las dos no puedan contar cosas distintas.
  */
-function documentoPorPagina(vacios: SlotImagen[]): string {
-  // Total de huecos por página, vacíos y llenos: sin el denominador, una página
-  // con dos huecos pendientes de nueve se lee igual que una con dos de dos.
-  const totalPorPagina = new Map<string, number>();
-  for (const s of SLOTS) {
-    totalPorPagina.set(s.pagina, (totalPorPagina.get(s.pagina) ?? 0) + 1);
-  }
-
+function documentoPorPagina(todos: SlotImagen[]): string {
   const porPagina = new Map<string, SlotImagen[]>();
-  for (const s of vacios) {
+  for (const s of todos) {
     const lista = porPagina.get(s.pagina) ?? [];
     lista.push(s);
     porPagina.set(s.pagina, lista);
@@ -446,12 +717,14 @@ function documentoPorPagina(vacios: SlotImagen[]): string {
   const paginas = [...porPagina.entries()].sort(
     ([a], [b]) => ordenPagina(a) - ordenPagina(b),
   );
+  const n = cuenta(todos);
+  const pendientesDeClasificar = sinClasificarProcedencia(todos);
 
   const l: string[] = [
     "# Requisitos de fotografía por página — Textil Padilla",
     "",
-    "Lo que le falta a CADA PÁGINA para poder publicarse completa: sus secciones,",
-    "y dentro de cada una los huecos que siguen vacíos con su especificación.",
+    "Qué le falta a CADA PÁGINA para poder publicarse completa: sus secciones, y",
+    "dentro de cada una todos sus huecos de imagen con su estado.",
     "",
     "**GENERADO — no editar a mano.** Sale del registro de slots y del manifiesto",
     "de imágenes. Se regenera con `npm run imagenes:requisitos`, que escribe este",
@@ -462,41 +735,61 @@ function documentoPorPagina(vacios: SlotImagen[]): string {
     "Para salir a fotografiar sirve la otra —cada bloque suyo es una sesión—; esta",
     "sirve para revisar el sitio página a página y para priorizar por página.",
     "",
-    "Los huecos que YA tienen foto no se listan, igual que en la otra vista: este",
-    "documento es lo que falta. El «faltan X de Y» de cada página da el total real,",
-    "y `npm run imagenes:slots` lista todos los huecos, llenos incluidos.",
-    "",
+    ...leyendaDeEstados(),
     "## Resumen",
     "",
-    `De **${SLOTS.length} huecos** de imagen del sitio, **${SLOTS_LLENOS.size} tienen foto** y ` +
-      `**faltan ${vacios.length}**, repartidos en **${paginas.length} páginas**.`,
+    `Los **${SLOTS.length} huecos** de imagen del sitio, repartidos en ` +
+      `**${paginas.length} páginas**:`,
     "",
-    "| Página | Faltan | De |",
-    "|---|---|---|",
-    ...paginas.map(
-      ([ruta, slots]) =>
-        `| [${tituloPagina(ruta)}](#${anclaPagina(ruta)}) (\`${ruta}\`) | ${slots.length} | ` +
-        `${totalPorPagina.get(ruta) ?? slots.length} |`,
-    ),
+    `- **Faltan ${n.falta}** — no hay archivo.`,
+    `- **Provisionales ${n.provisional}** — hay foto, pero hay que reemplazarla.` +
+      (pendientesDeClasificar.length
+        ? ` De estas, **${pendientesDeClasificar.length} están pendientes de clasificar**.`
+        : ""),
+    `- **Definitivas ${n.definitiva}** — no se piden.`,
+    "",
+    `**Hay que conseguir ${n.falta + n.provisional} fotos**, no ${n.falta}.`,
+    "",
+    "| Página | Faltan | Provisionales | Definitivas | Total |",
+    "|---|---|---|---|---|",
+    ...paginas.map(([ruta, slots]) => {
+      const c = cuenta(slots);
+      return (
+        `| [${tituloPagina(ruta)}](#${anclaPagina(ruta)}) (\`${ruta}\`) | ${c.falta} | ` +
+        `${c.provisional} | ${c.definitiva} | ${slots.length} |`
+      );
+    }),
     "",
     "---",
     "",
   ];
 
   for (const [ruta, slots] of paginas) {
-    const total = totalPorPagina.get(ruta) ?? slots.length;
+    const c = cuenta(slots);
     l.push(
       `## ${tituloPagina(ruta)} — \`${ruta}\``,
       "",
-      `**Faltan ${slots.length} de ${total} huecos.**`,
+      `**${conteo(c)}** — ${slots.length} huecos en total. ` +
+        (c.falta + c.provisional === 0
+          ? "Página resuelta: no se pide nada."
+          : `Quedan ${c.falta + c.provisional} fotos por conseguir.`),
       "",
     );
     for (const { titulo, slots: deSeccion } of seccionesDe(slots)) {
-      l.push(`### ${titulo} — ${deSeccion.length}`, "");
+      const cs = cuenta(deSeccion);
+      l.push(
+        `### ${titulo} — ${deSeccion.length}` +
+          (cs.falta + cs.provisional
+            ? ` (${cs.falta + cs.provisional} por conseguir)`
+            : " (resuelta)"),
+        "",
+      );
       for (const s of deSeccion) l.push(...fichaPorPagina(s));
     }
     l.push("---", "");
   }
+
+  l.push(...procesoDeEntrega(), "---", "");
 
   l.push(
     "## Avisos",
@@ -537,37 +830,77 @@ function anclaPagina(ruta: string): string {
 }
 
 function main() {
-  const vacios = SLOTS.filter((s) => !SLOTS_LLENOS.has(s.id));
-  const { porGrupo, sueltos, sinClasificar } = clasificar(vacios);
+  const { porGrupo, sueltos, sinTipoDeToma, resueltasSueltas } = clasificar(SLOTS);
+  const n = cuenta(SLOTS);
+  const pendientesDeClasificar = sinClasificarProcedencia(SLOTS);
   // Se recogen aparte de la clasificación: un `porConfirmar` no cambia a qué
   // sesión pertenece el hueco, solo que hay que decidir algo antes de ir.
-  const porConfirmar = vacios.filter((s) => s.porConfirmar);
+  const porConfirmar = SLOTS.filter((s) => s.porConfirmar && esPendiente(s));
 
   const l: string[] = [
     "# Requisitos de fotografía — Textil Padilla",
     "",
-    "Lo que falta fotografiar para que el sitio quede completo, agrupado por tipo",
-    "de toma: cada bloque es una sesión.",
+    "Lo que hay que fotografiar para que el sitio quede completo, agrupado por",
+    "tipo de toma: cada bloque es una sesión.",
     "",
     "**GENERADO — no editar a mano.** Sale del registro de slots y del manifiesto",
     "de imágenes. Se regenera con `npm run imagenes:requisitos`, y una foto",
-    "entregada desaparece sola de este documento.",
+    "definitiva deja de pedirse sola.",
     "",
     "Los mismos huecos ordenados por dónde van, página a página, están en",
     "`requisitos-fotografia-por-pagina.md`. Esta vista es la de salir a",
     "fotografiar: cada bloque es una sesión. Aquélla es la de revisar el sitio.",
     "",
+    ...leyendaDeEstados(),
     "## Resumen",
     "",
-    `De **${SLOTS.length} huecos** de imagen del sitio, **${SLOTS_LLENOS.size} tienen foto** y ` +
-      `**faltan ${vacios.length}**.`,
+    `Los **${SLOTS.length} huecos** de imagen del sitio:`,
     "",
-    "| Tipo de toma | Faltan |",
-    "|---|---|",
-    ...porGrupo.map((g) => `| ${g.grupo.tipo} | ${g.slots.length} |`),
-    ...(sueltos.length ? [`| ${GRUPO_SUELTOS.tipo} | ${sueltos.length} |`] : []),
-    ...(sinClasificar.length ? [`| **Sin clasificar** | ${sinClasificar.length} |`] : []),
+    `- **Faltan ${n.falta}** — no hay archivo.`,
+    `- **Provisionales ${n.provisional}** — hay foto, pero hay que reemplazarla.` +
+      (pendientesDeClasificar.length
+        ? ` De estas, **${pendientesDeClasificar.length} están pendientes de clasificar**.`
+        : ""),
+    `- **Definitivas ${n.definitiva}** — no se piden.`,
     "",
+    `**Hay que conseguir ${n.falta + n.provisional} fotos**, no ${n.falta}: ` +
+      "las provisionales ocupan su hueco pero no lo cierran.",
+    "",
+    "| Tipo de toma | Faltan | Provisionales | Definitivas |",
+    "|---|---|---|---|",
+    ...porGrupo.map((g) => {
+      const c = cuenta(g.slots);
+      return `| ${g.grupo.tipo} | ${c.falta} | ${c.provisional} | ${c.definitiva} |`;
+    }),
+    ...(sueltos.length
+      ? [
+          `| ${GRUPO_SUELTOS.tipo} | ${cuenta(sueltos).falta} | ` +
+            `${cuenta(sueltos).provisional} | ${cuenta(sueltos).definitiva} |`,
+        ]
+      : []),
+    ...(sinTipoDeToma.length
+      ? [`| **Sin tipo de toma asignado** | ${cuenta(sinTipoDeToma).falta} | ` +
+         `${cuenta(sinTipoDeToma).provisional} | ${cuenta(sinTipoDeToma).definitiva} |`]
+      : []),
+    ...(resueltasSueltas.length
+      ? [`| Ya resueltas, fuera de sesión | 0 | 0 | ${resueltasSueltas.length} |`]
+      : []),
+    "",
+    ...(pendientesDeClasificar.length
+      ? [
+          `## Pendientes de clasificar — ${pendientesDeClasificar.length}`,
+          "",
+          "**Tienen foto y no consta de dónde salió.** No se ha adivinado: hasta que",
+          "alguien las mire no se puede decir si son las buenas o hay que repetirlas.",
+          "Van contadas como provisionales porque un hueco sin confirmar no se puede",
+          "cerrar, pero puede que alguna resulte definitiva y salga del encargo.",
+          "",
+          ...pendientesDeClasificar.map(
+            (s) => `- **\`${s.id}\`** — ${procedenciaDe(s.id)?.segun ?? "no consta nada."}`,
+          ),
+          "",
+        ]
+      : []),
     ...(porConfirmar.length
       ? [
           `## Hay que decidir esto antes de la sesión — ${porConfirmar.length}`,
@@ -580,11 +913,6 @@ function main() {
           "",
         ]
       : []),
-    "**El nombre del archivo es lo único que hay que acertar.** Cada hueco espera",
-    "un archivo con su nombre exacto (`athletic.jpg`, `hero-empresa.jpg`…). La",
-    "extensión da igual. Con el nombre bien puesto la foto entra en la web sin",
-    "tocar código.",
-    "",
     "---",
     "",
   ];
@@ -592,9 +920,9 @@ function main() {
   for (const g of porGrupo) l.push(...bloque(g.grupo, g.slots), "---", "");
   if (sueltos.length) l.push(...bloque(GRUPO_SUELTOS, sueltos), "---", "");
 
-  if (sinClasificar.length) {
+  if (sinTipoDeToma.length) {
     l.push(
-      `## Sin clasificar — ${sinClasificar.length}`,
+      `## Sin tipo de toma asignado — ${sinTipoDeToma.length}`,
       "",
       "**Estos huecos no llevan nota, así que no se les ha asignado tipo de toma.**",
       "El `alt` de cada uno dice qué se espera ver, pero eso describe el contenido,",
@@ -605,11 +933,30 @@ function main() {
       "Se listan aparte a propósito. Meterlos en el grupo que más se les parece",
       "sería inventarles un encargo que nadie escribió.",
       "",
-      ...tabla(sinClasificar),
+      ...tabla(sinTipoDeToma),
       "---",
       "",
     );
   }
+
+  if (resueltasSueltas.length) {
+    l.push(
+      `## Ya resueltas, fuera de sesión — ${resueltasSueltas.length}`,
+      "",
+      "Fotos definitivas que no forman sesión con ninguna otra. **No se piden.**",
+      "Están aquí para que el documento cuadre con los",
+      `${SLOTS.length} huecos del sitio y no parezca que faltan.`,
+      "",
+      ...resueltasSueltas.map(
+        (s) => `- \`${s.id}.jpg\` — ${ubicacion(s)}`,
+      ),
+      "",
+      "---",
+      "",
+    );
+  }
+
+  l.push(...procesoDeEntrega(), "---", "");
 
   l.push(
     "## Avisos",
@@ -620,27 +967,29 @@ function main() {
     "corrección posterior para ninguna de las tres — una tela ya teñida o una toma con",
     "dominante cálida obligan a repetir la sesión, no a reprocesar el archivo.",
     "",
-    "**Material que no puede ir en cualquier hueco.** Ver `README-imagenes.md` §5:",
-    "el material generado por IA no puede ocupar un hueco que afirme algo nuestro",
-    "(«nuestra planta», «nuestro asesor»), y `retrato-asesor` es una persona real y",
-    "necesita su autorización, que no es lo mismo que una licencia.",
-    "",
   );
 
   writeFileSync(SALIDA, l.join("\n"), "utf8");
 
-  // La segunda vista, de los MISMOS `vacios`: no se vuelven a calcular, para
-  // que las dos no puedan contar cosas distintas.
-  writeFileSync(SALIDA_POR_PAGINA, documentoPorPagina(vacios), "utf8");
-  const paginasConHuecos = new Set(vacios.map((s) => s.pagina)).size;
+  // La segunda vista, de los MISMOS slots: no se vuelven a calcular, para que
+  // las dos no puedan contar cosas distintas.
+  writeFileSync(SALIDA_POR_PAGINA, documentoPorPagina(SLOTS), "utf8");
+  const paginasConHuecos = new Set(SLOTS.map((s) => s.pagina)).size;
 
   console.log(
-    `\ndocs/requisitos-fotografia.md — ${vacios.length} huecos vacíos en ` +
-      `${porGrupo.length} tipos de toma` +
+    `\n${SLOTS.length} huecos — faltan ${n.falta} · ${n.provisional} provisionales · ` +
+      `${n.definitiva} definitivas` +
+      `\n  hay que conseguir ${n.falta + n.provisional} fotos` +
+      (pendientesDeClasificar.length
+        ? `\n  ${pendientesDeClasificar.length} PENDIENTES DE CLASIFICAR: ` +
+          pendientesDeClasificar.map((s) => s.id).join(", ")
+        : "") +
+      (sinTipoDeToma.length
+        ? `\n  ${sinTipoDeToma.length} SIN TIPO DE TOMA (les falta la nota)`
+        : "") +
+      `\n\ndocs/requisitos-fotografia.md — ${porGrupo.length} tipos de toma` +
       (sueltos.length ? `, ${sueltos.length} sueltos` : "") +
-      (sinClasificar.length ? `, ${sinClasificar.length} SIN CLASIFICAR` : "") +
-      `\ndocs/requisitos-fotografia-por-pagina.md — los mismos ${vacios.length} ` +
-      `repartidos en ${paginasConHuecos} páginas\n`,
+      `\ndocs/requisitos-fotografia-por-pagina.md — ${paginasConHuecos} páginas\n`,
   );
 }
 

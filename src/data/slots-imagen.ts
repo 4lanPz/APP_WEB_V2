@@ -878,3 +878,245 @@ export function slotPorId(id: string): SlotImagen | undefined {
 
 /** Ids válidos, para que el procesado de entrega cace erratas en los nombres. */
 export const IDS_VALIDOS: ReadonlySet<string> = new Set(porId.keys());
+
+// ---------------------------------------------------------------------------
+// Procedencia de las fotos ya publicadas
+// ---------------------------------------------------------------------------
+
+/**
+ * De dónde salió la foto que ocupa un hueco, y por tanto si hay que
+ * reemplazarla.
+ *
+ * EXISTE PORQUE "EL HUECO TIENE FOTO" NO QUIERE DECIR "EL HUECO ESTÁ RESUELTO".
+ * El manifiesto solo sabe si hay archivo, así que una imagen puesta para poder
+ * maquetar la banda cuenta lo mismo que el macro real de la tela, y el encargo
+ * de fotografía la daba por hecha y dejaba de pedirla. Ese es justo el material
+ * que hay que reemplazar antes de publicar.
+ */
+export type Procedencia =
+  /** Material real, en su sitio definitivo. No se pide. */
+  | "definitiva"
+  /** Puesta solo para poder maquetar o valorar el tratamiento. */
+  | "maqueta"
+  /** Relleno: ocupa el hueco para que no se vea vacío. */
+  | "relleno"
+  /** Generada por IA. */
+  | "generada"
+  /** De banco de imágenes. */
+  | "banco"
+  /**
+   * No consta de dónde salió. NO es un cajón de sastre ni un "seguramente
+   * provisional": es una foto que hay que mirar antes de decidir. Se prefiere
+   * esto a adivinar, porque una clasificación inventada se lee igual que una
+   * comprobada y nadie vuelve a revisarla.
+   */
+  | "sin-clasificar";
+
+/** Los tres estados en que puede estar un hueco de imagen. */
+export type EstadoHueco = "falta" | "provisional" | "definitiva";
+
+export interface FotoPublicada {
+  procedencia: Procedencia;
+  /**
+   * DE DÓNDE CONSTA. Es la evidencia, no la conclusión: el commit, el md5 o la
+   * receta que lo demuestra. Se imprime en el documento de fotografía para que
+   * quien lo lea pueda comprobarlo en vez de creérselo.
+   */
+  segun: string;
+}
+
+/**
+ * Las fotos que salen de `Telas_PW/`. Es la carpeta de 2,4 GB que entregó el
+ * cliente (`README-imagenes.md` §4), y cada una tiene su original concreto
+ * anotado en la receta de `scripts/preparar-imagenes.ts` — con la etiqueta de
+ * producción que identifica la tela, verificada contra la ficha donde existe.
+ *
+ * No se deriva de ese script leyéndolo: `src/` no importa de `scripts/`, y al
+ * revés sí. La comprobación de que las dos listas siguen cuadrando es que
+ * `preparar-imagenes.ts` falla si una receta nombra un id que no existe aquí.
+ */
+const SEGUN_CLIENTE =
+  "Sale de `Telas_PW/`, la carpeta que entregó el cliente, con su original " +
+  "concreto anotado en la receta de `scripts/preparar-imagenes.ts`.";
+
+const DEL_CLIENTE: readonly string[] = [
+  // Fotos de sección
+  "oficio-nave-tejido",
+  "oficio-taller-alangasi",
+  "local-fachada",
+  "macro-fibra-blanca",
+  "macro-tejido",
+  "macro-punto-camiseta",
+  // Telas
+  "sevilla-plus",
+  "chelsea",
+  "dortmund",
+  "mezi",
+  "dortmund-plus-brillante",
+  "sevilla-plus-brillante",
+  "dobleface-plus",
+  "sevilla",
+  "aston-plus",
+  "kansas",
+  "boston",
+  "juventus",
+  "gaby",
+  "napoli",
+  "napoles",
+  "kiana",
+  "river",
+  "ribb-150",
+  "interlock-30",
+  "interlock-40",
+  "denis-20",
+  "lacoast-20",
+  "lacoast-polo-20",
+  "lacoast-kratos-22",
+  "pique-ares-24",
+];
+
+/** Las que llevan una precisión propia además de su origen. */
+const PROPIAS: readonly (readonly [string, FotoPublicada])[] = [
+  [
+    "athletic",
+    {
+      procedencia: "definitiva",
+      segun:
+        `${SEGUN_CLIENTE} Confirmada como buena por el cliente. Es además la ` +
+        "referencia de croma 0,0 del lote, que es contra la que se mide el techo " +
+        "de tinte de las demás telas con recoloreo.",
+    },
+  ],
+  ...(["titanium", "titanium-caida", "titanium-trama"] as const).map(
+    (id) =>
+      [
+        id,
+        {
+          procedencia: "definitiva" as const,
+          segun: `${SEGUN_CLIENTE} Confirmada como buena por el cliente.`,
+        },
+      ] as const,
+  ),
+  ...(["athletic-macro", "athletic-zoom"] as const).map(
+    (id) =>
+      [
+        id,
+        {
+          procedencia: "definitiva" as const,
+          segun:
+            "No se entrega ni se fotografía: la genera el procesado recortando " +
+            "el original de Athletic (`ORIGEN_ALTA` en `preparar-imagenes.ts`). " +
+            "Se rehace sola si cambia la foto de la que sale.",
+        },
+      ] as const,
+  ),
+
+  // --- Provisionales -------------------------------------------------------
+  [
+    "hero-empresa",
+    {
+      procedencia: "maqueta",
+      segun:
+        "Lo dice el commit que la subió (b1e2e42): «entra como muestra para " +
+        "poder valorarlo; es la misma foto que ya sale más abajo en esa página, " +
+        "así que no es definitiva».",
+    },
+  ],
+  ...(
+    ["hero-contacto", "hero-productos", "hero-camisetas", "hero-asesor-virtual"] as const
+  ).map(
+    (id) =>
+      [
+        id,
+        {
+          procedencia: "maqueta" as const,
+          segun:
+            "Los cuatro archivos son BYTE A BYTE el mismo (md5 56e355a4…), y el " +
+            "`alt` de cada slot describe una escena distinta: una sola imagen no " +
+            "puede ser a la vez el mostrador, los rollos, las camisetas y el " +
+            "asesor. Está puesta para poder maquetar la banda de cabecera.",
+        },
+      ] as const,
+  ),
+
+  // --- Sin clasificar ------------------------------------------------------
+  [
+    "hero-microfibra",
+    {
+      procedencia: "sin-clasificar",
+      segun:
+        "Archivo propio, no duplicado de los otros heroes. Entró en 55ffae7 —el " +
+        "commit del mapa de Contacto— mencionada de pasada y sin decir de dónde " +
+        "sale. No consta el origen.",
+    },
+  ],
+  [
+    "hero-home-poster",
+    {
+      procedencia: "sin-clasificar",
+      segun:
+        "Entró en 8e485c6, al arreglar el póster de la portada. El commit explica " +
+        "por qué no se veía, no de dónde sale el archivo.",
+    },
+  ],
+  [
+    "dortmund-plus-cancha",
+    {
+      procedencia: "sin-clasificar",
+      segun:
+        "Entró en d55790f, un commit sobre el marcado de las cabeceras vacías que " +
+        "no menciona su origen.",
+    },
+  ],
+];
+
+/**
+ * Procedencia de cada foto ya publicada.
+ *
+ * Un hueco lleno que NO figure aquí se trata como `sin-clasificar`, no como
+ * definitiva: así una foto nueva entra en la pila de revisión sola, y el
+ * silencio nunca se lee como "es la buena".
+ */
+export const PROCEDENCIA_FOTO: ReadonlyMap<string, FotoPublicada> = (() => {
+  const m = new Map<string, FotoPublicada>();
+  for (const id of DEL_CLIENTE) {
+    m.set(id, { procedencia: "definitiva", segun: SEGUN_CLIENTE });
+  }
+  for (const [id, foto] of PROPIAS) m.set(id, foto);
+  return m;
+})();
+
+for (const id of PROCEDENCIA_FOTO.keys()) {
+  // Un id mal escrito aquí dejaría su foto real fuera de la clasificación y
+  // haría aparecer un hueco fantasma en el documento. Se para al cargar.
+  if (!porId.has(id)) {
+    throw new Error(
+      `slots-imagen.ts: PROCEDENCIA_FOTO nombra un slot que no existe: ${id}`,
+    );
+  }
+}
+
+/** Qué se sabe de la foto de un hueco. `undefined` si no consta nada. */
+export function procedenciaDe(id: string): FotoPublicada | undefined {
+  return PROCEDENCIA_FOTO.get(id);
+}
+
+/** `true` si esa procedencia obliga a reemplazar la foto. */
+export function esProvisional(p: Procedencia): boolean {
+  return p !== "definitiva";
+}
+
+/**
+ * El estado de un hueco. `lleno` viene del manifiesto, que es quien sabe si el
+ * archivo existe; se pasa como argumento en vez de importarlo para no cerrar un
+ * ciclo entre el registro y el manifiesto, que ya importa tipos de aquí.
+ *
+ * Una foto sin clasificar cuenta como PROVISIONAL. No es que se dé por mala: es
+ * que hasta que alguien la mire no se puede dar por buena, y el hueco no se
+ * puede cerrar. El documento la marca aparte para que se revise.
+ */
+export function estadoHueco(id: string, lleno: boolean): EstadoHueco {
+  if (!lleno) return "falta";
+  const foto = PROCEDENCIA_FOTO.get(id);
+  return foto && !esProvisional(foto.procedencia) ? "definitiva" : "provisional";
+}
