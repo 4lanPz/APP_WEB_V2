@@ -1,12 +1,30 @@
 /**
- * Genera el documento de fotografía que se le envía a marketing.
+ * Genera el documento de fotografía que se le envía a marketing, en sus dos
+ * vistas.
  *
- *   npm run imagenes:requisitos     ->  docs/requisitos-fotografia.md
+ *   npm run imagenes:requisitos  ->  docs/requisitos-fotografia.md
+ *                                ->  docs/requisitos-fotografia-por-pagina.md
  *
  * Es el inventario de los slots VACÍOS —los que faltan— agrupados por el tipo de
  * toma que requieren, porque con 88 huecos una lista plana no es un encargo: es
  * una lista de tareas sin prioridad que nadie sabe por dónde empezar. Agrupados
  * por tipo, cada bloque es una sesión de fotos.
+ *
+ * LAS DOS VISTAS SON EL MISMO CONJUNTO DE HUECOS, ordenado de dos formas, y
+ * responden a dos preguntas distintas que se hacen en dos momentos distintos:
+ *
+ * - por TIPO DE TOMA (`requisitos-fotografia.md`) — «¿qué monto en la próxima
+ *   sesión?». Es la vista con la que se sale a fotografiar: cada bloque se
+ *   dispara del tirón, con la misma luz y el mismo montaje.
+ * - por PÁGINA (`requisitos-fotografia-por-pagina.md`) — «¿qué le falta a esta
+ *   página para poder publicarse?». Es la vista con la que se revisa el sitio,
+ *   y la que hace falta cuando el trabajo se prioriza por página y no por
+ *   sesión.
+ *
+ * Ninguna es un resumen de la otra: las dos listan los mismos huecos vacíos y
+ * salen del mismo `main()`, así que no pueden desincronizarse ni descuadrar en
+ * el total. Se generan juntas a propósito — dos comandos serían dos documentos
+ * con fechas distintas.
  *
  * SE REGENERA, NO SE EDITA A MANO. El archivo sale de `slots-imagen.ts` y del
  * manifiesto, así que llenar un hueco lo quita del documento sin que nadie tenga
@@ -40,6 +58,7 @@ import { SLOTS_LLENOS } from "../src/data/imagenes.generado";
 
 const RAIZ = join(import.meta.dirname, "..");
 const SALIDA = join(RAIZ, "docs", "requisitos-fotografia.md");
+const SALIDA_POR_PAGINA = join(RAIZ, "docs", "requisitos-fotografia-por-pagina.md");
 
 interface Grupo {
   /** Nombre del tipo de toma. Es el título del bloque en el documento. */
@@ -327,6 +346,196 @@ function bloque(grupo: Grupo, slots: SlotImagen[]): string[] {
   return l;
 }
 
+// ---------------------------------------------------------------------------
+// Vista por página
+// ---------------------------------------------------------------------------
+
+/**
+ * Cómo se ve UN hueco concreto: lo suyo propio si lo tiene declarado, y si no
+ * lo de su grupo.
+ *
+ * La vista por tipo puede escribir el tamaño y la proporción una sola vez, en
+ * la cabecera del bloque, porque ahí todos los huecos comparten sesión. En la
+ * vista por página no: un hueco aparece solo, entre los de su sección, sin
+ * hermanos de los que heredar la especificación — y el tamaño al que se ve es
+ * justo el dato que no se puede deducir mirando la página.
+ *
+ * Sale de las MISMAS dos tablas que la otra vista (`VISUALIZACION_SUELTA` y
+ * `GRUPOS`). No hay una tercera con los mismos datos: corregir un `className`
+ * desfasado se hace en un sitio y las dos vistas quedan corregidas.
+ */
+function visualizacion(s: SlotImagen): { seVeA: string; proporcion: string } {
+  const propia = VISUALIZACION_SUELTA[s.id];
+  if (propia) return propia;
+  const grupo = GRUPOS.find((g) => g.pertenece(s));
+  if (grupo) return { seVeA: grupo.seVeA, proporcion: grupo.proporcion };
+  // Sin grupo y sin visualización propia. No se inventa un tamaño plausible:
+  // se marca como lo que es, que es lo que hace que alguien lo escriba.
+  return { seVeA: "— sin declarar —", proporcion: "— sin declarar —" };
+}
+
+/** Título del bloque de huecos que no declaran sección. */
+const SIN_SECCION = "Contenido principal";
+
+/**
+ * Los huecos de una página repartidos en sus secciones, en el orden en que se
+ * leen: la cabecera primero —es lo primero que se ve de la página—, después los
+ * huecos sin sección, que son su contenido principal, y al final las secciones
+ * restantes en el orden en que están registradas en `slots-imagen.ts`.
+ *
+ * El orden de registro es el de la página, así que se respeta. Alfabético las
+ * barajaría sin criterio: «Encuentros» antes que «Oficio» no significa nada.
+ */
+function seccionesDe(slots: SlotImagen[]): { titulo: string; slots: SlotImagen[] }[] {
+  const porSeccion = new Map<string, SlotImagen[]>();
+  for (const s of slots) {
+    const clave = s.seccion ?? SIN_SECCION;
+    const lista = porSeccion.get(clave) ?? [];
+    lista.push(s);
+    porSeccion.set(clave, lista);
+  }
+  const rango = (titulo: string) =>
+    titulo === "Cabecera" ? 0 : titulo === SIN_SECCION ? 1 : 2;
+  // `Map` conserva el orden de inserción, así que el índice de la entrada ES el
+  // orden de registro y sirve de desempate.
+  return [...porSeccion.entries()]
+    .map(([titulo, lista], registro) => ({ titulo, slots: lista, registro }))
+    .sort((a, b) => rango(a.titulo) - rango(b.titulo) || a.registro - b.registro)
+    .map(({ titulo, slots: lista }) => ({ titulo, slots: lista }));
+}
+
+/**
+ * Ficha de un hueco en la vista por página. A diferencia de `ficha()`, aquí el
+ * tamaño y la proporción van SIEMPRE: son el motivo de esta vista.
+ */
+function fichaPorPagina(s: SlotImagen): string[] {
+  const { seVeA, proporcion } = visualizacion(s);
+  return [
+    `#### \`${s.id}.jpg\``,
+    "",
+    `- **Se ve a:** ${seVeA}`,
+    `- **Proporción:** ${proporcion}`,
+    `- **Ancho mínimo de entrega:** ${s.ancho} px`,
+    `- **Qué debe verse:** ${s.alt || "—"}`,
+    ...(s.nota ? [`- **Nota:** ${s.nota}`] : []),
+    ...(s.porConfirmar
+      ? ["", `> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** ${s.porConfirmar}`]
+      : []),
+    "",
+  ];
+}
+
+/**
+ * El documento por página. Recibe los mismos `vacios` que la vista por tipo —no
+ * los recalcula— para que las dos no puedan contar cosas distintas.
+ */
+function documentoPorPagina(vacios: SlotImagen[]): string {
+  // Total de huecos por página, vacíos y llenos: sin el denominador, una página
+  // con dos huecos pendientes de nueve se lee igual que una con dos de dos.
+  const totalPorPagina = new Map<string, number>();
+  for (const s of SLOTS) {
+    totalPorPagina.set(s.pagina, (totalPorPagina.get(s.pagina) ?? 0) + 1);
+  }
+
+  const porPagina = new Map<string, SlotImagen[]>();
+  for (const s of vacios) {
+    const lista = porPagina.get(s.pagina) ?? [];
+    lista.push(s);
+    porPagina.set(s.pagina, lista);
+  }
+  const paginas = [...porPagina.entries()].sort(
+    ([a], [b]) => ordenPagina(a) - ordenPagina(b),
+  );
+
+  const l: string[] = [
+    "# Requisitos de fotografía por página — Textil Padilla",
+    "",
+    "Lo que le falta a CADA PÁGINA para poder publicarse completa: sus secciones,",
+    "y dentro de cada una los huecos que siguen vacíos con su especificación.",
+    "",
+    "**GENERADO — no editar a mano.** Sale del registro de slots y del manifiesto",
+    "de imágenes. Se regenera con `npm run imagenes:requisitos`, que escribe este",
+    "documento y su pareja a la vez.",
+    "",
+    "Es la **segunda vista de `requisitos-fotografia.md`**, no otro encargo: los",
+    "mismos huecos, ordenados por dónde van en vez de por qué sesión los dispara.",
+    "Para salir a fotografiar sirve la otra —cada bloque suyo es una sesión—; esta",
+    "sirve para revisar el sitio página a página y para priorizar por página.",
+    "",
+    "Los huecos que YA tienen foto no se listan, igual que en la otra vista: este",
+    "documento es lo que falta. El «faltan X de Y» de cada página da el total real,",
+    "y `npm run imagenes:slots` lista todos los huecos, llenos incluidos.",
+    "",
+    "## Resumen",
+    "",
+    `De **${SLOTS.length} huecos** de imagen del sitio, **${SLOTS_LLENOS.size} tienen foto** y ` +
+      `**faltan ${vacios.length}**, repartidos en **${paginas.length} páginas**.`,
+    "",
+    "| Página | Faltan | De |",
+    "|---|---|---|",
+    ...paginas.map(
+      ([ruta, slots]) =>
+        `| [${tituloPagina(ruta)}](#${anclaPagina(ruta)}) (\`${ruta}\`) | ${slots.length} | ` +
+        `${totalPorPagina.get(ruta) ?? slots.length} |`,
+    ),
+    "",
+    "---",
+    "",
+  ];
+
+  for (const [ruta, slots] of paginas) {
+    const total = totalPorPagina.get(ruta) ?? slots.length;
+    l.push(
+      `## ${tituloPagina(ruta)} — \`${ruta}\``,
+      "",
+      `**Faltan ${slots.length} de ${total} huecos.**`,
+      "",
+    );
+    for (const { titulo, slots: deSeccion } of seccionesDe(slots)) {
+      l.push(`### ${titulo} — ${deSeccion.length}`, "");
+      for (const s of deSeccion) l.push(...fichaPorPagina(s));
+    }
+    l.push("---", "");
+  }
+
+  l.push(
+    "## Avisos",
+    "",
+    "Son los mismos de `requisitos-fotografia.md`, y valen igual aquí:",
+    "",
+    "**El recoloreo se decide al disparar, no al procesar.** Las telas del catálogo",
+    "alimentan la simulación de color de su ficha, y eso impone condiciones a la TOMA",
+    "—tela sin teñir, luz neutra, sin quemados— que no tienen arreglo posterior.",
+    "",
+    "**Material que no puede ir en cualquier hueco.** Ver `README-imagenes.md` §5:",
+    "el material generado por IA no puede ocupar un hueco que afirme algo nuestro",
+    "(«nuestra planta», «nuestro asesor»), y `retrato-asesor` es una persona real y",
+    "necesita su autorización, que no es lo mismo que una licencia.",
+    "",
+  );
+
+  return l.join("\n");
+}
+
+/**
+ * Ancla del encabezado `## Título — /ruta` tal y como la genera GitHub, para que
+ * el índice del resumen enlace de verdad. Escrita a mano porque el algoritmo es
+ * fijo: minúsculas, fuera todo lo que no sea letra, número, guion o espacio, y
+ * los espacios a guiones.
+ *
+ * SIN `trim()`, aunque parezca que sobra espacio. GitHub no lo hace: quita la
+ * puntuación y convierte a guion los espacios que esa puntuación deja sueltos,
+ * y de ahí salen los guiones dobles de `empresa--empresa`. Recortarlos aquí
+ * daría un ancla más limpia que no existe en el documento — el título de Inicio
+ * es «Inicio — /», que termina en puntuación, y su ancla real es `inicio--`.
+ */
+function anclaPagina(ruta: string): string {
+  return `${tituloPagina(ruta)} — ${ruta}`
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N} -]/gu, "")
+    .replace(/ /g, "-");
+}
+
 function main() {
   const vacios = SLOTS.filter((s) => !SLOTS_LLENOS.has(s.id));
   const { porGrupo, sueltos, sinClasificar } = clasificar(vacios);
@@ -343,6 +552,10 @@ function main() {
     "**GENERADO — no editar a mano.** Sale del registro de slots y del manifiesto",
     "de imágenes. Se regenera con `npm run imagenes:requisitos`, y una foto",
     "entregada desaparece sola de este documento.",
+    "",
+    "Los mismos huecos ordenados por dónde van, página a página, están en",
+    "`requisitos-fotografia-por-pagina.md`. Esta vista es la de salir a",
+    "fotografiar: cada bloque es una sesión. Aquélla es la de revisar el sitio.",
     "",
     "## Resumen",
     "",
@@ -415,12 +628,19 @@ function main() {
   );
 
   writeFileSync(SALIDA, l.join("\n"), "utf8");
+
+  // La segunda vista, de los MISMOS `vacios`: no se vuelven a calcular, para
+  // que las dos no puedan contar cosas distintas.
+  writeFileSync(SALIDA_POR_PAGINA, documentoPorPagina(vacios), "utf8");
+  const paginasConHuecos = new Set(vacios.map((s) => s.pagina)).size;
+
   console.log(
     `\ndocs/requisitos-fotografia.md — ${vacios.length} huecos vacíos en ` +
       `${porGrupo.length} tipos de toma` +
       (sueltos.length ? `, ${sueltos.length} sueltos` : "") +
       (sinClasificar.length ? `, ${sinClasificar.length} SIN CLASIFICAR` : "") +
-      "\n",
+      `\ndocs/requisitos-fotografia-por-pagina.md — los mismos ${vacios.length} ` +
+      `repartidos en ${paginasConHuecos} páginas\n`,
   );
 }
 

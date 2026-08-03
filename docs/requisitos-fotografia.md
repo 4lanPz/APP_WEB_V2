@@ -7,6 +7,10 @@ de toma: cada bloque es una sesión.
 de imágenes. Se regenera con `npm run imagenes:requisitos`, y una foto
 entregada desaparece sola de este documento.
 
+Los mismos huecos ordenados por dónde van, página a página, están en
+`requisitos-fotografia-por-pagina.md`. Esta vista es la de salir a
+fotografiar: cada bloque es una sesión. Aquélla es la de revisar el sitio.
+
 ## Resumen
 
 De **133 huecos** de imagen del sitio, **45 tienen foto** y **faltan 88**.
