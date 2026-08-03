@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { foto } from "@/data/imagenes";
+import { MARCAR_HUECOS_DE_IMAGEN } from "@/lib/huecos";
 
 /**
  * Fondo fotográfico a sangre para bandas oscuras de cabecera.
  *
  * Los heroes SÍ llevan foto. Si el slot no tiene archivo esto no pinta fondo y
  * la cabecera se queda en tinta plana, que es un estado provisional —falta la
- * foto—, no un diseño. En desarrollo se marca el hueco (ver abajo).
+ * foto—, no un diseño. Con el marcador encendido se señala el hueco (ver abajo).
  *
  * NO REPONER LA REJILLA
  * Aquí hubo una rejilla CSS de 34px (`REJILLA_HERO`) que se pintaba con foto y
@@ -39,19 +40,18 @@ export function FondoHero({
   const imagen = foto(slot);
 
   /*
-   * Hueco vacío: en producción no se pinta nada y la cabecera se queda en tinta
+   * Hueco vacío: sin marcar no se pinta nada y la cabecera se queda en tinta
    * plana. Eso es "falta la foto", no un diseño alternativo — no se rellena con
    * una textura para disimularlo.
    *
-   * En desarrollo sí se marca. Un hueco de cabecera vacío es invisible —el
-   * respaldo va a sangre, no es un recuadro— y eso lo vuelve indistinguible de
-   * "aquí no hay slot". El resto del sitio no tiene el problema porque
-   * `ImagePlaceholder` ya dibuja el hueco. `NODE_ENV` es constante de build,
-   * así que servidor y cliente pintan lo mismo y no hay desajuste de
-   * hidratación.
+   * Marcado sí se señala. Un hueco de cabecera vacío es invisible —el respaldo
+   * va a sangre, no es un recuadro— y eso lo vuelve indistinguible de "aquí no
+   * hay slot". El resto del sitio no tiene el problema porque `ImagePlaceholder`
+   * ya dibuja el hueco; por eso este marcador es distinto (punteado en el borde,
+   * no trama) y por eso los dos leen la MISMA constante: son la misma decisión.
    */
   if (!imagen) {
-    if (process.env.NODE_ENV === "production") return null;
+    if (!MARCAR_HUECOS_DE_IMAGEN) return null;
     return (
       <div
         aria-hidden

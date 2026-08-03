@@ -46,6 +46,13 @@ export interface CareStep {
 }
 
 export interface RelatedFabric {
+  /**
+   * Slug de la tela en `subcategories`. Sin él no hay forma de resolver ni su
+   * foto (el slot de una tela ES su slug) ni su enlace, y por eso "Otras telas
+   * de Microfibra" pintaba tiles vacías incluso para telas que ya tienen foto
+   * publicada: el bloque solo conocía el nombre visible.
+   */
+  slug: string;
   name: string;
   description: string;
 }
@@ -297,14 +304,17 @@ export const dortmundPlusBlancosProduct: ProductDetail = {
   ],
   related: [
     {
+      slug: "chelsea",
       name: "Chelsea",
       description: "Otra construcción de microfibra de la misma familia deportiva.",
     },
     {
+      slug: "athletic",
       name: "Athletic",
       description: "Microfibra de rendimiento pensada para uso atlético intenso.",
     },
     {
+      slug: "imperial",
       name: "Imperial",
       description: "Microfibra de la línea, con su propio acabado y gramaje.",
     },

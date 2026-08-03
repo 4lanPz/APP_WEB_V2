@@ -4,6 +4,18 @@ import { cn } from "@/lib/cn";
 
 export interface ProductCardProps {
   href: string;
+  /**
+   * Obligatoria y sin rama de hueco a propósito: hoy este componente solo vive
+   * en el styleguide, que le pasa `/placeholder-rollo.svg`, un asset de muestra
+   * explícito. Por eso no le falta ninguna foto y no tiene slot.
+   *
+   * SI ALGÚN DÍA ENTRA EN UNA PÁGINA REAL, no basta con pasarle una ruta: hay
+   * que registrar su hueco en `slots-imagen.ts` y dibujarlo con
+   * `ImagePlaceholder`, como el resto. La regla del sitio es que un sitio donde
+   * va a haber foto y no la hay se ve marcado; un `<Image>` con una ruta puesta
+   * a mano no se ve marcado, no sale en el inventario y por tanto nadie le pide
+   * esa foto a marketing. Es exactamente lo que pasó con `CategoryCard`.
+   */
   imageSrc: string;
   imageAlt: string;
   title: string;

@@ -52,6 +52,14 @@ export interface SlotImagen {
   /** Qué se espera ver, para el que dispara la foto. */
   nota?: string;
   /**
+   * Duda abierta sobre QUÉ va en el hueco —no sobre cómo fotografiarlo— que hay
+   * que resolver antes de disparar. Se imprime destacada en el documento de
+   * fotografía, aparte de la nota, y a propósito: la nota es el encargo, y una
+   * advertencia de "puede que el encargo esté mal" metida dentro se lee como un
+   * matiz del encuadre y se dispara igual.
+   */
+  porConfirmar?: string;
+  /**
    * `true` si esta foto se publica en GRIS NEUTRO NORMALIZADO: desaturada a
    * gris puro y con los niveles subidos hasta que el máximo de luminancia queda
    * en 250. Es la condición que necesita la simulación de color —`multiply`
@@ -123,6 +131,31 @@ export function ordenPagina(ruta: string): number {
 export function tituloPagina(ruta: string): string {
   return PAGINAS.find((p) => p.ruta === ruta)?.titulo ?? ruta;
 }
+
+/**
+ * Parte común de las cuatro fotos del carrusel de encuentros de la portada.
+ * Escrita una vez y compuesta en cada nota: son cuatro tomas de la misma
+ * sesión, y cuatro copias del mismo párrafo son cuatro sitios donde corregir
+ * el día que cambie el formato del carrusel.
+ *
+ * Formato leído de `EventCarousel.tsx:111-113` — `aspect-4/3` y 50vw desde
+ * tablet. Si eso cambia, esto miente.
+ */
+const NOTA_EVENTO =
+  "Apaisada (4:3), a media anchura del carrusel de encuentros (~600 px). Documental: material y gente reales, sin posado de estudio ni rótulos quemados. La portada lo presenta como un hecho de la empresa, así que no admite imagen generada ni de banco (ver README-imagenes.md §5).";
+
+/**
+ * Parte común de las tres prendas del recomendador.
+ *
+ * EL DATO QUE CAMBIA EL ENCUADRE es la reutilización: la misma foto sale
+ * grande en `GarmentRecommender.tsx:83` (`aspect-4/3`, 50vw) y recortada a un
+ * cuadrado de 64 px en las opciones del asesor virtual
+ * (`AsesorWizard.tsx:41-43`, `size-16 sm:size-18` con `object-cover`). Una
+ * prenda encuadrada solo para el marco grande se pierde en la miniatura, y eso
+ * no se arregla después: se repite la sesión.
+ */
+const NOTA_PRENDA =
+  "Apaisada (4:3) a media anchura del recomendador (~600 px), pero la MISMA foto se recorta a un cuadrado de 64 px (72 desde tablet) en las opciones del asesor virtual: la prenda tiene que quedar centrada y seguir reconociéndose dentro de ese cuadrado central. Prenda sola sobre fondo neutro, sin modelo y sin degradado de estudio.";
 
 /**
  * Slots únicos: uno por hueco concreto de una página. Los ids de los seis
@@ -236,6 +269,41 @@ export const SLOTS_UNICOS: SlotImagen[] = [
   },
 
   /**
+   * Cards de familia de tela, una por categoría del catálogo.
+   *
+   * UN SOLO SLOT POR FAMILIA AUNQUE LA CARD SALGA EN TRES SITIOS. La misma
+   * rejilla se pinta en la portada, en /productos y en el styleguide, y las tres
+   * usan la misma foto. Duplicar el slot por ruta le pediría a marketing ocho o
+   * doce fotos de cuatro familias.
+   *
+   * Van a `/` porque es donde más peso tienen: quien lee este inventario para
+   * disparar la foto necesita saber dónde se va a ver, y la portada manda. La
+   * doble ubicación va dicha en la `nota` de cada una.
+   */
+  ...(
+    [
+      ["microfibra", "Rollos de microfibra alineados en bodega, con el brillo característico del poliéster ligero."],
+      ["texturizado", "Tejido texturizado en plano abierto, con el cuerpo y el relieve del hilo a la vista."],
+      ["spun", "Tela de hilado spun en plano abierto, de superficie mate y aspecto algodonoso."],
+      ["polialgodon", "Tela de mezcla poliéster-algodón en plano abierto, con la trama del tejido visible."],
+    ] as const
+  ).map(([slug, alt]) => ({
+    id: `familia-${slug}`,
+    destino: `/familias/${slug}.webp`,
+    alt,
+    pagina: "/",
+    seccion: "Familias de tela",
+    ancho: 1280,
+    nota:
+      "Card de la rejilla de cuatro columnas, ~310 × 300 px. Lleva encima un velo " +
+      "que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja " +
+      "van el título y la descripción: la foto tiene que aguantar oscurecerse abajo " +
+      "y no llevar detalle importante ahí. (En las cabeceras hay que despejar el " +
+      "tercio izquierdo; aquí es la parte de abajo.) El mismo archivo se usa en la " +
+      "rejilla de /productos y en el styleguide: es un solo hueco, no tres.",
+  })),
+
+  /**
    * Fondos fotográficos de cabecera, uno por página con hero.
    *
    * Cada uno vive en la PÁGINA a la que pertenece (su `pagina` es la ruta), no
@@ -292,6 +360,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Encuentros",
     ancho: 1280,
+    nota: `${NOTA_EVENTO} El stand en el recinto, con gente delante: se tiene que leer que es una feria y no una bodega. Luz de recinto, sin flash directo.`,
   },
   {
     id: "evento-jornada-color",
@@ -300,6 +369,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Encuentros",
     ancho: 1280,
+    nota: `${NOTA_EVENTO} Plano medio de las manos, la carta de color y la muestra del cliente sobre la mesa. La carta tiene que salir legible y en luz neutra: es lo que sostiene el argumento del teñido a demanda, y una carta con dominante no se puede enseñar.`,
   },
   {
     id: "evento-alianza-retail",
@@ -308,6 +378,9 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Encuentros",
     ancho: 1280,
+    nota: `${NOTA_EVENTO} Rollos etiquetados y preparados para despacho, en bodega. Sin marcas ni logotipos de terceros identificables: al cliente no se le nombra.`,
+    porConfirmar:
+      "El id anuncia una ALIANZA y la nota describe un DESPACHO, que no es lo mismo. Antes de disparar hay que confirmar qué ocurrió de verdad en este encuentro: si la foto no comunica el acuerdo, el titular de la tarjeta dirá una cosa y la imagen otra. La nota está escrita con lo que hay hoy, que es el alt; si el evento resulta ser otra cosa, se reescribe aquí antes de la sesión.",
   },
   {
     id: "evento-performknit-320",
@@ -316,6 +389,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Encuentros",
     ancho: 1280,
+    nota: `${NOTA_EVENTO} El tejido de la línea sobre la mesa de muestras, cenital o en tres cuartos. Prima que se lea el tejido, no la sala.`,
   },
 
   /*
@@ -364,6 +438,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/productos",
     seccion: "Recomendador",
     ancho: 1280,
+    nota: `${NOTA_PRENDA} Camiseta lisa de frente, colgada o doblada de forma que se lea la caída del punto.`,
   },
   {
     id: "prenda-chompa",
@@ -372,6 +447,13 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/productos",
     seccion: "Recomendador",
     ancho: 1280,
+    /*
+     * Las dos exigencias de esta foto compiten y por eso la nota dice cuál
+     * manda: un detalle de perchado en una esquina desaparece al recortar a
+     * cuadrado, y ocupando el centro deja de leerse como chompa. La miniatura
+     * es donde se rompe, así que gana la miniatura.
+     */
+    nota: `${NOTA_PRENDA} Chompa entera y centrada, de frente. El reverso afelpado a la vista es DESEABLE, no obligatorio: si compite con el encuadre, manda que la prenda se reconozca en el cuadrado de 64 px. Que el perchado asome en un puño o en el dobladillo, con la prenda dominando el cuadro; un detalle de perchado que ocupe el centro se pierde como chompa, y en una esquina se pierde al recortar.`,
   },
   {
     id: "prenda-pantalon",
@@ -380,6 +462,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/productos",
     seccion: "Recomendador",
     ancho: 1280,
+    nota: `${NOTA_PRENDA} El pantalón entero, para que se vea la caída; el detalle de la sarga en el mismo cuadro si cabe sin perder la prenda.`,
   },
 
   /*
@@ -486,6 +569,44 @@ export const SLOTS_HITOS: SlotImagen[] = [
 }));
 
 /**
+ * Nota común de las telas del catálogo, con los REQUISITOS DE RECOLOREO.
+ *
+ * POR QUÉ ESTÁN AQUÍ Y NO EN LA DOCUMENTACIÓN INTERNA
+ * La simulación de color de la ficha multiplica el chip sobre la foto de la
+ * tela (`recoloreo.ts`), y eso solo sale limpio si la foto no trae color propio.
+ * Es una condición de la TOMA, no del preprocesado: no hay corrección posterior
+ * que quite el tinte de una tela ya teñida ni que devuelva el detalle de una
+ * alta luz quemada. Si no se pide al encargar, se descubre al procesar, y
+ * entonces la sesión hay que repetirla.
+ *
+ * Los números no son de criterio: salen medidos. `scripts/gris.ts` calcula el
+ * croma del original —cuánto se separan las medias de los tres canales, en
+ * 0–255— y avisa por encima de `CROMA_MAXIMO`, hoy 10. Del material que hay,
+ * Athletic mide 0,0 y Titanium entre 2,3 y 3,0. Lo de los quemados es por el
+ * otro paso del preprocesado: normaliza los niveles hasta dejar el máximo de
+ * luminancia en 250, y donde el original ya está en 255 no queda información
+ * que levantar (el lote actual tenía su máximo en 211, con margen de sobra).
+ *
+ * Va en TODAS las telas y no solo en las vacías: la nota describe lo que el
+ * slot debe contener, no lo que contiene. Las que hoy están publicadas a color
+ * no admiten recoloreo, y esta nota es exactamente lo que hay que cumplir para
+ * que la siguiente sí.
+ */
+const NOTA_MACRO_TELA =
+  "Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que " +
+  "tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o " +
+  "la celda, según la tela—; luz rasante si el tejido tiene relieve. " +
+  "REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de " +
+  "color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya " +
+  "teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, " +
+  "sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre " +
+  "255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas " +
+  "luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta " +
+  "dejar el máximo en 250, y donde el original está a 255 no queda información que " +
+  "levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. " +
+  "Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.";
+
+/**
  * Un slot por tela del catálogo. El id es el slug, así que el nombre de archivo
  * de una tela nunca hay que buscarlo: es el que aparece en su URL. Cada tela
  * se inventaría bajo la página de su familia (`/productos/<categoria>`).
@@ -498,6 +619,7 @@ export const SLOTS_TELA: SlotImagen[] = categories.flatMap((c) =>
     pagina: `/productos/${c.slug}`,
     seccion: "Telas del catálogo",
     ancho: 1280,
+    nota: NOTA_MACRO_TELA,
   })),
 );
 
@@ -515,7 +637,24 @@ export const SUFIJOS_GALERIA_TELA = ["caida"] as const;
 const NOTA_VISTA_GALERIA: Record<(typeof SUFIJOS_GALERIA_TELA)[number], (nombre: string) => { alt: (fam: string) => string; nota: string }> = {
   caida: (nombre) => ({
     alt: (fam) => `Tela ${nombre} de ${fam}, el género en caída mostrando peso y drapeado.`,
-    nota: `Segunda foto de la galería de ${nombre}: el género drapeado o en caída, NO el macro plano del tejido. Fondo neutro, vertical (4:5).`,
+    /*
+     * DECÍA "vertical (4:5)" Y ERA FALSO. La galería recorta a 4:3 en los dos
+     * sitios que recortan —la vista principal de `MacroLupa` y las miniaturas
+     * cuadradas—, así que una foto vertical entregada según esa nota perdía
+     * ~40% de alto; solo el visor a pantalla completa la habría enseñado entera,
+     * porque va con `object-contain`. El resto del registro ya pedía 4:3
+     * (`titanium-trama`, `athletic-macro`): la nota era la pieza descolgada.
+     * Se corrigió antes de encargar las 28 fotos, no después.
+     */
+    /*
+     * SIN EL NOMBRE DE LA TELA. Lo llevaba ("Segunda foto de la galería de
+     * Chelsea: …") y no aportaba nada —el nombre ya está en el id y en el alt—,
+     * pero hacía que las 28 notas fueran 28 textos distintos. El documento de
+     * fotografía agrupa por nota común para no repetir la misma especificación
+     * 28 veces, y con el nombre dentro no podía: son la misma toma pedida sobre
+     * telas distintas.
+     */
+    nota: `Segunda foto de la galería, la que activa el visor: el género drapeado o en caída, NO el macro plano del tejido (esa es la foto principal). Fondo neutro, apaisada (4:3) como el resto de la galería.`,
   }),
 };
 

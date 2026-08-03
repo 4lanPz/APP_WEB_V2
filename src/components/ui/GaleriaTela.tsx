@@ -74,6 +74,23 @@ export function GaleriaTela({
   if (vistas.length === 0) {
     return (
       <ImagePlaceholder
+        /*
+         * hueco-registrado: este `src={undefined}` NO es un hueco sin slot.
+         *
+         * Es la rama de "esta tela no tiene todavía NINGUNA vista": `vistas` sale
+         * de `vistasDeTela(slug)`, que ya resuelve los slots de la tela, y viene
+         * vacío justo cuando ninguno tiene archivo. El slot existe y es el slug
+         * de la tela (`SLOTS_TELA`, derivado de `taxonomy.ts`), así que la foto
+         * SÍ está pedida en el inventario de /admin/imagenes.
+         *
+         * Escribir aquí `foto(slug)` para que se notara sería peor: volvería a
+         * consultar lo que la llamada de arriba ya resolvió, y en este punto se
+         * sabe que da `undefined`.
+         *
+         * La marca la lee el chequeo de `npm run imagenes`, que si no lo daría
+         * por hueco sin registrar. Va aquí y no en una lista del script para que
+         * quien lea este archivo sepa si es excepción o descuido sin salir de él.
+         */
         src={undefined}
         alt=""
         sizes={sizes}

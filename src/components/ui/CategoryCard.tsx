@@ -1,5 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ImagePlaceholder } from "./ImagePlaceholder";
+import type { Foto } from "@/data/imagenes";
 import { cn } from "@/lib/cn";
 
 export interface CategoryCardProps {
@@ -8,18 +9,34 @@ export interface CategoryCardProps {
   index: number;
   title: string;
   description: string;
-  /** Fotografía real (Fase 2). Sin ella, se usa la textura "en preparación". */
-  imageSrc?: string;
-  imageAlt?: string;
+  /**
+   * Foto de la familia, ya resuelta: `foto("familia-<slug>")`. Sin ella el hueco
+   * se dibuja marcado, como en el resto del sitio — aquí va una foto, y hasta
+   * que llegue tiene que verse que falta.
+   *
+   * Recibe la `Foto` entera y no una ruta suelta, igual que `SubcategoryTile`:
+   * el `alt` viaja con la imagen. Separarlos deja abierta la puerta a pasar una
+   * ruta con el alt de otra, que es un fallo que nadie ve porque solo lo nota
+   * quien usa lector de pantalla.
+   */
+  foto?: Foto;
   className?: string;
 }
 
 /**
  * Card de familia de producto — reconstruida contra la grilla "03 Categorías"
- * de Productos.dc.html: tile de fondo oscuro con foto (o textura placeholder
- * "en preparación") + velo degradado, índice mono azul arriba, título +
- * descripción abajo. Sin borde propio: vive en una "seam grid" (gap-px
- * bg-greige + borde exterior), igual que ProductCard.
+ * de Productos.dc.html: tile de fondo oscuro con foto + velo degradado, índice
+ * mono azul arriba, título + descripción abajo. Sin borde propio: vive en una
+ * "seam grid" (gap-px bg-greige + borde exterior), igual que ProductCard.
+ *
+ * LA CAPA DE IMAGEN ES `ImagePlaceholder`, NO UN FONDO PROPIO
+ * Aquí se dibujaba a mano la misma trama diagonal que usa `ImagePlaceholder` en
+ * su rama de hueco vacío: copiada, sin rótulo y sin la guarda que la apaga al
+ * publicar. El efecto es que el hueco no se leía como hueco —parecía la textura
+ * elegida para la card—, así que nadie registró su slot y las cuatro familias no
+ * figuraban en el inventario de fotos que se le pide a marketing. Un marcador
+ * copiado deja de ser un marcador. Que la capa de imagen la ponga el componente
+ * que sabe dibujar huecos.
  *
  * Motion v1 §05: velo tinta se desliza desde abajo (opacity 0→1, 400ms) y
  * la flecha avanza (translateX +6px, asentar) al pasar el cursor. La card
@@ -32,8 +49,7 @@ export function CategoryCard({
   index,
   title,
   description,
-  imageSrc,
-  imageAlt,
+  foto,
   className,
 }: CategoryCardProps) {
   const indexLabel = String(index).padStart(2, "0");
@@ -46,24 +62,22 @@ export function CategoryCard({
         className,
       )}
     >
-      {imageSrc ? (
-        <Image
-          src={imageSrc}
-          alt={imageAlt ?? ""}
-          fill
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover"
-        />
-      ) : (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(45deg, rgba(245,242,238,0.05) 0 3px, transparent 3px 8px), radial-gradient(120% 120% at 25% 20%, #14333f 0%, #0D2937 60%, #091d27 100%)",
-          }}
-        />
-      )}
+      <ImagePlaceholder
+        dark
+        src={foto?.ruta}
+        alt={foto?.alt ?? ""}
+        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+        label="Foto de familia"
+        /*
+         * `marcadorEnAlto` y sin `sublabel`, las dos por lo mismo: el tercio
+         * inferior de esta card es el bloque de texto, que va SOBRE el hueco.
+         * Centrado, el rótulo caía en la línea del título y quedaban ilegibles
+         * los dos. Y el `sublabel` natural aquí sería el nombre de la familia,
+         * que la card ya escribe como título: repetirlo no añadía nada.
+         */
+        marcadorEnAlto
+        className="absolute inset-0"
+      />
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0"

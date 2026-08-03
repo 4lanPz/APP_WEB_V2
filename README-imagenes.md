@@ -35,17 +35,33 @@ llenos, una miniatura de los que sí, y el nombre exacto que espera cada uno
 
 Solo existe en desarrollo — en producción devuelve 404.
 
-### Los marcadores de hueco no se publican
+### Los marcadores de hueco — ANTES DE PUBLICAR
 
 Un hueco sin foto se dibuja con trama diagonal y su rótulo ("Foto pendiente",
-"Documental de taller · foto real"…) **solo en desarrollo**. En producción el
-hueco queda en un plano de color liso, sin texto ni trama: esos rótulos venían
-del mockup, describían la foto que faltaba y estaban llegando al visitante, que
-ni sabe ni le importa qué foto falta. Mismo criterio que `FondoHero` con su
-marcador punteado de cabecera.
+"Documental de taller · foto real"…). Lo hace **también en la build de
+producción**, a propósito: hoy el sitio es una demo interna y quien la mira
+necesita ver qué falta. Un hueco sin marcar no se distingue de una decisión de
+diseño — y eso es justo lo que dejó el inventario de fotos incompleto.
 
-O sea: si trabajando en local ves "Foto pendiente", es un aviso para ti. Al
-publicar no se ve. La lista de tareas sigue siendo `/admin/imagenes`.
+> **El día que el sitio salga al público, apagarlo.** Es una línea:
+>
+> ```ts
+> // src/lib/huecos.ts
+> export const MARCAR_HUECOS_DE_IMAGEN = false;
+> ```
+>
+> Con `false`, los huecos quedan en un plano de color liso —sin texto ni
+> trama— y las cabeceras vacías en tinta plana. Esos rótulos vienen del
+> mockup, donde describían la foto que faltaba, y el visitante final ni sabe
+> ni le importa qué foto falta.
+
+La constante la leen `ImagePlaceholder` y `FondoHero`, que es todo lo que dibuja
+huecos en el sitio. No hay una segunda casilla que tocar.
+
+No afecta a los planos de color que **son** contenido (`tintColor` en un swatch,
+`swatchColor` en las tiles de tono): esos se pintan igual en los dos casos.
+
+La lista de tareas sigue siendo `/admin/imagenes`.
 
 Sin levantar el servidor:
 
@@ -165,6 +181,7 @@ si el navegador no sabe reproducir ninguno de los dos formatos.
 |---|---|
 | `npm run imagenes` | procesa `entrega/` y actualiza el manifiesto |
 | `npm run imagenes:slots` | lista los nombres válidos en terminal |
+| `npm run imagenes:requisitos` | genera `docs/requisitos-fotografia.md` — lo que se le manda a marketing |
 | `npm run video -- <archivo>` | comprime el vídeo del hero y saca el póster |
 | `npm run catalogo` | verifica el catálogo y genera los pedidos pendientes |
 | `npm run imagenes:telas-pw` | regenera las fotos que salen de `Telas_PW/` |

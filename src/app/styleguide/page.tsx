@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { CategoryCard } from "@/components/ui/CategoryCard";
 import { PropuestaBotones } from "./_sistema/PropuestaBotones";
+import { foto } from "@/data/imagenes";
 
 export const metadata: Metadata = {
   title: "Styleguide — Textil Padilla",
@@ -419,30 +420,40 @@ export default function StyleguidePage() {
             description="Punto de mano suave, solidez de color verificada para teñido a demanda."
           />
         </div>
+        {/*
+         * Leen los MISMOS slots `familia-*` que la portada y /productos, no un
+         * placeholder de muestra. El styleguide documenta el sistema: si aquí se
+         * enseñara otra cosa, enseñaría algo que en el sitio no existe. Y no son
+         * huecos nuevos — un slot por familia, tres sitios donde se ve.
+         */}
         <div className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-4">
           <CategoryCard
             href="/productos/microfibra"
             index={1}
             title="Microfibra"
             description="Poliéster ligero de secado rápido para prenda deportiva."
+            foto={foto("familia-microfibra")}
           />
           <CategoryCard
             href="/productos#categorias"
             index={2}
             title="Texturizado"
             description="Hilo texturizado con cuerpo y frescura. En preparación."
+            foto={foto("familia-texturizado")}
           />
           <CategoryCard
             href="/productos#categorias"
             index={3}
             title="Spun"
             description="Hilado spun de tacto algodonoso. En preparación."
+            foto={foto("familia-spun")}
           />
           <CategoryCard
             href="/productos#categorias"
             index={4}
             title="Polialgodón"
             description="Mezcla poliéster-algodón resistente. En preparación."
+            foto={foto("familia-polialgodon")}
           />
         </div>
       </Section>

@@ -243,6 +243,7 @@ export default function Home() {
                   index={category.index}
                   title={category.name}
                   description={category.description}
+                  foto={foto(`familia-${category.slug}`)}
                   className="h-full"
                 />
               </RevealItem>

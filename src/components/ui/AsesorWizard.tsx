@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 import { categories } from "@/data/taxonomy";
@@ -10,6 +9,7 @@ import { estadoFicha } from "@/data/fichas";
 import { foto } from "@/data/imagenes";
 import { whatsappHref } from "@/data/whatsapp";
 import { buttonVariants } from "./buttonVariants";
+import { ImagePlaceholder } from "./ImagePlaceholder";
 import { EASE_REVELAR, EASE_PLEGAR, EASE_ASENTAR } from "@/lib/motion";
 
 /**
@@ -133,15 +133,26 @@ function OpcionConImagen({
     >
       {/* El hueco va MÁS OSCURO que la tarjeta, no más claro como antes: sobre
           una tarjeta ya levantada, un cuadro aún más claro añadía un tercer
-          plano. En tinta se lee como agujero, que es lo que es. */}
+          plano. En tinta se lee como agujero, que es lo que es.
+
+          Ese `ink/40` lo pone el contenedor y por eso el hueco va con
+          `sinFondoPropio`: el color de aquí está medido contra `ink`, y el fondo
+          `dark` de la familia es `brand-deep`, que es justo lo que esta pantalla
+          descartó. Lo que sí viene del sistema es el marcador — antes esto
+          dibujaba su propio hueco (un punto `brand/70` centrado) y por tanto era
+          un hueco que no decía que lo era: ni el chequeo de `npm run imagenes`
+          lo veía ni el usuario lo entendía. La trama va sin rótulo porque a
+          64 px no cabe ninguno legible. */}
       <span className="relative block size-16 shrink-0 overflow-hidden bg-ink/40 sm:size-18">
-        {f ? (
-          <Image src={f.ruta} alt="" fill sizes="72px" className="object-cover" />
-        ) : (
-          <span aria-hidden className="absolute inset-0 flex items-center justify-center">
-            <span className="block size-2 bg-brand/70" />
-          </span>
-        )}
+        <ImagePlaceholder
+          dark
+          sinFondoPropio
+          src={f?.ruta}
+          alt=""
+          sizes="72px"
+          label=""
+          className="absolute inset-0"
+        />
       </span>
       <span className="min-w-0">
         <span className="block font-sans text-body-s font-semibold text-paper">
