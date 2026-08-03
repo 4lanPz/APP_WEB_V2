@@ -20,39 +20,49 @@ tenga imagen no quiere decir que esté resuelto:
 | Estado | Qué significa | ¿Se pide? |
 |---|---|---|
 | **FALTA** | No hay archivo. El sitio dibuja el marcador de hueco. | Sí |
-| **PROVISIONAL** | Hay foto, pero es de relleno, de maqueta, generada o de banco. Hay que reemplazarla. | Sí |
+| **PROVISIONAL** | Hay foto, pero hay que reemplazarla. | Sí |
 | **DEFINITIVA** | Material real, en su sitio. | No |
 
 Las provisionales llevan debajo **por qué** lo son y **según qué** se ha
-determinado —el commit, el md5 o la receta—, para que se pueda comprobar en
-vez de creérselo.
+determinado —el commit, el md5, la receta o la medida—, para que se pueda
+comprobar en vez de creérselo. No todas piden lo mismo:
 
-**PENDIENTE DE CLASIFICAR** es una provisional de la que no consta de dónde
-salió. No se ha adivinado a propósito: una clasificación inventada se lee
-igual que una comprobada y ya nadie vuelve a revisarla. Hay que mirarla y
-decidir.
+| Etiqueta | Qué pasa | Qué se pide |
+|---|---|---|
+| **PROVISIONAL** a secas | De maqueta, de relleno, generada o de banco. | La foto de verdad. |
+| **NO SIRVE PARA EL RECOLOREO** | La medida del sitio rechaza la toma: tela teñida, dominante, zona quemada o subexposición. | **Volver a fotografiar** la tela. |
+| **SIN VERIFICAR** | El original llegó ya en blanco y negro, así que no se puede comprobar si la tela era cruda. Lo publicado suele verse bien. | **El original a color** de esa misma toma. No hay que repetir la sesión. |
+| **PENDIENTE DE CLASIFICAR** | No consta de dónde salió el archivo. | Mirarla y decidir. |
+
+Las dos del medio salen de medir las fotos, no de opinar sobre ellas: el
+croma, los píxeles quemados y la luminancia de cada original están en el
+`Según` de cada una y se recalculan con `npm run imagenes:medir`.
+
+Y **PENDIENTE DE CLASIFICAR** no se ha adivinado a propósito: una
+clasificación inventada se lee igual que una comprobada y ya nadie vuelve a
+revisarla.
 
 ## Resumen
 
 Los **133 huecos** de imagen del sitio, repartidos en **11 páginas**:
 
 - **Faltan 88** — no hay archivo.
-- **Provisionales 8** — hay foto, pero hay que reemplazarla. De estas, **3 están pendientes de clasificar**.
-- **Definitivas 37** — no se piden.
+- **Provisionales 34** — hay foto, pero hay que reemplazarla. De estas, **3 están pendientes de clasificar**.
+- **Definitivas 11** — no se piden.
 
-**Hay que conseguir 96 fotos**, no 88.
+**Hay que conseguir 122 fotos**, no 88.
 
 | Página | Faltan | Provisionales | Definitivas | Total |
 |---|---|---|---|---|
 | [Inicio](#inicio--) (`/`) | 11 | 1 | 1 | 13 |
 | [Empresa](#empresa--empresa) (`/empresa`) | 11 | 1 | 2 | 14 |
 | [Productos](#productos--productos) (`/productos`) | 3 | 1 | 1 | 5 |
-| [Microfibra](#microfibra--productosmicrofibra) (`/productos/microfibra`) | 21 | 1 | 17 | 39 |
+| [Microfibra](#microfibra--productosmicrofibra) (`/productos/microfibra`) | 21 | 13 | 5 | 39 |
 | [Dortmund Plus](#dortmund-plus--productosmicrofibradortmund-plus) (`/productos/microfibra/dortmund-plus`) | 2 | 1 | 0 | 3 |
 | [Camisetas](#camisetas--productoscamisetas) (`/productos/camisetas`) | 2 | 1 | 1 | 4 |
-| [Texturizado](#texturizado--productostexturizado) (`/productos/texturizado`) | 8 | 0 | 7 | 15 |
-| [Spun](#spun--productosspun) (`/productos/spun`) | 8 | 0 | 2 | 10 |
-| [Polialgodón](#polialgodón--productospolialgodon) (`/productos/polialgodon`) | 15 | 0 | 5 | 20 |
+| [Texturizado](#texturizado--productostexturizado) (`/productos/texturizado`) | 8 | 7 | 0 | 15 |
+| [Spun](#spun--productosspun) (`/productos/spun`) | 8 | 2 | 0 | 10 |
+| [Polialgodón](#polialgodón--productospolialgodon) (`/productos/polialgodon`) | 15 | 5 | 0 | 20 |
 | [Asesor Virtual](#asesor-virtual--asesor-virtual) (`/asesor-virtual`) | 6 | 1 | 0 | 7 |
 | [Contacto](#contacto--contacto) (`/contacto`) | 1 | 1 | 1 | 3 |
 
@@ -348,7 +358,7 @@ No se pide: ya está resuelta.
 
 ## Microfibra — `/productos/microfibra`
 
-**21 faltan · 1 provisional · 17 definitivas** — 39 huecos en total. Quedan 22 fotos por conseguir.
+**21 faltan · 13 provisionales · 5 definitivas** — 39 huecos en total. Quedan 34 fotos por conseguir.
 
 ### Cabecera — 1 (1 por conseguir)
 
@@ -372,7 +382,7 @@ No se pide: ya está resuelta.
 - **Qué debe verse:** Camiseta deportiva sobre pedestal, fondo oscuro — ejemplo de aplicación de la microfibra en confección.
 - **Nota:** Demo: prenda deportiva sobre pedestal, fondo oscuro y neutro. Imagen generada para la maqueta, NO es producto de Textil Padilla. Se reemplazará por el objeto 3D. Vertical (4:5).
 
-### Telas del catálogo — 20 (7 por conseguir)
+### Telas del catálogo — 20 (17 por conseguir)
 
 #### **DEFINITIVA** `chelsea.jpg`
 
@@ -382,13 +392,25 @@ No se pide: ya está resuelta.
 
 No se pide: ya está resuelta.
 
-#### **DEFINITIVA** `boston.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `boston.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía de la microfibra Boston, muestra de fábrica sin teñir: punto liso de malla cerrada.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `dortmund.jpg`
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,428, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `dortmund.jpg`
+
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Tela Dortmund de microfibra en blanco, superficie lisa a color pleno.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Croma 10,3, justo sobre el techo de 10. Poco, pero es dominante real: el original es a color y el tinte multiplicaría al del chip.
 
 #### **FALTA** `imperial.jpg`
 
@@ -396,11 +418,17 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Imperial de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `sevilla.jpg`
+#### **PROVISIONAL · SIN VERIFICAR** `sevilla.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía de la microfibra Sevilla, muestra de fábrica sin teñir, con el relieve del punto marcado en diagonal.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,513 · sin quemados · sin estirar.
 
 #### **DEFINITIVA** `titanium.jpg`
 
@@ -412,7 +440,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Chelsea Plus de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `athletic-plus.jpg`
 
@@ -420,7 +448,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Athletic Plus de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `dortmund-plus.jpg`
 
@@ -428,7 +456,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Dortmund Plus de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `equatex-plus.jpg`
 
@@ -436,19 +464,37 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Equatex Plus de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `juventus.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `juventus.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía de la microfibra Juventus, muestra de fábrica sin teñir, con el canalé vertical del tejido bien definido.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `kansas.jpg`
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,417, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `kansas.jpg`
 
-#### **DEFINITIVA** `sevilla-plus.jpg`
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía de la microfibra Kansas, muestra de fábrica sin teñir, con celdas tipo panal visibles en la superficie.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-No se pide: ya está resuelta.
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,381, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `sevilla-plus.jpg`
+
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Tela Sevilla Plus de microfibra, detalle del tejido.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. 4.116 píxeles quemados, un 0,251% del cuadro sobre un techo de 0,05%. El preprocesado lleva el máximo a 250, y donde el original ya está en 255 no queda información que levantar.
 
 #### **FALTA** `boston-plus.jpg`
 
@@ -456,11 +502,17 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Boston Plus de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `dobleface-plus.jpg`
+#### **PROVISIONAL · SIN VERIFICAR** `dobleface-plus.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía de la microfibra Dobleface Plus, muestra de fábrica sin teñir: punto doble cara de malla fina y uniforme.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,552 · sin quemados · sin estirar.
 
 #### **FALTA** `equator-plus.jpg`
 
@@ -468,19 +520,37 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Equator Plus de microfibra, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `sevilla-plus-brillante.jpg`
+#### **PROVISIONAL · SIN VERIFICAR** `sevilla-plus-brillante.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Tela Sevilla Plus Brillante, detalle del tejido con acabado brillante.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `dortmund-plus-brillante.jpg`
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,702 · 60 píxeles quemados (0,007%) · sin estirar.
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · SIN VERIFICAR** `dortmund-plus-brillante.jpg`
 
-#### **DEFINITIVA** `aston-plus.jpg`
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Tela Dortmund Plus Brillante, detalle del tejido con acabado brillante.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-No se pide: ya está resuelta.
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,566 · sin quemados · sin estirar.
+
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `aston-plus.jpg`
+
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía de la microfibra Aston Plus, muestra de fábrica sin teñir: tejido de relieve acanalado y estructura abierta.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,401, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
 ### Galería · segunda vista — 14 (13 por conseguir)
 
@@ -598,17 +668,29 @@ No se pide: ya está resuelta.
 
 No se pide: ya está resuelta.
 
-### Galería · principal en alta — 1 (resuelta)
+### Galería · principal en alta — 1 (1 por conseguir)
 
-#### **DEFINITIVA** `athletic-macro.jpg`
+#### **PROVISIONAL · SIN VERIFICAR** `athletic-macro.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** — sin declarar —
+- **Proporción:** — sin declarar —
+- **Ancho mínimo de entrega:** 2400 px
+- **Qué debe verse:** Macrofotografía de la microfibra Athletic sin teñir: la malla de panal y los pliegues del género en luz rasante.
+- **Nota:** Generado, no se entrega. Recorte 4:3 del original sobre la zona en foco.
 
-### Galería · capa de lupa — 1 (resuelta)
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,707, sin subexponer y sin zona quemada: LA FOTO EN USO ES ACEPTABLE y la ficha con lupa funciona con ella. Lo que se pide es el ORIGINAL A COLOR de `Microfibra/Athletic (3).jpeg`, para poder verificarla — no repetir la sesión. No se entrega un archivo nuevo: este slot lo genera el procesado recortando ese original (`ORIGEN_ALTA` en `preparar-imagenes.ts`), así que se rehace solo en cuanto llegue.
 
-#### **DEFINITIVA** `athletic-zoom.jpg`
+### Galería · capa de lupa — 1 (1 por conseguir)
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · SIN VERIFICAR** `athletic-zoom.jpg`
+
+- **Se ve a:** — sin declarar —
+- **Proporción:** — sin declarar —
+- **Ancho mínimo de entrega:** 3000 px
+- **Qué debe verse:** —
+- **Nota:** Generado, no se entrega. Mismo recorte que athletic-macro, al ancho máximo que da el recorte sin escalar. Decorativo: la lupa lo monta con aria-hidden sobre la imagen que ya tiene alt.
+
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,708, mismo original y mismo recorte que `athletic-macro`: LA CAPA DE LA LUPA EN USO ES ACEPTABLE y lo que se pide es el ORIGINAL A COLOR para poder verificarla, no repetir la sesión. También lo genera el procesado, no se entrega.
 
 ---
 
@@ -690,21 +772,39 @@ No se pide: ya está resuelta.
 
 ## Texturizado — `/productos/texturizado`
 
-**8 faltan · 0 provisionales · 7 definitivas** — 15 huecos en total. Quedan 8 fotos por conseguir.
+**8 faltan · 7 provisionales · 0 definitivas** — 15 huecos en total. Quedan 15 fotos por conseguir.
 
-### Telas del catálogo — 8 (1 por conseguir)
+### Telas del catálogo — 8 (8 por conseguir)
 
-#### **DEFINITIVA** `gaby.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `gaby.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del texturizado Gaby, muestra de fábrica sin teñir: trama diagonal fina y regular.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `kiana.jpg`
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,307, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `kiana.jpg`
 
-#### **DEFINITIVA** `napoli.jpg`
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del texturizado Kiana, muestra de fábrica sin teñir, de superficie lisa y trama muy fina.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-No se pide: ya está resuelta.
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,350, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `napoli.jpg`
+
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del texturizado Napoli, muestra de fábrica sin teñir, con el acanalado del punto en sentido vertical.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,372, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
 #### **FALTA** `napoli-open.jpg`
 
@@ -712,23 +812,47 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Napoli Open de texturizado, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `napoles.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `napoles.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del texturizado Napoles, muestra de fábrica sin teñir: canalé vertical de paso ancho.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `river.jpg`
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,364, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `river.jpg`
 
-#### **DEFINITIVA** `mezi.jpg`
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del texturizado River, muestra de fábrica sin teñir, con la estructura del punto visible al trasluz.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-No se pide: ya está resuelta.
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,347, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-#### **DEFINITIVA** `ribb-150.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `mezi.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Tela Mezi texturizada en negro, superficie lisa a color pleno.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Subexpuesta: su máximo es 113 sobre 255, así que habría que estirar ×2,21 (techo ×1,35) y 113 niveles repartidos en 250 dan banding. Es tela NEGRA, y por eso pasa el croma con 2,1: el negro es neutro. El croma mide el tinte, no si la tela está teñida.
+
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `ribb-150.jpg`
+
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del texturizado Ribb 150, muestra de fábrica sin teñir: canalé elástico de rib, característico de cuellos y puños.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,325, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
 ### Galería · segunda vista — 7 (7 por conseguir)
 
@@ -792,9 +916,9 @@ No se pide: ya está resuelta.
 
 ## Spun — `/productos/spun`
 
-**8 faltan · 0 provisionales · 2 definitivas** — 10 huecos en total. Quedan 8 fotos por conseguir.
+**8 faltan · 2 provisionales · 0 definitivas** — 10 huecos en total. Quedan 10 fotos por conseguir.
 
-### Telas del catálogo — 8 (6 por conseguir)
+### Telas del catálogo — 8 (8 por conseguir)
 
 #### **FALTA** `ribb-20.jpg`
 
@@ -802,11 +926,17 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Ribb 20 de spun, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `interlock-30.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `interlock-30.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Tela Interlock 30 de spun en blanco, mostrando la caída del género y su doble cara lisa.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Croma 18,7, casi el doble del techo de 10 — y eso que la tela se llama «Blanco Frozen»: la dominante la trae la luz, no el género.
 
 #### **FALTA** `interlock-plus-30.jpg`
 
@@ -814,7 +944,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Interlock Plus 30 de spun, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `buff-romina-30.jpg`
 
@@ -822,7 +952,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Buff Romina 30 de spun, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `buff-romina-rev-30.jpg`
 
@@ -830,7 +960,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Buff Romina Rev 30 de spun, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `ribb-30.jpg`
 
@@ -838,11 +968,17 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Ribb 30 de spun, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `interlock-40.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `interlock-40.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del Interlock 40 de spun, muestra de fábrica sin teñir: doble punto liso por ambas caras.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,383, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
 #### **FALTA** `ribb-40.jpg`
 
@@ -850,7 +986,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Ribb 40 de spun, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 ### Galería · segunda vista — 2 (2 por conseguir)
 
@@ -874,13 +1010,19 @@ No se pide: ya está resuelta.
 
 ## Polialgodón — `/productos/polialgodon`
 
-**15 faltan · 0 provisionales · 5 definitivas** — 20 huecos en total. Quedan 15 fotos por conseguir.
+**15 faltan · 5 provisionales · 0 definitivas** — 20 huecos en total. Quedan 20 fotos por conseguir.
 
-### Telas del catálogo — 14 (9 por conseguir)
+### Telas del catálogo — 14 (14 por conseguir)
 
-#### **DEFINITIVA** `denis-20.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `denis-20.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del poli-algodón Denis 20, muestra de fábrica sin teñir, de punto liso y tacto de peinado.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,377, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
 #### **FALTA** `balboa-24.jpg`
 
@@ -888,7 +1030,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Balboa 24 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `melisa-24.jpg`
 
@@ -896,7 +1038,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Melisa 24 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `austria-premium-18.jpg`
 
@@ -904,7 +1046,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Austria Premium 18 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `australia-18.jpg`
 
@@ -912,7 +1054,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Australia 18 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `amelia-24.jpg`
 
@@ -920,7 +1062,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Amelia 24 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `ribb-18.jpg`
 
@@ -928,7 +1070,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Ribb 18 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `ribb-20-24.jpg`
 
@@ -936,23 +1078,47 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Ribb 20/24 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `lacoast-20.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `lacoast-20.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del poli-algodón Lacoast 20, muestra de fábrica sin teñir, con las celdas de panal del piqué bien marcadas.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-#### **DEFINITIVA** `lacoast-polo-20.jpg`
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,277, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-No se pide: ya está resuelta.
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `lacoast-polo-20.jpg`
 
-#### **DEFINITIVA** `lacoast-kratos-22.jpg`
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del poli-algodón Lacoast Polo 20, muestra de fábrica sin teñir: piqué de celda romboidal para polos.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
-No se pide: ya está resuelta.
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,312, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
-#### **DEFINITIVA** `pique-ares-24.jpg`
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `lacoast-kratos-22.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del poli-algodón Lacoast Kratos 22 en color marengo, con el hilo jaspeado visible en la trama.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,076, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+#### **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** `pique-ares-24.jpg`
+
+- **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
+- **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Macrofotografía del poli-algodón Pique Ares 24, muestra de fábrica sin teñir, con el relieve regular del piqué.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,351, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
 
 #### **FALTA** `cuellos-20-24.jpg`
 
@@ -960,7 +1126,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Cuellos 20/24 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 #### **FALTA** `punos-20-24.jpg`
 
@@ -968,7 +1134,7 @@ No se pide: ya está resuelta.
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela Puños 20/24 de polialgodón, detalle del tejido.
-- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+- **Nota:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 ### Galería · segunda vista — 6 (6 por conseguir)
 

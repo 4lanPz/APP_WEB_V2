@@ -13,15 +13,28 @@
  *  1. DESATURAR A GRIS PURO. `multiply` multiplica canal a canal: si la foto
  *     trae dominante, ese tinte multiplica también al color del chip y el
  *     resultado ya no es el color que se pidió. El lote de Titanium llega con
- *     croma 2,5–3,0 —poco, pero medible—; el de Athletic con 0,0.
+ *     croma 2,3–3,0 —poco, pero medible—, y es la referencia de luz neutra que
+ *     tenemos.
+ *
+ *     AQUÍ DECÍA QUE ATHLETIC LLEGABA CON CROMA 0,0, Y ESO NO MEDÍA LO QUE
+ *     PARECÍA. `Microfibra/Athletic (3).jpeg` es un archivo en blanco y negro:
+ *     24 millones de píxeles con R=G=B exacto, comprobado. Su croma es 0,0
+ *     porque ya venía desaturado, no porque la luz fuera neutra — el mismo 0,0
+ *     daría una tela azul convertida a gris. Citarlo como referencia pedía una
+ *     cifra que solo se consigue tirando el color, que es justo lo contrario de
+ *     lo que hace falta. Ver `npm run imagenes:medir`.
  *
  *  2. NORMALIZAR NIVELES hasta que el máximo de luminancia quede en 250. Las
  *     fotos de Titanium son bastante más oscuras que la de Athletic (k 0,469 a
- *     0,600 frente a 0,749) y ninguna del lote tiene un solo píxel quemado
- *     —máximo medido 211—, así que hay margen para levantarlas sin perder
- *     información. Normalizada, Titanium (3) pasa de k=0,600 a 0,712, o sea al
+ *     0,600 frente a 0,721) y ninguna del lote tiene un solo píxel quemado
+ *     —máximo medido 212—, así que hay margen para levantarlas sin perder
+ *     información. Normalizada, Titanium (3) pasa de k=0,600 a 0,708, o sea al
  *     nivel de Athletic, y la compensación de la capa deja de tener que
  *     estirar tanto.
+ *
+ *     El 0,721 es del RECORTE que se publica. Antes decía 0,749, que es el
+ *     cuadro entero de `Athletic (3).jpeg` y quedó de cuando no había recorte:
+ *     describía una imagen que ya no se publica.
  *
  * El factor es `250 / máximo`, un solo escalar para toda la imagen. No es
  * `normalise()` de sharp: ese estira contra percentiles y RECORTA, y recortar

@@ -19,31 +19,41 @@ tenga imagen no quiere decir que esté resuelto:
 | Estado | Qué significa | ¿Se pide? |
 |---|---|---|
 | **FALTA** | No hay archivo. El sitio dibuja el marcador de hueco. | Sí |
-| **PROVISIONAL** | Hay foto, pero es de relleno, de maqueta, generada o de banco. Hay que reemplazarla. | Sí |
+| **PROVISIONAL** | Hay foto, pero hay que reemplazarla. | Sí |
 | **DEFINITIVA** | Material real, en su sitio. | No |
 
 Las provisionales llevan debajo **por qué** lo son y **según qué** se ha
-determinado —el commit, el md5 o la receta—, para que se pueda comprobar en
-vez de creérselo.
+determinado —el commit, el md5, la receta o la medida—, para que se pueda
+comprobar en vez de creérselo. No todas piden lo mismo:
 
-**PENDIENTE DE CLASIFICAR** es una provisional de la que no consta de dónde
-salió. No se ha adivinado a propósito: una clasificación inventada se lee
-igual que una comprobada y ya nadie vuelve a revisarla. Hay que mirarla y
-decidir.
+| Etiqueta | Qué pasa | Qué se pide |
+|---|---|---|
+| **PROVISIONAL** a secas | De maqueta, de relleno, generada o de banco. | La foto de verdad. |
+| **NO SIRVE PARA EL RECOLOREO** | La medida del sitio rechaza la toma: tela teñida, dominante, zona quemada o subexposición. | **Volver a fotografiar** la tela. |
+| **SIN VERIFICAR** | El original llegó ya en blanco y negro, así que no se puede comprobar si la tela era cruda. Lo publicado suele verse bien. | **El original a color** de esa misma toma. No hay que repetir la sesión. |
+| **PENDIENTE DE CLASIFICAR** | No consta de dónde salió el archivo. | Mirarla y decidir. |
+
+Las dos del medio salen de medir las fotos, no de opinar sobre ellas: el
+croma, los píxeles quemados y la luminancia de cada original están en el
+`Según` de cada una y se recalculan con `npm run imagenes:medir`.
+
+Y **PENDIENTE DE CLASIFICAR** no se ha adivinado a propósito: una
+clasificación inventada se lee igual que una comprobada y ya nadie vuelve a
+revisarla.
 
 ## Resumen
 
 Los **133 huecos** de imagen del sitio:
 
 - **Faltan 88** — no hay archivo.
-- **Provisionales 8** — hay foto, pero hay que reemplazarla. De estas, **3 están pendientes de clasificar**.
-- **Definitivas 37** — no se piden.
+- **Provisionales 34** — hay foto, pero hay que reemplazarla. De estas, **3 están pendientes de clasificar**.
+- **Definitivas 11** — no se piden.
 
-**Hay que conseguir 96 fotos**, no 88: las provisionales ocupan su hueco pero no lo cierran.
+**Hay que conseguir 122 fotos**, no 88: las provisionales ocupan su hueco pero no lo cierran.
 
 | Tipo de toma | Faltan | Provisionales | Definitivas |
 |---|---|---|---|
-| Macro de tela del catálogo | 23 | 0 | 27 |
+| Macro de tela del catálogo | 23 | 24 | 3 |
 | Segunda vista de tela — el género en caída | 28 | 0 | 1 |
 | Card de familia de tela | 4 | 0 | 0 |
 | Cabecera de página | 1 | 7 | 0 |
@@ -53,8 +63,8 @@ Los **133 huecos** de imagen del sitio:
 | Línea de hitos — archivo histórico | 9 | 0 | 0 |
 | Miniaturas del cuestionario del asesor | 6 | 0 | 0 |
 | Asesor virtual en portada | 3 | 0 | 0 |
-| Huecos sueltos | 5 | 1 | 0 |
-| Ya resueltas, fuera de sesión | 0 | 0 | 7 |
+| Huecos sueltos | 5 | 3 | 0 |
+| Ya resueltas, fuera de sesión | 0 | 0 | 5 |
 
 ## Pendientes de clasificar — 3
 
@@ -77,28 +87,47 @@ pero si la decisión cae del otro lado la toma no sirve y hay que repetirla.
 
 ---
 
-## Macro de tela del catálogo — 23 fotos
+## Macro de tela del catálogo — 47 fotos
 
 El detalle del tejido de cada tela. Es la foto principal de su ficha y la miniatura de la rejilla de su familia. La más importante del encargo: sin ella una tela no se puede publicar.
 
 - **Se ve a:** ficha de tela, ancho de la columna de galería (hasta ~860 px); en la rejilla de familia, tile de ~380 × 170 px (`MacroLupa`, `SubcategoryTile`)
 - **Proporción:** 4:3 apaisada — el marco de la galería es `aspect-4/3`
-- **Estado:** 23 faltan · 0 provisionales · 27 definitivas
+- **Estado:** 23 faltan · 24 provisionales · 3 definitivas
 
-**Qué se necesita, igual para todas:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
+**Qué se necesita, igual para todas:** Macro del tejido a plano, apaisada (4:3) como el resto de la galería. Lo que tiene que leerse es la ESTRUCTURA del punto —la trama, el relieve, el canalé o la celda, según la tela—; luz rasante si el tejido tiene relieve. REQUISITOS DE RECOLOREO, y sin ellos la foto no sirve para la simulación de color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre 255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; (3) sin altas luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta dejar el máximo en 250, y donde el original está a 255 no queda información que levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el recoloreo desatura él solo, y una foto que llega ya desaturada hace imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro da 0,0 siempre, venga de tela cruda o de tela azul. Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.
 
 | Estado | Archivo a entregar | Dónde va | Ancho mín. | Qué debe verse |
 |---|---|---|---|---|
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `aston-plus.jpg` | Microfibra | 1280 px | Macrofotografía de la microfibra Aston Plus, muestra de fábrica sin teñir: tejido de relieve acanalado y estructura abierta. |
 | **FALTA** | `athletic-plus.jpg` | Microfibra | 1280 px | Tela Athletic Plus de microfibra, detalle del tejido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `boston.jpg` | Microfibra | 1280 px | Macrofotografía de la microfibra Boston, muestra de fábrica sin teñir: punto liso de malla cerrada. |
 | **FALTA** | `boston-plus.jpg` | Microfibra | 1280 px | Tela Boston Plus de microfibra, detalle del tejido. |
 | **FALTA** | `chelsea-plus.jpg` | Microfibra | 1280 px | Tela Chelsea Plus de microfibra, detalle del tejido. |
+| **PROVISIONAL · SIN VERIFICAR** | `dobleface-plus.jpg` | Microfibra | 1280 px | Macrofotografía de la microfibra Dobleface Plus, muestra de fábrica sin teñir: punto doble cara de malla fina y uniforme. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `dortmund.jpg` | Microfibra | 1280 px | Tela Dortmund de microfibra en blanco, superficie lisa a color pleno. |
 | **FALTA** | `dortmund-plus.jpg` | Microfibra | 1280 px | Tela Dortmund Plus de microfibra, detalle del tejido. |
+| **PROVISIONAL · SIN VERIFICAR** | `dortmund-plus-brillante.jpg` | Microfibra | 1280 px | Tela Dortmund Plus Brillante, detalle del tejido con acabado brillante. |
 | **FALTA** | `equatex-plus.jpg` | Microfibra | 1280 px | Tela Equatex Plus de microfibra, detalle del tejido. |
 | **FALTA** | `equator-plus.jpg` | Microfibra | 1280 px | Tela Equator Plus de microfibra, detalle del tejido. |
 | **FALTA** | `imperial.jpg` | Microfibra | 1280 px | Tela Imperial de microfibra, detalle del tejido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `juventus.jpg` | Microfibra | 1280 px | Macrofotografía de la microfibra Juventus, muestra de fábrica sin teñir, con el canalé vertical del tejido bien definido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `kansas.jpg` | Microfibra | 1280 px | Macrofotografía de la microfibra Kansas, muestra de fábrica sin teñir, con celdas tipo panal visibles en la superficie. |
+| **PROVISIONAL · SIN VERIFICAR** | `sevilla.jpg` | Microfibra | 1280 px | Macrofotografía de la microfibra Sevilla, muestra de fábrica sin teñir, con el relieve del punto marcado en diagonal. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `sevilla-plus.jpg` | Microfibra | 1280 px | Tela Sevilla Plus de microfibra, detalle del tejido. |
+| **PROVISIONAL · SIN VERIFICAR** | `sevilla-plus-brillante.jpg` | Microfibra | 1280 px | Tela Sevilla Plus Brillante, detalle del tejido con acabado brillante. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `gaby.jpg` | Texturizado | 1280 px | Macrofotografía del texturizado Gaby, muestra de fábrica sin teñir: trama diagonal fina y regular. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `kiana.jpg` | Texturizado | 1280 px | Macrofotografía del texturizado Kiana, muestra de fábrica sin teñir, de superficie lisa y trama muy fina. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `mezi.jpg` | Texturizado | 1280 px | Tela Mezi texturizada en negro, superficie lisa a color pleno. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `napoles.jpg` | Texturizado | 1280 px | Macrofotografía del texturizado Napoles, muestra de fábrica sin teñir: canalé vertical de paso ancho. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `napoli.jpg` | Texturizado | 1280 px | Macrofotografía del texturizado Napoli, muestra de fábrica sin teñir, con el acanalado del punto en sentido vertical. |
 | **FALTA** | `napoli-open.jpg` | Texturizado | 1280 px | Tela Napoli Open de texturizado, detalle del tejido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `ribb-150.jpg` | Texturizado | 1280 px | Macrofotografía del texturizado Ribb 150, muestra de fábrica sin teñir: canalé elástico de rib, característico de cuellos y puños. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `river.jpg` | Texturizado | 1280 px | Macrofotografía del texturizado River, muestra de fábrica sin teñir, con la estructura del punto visible al trasluz. |
 | **FALTA** | `buff-romina-30.jpg` | Spun | 1280 px | Tela Buff Romina 30 de spun, detalle del tejido. |
 | **FALTA** | `buff-romina-rev-30.jpg` | Spun | 1280 px | Tela Buff Romina Rev 30 de spun, detalle del tejido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `interlock-30.jpg` | Spun | 1280 px | Tela Interlock 30 de spun en blanco, mostrando la caída del género y su doble cara lisa. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `interlock-40.jpg` | Spun | 1280 px | Macrofotografía del Interlock 40 de spun, muestra de fábrica sin teñir: doble punto liso por ambas caras. |
 | **FALTA** | `interlock-plus-30.jpg` | Spun | 1280 px | Tela Interlock Plus 30 de spun, detalle del tejido. |
 | **FALTA** | `ribb-20.jpg` | Spun | 1280 px | Tela Ribb 20 de spun, detalle del tejido. |
 | **FALTA** | `ribb-30.jpg` | Spun | 1280 px | Tela Ribb 30 de spun, detalle del tejido. |
@@ -108,40 +137,101 @@ El detalle del tejido de cada tela. Es la foto principal de su ficha y la miniat
 | **FALTA** | `austria-premium-18.jpg` | Polialgodón | 1280 px | Tela Austria Premium 18 de polialgodón, detalle del tejido. |
 | **FALTA** | `balboa-24.jpg` | Polialgodón | 1280 px | Tela Balboa 24 de polialgodón, detalle del tejido. |
 | **FALTA** | `cuellos-20-24.jpg` | Polialgodón | 1280 px | Tela Cuellos 20/24 de polialgodón, detalle del tejido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `denis-20.jpg` | Polialgodón | 1280 px | Macrofotografía del poli-algodón Denis 20, muestra de fábrica sin teñir, de punto liso y tacto de peinado. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `lacoast-20.jpg` | Polialgodón | 1280 px | Macrofotografía del poli-algodón Lacoast 20, muestra de fábrica sin teñir, con las celdas de panal del piqué bien marcadas. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `lacoast-kratos-22.jpg` | Polialgodón | 1280 px | Macrofotografía del poli-algodón Lacoast Kratos 22 en color marengo, con el hilo jaspeado visible en la trama. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `lacoast-polo-20.jpg` | Polialgodón | 1280 px | Macrofotografía del poli-algodón Lacoast Polo 20, muestra de fábrica sin teñir: piqué de celda romboidal para polos. |
 | **FALTA** | `melisa-24.jpg` | Polialgodón | 1280 px | Tela Melisa 24 de polialgodón, detalle del tejido. |
+| **PROVISIONAL · NO SIRVE PARA EL RECOLOREO** | `pique-ares-24.jpg` | Polialgodón | 1280 px | Macrofotografía del poli-algodón Pique Ares 24, muestra de fábrica sin teñir, con el relieve regular del piqué. |
 | **FALTA** | `punos-20-24.jpg` | Polialgodón | 1280 px | Tela Puños 20/24 de polialgodón, detalle del tejido. |
 | **FALTA** | `ribb-18.jpg` | Polialgodón | 1280 px | Tela Ribb 18 de polialgodón, detalle del tejido. |
 | **FALTA** | `ribb-20-24.jpg` | Polialgodón | 1280 px | Tela Ribb 20/24 de polialgodón, detalle del tejido. |
 
-**Ya resueltas — 27.** No se piden.
+#### Hay foto, pero no sirve para el recoloreo — 20
 
-- `aston-plus.jpg` — Microfibra
+Hay que **volver a fotografiar** estas telas: lo que falla es la toma, y ninguno de estos defectos se corrige procesando el archivo.
+
+`aston-plus.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,401, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`boston.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,428, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`dortmund.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Croma 10,3, justo sobre el techo de 10. Poco, pero es dominante real: el original es a color y el tinte multiplicaría al del chip.
+
+`juventus.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,417, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`kansas.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,381, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`sevilla-plus.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. 4.116 píxeles quemados, un 0,251% del cuadro sobre un techo de 0,05%. El preprocesado lleva el máximo a 250, y donde el original ya está en 255 no queda información que levantar.
+
+`gaby.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,307, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`kiana.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,350, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`mezi.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Subexpuesta: su máximo es 113 sobre 255, así que habría que estirar ×2,21 (techo ×1,35) y 113 niveles repartidos en 250 dan banding. Es tela NEGRA, y por eso pasa el croma con 2,1: el negro es neutro. El croma mide el tinte, no si la tela está teñida.
+
+`napoles.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,364, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`napoli.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,372, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`ribb-150.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,325, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`river.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,347, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`interlock-30.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Croma 18,7, casi el doble del techo de 10 — y eso que la tela se llama «Blanco Frozen»: la dominante la trae la luz, no el género.
+
+`interlock-40.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,383, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`denis-20.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,377, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`lacoast-20.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,277, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`lacoast-kratos-22.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,076, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`lacoast-polo-20.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,312, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+`pique-ares-24.jpg` —
+> **⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.** La toma no cumple lo que la simulación de color necesita, y eso no se arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. Original ya desaturado —croma no verificable— y además k normalizada 0,351, por debajo de 0,50: ni estirada llega a la mitad del recorrido.
+
+#### Hay foto, y no se puede verificar — 4
+
+**No hay que repetir la sesión.** Lo publicado se ve bien; lo que falta es el ORIGINAL A COLOR de esa misma toma, porque el archivo que tenemos llegó ya en blanco y negro y sobre él no se puede comprobar si la tela era cruda. Es buscar un archivo, no montar una sesión.
+
+`dobleface-plus.jpg` —
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,552 · sin quemados · sin estirar.
+
+`dortmund-plus-brillante.jpg` —
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,566 · sin quemados · sin estirar.
+
+`sevilla.jpg` —
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,513 · sin quemados · sin estirar.
+
+`sevilla-plus-brillante.jpg` —
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,702 · 60 píxeles quemados (0,007%) · sin estirar.
+
+**Ya resueltas — 3.** No se piden.
+
 - `athletic.jpg` — Microfibra
-- `boston.jpg` — Microfibra
 - `chelsea.jpg` — Microfibra
-- `dobleface-plus.jpg` — Microfibra
-- `dortmund.jpg` — Microfibra
-- `dortmund-plus-brillante.jpg` — Microfibra
-- `juventus.jpg` — Microfibra
-- `kansas.jpg` — Microfibra
-- `sevilla.jpg` — Microfibra
-- `sevilla-plus.jpg` — Microfibra
-- `sevilla-plus-brillante.jpg` — Microfibra
 - `titanium.jpg` — Microfibra
-- `gaby.jpg` — Texturizado
-- `kiana.jpg` — Texturizado
-- `mezi.jpg` — Texturizado
-- `napoles.jpg` — Texturizado
-- `napoli.jpg` — Texturizado
-- `ribb-150.jpg` — Texturizado
-- `river.jpg` — Texturizado
-- `interlock-30.jpg` — Spun
-- `interlock-40.jpg` — Spun
-- `denis-20.jpg` — Polialgodón
-- `lacoast-20.jpg` — Polialgodón
-- `lacoast-kratos-22.jpg` — Polialgodón
-- `lacoast-polo-20.jpg` — Polialgodón
-- `pique-ares-24.jpg` — Polialgodón
 
 > Clasificadas según el origen del slot: salen de `SLOTS_TELA`, que se deriva de las subcategorías de `taxonomy.ts`, con nota común.
 
@@ -567,13 +657,13 @@ Una foto grande y editorial por paso del cuestionario en la portada. Se cambian 
 
 ---
 
-## Huecos sueltos — 6 fotos
+## Huecos sueltos — 8 fotos
 
 Tomas que no forman sesión con ninguna otra. Cada una pide una cosa distinta; la nota de cada slot es la especificación.
 
 - **Se ve a:** ver cada hueco
 - **Proporción:** ver cada hueco
-- **Estado:** 5 faltan · 1 provisional · 0 definitivas
+- **Estado:** 5 faltan · 3 provisionales · 0 definitivas
 
 #### **FALTA** `aplicacion-microfibra`
 
@@ -584,6 +674,26 @@ Tomas que no forman sesión con ninguna otra. Cada una pide una cosa distinta; l
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Camiseta deportiva sobre pedestal, fondo oscuro — ejemplo de aplicación de la microfibra en confección.
 - **Nota:** Demo: prenda deportiva sobre pedestal, fondo oscuro y neutro. Imagen generada para la maqueta, NO es producto de Textil Padilla. Se reemplazará por el objeto 3D. Vertical (4:5).
+
+#### **PROVISIONAL · SIN VERIFICAR** `athletic-macro`
+
+- **Nombre del archivo a entregar:** `athletic-macro.jpg`
+- **Dónde va:** Microfibra (`/productos/microfibra`) · Galería · principal en alta
+- **Ancho mínimo de entrega:** 2400 px
+- **Qué debe verse:** Macrofotografía de la microfibra Athletic sin teñir: la malla de panal y los pliegues del género en luz rasante.
+- **Nota:** Generado, no se entrega. Recorte 4:3 del original sobre la zona en foco.
+
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,707, sin subexponer y sin zona quemada: LA FOTO EN USO ES ACEPTABLE y la ficha con lupa funciona con ella. Lo que se pide es el ORIGINAL A COLOR de `Microfibra/Athletic (3).jpeg`, para poder verificarla — no repetir la sesión. No se entrega un archivo nuevo: este slot lo genera el procesado recortando ese original (`ORIGEN_ALTA` en `preparar-imagenes.ts`), así que se rehace solo en cuanto llegue.
+
+#### **PROVISIONAL · SIN VERIFICAR** `athletic-zoom`
+
+- **Nombre del archivo a entregar:** `athletic-zoom.jpg`
+- **Dónde va:** Microfibra (`/productos/microfibra`) · Galería · capa de lupa
+- **Ancho mínimo de entrega:** 3000 px
+- **Qué debe verse:** —
+- **Nota:** Generado, no se entrega. Mismo recorte que athletic-macro, al ancho máximo que da el recorte sin escalar. Decorativo: la lupa lo monta con aria-hidden sobre la imagen que ya tiene alt.
+
+> **⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.** La foto que se ve puede estar bien; lo que falta es poder comprobarla. NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma toma, que es el único que permite medir si la tela era cruda. Según: Medido sobre el encuadre que se publica, con `npm run imagenes:medir`. El original tiene los tres canales idénticos píxel a píxel, o sea que ya venía desaturado, así que su croma 0,0 no demuestra que la tela fuera cruda: demuestra que ya no se puede saber. Por lo demás, K 0,708, mismo original y mismo recorte que `athletic-macro`: LA CAPA DE LA LUPA EN USO ES ACEPTABLE y lo que se pide es el ORIGINAL A COLOR para poder verificarla, no repetir la sesión. También lo genera el procesado, no se entrega.
 
 #### **FALTA** `dortmund-plus-blancos-macro`
 
@@ -639,7 +749,7 @@ Tomas que no forman sesión con ninguna otra. Cada una pide una cosa distinta; l
 
 ---
 
-## Ya resueltas, fuera de sesión — 7
+## Ya resueltas, fuera de sesión — 5
 
 Fotos definitivas que no forman sesión con ninguna otra. **No se piden.**
 Están aquí para que el documento cuadre con los
@@ -647,8 +757,6 @@ Están aquí para que el documento cuadre con los
 
 - `macro-fibra-blanca.jpg` — Inicio (`/`)
 - `macro-tejido.jpg` — Productos (`/productos`)
-- `athletic-macro.jpg` — Microfibra (`/productos/microfibra`) · Galería · principal en alta
-- `athletic-zoom.jpg` — Microfibra (`/productos/microfibra`) · Galería · capa de lupa
 - `titanium-trama.jpg` — Microfibra (`/productos/microfibra`) · Galería · vistas extra
 - `macro-punto-camiseta.jpg` — Camisetas (`/productos/camisetas`)
 - `local-fachada.jpg` — Contacto (`/contacto`)

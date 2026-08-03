@@ -600,10 +600,15 @@ const NOTA_MACRO_TELA =
   "color de la ficha: (1) tela BLANCA O CRUDO, sin teñir — sobre una tela ya " +
   "teñida el tono del chip sale sucio y no hay corrección posible; (2) luz NEUTRA, " +
   "sin dominante cálida ni fría — se mide al procesar, el techo es croma 10 sobre " +
-  "255 y la referencia del lote actual es Athletic, con croma 0,0; (3) sin altas " +
+  "255 y la referencia del lote actual es Titanium, con croma medido de 2,3 a 3,0; " +
+  "(3) sin altas " +
   "luces quemadas ni negros cerrados — el preprocesado sube los niveles hasta " +
   "dejar el máximo en 250, y donde el original está a 255 no queda información que " +
   "levantar; (4) la tela LLENA EL CUADRO: sin fondo, sin manos, sin prenda. " +
+  "Y SE ENTREGA EL ORIGINAL A COLOR, no una conversión a blanco y negro: el " +
+  "recoloreo desatura él solo, y una foto que llega ya desaturada hace " +
+  "imposible comprobar (1) y (2) — el croma de un archivo en blanco y negro " +
+  "da 0,0 siempre, venga de tela cruda o de tela azul. " +
   "Una toma que incumpla (1) o (2) hay que repetirla: no se arregla después.";
 
 /**
@@ -905,6 +910,25 @@ export type Procedencia =
   /** De banco de imágenes. */
   | "banco"
   /**
+   * La medida del propio pipeline la rechaza para el recoloreo: croma sobre el
+   * techo, zona quemada o subexposición. Ver `npm run imagenes:medir`.
+   *
+   * Es un defecto de la TOMA, no del archivo, y por eso obliga a repetir: nada
+   * de esto se arregla procesando.
+   */
+  | "no-apta"
+  /**
+   * El original ya viene desaturado, así que NO SE PUEDE COMPROBAR si la tela
+   * era cruda: el dato que lo demostraría se perdió al guardar el archivo en
+   * blanco y negro.
+   *
+   * NO ES LO MISMO QUE `no-apta`, y por eso son dos. Aquí la foto publicada
+   * puede estar perfectamente bien —varias lo están, y se ven bien en la web—;
+   * lo que falta es la prueba, no la calidad. Lo que se pide para cerrar el
+   * hueco es el ORIGINAL A COLOR de esa misma toma, no volver a fotografiar.
+   */
+  | "no-verificable"
+  /**
    * No consta de dónde salió. NO es un cajón de sastre ni un "seguramente
    * provisional": es una foto que hay que mirar antes de decidir. Se prefiere
    * esto a adivinar, porque una clasificación inventada se lee igual que una
@@ -939,74 +963,186 @@ const SEGUN_CLIENTE =
   "Sale de `Telas_PW/`, la carpeta que entregó el cliente, con su original " +
   "concreto anotado en la receta de `scripts/preparar-imagenes.ts`.";
 
+/**
+ * Fotos del cliente que NO alimentan ninguna simulación de color. Salir de
+ * `Telas_PW/` basta para darlas por definitivas: no tienen que cumplir nada más.
+ */
 const DEL_CLIENTE: readonly string[] = [
-  // Fotos de sección
   "oficio-nave-tejido",
   "oficio-taller-alangasi",
   "local-fachada",
   "macro-fibra-blanca",
   "macro-tejido",
   "macro-punto-camiseta",
-  // Telas
-  "sevilla-plus",
-  "chelsea",
-  "dortmund",
-  "mezi",
-  "dortmund-plus-brillante",
-  "sevilla-plus-brillante",
-  "dobleface-plus",
-  "sevilla",
-  "aston-plus",
-  "kansas",
-  "boston",
-  "juventus",
-  "gaby",
-  "napoli",
-  "napoles",
-  "kiana",
-  "river",
-  "ribb-150",
-  "interlock-30",
-  "interlock-40",
-  "denis-20",
-  "lacoast-20",
-  "lacoast-polo-20",
-  "lacoast-kratos-22",
-  "pique-ares-24",
+];
+
+/*
+ * ---------------------------------------------------------------------------
+ * LAS TELAS SE CLASIFICAN POR MEDIDA, NO POR PROCEDENCIA
+ *
+ * Venir de `Telas_PW/` no dice nada de si una foto sirve para el recoloreo: en
+ * esa carpeta hay tela negra, hay tela con dominante y hay macros disparados
+ * para otra cosa. Una tela solo puede darse por definitiva si cumple lo mismo
+ * que el documento de fotografía le exige a marketing, y eso se mide.
+ *
+ * Las cifras de aquí abajo son un volcado de `npm run imagenes:medir`, que las
+ * vuelve a calcular sobre los originales y AVISA si alguna clasificación ha
+ * dejado de corresponderse con lo medido. Sin esa comprobación esto sería una
+ * copia condenada a envejecer; con ella, sustituir una foto y olvidarse de
+ * reclasificarla se ve al correr el script.
+ * ---------------------------------------------------------------------------
+ */
+
+const SEGUN_MEDIDA =
+  "Medido sobre el encuadre que se publica, con `npm run imagenes:medir`.";
+
+/** Telas que pasan los cuatro cortes del recoloreo. */
+const TELAS_MEDIDAS: readonly (readonly [string, string])[] = [
+  ["chelsea", "Croma 4,1 · sin píxeles quemados · sin estirar · k 0,679"],
+  [
+    "athletic",
+    "Croma 6,1 · 2 píxeles quemados de 1,2 millones · sin estirar · k 0,701. " +
+      "Confirmada como buena por el cliente, y además el original ES A COLOR: " +
+      "por eso su croma significa algo. La referencia de luz neutra del lote, " +
+      "sin embargo, es Titanium — ver `NOTA_MACRO_TELA`",
+  ],
+  ["titanium", "Croma 3,0 · sin quemados · estira ×1,18 · k 0,708"],
+  [
+    "titanium-caida",
+    "Croma 2,3 · sin quemados · estira ×1,24 · k 0,580. Es la más oscura del " +
+      "lote que sirve, o sea el suelo contra el que se miden las demás",
+  ],
+  ["titanium-trama", "Croma 2,9 · sin quemados · estira ×1,20 · k 0,692"],
+];
+
+/**
+ * Telas cuyo original ya viene en blanco y negro.
+ *
+ * Se piden, pero lo que se pide es OTRA COSA: el original a color de la misma
+ * toma, no repetir la sesión. La foto publicada puede estar bien —estas seis lo
+ * están: sin quemados, sin subexponer— y lo que falta es poder demostrar que la
+ * tela era cruda, que es la condición que decide si el recoloreo sale limpio.
+ */
+const TELAS_NO_VERIFICABLES: readonly (readonly [string, string])[] = [
+  [
+    "athletic-macro",
+    "K 0,707, sin subexponer y sin zona quemada: LA FOTO EN USO ES ACEPTABLE y " +
+      "la ficha con lupa funciona con ella. Lo que se pide es el ORIGINAL A " +
+      "COLOR de `Microfibra/Athletic (3).jpeg`, para poder verificarla — no " +
+      "repetir la sesión. No se entrega un archivo nuevo: este slot lo genera " +
+      "el procesado recortando ese original (`ORIGEN_ALTA` en " +
+      "`preparar-imagenes.ts`), así que se rehace solo en cuanto llegue",
+  ],
+  [
+    "athletic-zoom",
+    "K 0,708, mismo original y mismo recorte que `athletic-macro`: LA CAPA DE " +
+      "LA LUPA EN USO ES ACEPTABLE y lo que se pide es el ORIGINAL A COLOR " +
+      "para poder verificarla, no repetir la sesión. También lo genera el " +
+      "procesado, no se entrega",
+  ],
+  ["sevilla-plus-brillante", "K 0,702 · 60 píxeles quemados (0,007%) · sin estirar"],
+  ["dortmund-plus-brillante", "K 0,566 · sin quemados · sin estirar"],
+  ["dobleface-plus", "K 0,552 · sin quemados · sin estirar"],
+  ["sevilla", "K 0,513 · sin quemados · sin estirar"],
+];
+
+/**
+ * Telas en blanco y negro que ADEMÁS salen demasiado oscuras: ni estiradas
+ * llegan a la mitad del recorrido, y el chip de color multiplicado sobre un
+ * gris así no da el tono que pide. Aquí sí hay que volver a fotografiar.
+ */
+const TELAS_OSCURAS: readonly (readonly [string, number])[] = [
+  ["boston", 0.428],
+  ["juventus", 0.417],
+  ["aston-plus", 0.401],
+  ["interlock-40", 0.383],
+  ["kansas", 0.381],
+  ["denis-20", 0.377],
+  ["napoli", 0.372],
+  ["napoles", 0.364],
+  ["pique-ares-24", 0.351],
+  ["kiana", 0.35],
+  ["river", 0.347],
+  ["ribb-150", 0.325],
+  ["lacoast-polo-20", 0.312],
+  ["gaby", 0.307],
+  ["lacoast-20", 0.277],
+  ["lacoast-kratos-22", 0.076],
+];
+
+/** Telas a color que la medida rechaza, cada una por lo suyo. */
+const TELAS_NO_APTAS: readonly (readonly [string, string])[] = [
+  [
+    "sevilla-plus",
+    "4.116 píxeles quemados, un 0,251% del cuadro sobre un techo de 0,05%. El " +
+      "preprocesado lleva el máximo a 250, y donde el original ya está en 255 " +
+      "no queda información que levantar",
+  ],
+  [
+    "dortmund",
+    "Croma 10,3, justo sobre el techo de 10. Poco, pero es dominante real: el " +
+      "original es a color y el tinte multiplicaría al del chip",
+  ],
+  [
+    "interlock-30",
+    "Croma 18,7, casi el doble del techo de 10 — y eso que la tela se llama " +
+      "«Blanco Frozen»: la dominante la trae la luz, no el género",
+  ],
+  [
+    "mezi",
+    "Subexpuesta: su máximo es 113 sobre 255, así que habría que estirar ×2,21 " +
+      "(techo ×1,35) y 113 niveles repartidos en 250 dan banding. Es tela " +
+      "NEGRA, y por eso pasa el croma con 2,1: el negro es neutro. El croma " +
+      "mide el tinte, no si la tela está teñida",
+  ],
 ];
 
 /** Las que llevan una precisión propia además de su origen. */
 const PROPIAS: readonly (readonly [string, FotoPublicada])[] = [
-  [
-    "athletic",
-    {
-      procedencia: "definitiva",
-      segun:
-        `${SEGUN_CLIENTE} Confirmada como buena por el cliente. Es además la ` +
-        "referencia de croma 0,0 del lote, que es contra la que se mide el techo " +
-        "de tinte de las demás telas con recoloreo.",
-    },
-  ],
-  ...(["titanium", "titanium-caida", "titanium-trama"] as const).map(
-    (id) =>
+  ...TELAS_MEDIDAS.map(
+    ([id, medida]) =>
       [
         id,
         {
           procedencia: "definitiva" as const,
-          segun: `${SEGUN_CLIENTE} Confirmada como buena por el cliente.`,
+          segun: `${SEGUN_CLIENTE} ${SEGUN_MEDIDA} ${medida}.`,
         },
       ] as const,
   ),
-  ...(["athletic-macro", "athletic-zoom"] as const).map(
-    (id) =>
+  ...TELAS_NO_VERIFICABLES.map(
+    ([id, medida]) =>
       [
         id,
         {
-          procedencia: "definitiva" as const,
+          procedencia: "no-verificable" as const,
           segun:
-            "No se entrega ni se fotografía: la genera el procesado recortando " +
-            "el original de Athletic (`ORIGEN_ALTA` en `preparar-imagenes.ts`). " +
-            "Se rehace sola si cambia la foto de la que sale.",
+            `${SEGUN_MEDIDA} El original tiene los tres canales idénticos ` +
+            `píxel a píxel, o sea que ya venía desaturado, así que su croma ` +
+            `0,0 no demuestra que la tela fuera cruda: demuestra que ya no se ` +
+            `puede saber. Por lo demás, ${medida}.`,
+        },
+      ] as const,
+  ),
+  ...TELAS_OSCURAS.map(
+    ([id, k]) =>
+      [
+        id,
+        {
+          procedencia: "no-apta" as const,
+          segun:
+            `${SEGUN_MEDIDA} Original ya desaturado —croma no verificable— y ` +
+            `además k normalizada ${k.toFixed(3).replace(".", ",")}, por ` +
+            `debajo de 0,50: ni estirada llega a la mitad del recorrido.`,
+        },
+      ] as const,
+  ),
+  ...TELAS_NO_APTAS.map(
+    ([id, medida]) =>
+      [
+        id,
+        {
+          procedencia: "no-apta" as const,
+          segun: `${SEGUN_MEDIDA} ${medida}.`,
         },
       ] as const,
   ),

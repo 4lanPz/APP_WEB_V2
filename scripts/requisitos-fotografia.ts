@@ -88,9 +88,14 @@ function rotulo(s: SlotImagen): string {
   if (e === "falta") return "**FALTA**";
   if (e === "definitiva") return "**DEFINITIVA**";
   const p = procedenciaDe(s.id)?.procedencia;
-  return p === "sin-clasificar"
-    ? "**PROVISIONAL · PENDIENTE DE CLASIFICAR**"
-    : "**PROVISIONAL**";
+  // Las dos de recoloreo llevan rótulo propio y no un «provisional» a secas:
+  // piden cosas distintas —una, repetir la toma; la otra, solo el original a
+  // color— y bajo la misma etiqueta las dos se leen como «hay que rehacerla».
+  if (p === "no-apta") return "**PROVISIONAL · NO SIRVE PARA EL RECOLOREO**";
+  if (p === "no-verificable") return "**PROVISIONAL · SIN VERIFICAR**";
+  return p && p !== "sin-clasificar"
+    ? "**PROVISIONAL**"
+    : "**PROVISIONAL · PENDIENTE DE CLASIFICAR**";
 }
 
 /**
@@ -113,12 +118,23 @@ function motivoProvisional(s: SlotImagen): string[] {
     generada: "Generada por IA.",
     banco: "De banco de imágenes.",
     "sin-clasificar": "NO CONSTA de dónde salió: hay que mirarla antes de decidir.",
+    "no-apta":
+      "La toma no cumple lo que la simulación de color necesita, y eso no se " +
+      "arregla procesando: HAY QUE VOLVER A FOTOGRAFIAR la tela.",
+    "no-verificable":
+      "La foto que se ve puede estar bien; lo que falta es poder comprobarla. " +
+      "NO hay que repetir la sesión: se pide el ORIGINAL A COLOR de esa misma " +
+      "toma, que es el único que permite medir si la tela era cruda.",
   };
-  const cabecera =
-    foto.procedencia === "sin-clasificar"
-      ? "**⚠ PENDIENTE DE CLASIFICAR.**"
-      : "**⚠ HAY FOTO, PERO ES PROVISIONAL.**";
-  return [`> ${cabecera} ${que[foto.procedencia]} Según: ${foto.segun}`];
+  const cabecera: Record<string, string> = {
+    "sin-clasificar": "**⚠ PENDIENTE DE CLASIFICAR.**",
+    "no-apta": "**⚠ HAY FOTO, PERO NO SIRVE PARA EL RECOLOREO.**",
+    "no-verificable": "**⚠ HAY FOTO, Y NO SE PUEDE VERIFICAR.**",
+  };
+  return [
+    `> ${cabecera[foto.procedencia] ?? "**⚠ HAY FOTO, PERO ES PROVISIONAL.**"} ` +
+      `${que[foto.procedencia]} Según: ${foto.segun}`,
+  ];
 }
 
 const RAIZ = join(import.meta.dirname, "..");
@@ -380,16 +396,21 @@ function conteo(n: ReturnType<typeof cuenta>): string {
   );
 }
 
-/** Los que no se han podido clasificar: hay foto y no consta de dónde sale. */
+/**
+ * Los que no se han podido clasificar: hay foto y no consta de dónde sale.
+ *
+ * Se pregunta por lo que SON y no por descarte de lo que no son. Estaba escrito
+ * al revés —una lista de las procedencias conocidas, y todo lo demás caía
+ * aquí—, y al añadir `no-apta` y `no-verificable` veintidós telas medidas y
+ * documentadas pasaron a figurar como «no consta de dónde salió». Un filtro por
+ * exclusión da por desconocido todo lo que se invente después.
+ */
 function sinClasificarProcedencia(slots: SlotImagen[]): SlotImagen[] {
-  return slots.filter(
-    (s) =>
-      estado(s) === "provisional" &&
-      procedenciaDe(s.id)?.procedencia !== "maqueta" &&
-      procedenciaDe(s.id)?.procedencia !== "relleno" &&
-      procedenciaDe(s.id)?.procedencia !== "generada" &&
-      procedenciaDe(s.id)?.procedencia !== "banco",
-  );
+  return slots.filter((s) => {
+    if (estado(s) !== "provisional") return false;
+    const p = procedenciaDe(s.id)?.procedencia;
+    return p === undefined || p === "sin-clasificar";
+  });
 }
 
 function ubicacion(s: SlotImagen): string {
@@ -451,6 +472,58 @@ function resueltas(slots: SlotImagen[]): string[] {
   ];
 }
 
+/**
+ * Las provisionales de un bloque, agrupadas por lo que hay que hacer con ellas.
+ *
+ * NO SE MEZCLAN, aunque las tres cuenten como provisionales. «No sirve para el
+ * recoloreo» significa volver a montar la sesión con la tela delante; «no se
+ * puede verificar» significa buscar un archivo que ya existe y mandarlo. Bajo un
+ * mismo epígrafe, seis fotos que solo necesitan que alguien abra una carpeta se
+ * leen como seis sesiones más, y eso cambia lo que el encargo parece costar.
+ */
+const AGRUPACION_PROVISIONAL: readonly (readonly [string, string, string])[] = [
+  [
+    "no-apta",
+    "Hay foto, pero no sirve para el recoloreo",
+    "Hay que **volver a fotografiar** estas telas: lo que falla es la toma, y " +
+      "ninguno de estos defectos se corrige procesando el archivo.",
+  ],
+  [
+    "no-verificable",
+    "Hay foto, y no se puede verificar",
+    "**No hay que repetir la sesión.** Lo publicado se ve bien; lo que falta es " +
+      "el ORIGINAL A COLOR de esa misma toma, porque el archivo que tenemos " +
+      "llegó ya en blanco y negro y sobre él no se puede comprobar si la tela " +
+      "era cruda. Es buscar un archivo, no montar una sesión.",
+  ],
+];
+
+function provisionalesAgrupadas(pendientes: SlotImagen[]): string[] {
+  const provisionales = pendientes.filter((s) => estado(s) === "provisional");
+  if (!provisionales.length) return [];
+
+  const l: string[] = [];
+  const yaPuestas = new Set<string>();
+
+  for (const [clave, titulo, queSePide] of AGRUPACION_PROVISIONAL) {
+    const suyas = provisionales.filter(
+      (s) => procedenciaDe(s.id)?.procedencia === clave,
+    );
+    if (!suyas.length) continue;
+    l.push(`#### ${titulo} — ${suyas.length}`, "", queSePide, "");
+    for (const s of suyas) {
+      yaPuestas.add(s.id);
+      l.push(`\`${s.id}.jpg\` —`, ...motivoProvisional(s), "");
+    }
+  }
+
+  // El resto (maqueta, relleno, sin clasificar…) va después y sin epígrafe: no
+  // forman un encargo con nada, cada una es lo suyo.
+  const resto = provisionales.filter((s) => !yaPuestas.has(s.id));
+  for (const s of resto) l.push(`\`${s.id}.jpg\` —`, ...motivoProvisional(s), "");
+  return l;
+}
+
 function bloque(grupo: Grupo, slots: SlotImagen[]): string[] {
   // La sesión es lo PENDIENTE: lo que falta más lo que hay que repetir porque
   // la foto que ocupa el hueco es provisional. Lo ya resuelto se lista al final
@@ -482,10 +555,8 @@ function bloque(grupo: Grupo, slots: SlotImagen[]): string[] {
     if (comun) l.push(`**Qué se necesita, igual para todas:** ${comun}`, "");
     l.push(...tabla(pendientes));
     // Las provisionales de un grupo de tabla no caben en la fila: el motivo y
-    // su evidencia son un párrafo. Van debajo, y solo si las hay.
-    for (const s of pendientes.filter((x) => estado(x) === "provisional")) {
-      l.push(`\`${s.id}.jpg\` —`, ...motivoProvisional(s), "");
-    }
+    // su evidencia son un párrafo. Van debajo, agrupadas por lo que PIDEN.
+    l.push(...provisionalesAgrupadas(pendientes));
   } else {
     for (const s of pendientes) l.push(...ficha(s));
   }
@@ -513,17 +584,27 @@ function leyendaDeEstados(): string[] {
     "| Estado | Qué significa | ¿Se pide? |",
     "|---|---|---|",
     "| **FALTA** | No hay archivo. El sitio dibuja el marcador de hueco. | Sí |",
-    "| **PROVISIONAL** | Hay foto, pero es de relleno, de maqueta, generada o de banco. Hay que reemplazarla. | Sí |",
+    "| **PROVISIONAL** | Hay foto, pero hay que reemplazarla. | Sí |",
     "| **DEFINITIVA** | Material real, en su sitio. | No |",
     "",
     "Las provisionales llevan debajo **por qué** lo son y **según qué** se ha",
-    "determinado —el commit, el md5 o la receta—, para que se pueda comprobar en",
-    "vez de creérselo.",
+    "determinado —el commit, el md5, la receta o la medida—, para que se pueda",
+    "comprobar en vez de creérselo. No todas piden lo mismo:",
     "",
-    "**PENDIENTE DE CLASIFICAR** es una provisional de la que no consta de dónde",
-    "salió. No se ha adivinado a propósito: una clasificación inventada se lee",
-    "igual que una comprobada y ya nadie vuelve a revisarla. Hay que mirarla y",
-    "decidir.",
+    "| Etiqueta | Qué pasa | Qué se pide |",
+    "|---|---|---|",
+    "| **PROVISIONAL** a secas | De maqueta, de relleno, generada o de banco. | La foto de verdad. |",
+    "| **NO SIRVE PARA EL RECOLOREO** | La medida del sitio rechaza la toma: tela teñida, dominante, zona quemada o subexposición. | **Volver a fotografiar** la tela. |",
+    "| **SIN VERIFICAR** | El original llegó ya en blanco y negro, así que no se puede comprobar si la tela era cruda. Lo publicado suele verse bien. | **El original a color** de esa misma toma. No hay que repetir la sesión. |",
+    "| **PENDIENTE DE CLASIFICAR** | No consta de dónde salió el archivo. | Mirarla y decidir. |",
+    "",
+    "Las dos del medio salen de medir las fotos, no de opinar sobre ellas: el",
+    "croma, los píxeles quemados y la luminancia de cada original están en el",
+    "`Según` de cada una y se recalculan con `npm run imagenes:medir`.",
+    "",
+    "Y **PENDIENTE DE CLASIFICAR** no se ha adivinado a propósito: una",
+    "clasificación inventada se lee igual que una comprobada y ya nadie vuelve a",
+    "revisarla.",
     "",
   ];
 }
