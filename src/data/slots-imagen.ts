@@ -51,6 +51,39 @@ export interface SlotImagen {
   ancho: number;
   /** Qué se espera ver, para el que dispara la foto. */
   nota?: string;
+  /**
+   * `true` si esta foto se publica en GRIS NEUTRO NORMALIZADO: desaturada a
+   * gris puro y con los niveles subidos hasta que el máximo de luminancia queda
+   * en 250. Es la condición que necesita la simulación de color —`multiply`
+   * multiplica canal a canal, así que cualquier dominante de la foto ensuciaría
+   * el tono del chip— y la marca la lleva el SLOT, no la receta: así el
+   * preprocesado es el mismo venga la foto de `Telas_PW/` o de `entrega/`.
+   *
+   * Se declara en `IDS_GRIS`, al final del archivo, junto al porqué.
+   */
+  gris?: true;
+}
+
+/**
+ * Medidas de una foto gris, calculadas por el preprocesado y guardadas en
+ * `imagenes.generado.ts`. Antes `k` era una constante escrita a mano para
+ * Athletic; con dos telas ya no escala, y a la tercera nadie recuerda que había
+ * que recalcularla.
+ */
+export interface MedidaGris {
+  /**
+   * Luminancia media de la foto YA PUBLICADA, en 0–1. Es lo que compensa la
+   * capa de color: sin ella la tela sale multiplicada por su propio gris y se
+   * ve más oscura de lo que dice el chip. Ver `capaMultiply` en `recoloreo.ts`.
+   */
+  k: number;
+  /**
+   * Separación entre las medias de canal del ORIGINAL, en 0–255 — o sea cuánto
+   * tinte traía la foto antes de desaturar. Se guarda aunque el runtime no la
+   * use: es el dato que dice si esa foto era apta para recoloreo, y medida
+   * después de desaturar sería siempre 0 y no diría nada.
+   */
+  croma: number;
 }
 
 export interface Pagina {
@@ -516,6 +549,32 @@ export const SLOTS_GALERIA_TELA: SlotImagen[] = categories.flatMap((c) =>
 );
 
 /**
+ * Vistas de galería que existen SOLO en una tela concreta, porque solo esa tela
+ * tiene material para llenarlas.
+ *
+ * POR QUÉ NO ES UN SUFIJO MÁS DE `SUFIJOS_GALERIA_TELA`
+ * Mismo motivo que en `SLOTS_ALTA_TELA`: ese array es global. Añadirle "trama"
+ * abriría un hueco vacío en las 20 y pico fichas del catálogo y el inventario
+ * de `/admin/imagenes` pediría a marketing una foto por tela que nadie encargó.
+ * Aquí solo está la tela cuyo lote trae la toma.
+ *
+ * A DIFERENCIA de `SLOTS_ALTA_TELA`, estos SÍ son huecos de entrega normales:
+ * son una foto más, no un recorte generado. Si mañana llega la misma vista de
+ * otra tela, se añade su slot aquí y se cablea en `VISTAS_EXTRA_POR_TELA`.
+ */
+export const SLOTS_VISTAS_EXTRA: SlotImagen[] = [
+  {
+    id: "titanium-trama",
+    destino: "/telas/titanium-trama.webp",
+    alt: "Tela Titanium de microfibra en gris, con la trama del tejido visible a luz rasante sobre un pliegue ancho.",
+    pagina: "/productos/microfibra",
+    seccion: "Galería · vistas extra",
+    ancho: 1280,
+    nota: "Tercera foto de la galería de Titanium: plano abierto del género con un pliegue ancho y la trama legible a luz rasante. Formato 4:3, como el resto de la galería.",
+  },
+];
+
+/**
  * Alt más preciso para las telas ya fotografiadas. El genérico de arriba sirve
  * de red, pero cuando se sabe qué se ve conviene decirlo: un alt que solo
  * repite el nombre del producto no aporta nada a quien no ve la imagen.
@@ -575,11 +634,57 @@ for (const slot of SLOTS_TELA) {
   if (preciso) slot.alt = preciso;
 }
 
+/**
+ * Derivados de alta de la galería: la base de la foto principal y la capa que
+ * usa la lupa macro. Excepción por tela, no una vista más para todas.
+ *
+ * POR QUÉ NO SON UN SUFIJO DE `SUFIJOS_GALERIA_TELA`
+ * Ese array es global: añadirle "macro" abriría un hueco vacío en las 20 fichas
+ * del catálogo, y son huecos que nadie va a llenar —salen de un recorte del
+ * original, no de una foto nueva que pedir—. Aquí solo está la tela que tiene
+ * material que lo justifica.
+ *
+ * POR QUÉ DOS ARCHIVOS Y NO UNO
+ * Base y lupa COMPARTEN RECTÁNGULO DE RECORTE. Si discreparan, el punto bajo el
+ * cursor no sería el punto que se amplía y la lupa apuntaría a otro sitio. Son
+ * el mismo encuadre a dos tamaños: el de 2400 se pinta siempre, el de 3000 solo
+ * se descarga cuando alguien activa la lupa.
+ *
+ * NO SON HUECOS DE ENTREGA. A diferencia del resto del registro, estos ids no
+ * se llenan dejando un archivo en `entrega/`: los genera
+ * `scripts/preparar-imagenes.ts` recortando el original. Están aquí porque ese
+ * script exige que todo lo que escribe corresponda a un slot —lo que impide
+ * generar archivos que ninguna página lee— y porque el manifiesto tiene que
+ * saber que existen.
+ */
+export const SLOTS_ALTA_TELA: SlotImagen[] = [
+  {
+    id: "athletic-macro",
+    destino: "/telas/athletic-macro.webp",
+    alt: "Macrofotografía de la microfibra Athletic sin teñir: la malla de panal y los pliegues del género en luz rasante.",
+    pagina: "/productos/microfibra",
+    seccion: "Galería · principal en alta",
+    ancho: 2400,
+    nota: "Generado, no se entrega. Recorte 4:3 del original sobre la zona en foco.",
+  },
+  {
+    id: "athletic-zoom",
+    destino: "/telas/athletic-zoom.webp",
+    alt: "",
+    pagina: "/productos/microfibra",
+    seccion: "Galería · capa de lupa",
+    ancho: 3000,
+    nota: "Generado, no se entrega. Mismo recorte que athletic-macro, al ancho máximo que da el recorte sin escalar. Decorativo: la lupa lo monta con aria-hidden sobre la imagen que ya tiene alt.",
+  },
+];
+
 /** Todos los slots del sitio. */
 export const SLOTS: SlotImagen[] = [
   ...SLOTS_UNICOS,
   ...SLOTS_TELA,
   ...SLOTS_GALERIA_TELA,
+  ...SLOTS_VISTAS_EXTRA,
+  ...SLOTS_ALTA_TELA,
   ...SLOTS_HITOS,
 ];
 
@@ -593,6 +698,39 @@ if (porId.size !== SLOTS.length) {
     vistos.has(id) ? true : (vistos.add(id), false),
   );
   throw new Error(`slots-imagen.ts: ids duplicados: ${[...new Set(dup)].join(", ")}`);
+}
+
+/**
+ * Fotos que se publican en gris neutro normalizado (ver `SlotImagen.gris`).
+ *
+ * ES LA MISMA LISTA QUE `TELAS_CON_RECOLOREO` de `recoloreo.ts`, vista desde el
+ * otro lado: allí están las telas que ofrecen el muestrario, aquí los archivos
+ * concretos que lo alimentan. Tienen que ir juntas —una tela con recoloreo cuya
+ * galería trae una foto a color daría un tono sucio, y nadie sabría por qué— y
+ * no se derivan la una de la otra a propósito: la galería de una tela puede
+ * traer una vista que no pasó por el preprocesado, y entonces esa vista NO va
+ * aquí aunque la tela sí tenga muestrario.
+ *
+ * Hoy son las dos telas cuyo lote se disparó sobre género sin teñir. Las otras
+ * 18 están fotografiadas a color y no admiten la técnica.
+ */
+export const IDS_GRIS: readonly string[] = [
+  "athletic-macro",
+  "athletic-zoom",
+  "titanium",
+  "titanium-caida",
+  "titanium-trama",
+];
+
+for (const id of IDS_GRIS) {
+  const slot = porId.get(id);
+  // Un id mal escrito aquí no rompería nada visible: la foto se publicaría a
+  // color, el recoloreo la multiplicaría por su propio tinte y el tono saldría
+  // sucio sin que ningún error lo dijera. Se para al cargar el módulo.
+  if (!slot) {
+    throw new Error(`slots-imagen.ts: IDS_GRIS nombra un slot que no existe: ${id}`);
+  }
+  slot.gris = true;
 }
 
 export function slotPorId(id: string): SlotImagen | undefined {

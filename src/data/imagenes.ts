@@ -19,13 +19,21 @@
  */
 
 import { SLOTS, SLOTS_TELA, SUFIJOS_GALERIA_TELA, slotPorId } from "./slots-imagen";
-import { SLOTS_LLENOS } from "./imagenes.generado";
+import { MEDIDAS_GRIS, SLOTS_LLENOS } from "./imagenes.generado";
 
 export interface Foto {
   /** Ruta pública, servida por next/image. */
   ruta: string;
   /** Alt descriptivo en español. Nunca vacío salvo que sea decorativa. */
   alt: string;
+  /**
+   * Luminancia media medida de esta foto concreta, en 0–1, cuando se publica en
+   * gris. Solo la usa el recoloreo, y viaja EN LA FOTO y no en una tabla que se
+   * consulte aparte porque el consumidor —una miniatura, la capa de la lupa, el
+   * visor— tiñe la imagen que tiene delante y no sabe de qué tela es. Ver
+   * `capaMultiply` en `recoloreo.ts`.
+   */
+  k?: number;
 }
 
 /**
@@ -37,7 +45,8 @@ export interface Foto {
 export function foto(id: string): Foto | undefined {
   if (!SLOTS_LLENOS.has(id)) return undefined;
   const slot = slotPorId(id);
-  return slot ? { ruta: slot.destino, alt: slot.alt } : undefined;
+  if (!slot) return undefined;
+  return { ruta: slot.destino, alt: slot.alt, k: MEDIDAS_GRIS.get(id)?.k };
 }
 
 /** Foto de una tela, por slug de subcategoría. El slug ES el id del slot. */
@@ -45,28 +54,88 @@ export function fotoDeTela(slug: string): Foto | undefined {
   return foto(slug);
 }
 
-/** Una vista de la galería de una tela: su foto, o `null` si el hueco está vacío. */
+/** Una vista de la galería de una tela. */
 export interface VistaTela {
   /** Id del slot, para key estable. */
   id: string;
-  /** La foto si el slot tiene archivo; `null` si es un hueco pendiente. */
-  foto: Foto | null;
+  foto: Foto;
 }
 
 /**
- * Las vistas REGISTRADAS de una tela para la galería, en orden (macro base
- * primero), incluidas las que aún no tienen foto. Se usa para pintar los huecos
- * pendientes como miniatura-marcador —"aquí van más fotos"— en vez de
- * esconderlos: con una sola foto por tela, ocultar los huecos dejaba la galería
- * indistinguible de una imagen suelta. Solo incluye slots que existen en el
- * registro (`slotPorId`), así que una tela sin segunda vista registrada no
- * inventa huecos.
+ * Las vistas de una tela para la galería, en orden (macro base primero). SOLO
+ * las que tienen archivo.
+ *
+ * ANTES DEVOLVÍA TAMBIÉN LOS HUECOS VACÍOS y la galería los pintaba como
+ * recuadro con un "+", para que se leyera "aquí van más fotos". Con la mayoría
+ * de las telas a una sola foto, eso dejaba una tira de marcadores debajo de
+ * cada ficha que se lee como catálogo incompleto, no como promesa. El
+ * inventario de lo que falta ya lo lleva `/admin/imagenes`, que es donde sirve
+ * de algo; la ficha pública enseña lo que hay.
  */
 export function vistasDeTela(slug: string): VistaTela[] {
-  const ids = [slug, ...SUFIJOS_GALERIA_TELA.map((sufijo) => `${slug}-${sufijo}`)];
+  const ids = [
+    slug,
+    ...SUFIJOS_GALERIA_TELA.map((sufijo) => `${slug}-${sufijo}`),
+    ...(VISTAS_EXTRA_POR_TELA[slug] ?? []),
+  ];
   return ids
     .filter((id) => slotPorId(id))
-    .map((id) => ({ id, foto: foto(id) ?? null }));
+    .map((id) => ({
+      id,
+      // El slot de la tela usa el derivado de alta cuando existe: la principal
+      // de la galería sale del recorte de la ficha, no del de la tarjeta.
+      foto: (id === slug ? altaDeTela(slug).base : undefined) ?? foto(id),
+    }))
+    .filter((v): v is VistaTela => v.foto !== undefined);
+}
+
+/**
+ * Vistas de galería propias de UNA tela, después de las que tiene todo el
+ * catálogo. El orden de este array ES el orden en que salen las miniaturas.
+ *
+ * Los ids van literales y no compuestos con plantilla, por lo mismo que en
+ * `ALTA_POR_TELA`: el chequeo de slots sin cablear de `procesar-entrega.ts`
+ * busca el id literal en `src/`, y con `${slug}-trama` daría este slot por
+ * huérfano cuando sí se lee.
+ *
+ * TITANIUM. La galería queda: macro cerrado (principal) → caída del género →
+ * trama a luz rasante. Es el orden de lectura de una ficha técnica —del detalle
+ * del tejido al comportamiento del género—, no el orden de los archivos del
+ * lote. Ver `ORIGEN_TELAS` en `scripts/preparar-imagenes.ts` para qué original
+ * alimenta cada uno.
+ */
+const VISTAS_EXTRA_POR_TELA: Record<string, string[]> = {
+  titanium: ["titanium-trama"],
+};
+
+/**
+ * Derivados de alta de una tela: el recorte de la ficha y su capa de lupa.
+ *
+ * DOS RECORTES DISTINTOS, Y NO ES UN DESCUIDO. La foto de la tarjeta de grilla
+ * (`/telas/<slug>.webp`) está encuadrada para la franja apaisada de la rejilla,
+ * al mismo nivel de acercamiento que las demás telas, para que Athletic no
+ * cante en el listado. La galería usa otro rectángulo del mismo original,
+ * elegido por composición sobre la zona en foco. LA GALERÍA ENTERA —principal y
+ * miniatura— sale del segundo: una miniatura con el encuadre de la tarjeta no
+ * sería la vista previa de la foto que hay arriba.
+ *
+ * Los ids van literales y no compuestos con plantilla a propósito: el chequeo
+ * de slots sin cablear de `procesar-entrega.ts` busca el id literal en `src/`,
+ * y con `${slug}-macro` daría por huérfanos dos slots que sí se leen.
+ */
+const ALTA_POR_TELA: Record<string, { base: string; zoom: string }> = {
+  athletic: { base: "athletic-macro", zoom: "athletic-zoom" },
+};
+
+export function altaDeTela(slug: string): { base?: Foto; zoom?: Foto } {
+  const ids = ALTA_POR_TELA[slug];
+  if (!ids) return {};
+  const base = foto(ids.base);
+  const zoom = foto(ids.zoom);
+  // La capa de lupa sin su base sería ampliar sobre un encuadre distinto: o
+  // están los dos archivos o no se usa ninguno.
+  if (!base || !zoom) return {};
+  return { base, zoom };
 }
 
 /** Slugs de tela con foto real — para informar de la cobertura. */

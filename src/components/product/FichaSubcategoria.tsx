@@ -6,7 +6,8 @@ import { GaleriaTela } from "@/components/ui/GaleriaTela";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { buttonVariants } from "@/components/ui/buttonVariants";
 import { valorEstandar, type FichaPublicable } from "@/data/fichas";
-import { vistasDeTela } from "@/data/imagenes";
+import { altaDeTela, vistasDeTela } from "@/data/imagenes";
+import { TELAS_CON_RECOLOREO } from "@/data/recoloreo";
 import type { Category, Subcategory } from "@/data/taxonomy";
 import { cn } from "@/lib/cn";
 
@@ -31,6 +32,7 @@ export function FichaSubcategoria({
   ficha,
 }: Props) {
   const vistas = vistasDeTela(subcategory.slug);
+  const { zoom } = altaDeTela(subcategory.slug);
 
   const rows = [
     { label: "Composición", value: ficha.composicion },
@@ -46,15 +48,26 @@ export function FichaSubcategoria({
 
       <div className="mt-8 grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
         {/*
-          Galería: con ≥1 foto real aparece completa —principal + miniaturas,
-          con recuadros marcador para las vistas que faltan, lupa en escritorio
-          y visor con pellizco en móvil—. Sin ninguna foto real queda el hueco
-          de siempre. No se pone una foto "parecida" para rellenar.
+          Galería: con ≥1 foto aparece la principal con lupa en escritorio y
+          visor con pellizco en móvil; las miniaturas solo si hay más de una.
+          Sin ninguna foto queda el hueco de siempre. No se pone una foto
+          "parecida" para rellenar.
+
+          La lupa y el recoloreo se activan por tela y no para todo el catálogo:
+          la primera necesita un derivado de alta y el segundo que la foto sea
+          gris neutro. Donde no los hay, la galería es la de siempre.
+
+          `sizes` describe la columna REAL: el contenedor topa en 1240px y esta
+          columna es 1.15fr de 2.15fr menos el gap, o sea ~520px de ahí en
+          adelante. Declarar 55vw hacía que next/image sirviera un derivado de
+          ~790px para pintar 520.
         */}
         <GaleriaTela
           vistas={vistas}
           caption={`${subcategory.name} · ${category.name}`}
-          sizes="(min-width: 1024px) 55vw, 100vw"
+          sizes="(min-width: 1240px) 520px, (min-width: 1024px) 45vw, 100vw"
+          zoom={zoom}
+          recoloreo={TELAS_CON_RECOLOREO.has(subcategory.slug)}
         />
 
         <div className="flex flex-col gap-8">

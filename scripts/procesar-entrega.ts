@@ -21,18 +21,24 @@ import {
   readFileSync,
   mkdirSync,
   readdirSync,
-  writeFileSync,
   renameSync,
 } from "node:fs";
 import { basename, dirname, extname, join } from "node:path";
 import sharp from "sharp";
-import { SLOTS, SLOTS_TELA, IDS_VALIDOS, slotPorId } from "../src/data/slots-imagen";
+import {
+  SLOTS,
+  SLOTS_TELA,
+  IDS_VALIDOS,
+  slotPorId,
+  type MedidaGris,
+} from "../src/data/slots-imagen";
+import { avisoDeCroma, desaturarYNormalizar, medirLuminancia } from "./gris";
+import { escribirManifiesto } from "./manifiesto";
 
 const RAIZ = join(import.meta.dirname, "..");
 const ENTREGA = join(RAIZ, "entrega");
 const PROCESADAS = join(ENTREGA, "procesadas");
 const PUBLIC = join(RAIZ, "public");
-const MANIFIESTO = join(RAIZ, "src", "data", "imagenes.generado.ts");
 
 const EXTENSIONES = new Set([".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"]);
 
@@ -71,10 +77,12 @@ interface Resultado {
   procesadas: string[];
   erratas: { archivo: string; sugerencia?: string }[];
   avisos: string[];
+  /** Medidas de las fotos en gris que se acaban de procesar. */
+  medidas: Map<string, MedidaGris>;
 }
 
 async function procesarEntrega(): Promise<Resultado> {
-  const r: Resultado = { procesadas: [], erratas: [], avisos: [] };
+  const r: Resultado = { procesadas: [], erratas: [], avisos: [], medidas: new Map() };
   if (!existsSync(ENTREGA)) {
     mkdirSync(ENTREGA, { recursive: true });
     return r;
@@ -105,20 +113,44 @@ async function procesarEntrega(): Promise<Resultado> {
       );
     }
 
-    const info = await sharp(entrada)
+    const encuadrada = sharp(entrada)
       .rotate() // respeta la orientación EXIF
-      .resize({ width: slot.ancho, withoutEnlargement: true })
+      .resize({ width: slot.ancho, withoutEnlargement: true });
+
+    /*
+      Mismo preprocesado que en `preparar-imagenes.ts`, y por eso los dos lo
+      importan del mismo módulo: una foto de Titanium que entre por aquí tiene
+      que salir con el mismo gris que la que entró desde `Telas_PW/`, o la misma
+      tela se vería de dos tonos según por dónde llegó su archivo.
+    */
+    const gris = slot.gris ? await desaturarYNormalizar(encuadrada) : null;
+
+    const info = await (gris?.salida ?? encuadrada)
       .webp({ quality: 82 })
       .toFile(salida);
+
+    if (gris) {
+      const medida: MedidaGris = {
+        k: await medirLuminancia(salida),
+        croma: gris.croma,
+      };
+      r.medidas.set(id, medida);
+      const aviso = avisoDeCroma(id, medida.croma);
+      if (aviso) r.avisos.push(aviso);
+    }
 
     // Se aparta el original para que la carpeta quede vacía y la siguiente
     // tanda se vea de un vistazo. No se borra: es el único máster que hay.
     mkdirSync(PROCESADAS, { recursive: true });
     renameSync(entrada, join(PROCESADAS, archivo));
 
+    const medida = r.medidas.get(id);
     r.procesadas.push(
       `${id.padEnd(28)} ${String(info.width).padStart(4)}x${String(info.height).padEnd(4)} ` +
-        `${String(Math.round(info.size / 1024)).padStart(4)} KB  -> ${slot.destino}`,
+        `${String(Math.round(info.size / 1024)).padStart(4)} KB  -> ${slot.destino}` +
+        (medida
+          ? `\n  ${"".padEnd(28)} gris · k ${medida.k.toFixed(3)} · croma del original ${medida.croma.toFixed(1)}`
+          : ""),
     );
   }
   return r;
@@ -174,30 +206,6 @@ function slotsSinCablear(): string[] {
   }).map((s) => s.id);
 }
 
-/** El manifiesto se genera mirando `public/`, no acumulando estado. */
-function escribirManifiesto(): { llenos: string[]; vacios: string[] } {
-  const llenos: string[] = [];
-  const vacios: string[] = [];
-  for (const slot of SLOTS) {
-    (existsSync(join(PUBLIC, slot.destino)) ? llenos : vacios).push(slot.id);
-  }
-
-  const cuerpo = `/**
- * GENERADO — no editar a mano.
- *
- * Lo reescribe \`npm run imagenes\` mirando qué archivos existen en \`public/\`.
- * Es la lista de slots que tienen imagen: lo que decide si una página muestra
- * la foto o el placeholder.
- */
-
-export const SLOTS_LLENOS: ReadonlySet<string> = new Set([
-${llenos.map((id) => `  ${JSON.stringify(id)},`).join("\n")}
-]);
-`;
-  writeFileSync(MANIFIESTO, cuerpo, "utf8");
-  return { llenos, vacios };
-}
-
 async function main() {
   const r = await procesarEntrega();
 
@@ -235,10 +243,17 @@ SLOTS REGISTRADOS QUE NINGÚN COMPONENTE LEE — ${huerfanos.length}`);
     for (const id of huerfanos) console.log(`  · ${id}`);
   }
 
-  const { llenos, vacios } = escribirManifiesto();
+  const { llenos, vacios, sinMedir } = escribirManifiesto(r.medidas);
   console.log(
-    `\nmanifiesto actualizado — ${llenos.length} de ${SLOTS.length} slots con imagen, ${vacios.length} vacíos\n`,
+    `\nmanifiesto actualizado — ${llenos.length} de ${SLOTS.length} slots con imagen, ${vacios.length} vacíos`,
   );
+  if (sinMedir.length) {
+    console.log(
+      `\nfotos en gris publicadas SIN medir — ${sinMedir.join(", ")}` +
+        `\n  (el recoloreo las compensa con la luminancia supuesta; regenéralas con  npm run imagenes:telas-pw <id>)`,
+    );
+  }
+  console.log("");
 
   // Un nombre mal escrito es justo lo que este script existe para cazar: si se
   // ignora, la imagen no aparece y parece un fallo de la web.

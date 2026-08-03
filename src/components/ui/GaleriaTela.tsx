@@ -2,60 +2,76 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+import { MacroLupa } from "./MacroLupa";
+import { TelaTenida } from "./TelaTenida";
+import { SwatchesRecoloreo } from "./SwatchesRecoloreo";
 import { cn } from "@/lib/cn";
-import { EASE_REVELAR } from "@/lib/motion";
+import { COLORES_RECOLOREO } from "@/data/recoloreo";
 import type { Foto, VistaTela } from "@/data/imagenes";
 
 export interface GaleriaTelaProps {
-  /**
-   * Vistas registradas de la tela, en orden: cada una con su foto o `null` si
-   * el hueco aún no tiene archivo.
-   */
+  /** Vistas de la tela con archivo, en orden. */
   vistas: VistaTela[];
   /** Caption sobre el hueco vacío / la foto (p. ej. "Chelsea · Microfibra"). */
   caption: string;
   /** Anchos servidos para la imagen principal. */
   sizes: string;
+  /** Derivado de alta para la lupa, si esta tela lo tiene. */
+  zoom?: Foto;
+  /** Muestrario de recoloreo. Solo donde la foto es gris neutro. */
+  recoloreo?: boolean;
   className?: string;
 }
-
-/** Aumento de la lupa. 2,2× enseña la trama sin pixelar los webp de 1280px. */
-const LUPA_ZOOM = 2.2;
 
 /**
  * Galería de la página de tela.
  *
- * MUESTRA LOS HUECOS cuando faltan fotos, no los esconde. Con una sola foto por
- * tela, degradar a "una imagen suelta" dejaba la galería indistinguible de lo
- * de siempre —ni miniaturas ni zoom— y la intención no se entendía. Ahora:
+ *  - Sin ninguna foto → el hueco de siempre (`ImagePlaceholder`): no hay nada
+ *    que enseñar todavía.
+ *  - Con una sola foto → la principal, con su lupa y su visor, y NADA debajo.
+ *    Una tira de miniaturas de un solo elemento no es un control: no hay a
+ *    dónde ir. Antes se pintaban además recuadros con un "+" por cada vista
+ *    pendiente, y en la mayoría de las telas —que tienen una foto— eso dejaba
+ *    una fila de huecos que se lee como catálogo a medio hacer. Lo que falta se
+ *    pide desde `/admin/imagenes`, no desde la ficha del cliente.
+ *  - Con ≥2 fotos → galería completa: principal más la tira de miniaturas.
  *
- *  - Sin ninguna foto real → el hueco de siempre (`ImagePlaceholder`): no hay
- *    nada que enseñar todavía.
- *  - Con ≥1 foto real → galería completa. La principal es la primera foto real;
- *    debajo, la tira de miniaturas con las vistas que existen y RECUADROS
- *    MARCADOR para las que faltan (se leen como "aquí van más fotos", no como
- *    algo roto). Lupa en escritorio y visor con pellizco en móvil, ambos sobre
- *    la foto real. Los huecos no son pulsables ni abren el visor.
+ * RECOLOREO
+ * Donde la tela lo admite, el muestrario va entre la principal y las
+ * miniaturas, y el color alcanza a TODA la galería: principal, miniaturas y
+ * visor. Teñir solo la principal dejaría una foto en rojo con sus miniaturas en
+ * blanco, que se lee como un fallo de carga; y abrir el visor para encontrar la
+ * tela otra vez blanca contradiría lo que el usuario acaba de elegir.
  *
  * RENDIMIENTO
  * No hay ningún efecto permanente. La lupa solo existe mientras el cursor está
- * encima (se monta en `pointerenter`, se desmonta en `pointerleave`) y solo
- * anima `transform`/`transform-origin`. El visor a pantalla completa solo vive
+ * encima y solo anima `transform`. El visor a pantalla completa solo vive
  * mientras está abierto. Nada corre en reposo.
  *
- * Sin dependencias nuevas: lupa y pellizco son Pointer Events + transform.
+ * Sin dependencias nuevas: lupa, pellizco y mezcla son Pointer Events,
+ * transform y `mix-blend-mode`.
  */
-export function GaleriaTela({ vistas, caption, sizes, className }: GaleriaTelaProps) {
-  const reales = vistas.filter((v): v is VistaTela & { foto: Foto } => v.foto !== null);
+export function GaleriaTela({
+  vistas,
+  caption,
+  sizes,
+  zoom,
+  recoloreo = false,
+  className,
+}: GaleriaTelaProps) {
   const [activa, setActiva] = useState(0);
   const [visorAbierto, setVisorAbierto] = useState(false);
-  const reduceMotion = useReducedMotion();
+  const [color, setColor] = useState(0);
 
-  // Sin ninguna foto real todavía: el hueco de siempre. No hay galería que
-  // mostrar —ni principal ni miniatura llena— así que se deja el placeholder.
-  if (reales.length === 0) {
+  // El primer tono es el blanco óptico: apenas un tinte azulado sobre la foto,
+  // que es el estado en que se ve la tela sin intervenir.
+  const colorHex = recoloreo ? COLORES_RECOLOREO[color].hex : null;
+
+  // Sin ninguna foto todavía: el hueco de siempre. No hay galería que mostrar,
+  // así que se deja el placeholder.
+  if (vistas.length === 0) {
     return (
       <ImagePlaceholder
         src={undefined}
@@ -68,192 +84,77 @@ export function GaleriaTela({ vistas, caption, sizes, className }: GaleriaTelaPr
     );
   }
 
-  const foto = reales[Math.min(activa, reales.length - 1)].foto;
+  const foto = vistas[Math.min(activa, vistas.length - 1)].foto;
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      <PrincipalConLupa
+      <MacroLupa
         foto={foto}
+        zoom={zoom}
         sizes={sizes}
-        reduceMotion={Boolean(reduceMotion)}
+        colorHex={colorHex}
         onAbrirVisor={() => setVisorAbierto(true)}
       />
 
       {/*
-        Miniaturas: una por vista REGISTRADA, exista o no su foto. Las llenas
-        son botones (anillo azul en la activa, mismo gesto que el muestrario);
-        las vacías son recuadros marcador, no interactivos, que dicen "aquí va
-        otra foto". `activa` indexa solo las fotos reales.
+        El muestrario va aquí, pegado a la foto y por encima de las miniaturas:
+        pulsar un color y ver cambiar la tela justo arriba es lo que explica el
+        control sin una sola línea de texto.
       */}
-      <div
-        role="tablist"
-        aria-label="Vistas de la tela"
-        className="flex flex-wrap gap-2.5"
-      >
-        {vistas.map((v, i) => {
-          if (!v.foto) {
-            return (
-              <span
-                key={v.id}
-                aria-hidden
-                title="Foto pendiente"
-                className="flex size-16 items-center justify-center border border-dashed border-greige bg-bone sm:size-18"
-              >
-                <span className="font-mono text-lg leading-none text-greige">+</span>
-              </span>
-            );
-          }
-          const indiceReal = reales.findIndex((r) => r.id === v.id);
-          return (
+      {recoloreo && (
+        <SwatchesRecoloreo activo={color} onCambiar={setColor} />
+      )}
+
+      {/*
+        Miniaturas: una por vista con archivo. Con una sola foto no se pintan —
+        un control con una única opción no controla nada y ocupa el sitio de la
+        ficha técnica.
+      */}
+      {vistas.length > 1 && (
+        <div
+          role="tablist"
+          aria-label="Vistas de la tela"
+          className="flex flex-wrap gap-2.5"
+        >
+          {vistas.map((v, i) => (
             <button
               key={v.id}
               type="button"
               role="tab"
-              aria-selected={indiceReal === activa}
+              aria-selected={i === activa}
               aria-label={`Vista ${i + 1}`}
-              onClick={() => setActiva(indiceReal)}
-              className="relative size-16 overflow-hidden transition-shadow duration-200 ease-asentar sm:size-18"
+              onClick={() => setActiva(i)}
+              className="relative size-16 isolate overflow-hidden transition-shadow duration-200 ease-asentar sm:size-18"
               style={{
                 boxShadow:
-                  indiceReal === activa
+                  i === activa
                     ? "0 0 0 1px #C8C2B8, 0 0 0 3px #F5F2EE, 0 0 0 5px #33A2DC"
                     : "0 0 0 1px #C8C2B8",
               }}
             >
-              <Image
-                src={v.foto.ruta}
-                alt=""
-                fill
-                sizes="72px"
-                className="object-cover"
-              />
+              <TelaTenida hex={colorHex} src={v.foto.ruta} k={v.foto.k}>
+                <Image
+                  src={v.foto.ruta}
+                  alt=""
+                  fill
+                  sizes="72px"
+                  className="object-cover"
+                />
+              </TelaTenida>
             </button>
-          );
-        })}
-      </div>
-
-      <AnimatePresence>
-        {visorAbierto && (
-          <VisorPantallaCompleta foto={foto} onCerrar={() => setVisorAbierto(false)} />
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-/**
- * Imagen principal con lupa de escritorio. La lupa es una segunda copia de la
- * imagen que se escala 2,2× con `transform-origin` en el punto del cursor, así
- * que el punto bajo el ratón se queda fijo y la trama crece a su alrededor a
- * tamaño real —no la foto entera más grande—. Solo se monta con puntero fino.
- *
- * En puntero grueso (táctil) no hay lupa: un toque abre el visor a pantalla
- * completa, que es donde el pellizco tiene sentido.
- */
-function PrincipalConLupa({
-  foto,
-  sizes,
-  reduceMotion,
-  onAbrirVisor,
-}: {
-  foto: Foto;
-  sizes: string;
-  reduceMotion: boolean;
-  onAbrirVisor: () => void;
-}) {
-  const marco = useRef<HTMLDivElement>(null);
-  const rect = useRef<DOMRect | null>(null);
-  const frame = useRef<number | null>(null);
-  const [lente, setLente] = useState<{ fx: number; fy: number } | null>(null);
-
-  const finoDisponible = () =>
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: fine)").matches;
-
-  function onEnter(e: React.PointerEvent) {
-    if (e.pointerType !== "mouse" || !finoDisponible()) return;
-    rect.current = marco.current?.getBoundingClientRect() ?? null;
-  }
-
-  function onMove(e: React.PointerEvent) {
-    if (e.pointerType !== "mouse" || !finoDisponible()) return;
-    const r = rect.current ?? marco.current?.getBoundingClientRect() ?? null;
-    if (!r) return;
-    rect.current = r;
-    const fx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-    const fy = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
-    if (frame.current) cancelAnimationFrame(frame.current);
-    frame.current = requestAnimationFrame(() => setLente({ fx, fy }));
-  }
-
-  function onLeave() {
-    if (frame.current) cancelAnimationFrame(frame.current);
-    setLente(null);
-  }
-
-  useEffect(() => {
-    return () => {
-      if (frame.current) cancelAnimationFrame(frame.current);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={marco}
-      className="group relative aspect-4/3 w-full cursor-zoom-in overflow-hidden bg-bone"
-      onPointerEnter={onEnter}
-      onPointerMove={onMove}
-      onPointerLeave={onLeave}
-      onClick={(e) => {
-        // Solo el táctil abre el visor con un toque; el ratón usa la lupa.
-        if (e.nativeEvent instanceof PointerEvent && e.nativeEvent.pointerType !== "mouse") {
-          onAbrirVisor();
-        }
-      }}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={foto.ruta}
-          className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.35, ease: EASE_REVELAR }}
-        >
-          <Image
-            src={foto.ruta}
-            alt={foto.alt}
-            fill
-            sizes={sizes}
-            className="object-cover"
-          />
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Capa de lupa: solo montada mientras hay cursor encima. */}
-      {lente && (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 hidden sm:block"
-          style={{
-            transform: `scale(${LUPA_ZOOM})`,
-            transformOrigin: `${lente.fx * 100}% ${lente.fy * 100}%`,
-          }}
-        >
-          <Image
-            src={foto.ruta}
-            alt=""
-            fill
-            sizes={sizes}
-            className="object-cover"
-          />
+          ))}
         </div>
       )}
 
-      {/* Pista discreta, solo en táctil (con hover se ve la propia lupa). */}
-      <span className="pointer-events-none absolute bottom-0 right-0 m-3 bg-ink/70 px-2 py-1 font-mono text-micro uppercase tracking-widest text-paper sm:hidden">
-        Toca para ampliar
-      </span>
+      <AnimatePresence>
+        {visorAbierto && (
+          <VisorPantallaCompleta
+            foto={foto}
+            colorHex={colorHex}
+            onCerrar={() => setVisorAbierto(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -265,9 +166,11 @@ function PrincipalConLupa({
  */
 function VisorPantallaCompleta({
   foto,
+  colorHex,
   onCerrar,
 }: {
   foto: Foto;
+  colorHex: string | null;
   onCerrar: () => void;
 }) {
   const [t, setT] = useState({ escala: 1, x: 0, y: 0 });
@@ -363,19 +266,26 @@ function VisorPantallaCompleta({
       </button>
       {/* La imagen: object-contain para verla entera, transform para el zoom. */}
       <div
-        className="relative h-full w-full"
+        className="relative isolate h-full w-full"
         style={{
           transform: `translate3d(${t.x}px, ${t.y}px, 0) scale(${t.escala})`,
           transition: enGesto ? "none" : "transform 0.15s ease-out",
         }}
       >
-        <Image
-          src={foto.ruta}
-          alt={foto.alt}
-          fill
-          sizes="100vw"
-          className="object-contain"
-        />
+        {/*
+          El color viaja hasta aquí: quien abre el visor con la tela en azul
+          tiene que encontrarla en azul. `contain` porque la foto se ve entera
+          con franjas a los lados, y el color no debe salirse a ellas.
+        */}
+        <TelaTenida hex={colorHex} src={foto.ruta} k={foto.k} ajuste="contain">
+          <Image
+            src={foto.ruta}
+            alt={foto.alt}
+            fill
+            sizes="100vw"
+            className="object-contain"
+          />
+        </TelaTenida>
       </div>
     </motion.div>
   );

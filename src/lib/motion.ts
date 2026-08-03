@@ -33,6 +33,22 @@ export const DURATION = {
   cortinaCarga: 0.72, // 720ms — telón de carga inicial (#tp-curtain)
 } as const;
 
+/**
+ * Tope de espera del telón de carga por la foto LCP, en segundos.
+ *
+ * El telón (`LoadCurtain`) se retira cuando la foto principal está decodificada
+ * o cuando vence este tope, lo que pase primero. El tope no es un detalle de
+ * afinado: es lo que impide que una red lenta deje al visitante mirando un
+ * panel opaco sin fin. Con él, la peor espera posible es esta cifra, y a partir
+ * de ahí la página se comporta como si el telón nunca hubiera esperado.
+ *
+ * 1s y no más: por encima del segundo la pausa deja de leerse como "está
+ * cargando" y empieza a leerse como "no responde". Por debajo no da tiempo a
+ * que llegue una foto en una conexión normal, que es justo el caso que esto
+ * existe para cubrir.
+ */
+export const TOPE_ESPERA_FOTO = 1;
+
 export const MAGNETIC_STRENGTH = 0.28;
 
 /**
@@ -145,6 +161,29 @@ export const FLOTANTE = {
   entrada: 0.45,
   retardo: 1.5,
   escalaInicial: 0.7,
+} as const;
+
+/**
+ * Lupa macro de la ficha de tela. Solo entra y sale el aumento: mientras la
+ * lupa sigue al cursor NO hay transición ninguna, y es deliberado —interpolar
+ * el `transform-origin` haría que la imagen resbalara por detrás del puntero en
+ * vez de quedarse clavada bajo él, que es justo lo que la técnica promete—.
+ *
+ * `asentar` (220ms) y no `revelar`: es respuesta a un gesto del usuario, no una
+ * entrada de contenido.
+ */
+export const LUPA = {
+  aumento: DURATION.asentar,
+} as const;
+
+/**
+ * Recoloreo de la tela. El cambio de tono cruza en `asentar`, la misma curva
+ * que el anillo del muestrario: es la respuesta a haber pulsado un swatch, y
+ * debe leerse como parte del mismo gesto. Un corte seco haría dudar de si la
+ * foto cambió o se recargó.
+ */
+export const RECOLOREO = {
+  cambioDeTono: DURATION.asentar,
 } as const;
 
 /** CSS easing strings (para transiciones fuera de framer-motion). */
