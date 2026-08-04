@@ -57,6 +57,17 @@ export const productCategories: NavCategory[] = categories.map((category) => ({
 
 export const catalogStats = `${catalogTotals.telas} telas · ${catalogTotals.familias} familias · teñido a demanda`;
 
+/**
+ * El «ver todo» del catálogo. Vive aquí, y no escrito a mano en cada panel,
+ * porque el navbar lo pinta DOS veces —mega-menú de escritorio y menú móvil—
+ * y una etiqueta o un destino copiados acaban divergiendo en cuanto uno de los
+ * dos se retoca. La flecha va dentro de la etiqueta, como en el original.
+ */
+export const catalogAllLink = {
+  label: "Ver todo el catálogo →",
+  href: "/productos",
+};
+
 export const primaryNavLinks = [
   { label: "Inicio", href: "/" },
   { label: "Nuestra Empresa", href: "/empresa" },

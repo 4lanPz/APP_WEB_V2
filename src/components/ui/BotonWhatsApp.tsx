@@ -41,6 +41,14 @@ export function BotonWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribir a Textil Padilla por WhatsApp (se abre en una pestaña nueva)"
+      /*
+       * Asa para que el menú móvil abierto lo aparte — la regla vive en
+       * `globals.css`, junto al mecanismo de superficie. Se oculta con
+       * `display:none` y no con opacidad a propósito: así sale también del
+       * orden de tabulación, y un teclado que recorre el menú no tropieza con
+       * un enlace invisible.
+       */
+      data-flotante="whatsapp"
       className={cn(
         /*
          * z-900: por debajo del telón de carga y de la transición de página

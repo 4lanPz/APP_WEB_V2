@@ -8,6 +8,7 @@ import { Container } from "./Container";
 import { cn } from "@/lib/cn";
 import { EASE_ASENTAR, EASE_DESENROLLAR, EASE_PLEGAR, DURATION } from "@/lib/motion";
 import {
+  catalogAllLink,
   catalogStats,
   externalPortalHref,
   primaryNavLinks,
@@ -225,10 +226,29 @@ export function Navbar() {
     };
   }, [megaOpen, cerrarMenu]);
 
+  /*
+   * Con el menú desplegado, `<body>` queda marcado. Además de bloquear el
+   * scroll, esa marca es lo que aparta el flotante de WhatsApp: el botón vive
+   * en `layout.tsx`, es hermano del navbar y va a z-900, así que se pinta por
+   * encima del panel. Con nueve enlaces, "Portal Clientes" baja hasta el rincón
+   * del flotante y este le tapa la flecha; el enlace seguía navegando, pero con
+   * el área táctil medio cubierta. Se aparta el flotante en vez de recortar el
+   * menú porque a 375×667 el panel ya usa 584 de los 599px disponibles: hacerle
+   * sitio obligaba a meter scroll, que es justo lo que esta tanda vino a quitar.
+   *
+   * Un atributo en `<body>` y no un contexto de React: el acoplamiento es de
+   * una sola dirección y sin datos, `layout.tsx` es un componente de servidor
+   * —montar un proveedor cliente solo para un booleano no compensa— y el
+   * efecto ya estaba aquí tocando `<body>` por lo mismo. La regla que lo
+   * consume está en `globals.css`, junto al resto de mecanismos implícitos.
+   */
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
+    if (mobileOpen) document.body.dataset.menuMovil = "abierto";
+    else delete document.body.dataset.menuMovil;
     return () => {
       document.body.style.overflow = "";
+      delete document.body.dataset.menuMovil;
     };
   }, [mobileOpen]);
 
@@ -367,11 +387,11 @@ export function Navbar() {
                       <div className="col-span-full mt-2.5 flex items-center justify-between gap-5 border-t border-greige pt-5 font-mono text-xs uppercase tracking-[0.08em] text-graphite">
                         <span>{catalogStats}</span>
                         <Link
-                          href="/productos"
+                          href={catalogAllLink.href}
                           onClick={cerrarMenu}
                           className="font-sans text-sm font-medium text-ink hover:text-brand-ink"
                         >
-                          Ver todo el catálogo →
+                          {catalogAllLink.label}
                         </Link>
                       </div>
                     </div>
@@ -504,6 +524,26 @@ export function Navbar() {
                         </Link>
                       ))}
                     </div>
+
+                    {/*
+                     * «Ver todo el catálogo» — hermano de la lista, no un hijo,
+                     * a propósito: así la cuarta familia sigue siendo
+                     * `:last-child` y conserva su `last:border-b-0`, y el filete
+                     * que separa los dos niveles lo pone este enlace con su
+                     * `border-t`. Metido dentro de la lista saldrían dos rayas
+                     * seguidas y Polialgodón parecería tener una compañera.
+                     *
+                     * Se distingue como en escritorio: sin versalitas, peso
+                     * medio en vez de semibold y por debajo de un filete. Es un
+                     * enlace de otro nivel, no una quinta familia.
+                     */}
+                    <Link
+                      href={catalogAllLink.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="mt-2.5 flex border-t border-greige pt-4 font-sans text-sm font-medium text-ink"
+                    >
+                      {catalogAllLink.label}
+                    </Link>
                   </motion.details>
 
                   <motion.div variants={mobileItemVariants}>

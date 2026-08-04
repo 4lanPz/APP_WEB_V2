@@ -281,6 +281,33 @@
 }
 
 /*
+ * EL FLOTANTE SE APARTA MIENTRAS EL MENÚ MÓVIL ESTÁ DESPLEGADO.
+ *
+ * `Navbar.tsx` marca `<body data-menu-movil="abierto">` mientras el panel está
+ * abierto —el mismo efecto que bloquea el scroll— y esta regla es lo único que
+ * lee esa marca. El flotante de WhatsApp cuelga de `layout.tsx` a z-900, por
+ * encima del panel del menú (z-40), así que sin esto se pinta sobre los últimos
+ * enlaces y les tapa el rincón derecho.
+ *
+ * `display:none` y no opacidad: hace falta que salga TAMBIÉN del orden de
+ * tabulación. Con `opacity:0` seguiría siendo enfocable y un teclado que
+ * recorre el menú se pararía en un enlace que no se ve.
+ *
+ * El selector va por `[data-flotante]` y no por una clase de utilidad porque el
+ * conjunto es "lo que flota sobre la página desde el layout": hoy solo el
+ * WhatsApp, pero cualquier otro que se añada querrá apartarse igual.
+ *
+ * Acotado por debajo de 900px —el mismo corte que `--breakpoint-tablet`, que es
+ * donde la navegación pasa a menú— para que el flotante no se desvanezca en
+ * escritorio si alguien deja el menú abierto y ensancha la ventana.
+ */
+@media (width < 900px) {
+  body[data-menu-movil="abierto"] [data-flotante] {
+    display: none;
+  }
+}
+
+/*
  * Motion Architecture v1 §02/§05 — micro-interacciones en CSS puro.
  * Curva "Interacción · Asentar" (0.40,0,0.20,1), 220ms — botones, subrayado
  * de nav, anillo de swatch. Un solo lugar para el valor: si cambia, cambia
