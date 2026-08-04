@@ -14,7 +14,9 @@
     "catalogo": "npx tsx scripts/verificar-catalogo.ts",
     "video": "npx tsx scripts/preparar-video.ts",
     "botones": "node scripts/verificar-botones.mjs",
-    "imagenes:medir": "npx tsx scripts/medir-fotos.ts"
+    "imagenes:medir": "npx tsx scripts/medir-fotos.ts",
+    "tailwind:numericas": "node scripts/verificar-clases-numericas.mjs",
+    "auditoria:consistencia": "npx tsx scripts/auditoria-consistencia.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
