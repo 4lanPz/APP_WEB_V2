@@ -142,7 +142,17 @@ export function EventCarousel({ slides }: EventCarouselProps) {
         cualquier altura, así que la única solución estable es que los controles
         no vivan en esa columna. Desde 640px sobra sitio y vuelven a repartirse.
       */}
-      <div className="mt-6 flex items-center justify-start gap-5 sm:justify-between sm:gap-0">
+      {/*
+        `flex-wrap` SOLO tiene efecto por debajo de 640px, y es lo que hace
+        tocables los puntos: con el área táctil a 44px el grupo de puntos pasa de
+        56 a 176px, y la fila entera pedía 424px en un ancho útil de 323. En vez
+        de encoger el objetivo o solapar puntos —a 16px de paso, un área de 44
+        tapa el centro visual del vecino y el toque activa otra tarjeta—, el
+        grupo de puntos y flechas baja a una segunda línea. Desde 640px la fila
+        cabe de sobra (404 de 588) y no envuelve: ahí sigue siendo una sola línea
+        con `justify-between`, como estaba.
+      */}
+      <div className="mt-6 flex flex-wrap items-center justify-start gap-5 sm:flex-nowrap sm:justify-between sm:gap-0">
         <div className="flex items-center gap-4">
           <span className="font-mono text-xs text-graphite">
             {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
@@ -166,21 +176,35 @@ export function EventCarousel({ slides }: EventCarouselProps) {
           )}
         </div>
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
+          {/*
+            EL PUNTO MIDE 8px SIEMPRE; lo que cambia con el ancho es su ÁREA
+            SENSIBLE. En móvil el botón es una caja de 44px con el punto de 8
+            centrado dentro —el mínimo táctil, medido sobre el propio botón y no
+            sobre un pseudo-elemento, que no cuenta como objetivo—; las cajas se
+            tocan de borde a borde, así que ninguna muerde el área de la vecina.
+            Desde 640px el botón vuelve a ser el punto (`sm:size-2` y el `gap-2`
+            del grupo): con ratón no hay mínimo táctil que cumplir y agrandar el
+            hueco entre puntos ahí solo desharía el racimo compacto del diseño.
+          */}
+          <div className="flex items-center sm:gap-2">
             {slides.map((s, i) => (
               <button
                 key={s.title}
                 type="button"
                 aria-label={`Ir al evento ${i + 1}`}
                 onClick={() => irManual(i, i > index ? 1 : -1)}
-                /* El punto activo iba en `brand`: como marca no textual contra
-                   `paper` da 2,56:1 y necesita 3:1. Pasa a tinta, igual que el
-                   filete activo del navbar (styleguide §C). */
-                className={cn(
-                  "size-2 border border-graphite transition-colors duration-220 ease-asentar",
-                  i === index && "border-ink bg-ink",
-                )}
-              />
+                className="flex size-11 items-center justify-center sm:size-2"
+              >
+                {/* El punto activo iba en `brand`: como marca no textual contra
+                    `paper` da 2,56:1 y necesita 3:1. Pasa a tinta, igual que el
+                    filete activo del navbar (styleguide §C). */}
+                <span
+                  className={cn(
+                    "block size-2 border border-graphite transition-colors duration-220 ease-asentar",
+                    i === index && "border-ink bg-ink",
+                  )}
+                />
+              </button>
             ))}
           </div>
           <div className="flex items-center gap-3">

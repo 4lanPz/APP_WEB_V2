@@ -218,8 +218,14 @@ export default function CamisetasPage() {
                   <p className="mt-5 font-serif text-body-m text-graphite">
                     {fabric.description}
                   </p>
+                  {/* Sin `#en-preparacion`: ese id solo existe en las páginas
+                      de preparación (`PreparacionPage` y `[categoria]`), no en
+                      una categoría publicada como Microfibra —ver la nota de
+                      `subcategoryHref` en `lib/nav-data.ts`—. Con el ancla, el
+                      navegador no encontraba destino y dejaba al usuario arriba
+                      del todo sin explicación. */}
                   <Link
-                    href="/productos/microfibra#en-preparacion"
+                    href="/productos/microfibra"
                     title="Página en preparación"
                     className={cn(buttonVariants({ variant: "enlace" }), "mt-5")}
                   >

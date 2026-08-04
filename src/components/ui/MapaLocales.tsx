@@ -35,11 +35,45 @@ const TESELAS = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
 const ATRIBUCION = "© OpenStreetMap · © CARTO";
 
 /**
+ * Caja táctil del marcador. El PUNTO sigue midiendo 14px (matriz) o 10px
+ * (local) —el mapa se lee igual—, pero el elemento que recibe el toque es esta
+ * caja de 44 con el punto centrado dentro. Antes el elemento medía exactamente
+ * el punto: un objetivo de 10px es intocable con un dedo.
+ *
+ * ───────────────────────────────────────────────────────────────────────────
+ * POR QUÉ EL SOLAPE DEL RACIMO DE LA SIERRA NO SE ARREGLA AQUÍ
+ *
+ * Medido a 375px en el encuadre inicial, los centros de Matriz Alangasí, La
+ * Marín, Solanda y Sangolquí caen a 1–6px unos de otros: los cuatro ocupan casi
+ * el mismo píxel. Ya se tapaban entre sí cuando el marcador medía 10px, y con
+ * 44 se tapan más. Guayaquil, a 100px, no toca a nadie.
+ *
+ * No es un problema de tamaño de objetivo, así que agrandarlo o encogerlo no lo
+ * resuelve: la posición de un marcador la fija su coordenada, y el encuadre
+ * inicial tiene que abarcar de Quito a Samborondón —unos 430km— porque ahí están
+ * los locales. Cualquier caja, de 10 o de 44, cae dentro de la de al lado.
+ * Separarlos exigiría moverlos de su coordenada —un marcador que miente sobre
+ * dónde está el local— o agruparlos en un racimo que se abre al pulsarlo, que es
+ * otro control y otra tanda.
+ *
+ * Lo que SÍ cubre el caso, y por eso existe: el índice de locales de abajo —cada
+ * local se elige siempre, y por teclado— y el acercamiento al seleccionar uno,
+ * que separa los marcadores hasta que son pulsables de verdad. Ver la nota del
+ * índice, más abajo.
+ * ───────────────────────────────────────────────────────────────────────────
+ */
+const CAJA_TACTIL = 44;
+
+/**
  * Marcador del sistema, no el pin azul por defecto de Leaflet. Reproduce el
  * punto del mapa esquemático anterior —azul de marca con halo para la matriz,
  * terracota para los locales— para que el mapa, la leyenda y los puntos de la
  * tabla de abajo sigan diciendo lo mismo.
+ *
+ * El punto se pinta dentro de la caja de `CAJA_TACTIL`; ver ahí por qué el
+ * toque no se mide sobre el punto.
  */
+
 function icono(location: Location, activo: boolean): L.DivIcon {
   const lado = location.isMatriz ? 14 : 10;
   const color = location.isMatriz ? "#33A2DC" : "#A0715A";
@@ -53,10 +87,48 @@ function icono(location: Location, activo: boolean): L.DivIcon {
 
   return L.divIcon({
     className: "", // sin la clase de Leaflet: trae fondo y borde propios
-    iconSize: [lado, lado],
-    iconAnchor: [lado / 2, lado / 2],
-    html: `<span style="display:block;width:${lado}px;height:${lado}px;border-radius:9999px;background:${color};box-shadow:${halo};transition:box-shadow 180ms"></span>`,
+    iconSize: [CAJA_TACTIL, CAJA_TACTIL],
+    iconAnchor: [CAJA_TACTIL / 2, CAJA_TACTIL / 2],
+    html:
+      `<span style="display:flex;width:${CAJA_TACTIL}px;height:${CAJA_TACTIL}px;align-items:center;justify-content:center">` +
+      `<span style="display:block;width:${lado}px;height:${lado}px;border-radius:9999px;background:${color};box-shadow:${halo};transition:box-shadow 180ms"></span>` +
+      `</span>`,
   });
+}
+
+/**
+ * Nombre accesible y tecla de activación del marcador. Las dos cosas van juntas
+ * porque las dos las deja a medias Leaflet:
+ *
+ *  - NOMBRE. Solo pone `title` —tooltip del sistema, que un lector de pantalla
+ *    puede o no anunciar— y el `alt` que se le pasa lo ignora en los `divIcon`,
+ *    que no son `<img>`. Sin esto son cinco controles con `role="button"` y sin
+ *    texto: el lector anuncia "botón" y nada más.
+ *  - TECLA. Leaflet marca el marcador como `role="button"` y `tabindex="0"`,
+ *    pero solo ata Enter cuando el marcador lleva un popup suyo (`bindPopup` →
+ *    `_onKeyPress`), y aquí la ficha es un componente de React a propósito. Se
+ *    llegaba al marcador con el tabulador y no pasaba nada al pulsar.
+ *
+ * Se reaplica en cada `setIcon`: ahí Leaflet reconstruye el elemento. Se usa la
+ * propiedad `onkeydown` y no `addEventListener` para que reaplicarlo sustituya
+ * al anterior en vez de acumular manejadores.
+ */
+function prepararMarcador(
+  marcador: L.Marker,
+  location: Location,
+  activar: () => void,
+) {
+  const el = marcador.getElement();
+  if (!el) return;
+  el.setAttribute(
+    "aria-label",
+    `${location.name} — ${location.zone}. Ver ficha del local`,
+  );
+  el.onkeydown = (evento) => {
+    if (evento.key !== "Enter" && evento.key !== " ") return;
+    evento.preventDefault(); // el espacio, si no, hace scroll de la página
+    activar();
+  };
 }
 
 export function MapaLocales({ locations }: { locations: Location[] }) {
@@ -106,6 +178,7 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
       })
         .addTo(m)
         .on("click", () => setActivo(location));
+      prepararMarcador(marcador, location, () => setActivo(location));
       registro.set(location.ref, marcador);
     }
 
@@ -121,9 +194,10 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
   // no rehacer el mapa entero en cada clic.
   useEffect(() => {
     for (const location of locations) {
-      marcadores.current
-        .get(location.ref)
-        ?.setIcon(icono(location, activo?.ref === location.ref));
+      const marcador = marcadores.current.get(location.ref);
+      if (!marcador) continue;
+      marcador.setIcon(icono(location, activo?.ref === location.ref));
+      prepararMarcador(marcador, location, () => setActivo(location));
     }
     if (!activo || !mapa.current) return;
     const menosMovimiento = window.matchMedia(
@@ -227,6 +301,11 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
        * destinado al de Alangasí. Con el índice cada local se puede elegir
        * siempre, se llega por teclado, y el mapa se acerca lo suficiente para
        * que además el marcador sea pulsable.
+       *
+       * Sigue siendo cierto después de subir la caja táctil del marcador a 44px:
+       * el racimo se solapa por dónde caen las coordenadas, no por el tamaño del
+       * objetivo. Ver la nota de `CAJA_TACTIL` arriba, con las distancias
+       * medidas. Este índice es la vía fiable, no un adorno de respaldo.
        */}
       <div className="mt-3 flex flex-wrap gap-px border border-greige bg-greige sm:mt-4">
         {locations.map((location) => {

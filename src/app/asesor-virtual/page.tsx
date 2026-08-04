@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 export default function AsesorVirtualPage() {
   return (
     <div className="bg-ink text-paper">
-      <div className="relative overflow-hidden py-16 sm:py-20">
+      <div className="relative overflow-hidden">
         <FondoHero slot="hero-asesor-virtual" />
         {/*
          * Velo adicional, SOLO en esta página.
@@ -53,7 +53,22 @@ export default function AsesorVirtualPage() {
          * los seis heroes del sitio y ninguno de los otros centra su columna.
          */}
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-ink/30 sm:bg-ink/15" />
-        <Container className="relative">
+        {/*
+         * MISMA GEOMETRÍA QUE `Hero`, no una altura escrita a mano.
+         *
+         * Esta banda medía 448px a 1440 y 392 a 375, casi 200 menos que
+         * cualquier otra cabecera del sitio. La causa no era el contenido: era
+         * que aquí el relleno se puso a mano (`py-16 sm:py-20` en la banda) y
+         * faltaba el suelo `min-h-[70vh]` que sí tiene el `Container` de `Hero`
+         * —el mismo suelo del que salen los 630px de Dortmund Plus—. Ahora la
+         * regla es la de todos: suelo de 70vh y `py-24`. Si esta cabecera queda
+         * en el suelo y otra más alta, es porque su titular es más corto, que es
+         * exactamente como varía el resto del grupo.
+         *
+         * Va aquí y no envolviendo la banda porque el fondo tiene que seguir
+         * llegando a sangre por detrás del relleno.
+         */}
+        <Container className="relative flex min-h-[70vh] flex-col justify-center py-24">
           {/* El breadcrumb NO se centra: es chrome del sitio y es lo que ancla
               la página a la retícula editorial del resto. */}
           <Breadcrumb

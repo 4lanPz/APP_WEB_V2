@@ -85,8 +85,12 @@ export default async function ProductoDortmundPlusBlancosPage() {
             <FichaTecnica rows={product.fichaTecnica} />
 
             <div className="flex flex-col gap-4">
+              {/* Sin ancla: la página de Dortmund Plus está publicada y no
+                  tiene —ni tenía— ninguna sección "en preparación"; ese id solo
+                  lo pinta `PreparacionPage`. El destino sigue siendo la página
+                  de la tela, ahora desde arriba y a propósito. */}
               <MagneticLink
-                href="/productos/microfibra/dortmund-plus#en-preparacion"
+                href="/productos/microfibra/dortmund-plus"
                 className={buttonVariants({ variant: "contorno" })}
               >
                 Solicitar muestra de este color →
@@ -134,8 +138,14 @@ export default async function ProductoDortmundPlusBlancosPage() {
             className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3">
             {product.related.map((item) => (
               <RevealItem key={item.name} className="h-full">
+                {/* Sin ancla, por lo mismo que arriba: Microfibra es una
+                    categoría publicada y ahí no hay ningún `#en-preparacion`.
+                    OJO, pendiente de otra tanda: estas tarjetas ya traen `slug`
+                    (`item.slug`: chelsea, athletic, imperial) y hoy las tres van
+                    a la categoría con el rótulo "En preparación" escrito a mano,
+                    cuando dos de ellas ya tienen ficha. */}
                 <Link
-                  href="/productos/microfibra#en-preparacion"
+                  href="/productos/microfibra"
                   title="Página en preparación"
                   className="group flex h-full flex-col border border-transparent bg-paper text-ink transition-colors duration-500 ease-revelar hover:border-graphite"
                 >
