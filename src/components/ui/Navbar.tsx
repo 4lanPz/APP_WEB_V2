@@ -385,6 +385,21 @@ export function Navbar() {
           <NavLink href={externalPortalHref} label="Portal Clientes" external />
         </nav>
 
+        {/*
+         * SEPARACIÓN DE LAS RAYAS — 1.5 (6px), y no un valor cualquiera.
+         *
+         * Aquí ponía `translate-y-1.625` (6,5px) y el icono cerrado se veía
+         * como UNA sola raya, en escritorio y en móvil: Tailwind v4 solo genera
+         * las utilidades de espaciado cuyo valor suelto es múltiplo de 0,25, y
+         * descarta el resto EN SILENCIO —sin error de build ni de lint—. La
+         * clase nunca llegaba al CSS, las tres rayas se quedaban en el mismo
+         * `top` y se superponían píxel sobre píxel. La X sí funcionaba porque
+         * `translate-y-0` y `rotate-45` sí son válidas.
+         *
+         * Comprobado en el navegador: 1.5 · 1.75 · 2.25 se generan; 1.625 ·
+         * 1.6 · 1.125 · 3.125 no. No es exclusivo de `translate`: `pb-1.625`
+         * tampoco existe. Si tocas estas medidas, que sean múltiplos de 0,25.
+         */}
         <button
           type="button"
           onClick={() => setMobileOpen((v) => !v)}
@@ -395,7 +410,7 @@ export function Navbar() {
           <span
             className={cn(
               "absolute h-px w-6 bg-ink transition-transform duration-220 ease-asentar",
-              mobileOpen ? "translate-y-0 rotate-45" : "-translate-y-1.625",
+              mobileOpen ? "translate-y-0 rotate-45" : "-translate-y-1.5",
             )}
           />
           <span
@@ -407,7 +422,7 @@ export function Navbar() {
           <span
             className={cn(
               "absolute h-px w-6 bg-ink transition-transform duration-220 ease-asentar",
-              mobileOpen ? "translate-y-0 -rotate-45" : "translate-y-1.625",
+              mobileOpen ? "translate-y-0 -rotate-45" : "translate-y-1.5",
             )}
           />
         </button>
@@ -460,40 +475,33 @@ export function Navbar() {
                       {/* eslint-disable-next-line no-restricted-syntax -- tamaño de glifo "+" del acordeón, no es texto (fase 3) */}
                       <span className="text-[24px] leading-none text-greige">+</span>
                     </summary>
-                    <div className="mt-4 flex flex-col gap-4">
+                    {/*
+                     * SOLO LAS FAMILIAS, SIN LOS NOMBRES DE TELA.
+                     *
+                     * Aquí se desplegaban también las subcategorías: las más de
+                     * 40 telas del catálogo, una detrás de otra. El menú no
+                     * cabía en pantalla —el enlace del final quedaba
+                     * inalcanzable— y Polialgodón, la cuarta familia, quedaba
+                     * enterrada bajo las listas de las tres anteriores.
+                     *
+                     * El menú lleva A UN SITIO; el catálogo se explora en la
+                     * página de cada familia, con su rejilla y sus fotos. El
+                     * mega-menú de escritorio sí conserva las subcategorías:
+                     * allí hay cuatro columnas y espacio de sobra.
+                     */}
+                    <div className="mt-4 flex flex-col">
                       {productCategories.map((category) => (
-                        <div
+                        <Link
                           key={category.label}
-                          className="border-b border-greige py-4 last:border-b-0"
+                          href={category.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="flex items-baseline justify-between gap-2.25 border-b border-greige py-3.5 font-sans text-sm font-semibold uppercase tracking-[0.06em] text-ink last:border-b-0"
                         >
-                          <Link
-                            href={category.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="mb-3 inline-flex items-baseline gap-2.25 font-sans text-sm font-semibold uppercase tracking-[0.06em] text-ink"
-                          >
-                            {category.label}
-                            <span className="font-mono text-micro font-normal tracking-normal text-accent">
-                              {category.count}
-                            </span>
-                          </Link>
-                          <div className="flex flex-wrap gap-x-4 gap-y-2.25">
-                            {category.subcategories.map((sub) => (
-                              <Link
-                                key={sub.label}
-                                href={sub.href}
-                                title={
-                                  sub.estado === "sin-ficha"
-                                    ? "Página en preparación"
-                                    : undefined
-                                }
-                                onClick={() => setMobileOpen(false)}
-                                className="font-sans text-body-s text-graphite"
-                              >
-                                {sub.label}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
+                          {category.label}
+                          <span className="font-mono text-micro font-normal tracking-normal text-accent">
+                            {category.count}
+                          </span>
+                        </Link>
                       ))}
                     </div>
                   </motion.details>
