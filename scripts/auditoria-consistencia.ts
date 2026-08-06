@@ -447,7 +447,19 @@ function recoger() {
     huecos.push(ent(rects[i].top - rects[i - 1].bottom));
   }
 
-  const contenedores = [...document.querySelectorAll("main .max-w-padilla")]
+  /*
+   * LAS DOS VARIANTES DE `Container`, NO SOLO LA DE POR DEFECTO.
+   *
+   * `max-w-padilla-amplio` es una clase DISTINTA, no una modificación de
+   * `max-w-padilla`: un selector `.max-w-padilla` no la alcanza. Midiendo solo
+   * la primera, las secciones que estrenan el ancho amplio desaparecían del
+   * apartado §3 y el informe declaraba "un solo ancho, consistente" justo
+   * cuando había dos — el peor fallo posible en un documento cuya única función
+   * es contar cuántos valores distintos hay.
+   */
+  const contenedores = [
+    ...document.querySelectorAll("main .max-w-padilla, main .max-w-padilla-amplio"),
+  ]
     .filter(visible)
     .map((el) => {
       const cs = getComputedStyle(el);

@@ -24,6 +24,19 @@ export interface CategoryCardProps {
    * quien usa lector de pantalla.
    */
   foto?: Foto;
+  /**
+   * Anchos servidos, para `next/image`. El valor por defecto describe la rejilla
+   * de `/productos`: contenedor normal, cuatro columnas desde 1024.
+   *
+   * ES UN PROP Y NO UNA CONSTANTE DEL COMPONENTE porque las dos rejillas que lo
+   * usan ya no son la misma. La portada pasó a contenedor amplio y a cuatro
+   * columnas desde 1280, así que entre 1024 y 1279 sus cards miden 428 px y no
+   * 219: con el `sizes` de aquí pediría la variante de 25vw —256 px— y la
+   * estiraría al doble. Escribir un `sizes` que cubriera las dos rejillas
+   * significaría servir a `/productos` el doble de foto de la que cabe en su
+   * card, que es la misma factura pero pagada por la otra página.
+   */
+  sizes?: string;
   className?: string;
 }
 
@@ -54,6 +67,7 @@ export function CategoryCard({
   title,
   description,
   foto,
+  sizes = "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw",
   className,
 }: CategoryCardProps) {
   const indexLabel = String(index).padStart(2, "0");
@@ -70,7 +84,7 @@ export function CategoryCard({
         dark
         src={foto?.ruta}
         alt={foto?.alt ?? ""}
-        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+        sizes={sizes}
         label="Foto de familia"
         /*
          * `marcadorEnAlto` y sin `sublabel`, las dos por lo mismo: el tercio

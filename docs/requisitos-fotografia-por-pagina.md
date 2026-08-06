@@ -98,7 +98,7 @@ No se pide: ya está resuelta.
 - **Proporción:** casi cuadrada; se recorta a la card con `object-cover`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Rollos de microfibra alineados en bodega, con el brillo característico del poliéster ligero.
-- **Nota:** Card de la rejilla de cuatro columnas, ~310 × 300 px. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
+- **Nota:** Card de tres tamaños según la ventana: 550 × 300 px apilada (el caso más grande, hasta 639 px), 428 × 300 a dos columnas y ~290 × 300 a cuatro columnas en la portada. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) Al pasar el cursor se acerca un 10%, así que el encuadre no puede depender de lo que hay justo en el borde. El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
 
 #### **FALTA** `familia-texturizado.jpg`
 
@@ -106,7 +106,7 @@ No se pide: ya está resuelta.
 - **Proporción:** casi cuadrada; se recorta a la card con `object-cover`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tejido texturizado en plano abierto, con el cuerpo y el relieve del hilo a la vista.
-- **Nota:** Card de la rejilla de cuatro columnas, ~310 × 300 px. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
+- **Nota:** Card de tres tamaños según la ventana: 550 × 300 px apilada (el caso más grande, hasta 639 px), 428 × 300 a dos columnas y ~290 × 300 a cuatro columnas en la portada. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) Al pasar el cursor se acerca un 10%, así que el encuadre no puede depender de lo que hay justo en el borde. El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
 
 #### **FALTA** `familia-spun.jpg`
 
@@ -114,7 +114,7 @@ No se pide: ya está resuelta.
 - **Proporción:** casi cuadrada; se recorta a la card con `object-cover`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela de hilado spun en plano abierto, de superficie mate y aspecto algodonoso.
-- **Nota:** Card de la rejilla de cuatro columnas, ~310 × 300 px. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
+- **Nota:** Card de tres tamaños según la ventana: 550 × 300 px apilada (el caso más grande, hasta 639 px), 428 × 300 a dos columnas y ~290 × 300 a cuatro columnas en la portada. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) Al pasar el cursor se acerca un 10%, así que el encuadre no puede depender de lo que hay justo en el borde. El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
 
 #### **FALTA** `familia-polialgodon.jpg`
 
@@ -122,7 +122,7 @@ No se pide: ya está resuelta.
 - **Proporción:** casi cuadrada; se recorta a la card con `object-cover`
 - **Ancho mínimo de entrega:** 1280 px
 - **Qué debe verse:** Tela de mezcla poliéster-algodón en plano abierto, con la trama del tejido visible.
-- **Nota:** Card de la rejilla de cuatro columnas, ~310 × 300 px. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
+- **Nota:** Card de tres tamaños según la ventana: 550 × 300 px apilada (el caso más grande, hasta 639 px), 428 × 300 a dos columnas y ~290 × 300 a cuatro columnas en la portada. Lleva encima un velo que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar detalle importante ahí. (En las cabeceras hay que despejar el tercio izquierdo; aquí es la parte de abajo.) Al pasar el cursor se acerca un 10%, así que el encuadre no puede depender de lo que hay justo en el borde. El mismo archivo se usa en la rejilla de /productos y en el styleguide: es un solo hueco, no tres.
 
 ### Encuentros — 4 (4 por conseguir)
 
