@@ -1,6 +1,6 @@
 # Auditoría de consistencia
 
-Medido sobre el commit `4747305`.
+Medido sobre el commit `6c9192d`.
 
 Generado por `npm run auditoria:consistencia`. **No editar a mano:** cada pasada lo reescribe entero.
 
