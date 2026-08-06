@@ -64,10 +64,37 @@ export function SubcategoryTile({
       href={href}
       title={estado === "sin-ficha" ? "Página en preparación" : undefined}
       className={cn(
-        "group flex flex-col border border-transparent bg-paper text-ink transition-colors duration-500 ease-revelar hover:border-graphite",
+        "group relative flex flex-col border border-transparent bg-paper text-ink",
         className,
       )}
     >
+      {/*
+        EL FILETE DE HOVER ES UNA CAPA CON OPACIDAD, NO UN `border-color` QUE
+        TRANSICIONA. Aquí ponía `transition-colors duration-500 hover:border-graphite`
+        y era, medido, el 96% del pintado de esta pantalla: `border-color` no es
+        una propiedad que el compositor sepa animar, así que los 500ms obligaban
+        al hilo principal a repintar en cada fotograma —y como la tile no está
+        promovida a capa propia, cada repintado se anota contra la capa de la
+        página entera, que en `/productos/microfibra` mide 1425×5285 px. Veinte
+        tiles con eso dentro es la caída de FPS que se veía. Ver
+        `docs/rendimiento-cards.md`.
+
+        La opacidad sí se compone: el filete se pinta UNA vez y luego solo se
+        funde. El aspecto es idéntico —mismo color, misma duración, misma curva—
+        y el gesto no cambia.
+
+        `-inset-px` y no `inset-0`: la caja de contención de un absoluto es la
+        caja de PADDING del ancestro, o sea por dentro del `border-transparent`
+        de 1px que la tile ya reserva. Con `inset-0` el filete se dibujaría 1px
+        hacia dentro y se notaría el salto al encenderse.
+
+        El `border border-transparent` del enlace se queda: es lo que reserva el
+        hueco del filete y por lo que esto no mueve ni un píxel de la retícula.
+      */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -inset-px border border-graphite opacity-0 transition-opacity duration-500 ease-revelar group-hover:opacity-100"
+      />
       {swatchColor ? (
         <div
           className="h-[clamp(150px,18vh,190px)] w-full"

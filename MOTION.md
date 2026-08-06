@@ -89,6 +89,38 @@ comían atención en la única pantalla que se ve entera. No reponerlos.
   sí mismo, y con un umbral alto se quedaría invisible para siempre.
 - Sin dependencias nuevas: framer-motion y el GSAP que ya estaba.
 
+## Scroll suave — lo que cuesta y dónde (medido)
+
+Referido en el código como «Motion Architecture v1 §04». Lo pone `SmoothScroll`
+con `<ReactLenis root>`. Medido en agosto de 2026; método y cifras completas en
+`docs/rendimiento-cards.md`.
+
+**En táctil el scroll YA es nativo, y Lenis no interviene.** Lenis trae
+`syncTouch: false` por defecto y en `lenis.mjs:615` se sale sin hacer nada
+cuando el input es táctil. Medido con dedo emulado de verdad en un teléfono de
+375 px, quitarlo mueve el pintado de 280 a 248 ms — ruido. **No hay nada que
+apagar ahí, y apagarlo tendría un coste:** en modo `root`, `ReactLenis` es un
+`Context.Provider`, así que quitarlo con una condición cambia el tipo de
+elemento y React remonta la aplicación entera justo después de hidratar.
+
+**El coste real es de la RUEDA, o sea de escritorio y trackpad.** En
+`/productos/microfibra`, con un recorrido corto dentro de la rejilla ya
+revelada, quitar Lenis baja el pintado de 1833 a 164 ms —un 91 %— y el p95 del
+intervalo entre fotogramas de 22,3 a 11,1 ms. Lenis mueve el scroll con
+`scrollTo` en cada fotograma, y como la página es una sola capa de composición
+(1425×5285 px en esa ruta), eso vuelve a grabar la lista de pintado entera cada
+vez. **Pendiente, fuera de la tanda de rendimiento de agosto:** es un problema
+real y medido, pero quitar o rebajar el scroll suave es una decisión de diseño
+sobre §04, no un arreglo, y no se toca antes de la presentación del 15.
+
+> **Cómo NO medirlo, que ya costó una vuelta entera.** Un viewport de 375 px con
+> `isMobile` desactivado y eventos de rueda **no es un teléfono**: es un portátil
+> en una ventana estrecha, y ahí Lenis sí actúa. Con esa medida se concluyó que
+> el scroll suave era lo que más se iba a notar en un móvil, y es al revés. Para
+> hablar de táctil hace falta emular táctil (`isMobile` + `hasTouch`) y mandar el
+> gesto con `Input.dispatchTouchEvent`: los `TouchEvent` sintéticos desde
+> `evaluate` no hacen scroll.
+
 ## Lo que este vocabulario NO es
 
 Ni píldoras con blur, ni glassmorphism, ni rebotes elásticos, ni parallax de
