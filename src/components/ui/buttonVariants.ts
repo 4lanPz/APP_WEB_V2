@@ -1,4 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import {
+  CLASES_FILETE_DE_ENLACE,
+  CLASES_HUNDIMIENTO_DE_BOTON,
+  CLASES_TRANSICION_DE_BOTON,
+} from "@/lib/motion-interaccion";
 
 /**
  * SISTEMA DE BOTONES — cuatro variantes, y ninguna elige su forma a mano.
@@ -42,12 +47,29 @@ import { cva, type VariantProps } from "class-variance-authority";
  * no textual es 3:1. Pasa a `--sup-tinta`, que es 15,67:1 sobre las dos
  * superficies sin tener que pensarlo.
  */
-const BASE =
-  "inline-flex items-center justify-center gap-2.25 whitespace-nowrap rounded-sm " +
-  "font-sans text-base font-medium " +
-  "transition-[background-color,border-color,color,transform] duration-220 ease-asentar " +
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 " +
-  "focus-visible:outline-(color:--sup-tinta) disabled:pointer-events-none";
+/*
+ * El hundimiento al pulsar va en BASE y no en cada variante: es el sistema
+ * entero el que responde igual al gesto. Ver `HUNDIMIENTO_EN_BOTONES` en
+ * `@/lib/motion-interaccion` — de ahí salen tanto la clase del `:active` como la
+ * lista de propiedades en transición, que tiene que incluir `translate` para que
+ * el desplazamiento se vea recorrer en vez de saltar.
+ *
+ * El foco no se toca: sigue siendo el mismo contorno, y un contorno no se mueve
+ * con el botón porque `:focus-visible` y `:active` marcan cosas distintas —dónde
+ * está el teclado y qué se está pulsando— y pueden convivir sin estorbarse.
+ */
+const BASE = [
+  "inline-flex items-center justify-center gap-2.25 whitespace-nowrap rounded-sm",
+  "font-sans text-base font-medium",
+  // La duración viaja dentro de la constante: cambia con el interruptor.
+  `${CLASES_TRANSICION_DE_BOTON} ease-asentar`,
+  // Se cae de la lista —sin dejar hueco— cuando el hundimiento está apagado.
+  CLASES_HUNDIMIENTO_DE_BOTON,
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+  "focus-visible:outline-(color:--sup-tinta) disabled:pointer-events-none",
+]
+  .filter(Boolean)
+  .join(" ");
 
 const CAJA = "h-12 border px-7.5";
 
@@ -107,10 +129,17 @@ export const buttonVariants = cva(BASE, {
        * los enlaces de texto escritos a mano que hacían de CTA. El hover ya no
        * va a `text-brand` (2,53:1 sobre claro): lo marca el subrayado, que ya
        * era el gesto del ghost.
+       *
+       * ESTA ES LA VARIANTE QUE TRAZA EL FILETE. Es la que el sistema define
+       * como "el enlace de texto dentro del flujo de lectura", así que es donde
+       * cabe el gesto: las tres variantes con caja no llevan subrayado, y la
+       * navegación traza el suyo desde `Navbar`. `border-b border-transparent`
+       * se queda —reserva el hueco— y lo que cambia es quién lo pinta:
+       * `.filete-trazado` recorriéndolo, o el `hover:border` de antes de una vez.
        */
       enlace:
         "gap-2.25 rounded-none border-b border-transparent px-0.5 py-1.5 text-body-s " +
-        "text-(color:--sup-tinta) hover:border-(color:--sup-tinta) disabled:text-(color:--sup-inhab-texto)",
+        `text-(color:--sup-tinta) ${CLASES_FILETE_DE_ENLACE} disabled:text-(color:--sup-inhab-texto)`,
 
       /** WHATSAPP — se sale de la web a una conversación. Ver arriba. */
       whatsapp: `${CAJA} ${WHATSAPP}`,

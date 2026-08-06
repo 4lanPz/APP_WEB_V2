@@ -318,6 +318,65 @@
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 220ms;
   }
+
+  /*
+   * FILETE QUE SE TRAZA — el subrayado del enlace de texto se dibuja de
+   * izquierda a derecha al entrar el cursor, en vez de aparecer entero.
+   *
+   * Vive en CSS y no en una clase de Tailwind porque necesita un
+   * pseudo-elemento: la variante `enlace` del sistema de botones se aplica sobre
+   * `<a>`, `<Link>` y `<button>` de media docena de páginas, y ninguno de esos
+   * sitios puede meter un `<span>` dentro. Se enciende y se apaga desde
+   * `src/lib/motion-interaccion.ts` (`FILETE_TRAZADO_EN_ENLACES`).
+   *
+   * NO DESPLAZA NADA. El filete es un `::after` absoluto sobre el `border-b`
+   * transparente que la variante ya reserva, así que ni la altura de línea ni el
+   * texto se mueven al activarse.
+   *
+   * `bottom: -1px` cae exactamente sobre ese borde: los desplazamientos de un
+   * hijo absoluto se miden desde la caja de relleno, y el borde queda 1px por
+   * debajo de ella.
+   *
+   * `--sup-tinta` y no un color escrito: es el mismo color que ya usaba el
+   * `border-b` del hover, y se da la vuelta solo sobre banda oscura.
+   *
+   * EL ORIGEN CAMBIA ENTRE ENTRAR Y SALIR, y es lo que hace que se lea como un
+   * trazo y no como una persiana: entra creciendo desde la izquierda y sale
+   * encogiéndose hacia la derecha, siguiendo la misma dirección de lectura. Con
+   * un solo origen, al salir volvería sobre sus pasos.
+   *
+   * El `@media (hover: hover)` es el mismo trato que Tailwind v4 da a `hover:`:
+   * en táctil la regla no existe, así que no hay filete pegado tras tocar.
+   */
+  .filete-trazado {
+    position: relative;
+  }
+
+  .filete-trazado::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 1px;
+    background-color: var(--sup-tinta);
+    transform: scaleX(0);
+    transform-origin: right;
+    /*
+     * 400ms mientras se calibra la tanda (venía de 220ms). A 220 el trazo se
+     * completaba antes de que el ojo llegara al enlace y el efecto era
+     * indistinguible del subrayado que aparece de golpe, que es justo lo que
+     * viene a sustituir. Valor en `INTERACCION.fileteDeEnlace` de
+     * `src/lib/motion.ts`.
+     */
+    transition: transform 400ms var(--ease-asentar);
+  }
+
+  @media (hover: hover) {
+    .filete-trazado:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
 }
 
 /*

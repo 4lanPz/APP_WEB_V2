@@ -28,6 +28,17 @@ export const DURATION = {
   desenrollar: 0.7, // 700ms — fila "Página · Desenrollar" de la tabla de curvas
   paginaFase: 0.35, // 350ms por fase (cubre / retira) de la transición de página
   magnetico: 0.3, // 300ms — retorno del botón magnético, verificado en el código real
+  /**
+   * 500ms — acercamiento de foto al pasar el cursor sobre una card.
+   *
+   * No es un valor nuevo: es el que ya usaban `ImagePlaceholder`
+   * (`zoomOnGroupHover`) y `ProductCard`, escrito a mano como `duration-500` en
+   * la clase y en ningún sitio más. Entra aquí porque la familia interacción lo
+   * reutiliza y "ningún componente define duraciones propias" tiene que seguir
+   * siendo cierto. Sigue siendo `revelar` de curva y no `asentar`: acerca una
+   * fotografía, no responde a un control.
+   */
+  acercamiento: 0.5,
   cortinaFoto: 0.9, // 900ms — capa `shot` de la cortina de imagen
   cortinaVela: 0.76, // 760ms — capa `drape` de la cortina de imagen
   cortinaCarga: 0.72, // 720ms — telón de carga inicial (#tp-curtain)
@@ -184,6 +195,83 @@ export const LUPA = {
  */
 export const RECOLOREO = {
   cambioDeTono: DURATION.asentar,
+} as const;
+
+/**
+ * FAMILIA INTERACCIÓN — lo que se mueve porque el visitante lo toca.
+ *
+ * El resto del vocabulario describe ENTRADAS: contenido que llega al viewport y
+ * se asienta. Esto es lo contrario —respuesta a un gesto— y por eso su curva es
+ * `asentar` (220ms) salvo donde acompaña a una fotografía, que sigue en
+ * `revelar`. Las amplitudes viven aquí y no en cada componente, igual que las
+ * distancias de `VOCABULARIO`.
+ *
+ * CÓMO SE APAGA CADA UNO: `src/lib/motion-interaccion.ts`, una línea por efecto.
+ * Este archivo dice CUÁNTO se mueve; aquel dice SI se mueve.
+ *
+ * ┌───────────────────────────────────────────────────────────────────────┐
+ * │  ESTAS AMPLITUDES ESTÁN SUBIDAS PARA PODER JUZGARLAS, NO SON LAS      │
+ * │  DEFINITIVAS. La primera pasada se calibró a lo que se creía discreto │
+ * │  —1px de hundimiento, 4px de subida, 1,04 de escala, 220ms— y a esa   │
+ * │  escala no había nada que decidir: el efecto o no se percibía o no se │
+ * │  distinguía de no haberlo. Se suben para verlos y bajarlos después    │
+ * │  hasta donde queden bien, que es el orden correcto: de lo visible a   │
+ * │  lo justo, y no al revés. Cada campo lleva su valor anterior escrito  │
+ * │  al lado para saber de dónde se viene.                                │
+ * └───────────────────────────────────────────────────────────────────────┘
+ *
+ * ESTOS NÚMEROS ESTÁN ESCRITOS DOS VECES, A PROPÓSITO Y CON CUIDADO. Los cuatro
+ * efectos son transiciones CSS, así que quien los aplica es una clase de
+ * Tailwind (`group-hover:-translate-y-1`, `duration-220`…) y una clase no se
+ * puede componer a partir de una variable: Tailwind lee el código fuente como
+ * texto y solo genera lo que ve escrito. Es el mismo trato que ya tienen las
+ * curvas en `globals.css` (`--ease-asentar`) y el filete de `Navbar`. Si cambias
+ * un valor de aquí, cambia también la clase que lo escribe — el comentario de
+ * cada campo dice cuál es.
+ */
+export const INTERACCION = {
+  /** Card de familia (`CategoryCard`): la foto se acerca y el texto sube. */
+  cardDeFamilia: {
+    /**
+     * Escala de la foto (antes 1,04) — `group-hover:scale-[1.1]`.
+     *
+     * Ya NO es el `zoomOnGroupHover` de `ImagePlaceholder`: ese lo comparten
+     * `SubcategoryTile` y el muestrario de blancos, y subirlo ahí las movería a
+     * las tres a la vez y por fuera del interruptor. La card escala su propia
+     * capa de imagen para poder calibrarse sola. Ver `CLASES_FOTO_DE_CARD`.
+     */
+    escalaFoto: 1.1,
+    /** Subida del bloque de texto, en px (antes 4) — `group-hover:-translate-y-2.5`. */
+    subidaTexto: 10,
+    /** `duration-500 ease-revelar`, el mismo par para las dos mitades. */
+    duracion: DURATION.acercamiento,
+  },
+  /** Botón pulsado: se hunde y vuelve al soltar. */
+  hundimientoDeBoton: {
+    /** 3px (antes 1) — `active:translate-y-0.75`. */
+    distancia: 3,
+    /** 400ms (antes `asentar`, 220ms) — `duration-400`. */
+    duracion: 0.4,
+  },
+  /** Enlace de texto: el filete se traza de izquierda a derecha. */
+  fileteDeEnlace: {
+    /** 1px de grosor — el mismo que el `border-b` que sustituye. */
+    grosor: 1,
+    /** 400ms (antes 220ms). `.filete-trazado` en `globals.css` lo escribe. */
+    duracion: 0.4,
+  },
+  /** Swatch de recoloreo: el anillo de selección se cierra alrededor. */
+  anilloDeSwatch: {
+    /**
+     * De 1,15 a 1 — `scale-115`. SIN TOCAR, a la espera de mirarlo: son 4px de
+     * recorrido del borde exterior del aro. El techo antes de que los aros se
+     * toquen entre swatches vecinos es 1,25 (44px de chip, 12px de separación,
+     * aro a 5px): ahí serían 6,8px.
+     */
+    escalaInicial: 1.15,
+    /** 400ms (antes 220ms) — `duration-400`. */
+    duracion: 0.4,
+  },
 } as const;
 
 /** CSS easing strings (para transiciones fuera de framer-motion). */
