@@ -194,26 +194,67 @@ export default function Home() {
         </Container>
       </section>
 
-      <section className="py-16 sm:py-24">
+      {/*
+        Cifras — LA ÚNICA BANDA OSCURA DEL CUERPO DE LA PORTADA.
+
+        Hereda el azul que tenía "Verdad material" antes de pasar a papel, así
+        que el fondo oscuro se mueve de sección pero no se duplica: sigue
+        habiendo uno solo entre el hero y el footer.
+
+        LOS SEIS TEXTOS CAMBIAN DE COLOR PORQUE NINGUNO LLEGABA. La sección
+        entera estaba escrita en tinta sobre papel, y sobre `brand-deep` medía
+        —contraste real, no estimado— título 1,16:1, cifras 1,16:1, párrafo
+        1,16:1, etiquetas mono 2,63:1 e índice 3,60:1. No fallaba alguno: no
+        pasaba ninguno. La correspondencia que se aplica es la que el sitio ya
+        tiene para oscuro, no una paleta nueva:
+
+          índice   text-accent   → text-brand      3,60 → 5,28
+          título   text-ink      → text-paper      1,16 → 13,54
+          etiqueta text-graphite → text-paper/60   2,63 → 5,79
+          cifra    text-ink      → text-paper      1,16 → 13,54
+          label    text-graphite → text-paper/60   2,63 → 5,79
+          párrafo  text-ink      → text-paper      1,16 → 13,54
+
+        Las tres primeras no se escriben aquí: las pone `tone="dark"` de
+        `SectionHeader`, que ya existía y usan otras cuatro páginas.
+
+        LAS COSTURAS BAJAN DE `greige` A `paper/25`, y no es un retoque estético.
+        Sobre papel, `greige` es un hilo discreto de 1,59:1; sobre este azul se
+        dispara a 8,54:1 y la rejilla pasaría a ser lo más luminoso de la
+        sección, por encima de las propias cifras. `paper/25` la devuelve a 2,12,
+        que es el filete que llevan las demás bandas oscuras del sitio.
+
+        LAS CELDAS LLEVAN `bg-brand-deep` Y NO SE QUEDAN SIN FONDO. La rejilla es
+        de costura: el hueco de 1px deja ver el fondo del PADRE, y son las celdas
+        opacas las que lo tapan salvo en las juntas. Sin fondo propio, el
+        `bg-paper/25` del padre se vería entero y el bloque saldría como un
+        rectángulo lechoso en vez de una rejilla.
+      */}
+      <section className="bg-brand-deep py-16 sm:py-24">
         <Container>
-          <SectionHeader index={numero()} title="Textil Padilla en cifras" tag="Desde 1987" />
+          <SectionHeader
+            index={numero()}
+            title="Textil Padilla en cifras"
+            tag="Desde 1987"
+            tone="dark"
+          />
           <RevealGroup
             variante="rejilla"
-            className="grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4"
+            className="grid grid-cols-2 gap-px border border-paper/25 bg-paper/25 sm:grid-cols-4"
           >
             {stats.map((stat) => (
-              <RevealItem key={stat.label} className="bg-paper p-6">
-                <p className="font-sans text-h1 font-medium text-ink">
+              <RevealItem key={stat.label} className="bg-brand-deep p-6">
+                <p className="font-sans text-h1 font-medium text-paper">
                   <StatNumber target={stat.target} prefix={stat.prefix} suffix={stat.suffix} />
                 </p>
-                <p className="mt-2 font-mono text-label uppercase text-graphite">
+                <p className="mt-2 font-mono text-label uppercase text-paper/60">
                   {stat.label}
                 </p>
               </RevealItem>
             ))}
           </RevealGroup>
           <Reveal className="mt-10" tipo="cuerpo">
-            <p className="max-w-2xl font-serif text-body-m text-ink">
+            <p className="max-w-2xl font-serif text-body-m text-paper">
               Casi cuatro décadas seleccionando hilo, tejiendo rollo y
               afinando color. No hilamos: elegimos el mejor hilo disponible y
               lo convertimos en tela con la precisión de una ficha técnica y
@@ -298,13 +339,17 @@ export default function Home() {
         `AsesorPasos`, que además pone la sección sobre fondo CLARO a propósito.
 
         EL MOTIVO ORIGINAL YA NO ES EL QUE ERA, y conviene dejarlo dicho: iba en
-        claro porque "Verdad material" (entonces oscuro con foto) quedaba delante
-        y el footer detrás, y un tercer bloque oscuro con foto los volvía gemelos
-        y cerraba la portada en tres bandas de tinta. Con "Verdad material" pasada
-        a papel, esas tres bandas ya no existen — pero la decisión se sostiene por
-        sí sola: el asesor es el último bloque antes del footer, y ponerlo oscuro
-        lo pegaría a él sin costura. `bone` lo separa del papel de las secciones
-        de arriba sin abrir otra banda de tinta.
+        claro porque "Verdad material" (entonces oscuro con foto) quedaba justo
+        delante y el footer detrás, y un tercer bloque oscuro con foto los volvía
+        gemelos. Ese vecino ya no existe: "Verdad material" pasó a papel y el
+        fondo oscuro se mudó a "Cifras", que queda tres secciones más arriba y no
+        toca esta.
+
+        La decisión se sostiene igual, y ahora por dos motivos suyos: el asesor es
+        el último bloque antes del footer, así que en oscuro se pegaría a él sin
+        costura; y con "Cifras" ya ocupando la única banda oscura del cuerpo,
+        abrir otra aquí volvería a cerrar la portada en tres tintas. `bone` lo
+        separa del papel de encuentros sin ser ninguna de las dos cosas.
       */}
       <AsesorPasos
         eyebrow="Asesor virtual"
