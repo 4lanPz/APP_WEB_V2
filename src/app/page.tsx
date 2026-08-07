@@ -5,11 +5,12 @@ import { CategoryCard } from "@/components/ui/CategoryCard";
 import { EventCarousel } from "@/components/ui/EventCarousel";
 import { StatNumber } from "@/components/ui/StatNumber";
 import { AsesorPasos } from "@/components/ui/AsesorPasos";
-import { PhotoCurtain } from "@/components/motion/Curtain";
+import { BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
 import { MASCARA } from "@/lib/motion";
+import { numerador } from "@/lib/numerador";
 import { categories } from "@/data/taxonomy";
 import { foto } from "@/data/imagenes";
 
@@ -19,30 +20,6 @@ const stats = [
   { target: 3, prefix: "", suffix: "", label: "Países con presencia" },
   { target: 900, prefix: "+", suffix: "", label: "Tonos teñidos a demanda" },
 ];
-
-/*
- * EL NUMERADO DE SECCIÓN SALE DEL ORDEN, NO DE LA MANO.
- *
- * Antes cada `SectionHeader` traía su `index="02"` escrito, y reordenar la
- * portada obligaba a renumerar cuatro cabeceras a mano —con el fallo clásico de
- * dejarse una y publicar un 01, 03, 03, 04—. Aquí el índice es "el siguiente",
- * así que mover un bloque de sitio lo renumera todo sin tocar nada más: las
- * llamadas se resuelven en el orden en que se construye el JSX, que es el orden
- * en que se leen en pantalla.
- *
- * SE CREA DENTRO DE `Home()`, Y ESO ES LO IMPORTANTE. Un contador en el módulo
- * sería estado compartido entre peticiones: el servidor lo incrementaría en cada
- * render y el segundo visitante vería 04, 05, 06. Uno por render empieza siempre
- * en 01.
- *
- * NO NUMERA TODAS LAS SECCIONES, solo las que ya llevaban índice. El numerado
- * marca el recorrido del catálogo; "Verdad material" es declaración de marca y
- * el asesor es una herramienta, y ninguno de los dos usa `SectionHeader`.
- */
-function numerador() {
-  let n = 0;
-  return () => String(++n).padStart(2, "0");
-}
 
 /*
  * Los tres pasos del asesor: cada uno gobierna una foto en el bloque de portada
@@ -136,10 +113,10 @@ export default function Home() {
         —sobre papel `brand` se queda en 2,56:1— y el `paper/70` del párrafo.
 
         LA COMPOSICIÓN. La foto ya no rompe el contenedor: las dos columnas viven
-        en la misma rejilla, con una separación que a 1440 son 80 px. La foto
-        pierde el "medio ancho de pantalla" que tenía a sangre, y por eso lleva
-        alto propio: sin él, una columna de rejilla se queda a la altura del
-        texto y la macro dejaría de verse como macro.
+        en la misma rejilla, con una separación que a 1440 son 80 px. Esa
+        composición ya NO SE ESCRIBE AQUÍ: vive en `BloqueFotoTexto`, porque
+        «De dónde venimos» de Empresa la usa invertida y era eso o tener el
+        mismo split escrito dos veces en dos páginas.
 
         En móvil se apilan CON LA FOTO PRIMERO, 40 px por encima del texto. Es el
         mismo orden que ya tenían —la sección enseña una trama y luego la
@@ -150,47 +127,45 @@ export default function Home() {
       */}
       <section id="verdad-material" className="py-16 sm:py-24">
         <Container ancho="amplio">
-          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-20">
-            <PhotoCurtain
-              src={foto("macro-fibra-blanca")?.ruta}
-              alt={foto("macro-fibra-blanca")?.alt}
+          <BloqueFotoTexto
+            foto={{
+              src: foto("macro-fibra-blanca")?.ruta,
+              alt: foto("macro-fibra-blanca")?.alt,
               /*
                * 40vw y no los 45 de antes: la columna ya no es media pantalla a
                * sangre, sino la mitad del contenedor amplio menos la separación
                * —579 px de 1440—. Servir la variante de 45vw sería descargar una
                * foto más grande que el hueco donde va a caber.
                */
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="min-h-[62vw] sm:min-h-90 lg:min-h-130"
+              sizes: "(min-width: 1024px) 40vw, 100vw",
+            }}
+          >
+            <Reveal tipo="etiqueta">
+              <span className="font-mono text-label uppercase text-accent">
+                Verdad material
+              </span>
+            </Reveal>
+            {/* Declaración, no párrafo: va por máscara como los titulares. */}
+            <LineasEnMascara
+              as="p"
+              delay={MASCARA.stagger}
+              lineas={[
+                "La trama ampliada",
+                "hasta que la tela deja",
+                "de parecer tela y se",
+                "vuelve paisaje.",
+              ]}
+              // eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala editorial (fase 3)
+              className="font-sans font-medium leading-[1.12] tracking-[-0.02em] text-[clamp(1.5rem,0.9rem_+_1.6vw,2.375rem)] text-ink"
             />
-            <div className="flex flex-col gap-5">
-              <Reveal tipo="etiqueta">
-                <span className="font-mono text-label uppercase text-accent">
-                  Verdad material
-                </span>
-              </Reveal>
-              {/* Declaración, no párrafo: va por máscara como los titulares. */}
-              <LineasEnMascara
-                as="p"
-                delay={MASCARA.stagger}
-                lineas={[
-                  "La trama ampliada",
-                  "hasta que la tela deja",
-                  "de parecer tela y se",
-                  "vuelve paisaje.",
-                ]}
-                // eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala editorial (fase 3)
-                className="font-sans font-medium leading-[1.12] tracking-[-0.02em] text-[clamp(1.5rem,0.9rem_+_1.6vw,2.375rem)] text-ink"
-              />
-              <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
-                <p className="max-w-md font-serif text-body-m text-graphite">
-                  Macrofotografía de la trama: el mismo poliéster que tejemos y
-                  teñimos, visto tan de cerca que la estructura se lee como
-                  relieve.
-                </p>
-              </Reveal>
-            </div>
-          </div>
+            <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
+              <p className="max-w-md font-serif text-body-m text-graphite">
+                Macrofotografía de la trama: el mismo poliéster que tejemos y
+                teñimos, visto tan de cerca que la estructura se lee como
+                relieve.
+              </p>
+            </Reveal>
+          </BloqueFotoTexto>
         </Container>
       </section>
 
@@ -208,12 +183,17 @@ export default function Home() {
         pasaba ninguno. La correspondencia que se aplica es la que el sitio ya
         tiene para oscuro, no una paleta nueva:
 
-          índice   text-accent   → text-brand      3,60 → 5,28
+          índice   text-accent   → text-brand      3,60 → 5,56
           título   text-ink      → text-paper      1,16 → 13,54
           etiqueta text-graphite → text-paper/60   2,63 → 5,79
           cifra    text-ink      → text-paper      1,16 → 13,54
           label    text-graphite → text-paper/60   2,63 → 5,79
           párrafo  text-ink      → text-paper      1,16 → 13,54
+
+        El índice medía 5,28:1 cuando se escribió esta tabla; son 5,56 desde que
+        `--color-brand` pasó de `#33a2dc` a `#55a4db`. El azul nuevo es más claro
+        y sobre esta banda oscura gana margen. Vuelve a medirse con `npm run
+        marca`, que fotografía la página en vez de deducir el fondo.
 
         Las tres primeras no se escriben aquí: las pone `tone="dark"` de
         `SectionHeader`, que ya existía y usan otras cuatro páginas.
