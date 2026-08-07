@@ -131,7 +131,7 @@ export default function StyleguidePage() {
                 Azul Padilla
               </p>
               <p className="font-mono text-mono text-graphite">
-                #33A2DC · brand
+                #55A4DB · brand
               </p>
             </div>
           </div>

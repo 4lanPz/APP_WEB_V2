@@ -494,8 +494,10 @@ export function AsesorWizard() {
                     </p>
                     {/*
                      * NINGUNO DE LOS DOS VUELVE A `hover:text-brand`. Sobre la
-                     * tarjeta aclarada, `#33a2dc` da 3,67:1 y necesita 4,5 a
-                     * 13px: el azul de marca solo es legible sobre planos casi
+                     * tarjeta aclarada, `#55a4db` da 3,86:1 y necesita 4,5 a
+                     * 13px (con el `#33a2dc` anterior eran 3,67:1: el azul
+                     * nuevo sube, pero no lo bastante). El azul de marca solo
+                     * es legible sobre planos casi
                      * negros —es el mismo límite que obligó a quitarlo del
                      * titular del hero. En vez de bajar el velo hasta que quepa
                      * el azul (haría falta ~/11 y volveríamos al fondo turbio),

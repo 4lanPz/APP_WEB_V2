@@ -1,6 +1,28 @@
 "use client";
 
 import { COLORES_RECOLOREO } from "@/data/recoloreo";
+import { cn } from "@/lib/cn";
+import {
+  CIERRE_DEL_ANILLO_EN_SWATCHES,
+  CLASES_BOTON_DE_SWATCH,
+  clasesAnilloDeSwatch,
+} from "@/lib/motion-interaccion";
+
+/*
+ * Las tres capas del marcado de "seleccionado", con sus colores reales. Estaban
+ * escritas en línea dentro del `boxShadow` y salen aquí porque ahora hay dos
+ * formas de dibujarlas —el anillo que se cierra y el de siempre— y las dos
+ * tienen que pintar EXACTAMENTE lo mismo. Repetidas, se corregiría una sola.
+ *
+ * Hueco en Papel y aro azul, el gesto de "seleccionado" del sitio (el mismo del
+ * muestrario de blancos). El filete de 1px en Greige lo lleva siempre todo
+ * swatch, elegido o no: es el borde del chip, no parte de la selección.
+ */
+const BORDE_DEL_CHIP = "0 0 0 1px #C8C2B8";
+/* El aro va por token y no por literal: este archivo era una de las cuatro
+   copias a mano del azul de marca que se quedaron atrás la primera vez que el
+   token cambió de valor. `var()` en un `boxShadow` en línea resuelve igual. */
+const ANILLO_SELECCION = "0 0 0 3px #F5F2EE, 0 0 0 5px var(--color-brand)";
 
 export interface SwatchesRecoloreoProps {
   /** Índice dentro de `COLORES_RECOLOREO`. */
@@ -58,7 +80,10 @@ export function SwatchesRecoloreo({ activo, onCambiar }: SwatchesRecoloreoProps)
               redondos y van en fila, así que el área real ya es menor que el
               cuadro. Con 40 se fallaba el de al lado en móvil.
             */
-            className="size-11 rounded-full transition-shadow duration-200 ease-asentar focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className={cn(
+              "size-11 rounded-full transition-shadow duration-200 ease-asentar focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
+              CLASES_BOTON_DE_SWATCH,
+            )}
             style={{
               backgroundColor: color.hex,
               /*
@@ -67,13 +92,27 @@ export function SwatchesRecoloreo({ activo, onCambiar }: SwatchesRecoloreoProps)
                 ilegible justo para quien más lo necesita. Mismo doble
                 `box-shadow` que el muestrario de blancos —hueco en Papel y aro
                 azul—, que ya es el gesto de "seleccionado" del sitio.
+
+                Con el cierre encendido el chip solo lleva su filete y el anillo
+                se va a la capa de abajo, que es la que puede escalar. La marca
+                es la misma en los dos casos: lo que cambia es si aparece puesta
+                o se cierra hasta su sitio.
               */
-              boxShadow:
-                i === activo
-                  ? "0 0 0 1px #C8C2B8, 0 0 0 3px #F5F2EE, 0 0 0 5px #33A2DC"
-                  : "0 0 0 1px #C8C2B8",
+              boxShadow: CIERRE_DEL_ANILLO_EN_SWATCHES
+                ? BORDE_DEL_CHIP
+                : i === activo
+                  ? `${BORDE_DEL_CHIP}, ${ANILLO_SELECCION}`
+                  : BORDE_DEL_CHIP,
             }}
-          />
+          >
+            {CIERRE_DEL_ANILLO_EN_SWATCHES && (
+              <span
+                aria-hidden
+                className={clasesAnilloDeSwatch(i === activo)}
+                style={{ boxShadow: ANILLO_SELECCION }}
+              />
+            )}
+          </button>
         ))}
       </div>
 

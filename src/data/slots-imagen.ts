@@ -293,14 +293,37 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     alt,
     pagina: "/",
     seccion: "Familias de tela",
+    /*
+     * 1280 SE QUEDA COMO ESTÁ, Y NO ES QUE NADIE LO HAYA MIRADO.
+     *
+     * La portada pasó a contenedor amplio y sus cards crecieron (292 px a 1440,
+     * 282 a 1920, frente a los 259 y 249 de antes), así que lo natural es
+     * suponer que el ancho mínimo de la foto sube con ellas. No sube: NO ES LA
+     * CARD DE ESCRITORIO LA QUE MANDA. La más grande que se pinta en todo el
+     * sitio es la de UNA columna, justo antes de que la rejilla pase a dos —a
+     * 639 px de ventana mide 550 px de ancho—, y ese caso ni ha cambiado ni lo
+     * toca ninguna tanda prevista.
+     *
+     * La cuenta: 550 px de card × 1,10 del acercamiento al pasar el cursor =
+     * 605 px, × 2 de densidad de pantalla = 1210. 1280 lo cubre con margen. Y
+     * el sitio no pide nunca la foto entera: `sizes` sirve la variante que toca
+     * en cada rejilla, así que el número de aquí es el techo, no lo que
+     * descarga nadie.
+     *
+     * Medido en el navegador, no calculado sobre el papel.
+     */
     ancho: 1280,
     nota:
-      "Card de la rejilla de cuatro columnas, ~310 × 300 px. Lleva encima un velo " +
-      "que baja hasta rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja " +
-      "van el título y la descripción: la foto tiene que aguantar oscurecerse abajo " +
-      "y no llevar detalle importante ahí. (En las cabeceras hay que despejar el " +
-      "tercio izquierdo; aquí es la parte de abajo.) El mismo archivo se usa en la " +
-      "rejilla de /productos y en el styleguide: es un solo hueco, no tres.",
+      "Card de tres tamaños según la ventana: 550 × 300 px apilada (el caso más " +
+      "grande, hasta 639 px), 428 × 300 a dos columnas y ~290 × 300 a cuatro " +
+      "columnas en la portada. Lleva encima un velo que baja hasta " +
+      "rgba(9,20,25,0.78) en el borde inferior, y sobre esa franja van el título y " +
+      "la descripción: la foto tiene que aguantar oscurecerse abajo y no llevar " +
+      "detalle importante ahí. (En las cabeceras hay que despejar el tercio " +
+      "izquierdo; aquí es la parte de abajo.) Al pasar el cursor se acerca un 10%, " +
+      "así que el encuadre no puede depender de lo que hay justo en el borde. El " +
+      "mismo archivo se usa en la rejilla de /productos y en el styleguide: es un " +
+      "solo hueco, no tres.",
   })),
 
   /**

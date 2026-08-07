@@ -81,9 +81,18 @@ export const externalPortalHref =
 export const footerBrandQuote =
   "No fabricamos la moda. Fabricamos aquello con lo que la moda se hace.";
 
+/**
+ * EN EL ORDEN EN QUE APARECEN EN LA PÁGINA, no en orden de importancia. Un
+ * índice que lista al revés que el documento obliga a leerlo dos veces, y este
+ * es un índice de tres líneas: no hay margen para eso.
+ *
+ * Si se reordenan las secciones de `/empresa`, esta lista se reordena con
+ * ellas. Los `href` no cambian —los `id` viajan con su sección—, así que nada
+ * se rompe si se olvida; solo deja de coincidir con lo que ve el visitante.
+ */
 export const footerEmpresaLinks = [
-  { label: "Misión y visión", href: "/empresa#manifiesto" },
   { label: "Nuestra historia", href: "/empresa#historia" },
+  { label: "Misión y visión", href: "/empresa#manifiesto" },
   { label: "Hitos", href: "/empresa#hitos" },
 ];
 

@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { useReducedMotion } from "framer-motion";
 import { DURATION, MAGNETIC_STRENGTH, CSS_EASE_ASENTAR } from "@/lib/motion";
+import { TRANSICION_HUNDIMIENTO_EN_LINEA } from "@/lib/motion-interaccion";
 
 /**
  * Técnica ausente del documento — verificada en el código real
@@ -52,9 +53,23 @@ export function useMagnetic<T extends HTMLElement>() {
 
   const onMouseLeave = useCallback(() => setOffset({ x: 0, y: 0 }), []);
 
+  /*
+   * ESTE `transition` EN LÍNEA GANA A LA CLASE DEL BOTÓN, ENTERA. Es una
+   * declaración en el atributo `style`, así que sustituye —no completa— lo que
+   * `buttonVariants` haya puesto. Mientras el magnetismo fue lo único que se
+   * movía aquí daba igual; desde que el sistema de botones se hunde al pulsar,
+   * no: sin nombrar `translate` en esta misma línea, los botones magnéticos
+   * serían los únicos del sitio donde el hundimiento salta de golpe.
+   *
+   * El `transform 300ms` es del magnetismo y no se toca — se le añade la segunda
+   * propiedad detrás, o nada si el efecto está apagado. Ver
+   * `TRANSICION_HUNDIMIENTO_EN_LINEA` en `@/lib/motion-interaccion`.
+   */
   const style: CSSProperties = {
     transform: `translate(${offset.x.toFixed(1)}px, ${offset.y.toFixed(1)}px)`,
-    transition: `transform ${DURATION.magnetico * 1000}ms ${CSS_EASE_ASENTAR}`,
+    transition:
+      `transform ${DURATION.magnetico * 1000}ms ${CSS_EASE_ASENTAR}` +
+      TRANSICION_HUNDIMIENTO_EN_LINEA,
   };
 
   return { ref, onMouseMove, onMouseLeave, style };

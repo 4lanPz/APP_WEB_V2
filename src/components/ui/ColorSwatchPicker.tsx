@@ -36,7 +36,7 @@ export function ColorSwatchPicker({ swatches, active, onChange }: ColorSwatchPic
               backgroundColor: swatch.hex,
               boxShadow:
                 i === active
-                  ? "0 0 0 1px #C8C2B8, 0 0 0 3px #F5F2EE, 0 0 0 5px #33A2DC"
+                  ? "0 0 0 1px #C8C2B8, 0 0 0 3px #F5F2EE, 0 0 0 5px var(--color-brand)"
                   : "0 0 0 1px #C8C2B8",
             }}
           />

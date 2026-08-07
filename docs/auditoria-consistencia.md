@@ -1,8 +1,8 @@
 # Auditoría de consistencia
 
-Medido sobre el commit `ddc2c71`.
+Medido sobre el commit `e6ecca3`.
 
-> **Aviso —** el árbol tenía 6 archivo(s) sin commitear al medir. Este informe NO describe exactamente el commit `ddc2c71`.
+> **Aviso —** el árbol tenía 4 archivo(s) sin commitear al medir. Este informe NO describe exactamente el commit `e6ecca3`.
 
 Generado por `npm run auditoria:consistencia`. **No editar a mano:** cada pasada lo reescribe entero.
 
@@ -114,7 +114,7 @@ Sin banda de cabecera identificable (7 plantillas): `/politica-datos`, `/product
 
 | Padding | Secciones en |
 | ---: | --- |
-| 0 px | `/`, `/productos/microfibra` |
+| 0 px | `/productos/microfibra` |
 | 40 px | `/productos/microfibra/dortmund-plus/blancos` |
 | 64 px | `/` ×5, `/contacto` ×3, `/empresa` ×5, `/productos` ×4, `/productos/camisetas` ×3, `/productos/microfibra` ×2, `/productos/microfibra/dortmund-plus` ×3, `/productos/microfibra/dortmund-plus/blancos` ×2 |
 
@@ -130,7 +130,7 @@ Todas las secciones se tocan: **el ritmo vertical no lo pone ningún margen, lo 
 
 | Padding | Secciones en |
 | ---: | --- |
-| 0 px | `/`, `/productos/microfibra` |
+| 0 px | `/productos/microfibra` |
 | 64 px | `/`, `/productos/microfibra/dortmund-plus/blancos` |
 | 96 px | `/` ×4, `/contacto` ×3, `/empresa` ×5, `/productos` ×4, `/productos/camisetas` ×3, `/productos/microfibra` ×2, `/productos/microfibra/dortmund-plus` ×3, `/productos/microfibra/dortmund-plus/blancos` ×2 |
 
@@ -152,12 +152,13 @@ Anchos de contenedor: **375 px**. Padding lateral: **26 px**.
 
 ### A 1440 px
 
-Anchos de contenedor: **679 px**, **1240 px**. Padding lateral: **101 px**.
+Anchos de contenedor: **679 px**, **1240 px**, **1440 px**. Padding lateral: **101 px**.
 
 | Ancho | Rutas |
 | ---: | --- |
 | 679 px | `/productos/microfibra/dortmund-plus/blancos` |
 | 1240 px | `/`, `/asesor-virtual`, `/contacto`, `/empresa`, `/politica-datos`, `/productos`, `/productos/camisetas`, `/productos/microfibra`, `/productos/microfibra/athletic (×19 rutas)`, `/productos/microfibra/chelsea (×9 rutas)`, `/productos/microfibra/dortmund-plus`, `/productos/microfibra/dortmund-plus/blancos`, `/productos/microfibra/dortmund-plus/claros (×4 rutas)`, `/productos/microfibra/imperial (×21 rutas)`, `/productos/texturizado (×3 rutas)` |
+| 1440 px | `/`, `/empresa` |
 
 ---
 
@@ -304,8 +305,7 @@ Solo se listan los arbitrarios con medida absoluta (`px`/`rem`) en utilidades qu
 
 | Fichero | Clase | Token equivalente |
 | --- | --- | --- |
-| `src/app/page.tsx:196` | `min-h-[360px]` | `min-h-90` |
-| `src/components/ui/CategoryCard.tsx:99` | `text-[28px]` | sin equivalente exacto |
+| `src/components/ui/CategoryCard.tsx:147` | `text-[28px]` | sin equivalente exacto |
 | `src/components/ui/Footer.tsx:31` | `text-[19px]` | `text-body-l` |
 | `src/components/ui/Navbar.tsx:496` | `text-[24px]` | sin equivalente exacto |
 
@@ -320,12 +320,12 @@ Las clases arbitrarias de color y tamaño de fuente ya las bloquea eslint en bui
 | color literal en estilo en línea | `src/components/ui/Timeline.tsx:89` | `gsap.set(dot, { backgroundColor: "#F5F2EE", borderColor: "#C8C2B8" });` |
 | color literal en estilo en línea | `src/components/ui/Timeline.tsx:98` | `backgroundColor: "#A0715A",` |
 | color literal en estilo en línea | `src/components/ui/Timeline.tsx:99` | `borderColor: "#A0715A",` |
-| excepción aprobada al guardarraíl de tokens | `src/app/page.tsx:214` | `// eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala e` |
+| excepción aprobada al guardarraíl de tokens | `src/app/page.tsx:158` | `// eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala e` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/BotonWhatsApp.tsx:76` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena, no es color de paleta` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/BotonWhatsApp.tsx:79` | `// eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena` |
-| excepción aprobada al guardarraíl de tokens | `src/components/ui/buttonVariants.ts:81` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena` |
-| excepción aprobada al guardarraíl de tokens | `src/components/ui/buttonVariants.ts:83` | `// eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena` |
-| excepción aprobada al guardarraíl de tokens | `src/components/ui/CategoryCard.tsx:98` | `{/* eslint-disable-next-line no-restricted-syntax -- título de card: escala propia del componente, no de la escala edito` |
+| excepción aprobada al guardarraíl de tokens | `src/components/ui/buttonVariants.ts:103` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena` |
+| excepción aprobada al guardarraíl de tokens | `src/components/ui/buttonVariants.ts:105` | `// eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena` |
+| excepción aprobada al guardarraíl de tokens | `src/components/ui/CategoryCard.tsx:146` | `{/* eslint-disable-next-line no-restricted-syntax -- título de card: escala propia del componente, no de la escala edito` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/Footer.tsx:30` | `{/* eslint-disable-next-line no-restricted-syntax -- tagline itálica del footer, tamaño decorativo único (fase 3) */}` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/Navbar.tsx:495` | `{/* eslint-disable-next-line no-restricted-syntax -- tamaño de glifo "+" del acordeón, no es texto (fase 3) */}` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/ProductCard.tsx:66` | `{/* eslint-disable-next-line no-restricted-syntax -- título de card fluido: escala propia del componente, no editorial (` |
@@ -350,7 +350,7 @@ Tres niveles. El criterio de orden dentro de cada uno es **a cuántas rutas real
 
 ### 3 · Cosmético — puede esperar
 
-- **4 valores arbitrarios con token equivalente** (§12). No se ven; encarecen el siguiente cambio de escala.
+- **3 valores arbitrarios con token equivalente** (§12). No se ven; encarecen el siguiente cambio de escala.
 - **3 colores literales en estilos en línea** (§13). Fuera del alcance del guardarraíl de eslint; hoy no rompen nada.
 - **7 plantillas construidas sin `<section>`** (§2), frente al resto que sí las usa. Conviven dos formas de montar una página; unificarlo es refactor, no arreglo.
 

@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
-import { PhotoCurtain } from "@/components/motion/Curtain";
+import { BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
 import { Timeline } from "@/components/ui/Timeline";
 import { DraftNotice } from "@/components/ui/DraftNotice";
 import { foto } from "@/data/imagenes";
@@ -12,6 +12,7 @@ import { buttonVariants } from "@/components/ui/buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
+import { numerador } from "@/lib/numerador";
 
 export const metadata: Metadata = {
   title: "Nuestra Empresa — Textil Padilla",
@@ -109,7 +110,25 @@ const hitos = [
   },
 ];
 
+/*
+ * ORDEN DE LA PÁGINA: origen → propósito → taller → valores → cronología.
+ *
+ * Se cuenta de dónde venimos antes de decir a dónde vamos, y las dos cosas
+ * antes de enseñar dónde se hacen. La línea de hitos cierra: es el registro que
+ * respalda todo lo anterior, no la puerta de entrada.
+ *
+ * Los índices los pone `numerador()` según ESTE orden, así que mover una sección
+ * de sitio renumera las cabeceras sin tocarlas. Los `id` viajan con su sección
+ * —`#historia`, `#manifiesto`, `#infraestructura`, `#hitos` siguen existiendo y
+ * apuntando a lo mismo—, que es lo que mantiene vivos el CTA del hero y los
+ * enlaces del footer.
+ *
+ * «Los valores» no consume número: no usa `SectionHeader`, y no lo usa porque
+ * está pendiente de rediseño.
+ */
 export default function EmpresaPage() {
+  const numero = numerador();
+
   return (
     <div className="flex flex-col">
       <Hero
@@ -121,12 +140,103 @@ export default function EmpresaPage() {
         primaryCta={{ label: "Conocer nuestra historia →", href: "#historia" }}
       />
 
+      {/*
+        De dónde venimos — LA COMPOSICIÓN DE «VERDAD MATERIAL», INVERTIDA.
+
+        Era una rejilla propia de esta página: dos columnas desiguales
+        (1,15 / 0,85) con 64 px de separación, dentro del contenedor normal.
+        Pasa a `BloqueFotoTexto` —el split de la portada— en el contenedor
+        AMPLIO: dos mitades iguales con 80 px de aire a 1440.
+
+        INVERTIDA, y por eso existe la prop: aquí el texto abre por la izquierda
+        y la foto cierra por la derecha, al revés que en la portada. No es un
+        `order-*` sobre la misma rejilla: `invertido` cambia el orden en el DOM,
+        así que el apilado en móvil sigue siendo el que ya tenía esta sección
+        —primero el relato, después la foto— en vez de dársela vuelta.
+
+        LA FOTO CONSERVA SU `aspect-4/5` y no hereda el alto de la portada. El
+        slot `oficio-taller-alangasi` está registrado como vertical 4:5 y la foto
+        real es de 1200 px de ancho: meterla en el marco apaisado de la macro
+        sería recortarle media imagen. La composición se comparte; la proporción
+        de cada foto es suya.
+
+        La cabecera entra en el mismo contenedor amplio que el bloque, para que
+        el filete de `SectionHeader` empiece y acabe donde empieza y acaba el
+        texto que hay debajo. Es lo que ya hace «Familias de tela» en la portada.
+      */}
+      <section id="historia" className="py-16 sm:py-24">
+        <Container ancho="amplio">
+          <div className="mb-6">
+            <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
+          </div>
+          <SectionHeader index={numero()} title="De dónde venimos" tag="Origen y evolución" />
+          <BloqueFotoTexto
+            invertido
+            foto={{
+              src: foto("oficio-taller-alangasi")?.ruta,
+              alt: foto("oficio-taller-alangasi")?.alt,
+              /* La columna es la mitad del contenedor amplio menos el aire: 579 px de 1440. */
+              sizes: "(min-width: 1024px) 40vw, 100vw",
+              caption: "Alangasí · el taller",
+              className: "aspect-4/5",
+            }}
+          >
+            <p className="font-serif text-body-m text-ink">
+              Textil Padilla nació en 1987 en Alangasí, en el valle de los
+              Chillos, como un taller familiar dedicado a tejer punto para
+              la confección local. La primera decisión fue también la más
+              duradera: no hilar, sino seleccionar el mejor hilo disponible
+              y convertirlo en tela con la disciplina de una ficha técnica.
+            </p>
+            <p className="font-serif text-body-m text-ink">
+              Con los años, la demanda de un color constante nos llevó a
+              incorporar teñido a demanda: dejar de ofrecer el tono más
+              cercano de un stock y empezar a teñir el color exacto que
+              cada marca necesitaba, registrado para volver a él. Ese
+              salto —de tejer a teñir con criterio— definió el oficio que
+              hoy vive en tres verbos: seleccionar, tejer, teñir.
+            </p>
+            <p className="font-serif text-body-m text-ink">
+              De aquel primer taller crecimos hacia una red de locales en
+              Ecuador —desde la matriz de Alangasí hasta Quito, Sangolquí y
+              Guayaquil— y hacia clientes en la región andina, sin
+              renunciar nunca al listón con el que empezamos. Casi cuatro
+              décadas después, seguimos midiendo todo y alzando poco la
+              voz.
+            </p>
+            <RevealGroup className="mt-4 grid grid-cols-2 gap-6 border-t border-greige pt-6 sm:grid-cols-4">
+              {[
+                { label: "Fundación", value: "1987" },
+                { label: "Matriz", value: "Alangasí" },
+                { label: "Locales", value: "6 en Ecuador" },
+                { label: "Carácter", value: "Familiar" },
+              ].map((item) => (
+                <RevealItem key={item.label}>
+                  <p className="font-sans text-body-s font-semibold text-ink">
+                    {item.value}
+                  </p>
+                  <p className="mt-1 font-mono text-label uppercase text-graphite">
+                    {item.label}
+                  </p>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </BloqueFotoTexto>
+        </Container>
+      </section>
+
       <section id="manifiesto" className="py-16 sm:py-24">
         <Container>
           <div className="mb-6">
             <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
           </div>
-          <SectionHeader index="01" title="Lo que nos mueve" tag="Misión · Visión · Valores" />
+          {/*
+            La etiqueta decía "Misión · Visión · Valores" y anunciaba tres cosas
+            de las que aquí solo hay dos: los valores son su propia sección y
+            ahora quedan dos secciones más abajo, con «El taller por dentro» en
+            medio. La etiqueta enumera lo que hay debajo de ella, no el tema.
+          */}
+          <SectionHeader index={numero()} title="Lo que nos mueve" tag="Misión · Visión" />
           <RevealGroup className="flex flex-col divide-y divide-greige">
             <RevealItem className="grid grid-cols-1 gap-4 py-10 sm:grid-cols-[0.42fr_1fr] sm:gap-10">
               <span className="font-mono text-label uppercase text-accent">
@@ -154,112 +264,10 @@ export default function EmpresaPage() {
         </Container>
       </section>
 
-      <section className="border-y border-greige bg-bone py-16 sm:py-24">
-        <Container>
-          <p className="mb-10 font-mono text-label uppercase text-graphite">
-            Los valores que no negociamos
-          </p>
-          <RevealGroup className="flex flex-col divide-y divide-greige">
-            {valores.map((valor) => (
-              <RevealItem
-                key={valor.title}
-                className="grid grid-cols-1 gap-3 py-8 sm:grid-cols-[200px_1fr] sm:gap-10"
-              >
-                <h3 className="font-sans text-h3 font-semibold text-ink">
-                  {valor.title}
-                </h3>
-                <p className="max-w-2xl font-serif text-body-s text-graphite">
-                  {valor.description}
-                </p>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-          <Reveal className="mt-10">
-            <p className="max-w-xl font-serif text-body-l italic text-ink">
-              «No fabricamos la moda. Fabricamos aquello con lo que la moda se
-              hace.»
-            </p>
-          </Reveal>
-        </Container>
-      </section>
-
-      <section id="historia" className="py-16 sm:py-24">
-        <Container>
-          <div className="mb-6">
-            <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
-          </div>
-          <SectionHeader index="02" title="De dónde venimos" tag="Origen y evolución" />
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-            <div className="flex flex-col gap-5">
-              <p className="font-serif text-body-m text-ink">
-                Textil Padilla nació en 1987 en Alangasí, en el valle de los
-                Chillos, como un taller familiar dedicado a tejer punto para
-                la confección local. La primera decisión fue también la más
-                duradera: no hilar, sino seleccionar el mejor hilo disponible
-                y convertirlo en tela con la disciplina de una ficha técnica.
-              </p>
-              <p className="font-serif text-body-m text-ink">
-                Con los años, la demanda de un color constante nos llevó a
-                incorporar teñido a demanda: dejar de ofrecer el tono más
-                cercano de un stock y empezar a teñir el color exacto que
-                cada marca necesitaba, registrado para volver a él. Ese
-                salto —de tejer a teñir con criterio— definió el oficio que
-                hoy vive en tres verbos: seleccionar, tejer, teñir.
-              </p>
-              <p className="font-serif text-body-m text-ink">
-                De aquel primer taller crecimos hacia una red de locales en
-                Ecuador —desde la matriz de Alangasí hasta Quito, Sangolquí y
-                Guayaquil— y hacia clientes en la región andina, sin
-                renunciar nunca al listón con el que empezamos. Casi cuatro
-                décadas después, seguimos midiendo todo y alzando poco la
-                voz.
-              </p>
-              <RevealGroup className="mt-4 grid grid-cols-2 gap-6 border-t border-greige pt-6 sm:grid-cols-4">
-                {[
-                  { label: "Fundación", value: "1987" },
-                  { label: "Matriz", value: "Alangasí" },
-                  { label: "Locales", value: "6 en Ecuador" },
-                  { label: "Carácter", value: "Familiar" },
-                ].map((item) => (
-                  <RevealItem key={item.label}>
-                    <p className="font-sans text-body-s font-semibold text-ink">
-                      {item.value}
-                    </p>
-                    <p className="mt-1 font-mono text-label uppercase text-graphite">
-                      {item.label}
-                    </p>
-                  </RevealItem>
-                ))}
-              </RevealGroup>
-            </div>
-            <PhotoCurtain
-              src={foto("oficio-taller-alangasi")?.ruta}
-              alt={foto("oficio-taller-alangasi")?.alt}
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              caption="Alangasí · el taller"
-              className="aspect-4/5"
-            />
-          </div>
-        </Container>
-      </section>
-
-      <section id="hitos" className="py-16 sm:py-24">
-        <Container>
-          <div className="mb-6">
-            <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
-          </div>
-          <SectionHeader index="03" title="La vida de Textil Padilla" tag="Registro cronológico" />
-          <p className="mb-10 max-w-xl font-serif text-caption italic text-graphite">
-            Fechas y aperturas por confirmar con administración.
-          </p>
-          <Timeline items={hitos} />
-        </Container>
-      </section>
-
       <section id="infraestructura" className="bg-brand-deep py-16 text-paper sm:py-24">
         <Container>
           <SectionHeader
-            index="04"
+            index={numero()}
             title="El taller por dentro"
             tag="Oficio · manos y máquina"
             tone="dark"
@@ -313,6 +321,71 @@ export default function EmpresaPage() {
               Ver catálogo de telas →
             </Link>
           </div>
+        </Container>
+      </section>
+
+      {/*
+        Los valores — PENDIENTE DE REDISEÑO, INTACTO A PROPÓSITO.
+
+        Se mueve de sitio y nada más: sigue siendo la lista de cuatro filas
+        separadas por filete, sin cabecera numerada, con el rótulo mono suelto
+        que tenía. Llegará con el diseño ya decidido.
+
+        CUANDO SE REDISEÑE VA EN `ancho="amplio"`. Es una rejilla de piezas
+        —cuatro valores en paralelo, no un texto seguido—, que es exactamente el
+        caso para el que se reservó el segundo ancho del `Container`. Hoy no se
+        cambia porque en una lista de filas a todo lo ancho el ancho extra solo
+        alarga la línea de lectura; en cuanto sea rejilla, deja de serlo.
+      */}
+      <section className="border-y border-greige bg-bone py-16 sm:py-24">
+        <Container>
+          <p className="mb-10 font-mono text-label uppercase text-graphite">
+            Los valores que no negociamos
+          </p>
+          <RevealGroup className="flex flex-col divide-y divide-greige">
+            {valores.map((valor) => (
+              <RevealItem
+                key={valor.title}
+                className="grid grid-cols-1 gap-3 py-8 sm:grid-cols-[200px_1fr] sm:gap-10"
+              >
+                <h3 className="font-sans text-h3 font-semibold text-ink">
+                  {valor.title}
+                </h3>
+                <p className="max-w-2xl font-serif text-body-s text-graphite">
+                  {valor.description}
+                </p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+          <Reveal className="mt-10">
+            <p className="max-w-xl font-serif text-body-l italic text-ink">
+              «No fabricamos la moda. Fabricamos aquello con lo que la moda se
+              hace.»
+            </p>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/*
+        Línea de hitos — PENDIENTE DE REDISEÑO (año en vez del código interno,
+        textos e imagen más grandes). Aquí solo cambia de sitio: cierra la
+        página en vez de partirla por la mitad.
+
+        CUANDO SE REDISEÑE VA EN `ancho="amplio"`, igual que la rejilla de
+        valores. El rediseño la hace crecer —tipografía mayor y una imagen por
+        hito—, y esos son justo los 200 px de contenedor que hoy no le hacen
+        falta y entonces sí.
+      */}
+      <section id="hitos" className="py-16 sm:py-24">
+        <Container>
+          <div className="mb-6">
+            <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
+          </div>
+          <SectionHeader index={numero()} title="La vida de Textil Padilla" tag="Registro cronológico" />
+          <p className="mb-10 max-w-xl font-serif text-caption italic text-graphite">
+            Fechas y aperturas por confirmar con administración.
+          </p>
+          <Timeline items={hitos} />
         </Container>
       </section>
     </div>

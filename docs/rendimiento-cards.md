@@ -1,23 +1,11 @@
-# Rendimiento de cards y rejilla de telas
+# Rendimiento de cards y rejilla de telas — Fase 0, medición
 
-Respuesta a `brief-rendimiento.md`. Dos partes: **Fase 0** es la medición, escrita
-antes de tocar nada; **Fase 1**, al final, es lo que se arregló y cuánto se ganó.
-
-> **Corrección posterior, importante.** El §3 de la Fase 0 —el scroll suave— dice
-> que es «lo único que afecta al móvil de verdad». **Es falso, y el error está en
-> cómo se midió:** un viewport de 375 px con eventos de rueda no es un teléfono,
-> es un portátil en una ventana estrecha. Medido después con táctil emulado y
-> gestos de dedo, Lenis no interviene en táctil y no cuesta nada allí; el coste
-> real es de la rueda, o sea de escritorio. Está desarrollado en la Fase 1 y
-> anotado en `MOTION.md`. Lo demás de la Fase 0 se sostiene.
-
-## Fase 0 — la medición
-
-**No se había tocado ninguna animación.** Esto es solo lo que dicen los números.
+Respuesta a `brief-rendimiento.md`. **No se ha tocado ninguna animación.** Esto
+es solo lo que dicen los números.
 
 **Titular: la hipótesis de partida es falsa.** El marcador de hueco —la trama
 diagonal— no cuesta nada medible. Apagarlo no mueve una sola cifra en ninguna
-de las tres pantallas, en ninguna de las dos pruebas, en ninguno de los dos
+de las tres pantallas, en ninguna de las dos prueba, en ninguno de los dos
 tamaños. **Las fotos, cuando lleguen, no van a arreglar esto.** Eso cambia la
 prioridad: no hay nada que esperar.
 
@@ -174,14 +162,10 @@ la página, cada vez.
 > recorrido corto no había ninguna pendiente de entrar, así que la diferencia es
 > atribuible al scroll suave, pero no puedo descartar un residuo pequeño.
 
-> **⚠ Este párrafo era el original y estaba equivocado. Se conserva tachado
-> porque el error es instructivo:** decía que esto era «lo único de los tres que
-> afecta al móvil de verdad», porque en un teléfono el hover no existe —Tailwind
-> envuelve `hover:` en `@media (hover: hover)`— y §2 y §4 no se disparan allí.
-> La primera mitad es cierta; la conclusión no. **Las cifras de «móvil 375» de
-> arriba se tomaron con la RUEDA del ratón y sin emular táctil**, o sea sobre un
-> portátil en una ventana estrecha. En un teléfono de verdad Lenis se aparta solo
-> y el scroll ya es nativo. Ver la Fase 1.
+**Esto es lo único de los tres que afecta al móvil de verdad.** En un teléfono el
+hover no existe —Tailwind envuelve `hover:` en `@media (hover: hover)`— así que
+§2 y §4 no se disparan nunca allí. Lo que se va a ver en la demo del 15, en un
+teléfono, es esto.
 
 ---
 
@@ -288,145 +272,3 @@ Eso importa para el reparto: **§2 y §3 —las dos causas grandes— ya están 
 **§4 es de la tanda sin commitear** y solo existe en esta rama. Dime si prefieres
 una rama desde `main` para las dos primeras y dejar §4 donde está, o
 mantenerlo todo junto.
-
----
----
-
-# Fase 1 — lo que se arregló
-
-Rama `fix/rendimiento`, desde `main` limpio. Se hicieron **dos de las tres**
-cosas propuestas, y una de ellas resultó no hacer falta.
-
-## Qué se cambió
-
-Una sola corrección, en los **tres sitios** donde estaba la misma cadena de
-clases copiada:
-
-| fichero | dónde se ve |
-| --- | --- |
-| `src/components/ui/SubcategoryTile.tsx` | `/productos/microfibra`, `/productos/[categoria]`, `…/dortmund-plus` |
-| `src/app/productos/microfibra/dortmund-plus/blancos/page.tsx` | la rejilla «Otras telas de Microfibra» |
-| `src/components/ui/ProductCard.tsx` | solo `/styleguide` — pero es de donde se copia |
-
-Antes:
-
-```
-group … border border-transparent … transition-colors duration-500 ease-revelar hover:border-graphite
-```
-
-Ahora el enlace se queda sin transición y el filete lo pone una capa propia:
-
-```jsx
-<span
-  aria-hidden
-  className="pointer-events-none absolute -inset-px border border-graphite opacity-0
-             transition-opacity duration-500 ease-revelar group-hover:opacity-100"
-/>
-```
-
-Mismo color, misma duración, misma curva. Lo que cambia es **por qué propiedad
-se anima**: `opacity` la sabe animar el compositor, `border-color` no.
-
-`-inset-px` y no `inset-0` porque la caja de contención de un absoluto es la de
-*padding*, o sea por dentro del `border-transparent` de 1px que la tile ya
-reservaba: con `inset-0` el filete caería 1px hacia dentro. Comprobado contra
-`npm run dev`: la caja del filete coincide con la caja de borde del enlace con
-**0 px de desviación en los cuatro lados**, en las tres pantallas.
-
-## Antes y después
-
-Mismo método, misma máquina, mismas dos pasadas de la Fase 0 (build de
-producción, ventana real, freno de CPU 4× en escritorio y 6× a 375 px).
-
-**HOVER** — paint total de la prueba, p95 del intervalo entre fotogramas, y
-cuántos fotogramas pasan de 20 ms:
-
-| pantalla | paint antes | paint después | Δ | p95 antes | p95 después | >20 ms |
-| --- | --- | --- | --- | --- | --- | --- |
-| **microfibra** · escritorio | 9253,7 ms | **1988,3 ms** | **−79 %** | 44,5 ms | **11,2 ms** | 265 → **47** |
-| **microfibra** · móvil 375 | 3771,3 ms | **1006,4 ms** | **−73 %** | 38,9 ms | **16,7 ms** | 136 → **29** |
-| **blancos** · escritorio | 2995,2 ms | **802,7 ms** | **−73 %** | 22,3 ms | **11,2 ms** | 58 → **16** |
-| **blancos** · móvil 375 | 1849,6 ms | **763,3 ms** | **−59 %** | 33,3 ms | **11,2 ms** | 70 → **19** |
-| Home · escritorio *(no tocada)* | 1526,6 ms | 1531,7 ms | 0 % | 16,7 ms | 16,6 ms | 36 → 35 |
-| Home · móvil *(no tocada)* | 666 ms | 840,7 ms | +26 % | 16,7 ms | 16,7 ms | 27 → 29 |
-| `/productos` · escritorio *(no tocada)* | 1383,5 ms | 765 ms | −45 % | 22 ms | 10,6 ms | 65 → 12 |
-| `/productos` · móvil *(no tocada)* | 581 ms | 615 ms | +6 % | 11,1 ms | 11,2 ms | 21 → 17 |
-
-**SCROLL**:
-
-| pantalla | paint antes | paint después | Δ | p95 antes | p95 después |
-| --- | --- | --- | --- | --- | --- |
-| **microfibra** · móvil 375 | 4784,9 ms | **1388,4 ms** | **−71 %** | 50 ms | 38,9 ms |
-| **microfibra** · escritorio | 2042,6 ms | **979,9 ms** | **−52 %** | 38,8 ms | 27,8 ms |
-| **blancos** · móvil 375 | 1505,4 ms | **938 ms** | **−38 %** | 33,3 ms | 27,8 ms |
-| **blancos** · escritorio | 463,6 ms | 380,1 ms | −18 % | 16,3 ms | 16,6 ms |
-| Home · escritorio *(no tocada)* | 1652,5 ms | 1332 ms | −19 % | 50,4 ms | 33,2 ms |
-| `/productos` · móvil *(no tocada)* | 894,6 ms | 918,2 ms | +3 % | 27,8 ms | 27,6 ms |
-
-### Cómo leer esto, incluida la parte incómoda
-
-**Donde estaba el defecto, la mejora es inequívoca.** En microfibra el p95 del
-fotograma pasa de 44,5 a 11,2 ms y los fotogramas malos de 265 a 47: es la
-diferencia entre un tirón visible cada dos fotogramas y ninguno. El muestrario
-de blancos, con solo tres tiles, mejora en la misma proporción —lo que confirma
-que el coste era por tile y no por rejilla.
-
-**Donde no se tocó nada, los números se mueven en las dos direcciones, y eso es
-ruido.** `/productos` sale un 45 % «mejor» y ahí no se cambió una línea: esa
-página solo monta `CategoryCard`, que no se ha tocado. Para saber cuánto vale
-el ruido se compararon **dos pasadas del mismo «antes»**, misma build y mismo
-guion: las diferencias entre ellas llegan al ±20 % de forma habitual y hasta el
-−49 % en un caso (Home móvil, hover: 1311 → 666 ms). Con esa vara, todo lo
-marcado *(no tocada)* está dentro del ruido, en un sentido o en el otro. **No me
-apunto esas mejoras.** Las que valen son las cuatro filas en negrita, que están
-muy por fuera de esa banda y tienen un mecanismo que las explica.
-
-**Por qué también baja el scroll, si el arreglo es de hover.** Porque al
-desplazar con el cursor sobre la rejilla, las tiles pasan por debajo del ratón y
-cada una disparaba su transición de 500 ms al entrar y otra al salir. Veinte
-tiles pasando bajo el cursor eran veinte transiciones de `border-color`
-encadenadas encima del scroll. No es un efecto de laboratorio: es exactamente lo
-que hace alguien que recorre el catálogo con el ratón dentro de la rejilla.
-
-## §3, el scroll suave: no se tocó, y el motivo cambió
-
-**Se midió y la premisa era falsa.** Lenis trae `syncTouch: false` por defecto y
-en `lenis.mjs:615` se sale sin hacer nada ante input táctil: en un teléfono el
-scroll **ya es nativo**. Medido con táctil emulado de verdad (`isMobile` +
-`hasTouch`, gestos por `Input.dispatchTouchEvent`), quitar Lenis en microfibra
-mueve el pintado de 280 a 248 ms — ruido.
-
-Las cifras de «móvil 375» de la Fase 0 se tomaron con la **rueda del ratón** y
-sin emular táctil: eso es un portátil en una ventana estrecha, no un teléfono.
-
-Y quitarlo tendría un coste propio: en modo `root`, `ReactLenis` es un
-`Context.Provider`, así que montarlo con una condición cambia el tipo de
-elemento y **React remonta la aplicación entera** justo después de hidratar.
-
-**Queda pendiente, fuera de esta tanda:** el coste de Lenis con **rueda** en
-escritorio es real y grande —paint −91 %, p95 de 22,3 a 11,1 ms al quitarlo— pero
-tocar el scroll suave es una decisión de diseño sobre `MOTION.md` §04, no un
-arreglo, y no se hace antes de la presentación del 15. Anotado allí con las
-cifras y con cómo *no* volver a medirlo.
-
-## Lo que no se tocó
-
-- **§4, el hover de las cards de familia.** Vive en `motion/interaccion`, no en
-  esta rama, y se queda como está hasta después de la presentación.
-- **El velo tinta de `CategoryCard`**, que cuesta lo mismo que §4 y no está
-  detrás de ningún interruptor. Sigue igual.
-- **La trama de los huecos.** No costaba nada, no se toca. Las fotos siguen
-  haciendo falta, pero por lo que hacen falta las fotos.
-
-## Comprobaciones
-
-- `npx tsc --noEmit` limpio.
-- `npm run lint`: 0 errores. Un aviso, `'BRAND' is assigned a value but never
-  used` en `scripts/verificar-botones.mjs`, que ya venía de antes y no es de
-  aquí.
-- `npm run build` limpio, y el CSS de producción emite `inset:-1px` y
-  `transition-property:opacity` — o sea, Tailwind sí genera `-inset-px`, que era
-  lo único de la corrección que podía no existir.
-- Comprobación funcional contra `npm run dev`, en las tres pantallas y también
-  con `prefers-reduced-motion`: opacidad 0 → 1 → 0, y con la preferencia puesta
-  el estado final es el mismo (desaparece el recorrido, no el resultado).

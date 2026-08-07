@@ -5,11 +5,12 @@ import { CategoryCard } from "@/components/ui/CategoryCard";
 import { EventCarousel } from "@/components/ui/EventCarousel";
 import { StatNumber } from "@/components/ui/StatNumber";
 import { AsesorPasos } from "@/components/ui/AsesorPasos";
-import { PhotoCurtain } from "@/components/motion/Curtain";
+import { BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
 import { MASCARA } from "@/lib/motion";
+import { numerador } from "@/lib/numerador";
 import { categories } from "@/data/taxonomy";
 import { foto } from "@/data/imagenes";
 
@@ -18,27 +19,6 @@ const stats = [
   { target: 6, prefix: "", suffix: "", label: "Locales en Ecuador" },
   { target: 3, prefix: "", suffix: "", label: "Países con presencia" },
   { target: 900, prefix: "+", suffix: "", label: "Tonos teñidos a demanda" },
-];
-
-const verbos = [
-  {
-    index: "01",
-    title: "Seleccionar",
-    description:
-      "El listón empieza en el hilo. Compramos el mejor disponible y descartamos lo que no cumple gramaje, torsión ni densidad. Nada se deja al azar; todo se documenta.",
-  },
-  {
-    index: "02",
-    title: "Tejer",
-    description:
-      "Convertimos el hilo en rollo con precisión de sistema: trama, urdimbre y acabado tejidos para rendir. Cada serie sale con la misma mano, tirada tras tirada.",
-  },
-  {
-    index: "03",
-    title: "Teñir",
-    description:
-      "Teñido a demanda, al color exacto que pide el cliente. Solidez constante entre rollos: la referencia que apruebas es la que recibes, sin sorpresas.",
-  },
 ];
 
 /*
@@ -87,6 +67,8 @@ const eventSlides = [
 ];
 
 export default function Home() {
+  const numero = numerador();
+
   return (
     <div className="flex flex-col">
       {/*
@@ -115,89 +97,51 @@ export default function Home() {
         primaryCta={{ label: "Ver catálogo de telas →", href: "/productos" }}
       />
 
-      <section className="py-16 sm:py-24">
-        <Container>
-          <SectionHeader index="01" title="Textil Padilla en cifras" tag="Desde 1987" />
-          <RevealGroup
-            variante="rejilla"
-            className="grid grid-cols-2 gap-px border border-greige bg-greige sm:grid-cols-4"
-          >
-            {stats.map((stat) => (
-              <RevealItem key={stat.label} className="bg-paper p-6">
-                <p className="font-sans text-h1 font-medium text-ink">
-                  <StatNumber target={stat.target} prefix={stat.prefix} suffix={stat.suffix} />
-                </p>
-                <p className="mt-2 font-mono text-label uppercase text-graphite">
-                  {stat.label}
-                </p>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-          <Reveal className="mt-10" tipo="cuerpo">
-            <p className="max-w-2xl font-serif text-body-m text-ink">
-              Casi cuatro décadas seleccionando hilo, tejiendo rollo y
-              afinando color. No hilamos: elegimos el mejor hilo disponible y
-              lo convertimos en tela con la precisión de una ficha técnica y
-              el criterio de quien conoce la materia por el tacto.
-            </p>
-          </Reveal>
-        </Container>
-      </section>
-
-      <section className="py-16 sm:py-24">
-        <Container>
-          <SectionHeader index="02" title="El oficio en tres verbos" tag="Seleccionar · Tejer · Teñir" />
-          <RevealGroup
-            variante="rejilla"
-            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-3"
-          >
-            {verbos.map((verbo) => (
-              <RevealItem key={verbo.title} className="bg-paper p-8">
-                <span className="font-mono text-label uppercase text-accent">
-                  Verbo {verbo.index}
-                </span>
-                <h3 className="mt-4 font-sans text-h3 font-semibold text-ink">
-                  {verbo.title}
-                </h3>
-                <p className="mt-3 font-serif text-body-s text-graphite">
-                  {verbo.description}
-                </p>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </Container>
-      </section>
-
       {/*
-        Verdad material — split a sangre. La macro va a la IZQUIERDA tocando el
-        borde y a la misma altura que el texto (`items-stretch`); la declaración
-        a la derecha. La foto ocupa el medio ancho que antes quedaba en negro:
-        es grande porque llena ese hueco, no porque se sume altura —la banda es
-        MÁS corta que los dos bloques de antes—. Y en una columna alta se ve
-        muchísima más trama que en la franja 21:9, que era justo lo que el texto
-        prometía enseñar.
+        Verdad material — DOS COLUMNAS CON AIRE, DENTRO DEL CONTENEDOR AMPLIO.
 
-        El texto va AL LADO de la foto, no encima: cero riesgo de contraste, sin
-        DEGRADADO_HERO. La declaración sigue por máscara (`LineasEnMascara`) y la
-        foto por barrido (`Curtain`); sin gestos nuevos.
+        Era un split a sangre sobre azul profundo, con la foto tocando el borde
+        izquierdo y pegada al texto. Cambian las dos cosas:
 
-        Los cortes de la declaración se reescriben en cuatro líneas cortas: la
-        más larga cabe con margen en la columna estrecha del split a 1024 (el
-        peor caso) y en 375, medido contra su line-height. Antes eran dos líneas
-        largas que envolvían y soltaban "tela" y "paisaje." huérfanas.
+        EL FONDO. El azul lo pintaba esta misma sección (`bg-brand-deep`), no un
+        componente compartido, así que quitarlo no arrastra a ninguna otra
+        pantalla. Con él fuera, la portada deja de tener tres bandas oscuras
+        —hero, esta y el footer— y pasa a tener las dos de los extremos, que era
+        justo lo que el asesor virtual ya intentaba compensar poniéndose claro a
+        propósito (ver su comentario más abajo). El cambio de fondo arrastra el
+        tono de todo lo de dentro: el `dark` de la foto, el azul de la etiqueta
+        —sobre papel `brand` se queda en 2,56:1— y el `paper/70` del párrafo.
+
+        LA COMPOSICIÓN. La foto ya no rompe el contenedor: las dos columnas viven
+        en la misma rejilla, con una separación que a 1440 son 80 px. Esa
+        composición ya NO SE ESCRIBE AQUÍ: vive en `BloqueFotoTexto`, porque
+        «De dónde venimos» de Empresa la usa invertida y era eso o tener el
+        mismo split escrito dos veces en dos páginas.
+
+        En móvil se apilan CON LA FOTO PRIMERO, 40 px por encima del texto. Es el
+        mismo orden que ya tenían —la sección enseña una trama y luego la
+        explica—, así que el cambio no reordena nada de lo que ya se leía.
+
+        Los gestos siguen siendo los de antes: la declaración por máscara
+        (`LineasEnMascara`), la foto por barrido (`Curtain`). Sin gestos nuevos.
       */}
-      <section id="verdad-material" className="bg-brand-deep text-paper">
-        <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
-          <PhotoCurtain
-            dark
-            src={foto("macro-fibra-blanca")?.ruta}
-            alt={foto("macro-fibra-blanca")?.alt}
-            sizes="(min-width: 1024px) 45vw, 100vw"
-            className="min-h-[62vw] sm:min-h-[360px] lg:min-h-0 lg:h-full"
-          />
-          <div className="flex flex-col justify-center gap-5 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+      <section id="verdad-material" className="py-16 sm:py-24">
+        <Container ancho="amplio">
+          <BloqueFotoTexto
+            foto={{
+              src: foto("macro-fibra-blanca")?.ruta,
+              alt: foto("macro-fibra-blanca")?.alt,
+              /*
+               * 40vw y no los 45 de antes: la columna ya no es media pantalla a
+               * sangre, sino la mitad del contenedor amplio menos la separación
+               * —579 px de 1440—. Servir la variante de 45vw sería descargar una
+               * foto más grande que el hueco donde va a caber.
+               */
+              sizes: "(min-width: 1024px) 40vw, 100vw",
+            }}
+          >
             <Reveal tipo="etiqueta">
-              <span className="font-mono text-label uppercase text-brand">
+              <span className="font-mono text-label uppercase text-accent">
                 Verdad material
               </span>
             </Reveal>
@@ -212,25 +156,132 @@ export default function Home() {
                 "vuelve paisaje.",
               ]}
               // eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala editorial (fase 3)
-              className="font-sans font-medium leading-[1.12] tracking-[-0.02em] text-[clamp(1.5rem,0.9rem_+_1.6vw,2.375rem)]"
+              className="font-sans font-medium leading-[1.12] tracking-[-0.02em] text-[clamp(1.5rem,0.9rem_+_1.6vw,2.375rem)] text-ink"
             />
             <Reveal tipo="cuerpo" delay={MASCARA.stagger * 2}>
-              <p className="max-w-md font-serif text-body-m text-paper/70">
+              <p className="max-w-md font-serif text-body-m text-graphite">
                 Macrofotografía de la trama: el mismo poliéster que tejemos y
                 teñimos, visto tan de cerca que la estructura se lee como
                 relieve.
               </p>
             </Reveal>
-          </div>
-        </div>
+          </BloqueFotoTexto>
+        </Container>
       </section>
 
-      <section id="categorias" className="py-16 sm:py-24">
+      {/*
+        Cifras — LA ÚNICA BANDA OSCURA DEL CUERPO DE LA PORTADA.
+
+        Hereda el azul que tenía "Verdad material" antes de pasar a papel, así
+        que el fondo oscuro se mueve de sección pero no se duplica: sigue
+        habiendo uno solo entre el hero y el footer.
+
+        LOS SEIS TEXTOS CAMBIAN DE COLOR PORQUE NINGUNO LLEGABA. La sección
+        entera estaba escrita en tinta sobre papel, y sobre `brand-deep` medía
+        —contraste real, no estimado— título 1,16:1, cifras 1,16:1, párrafo
+        1,16:1, etiquetas mono 2,63:1 e índice 3,60:1. No fallaba alguno: no
+        pasaba ninguno. La correspondencia que se aplica es la que el sitio ya
+        tiene para oscuro, no una paleta nueva:
+
+          índice   text-accent   → text-brand      3,60 → 5,56
+          título   text-ink      → text-paper      1,16 → 13,54
+          etiqueta text-graphite → text-paper/60   2,63 → 5,79
+          cifra    text-ink      → text-paper      1,16 → 13,54
+          label    text-graphite → text-paper/60   2,63 → 5,79
+          párrafo  text-ink      → text-paper      1,16 → 13,54
+
+        El índice medía 5,28:1 cuando se escribió esta tabla; son 5,56 desde que
+        `--color-brand` pasó de `#33a2dc` a `#55a4db`. El azul nuevo es más claro
+        y sobre esta banda oscura gana margen. Vuelve a medirse con `npm run
+        marca`, que fotografía la página en vez de deducir el fondo.
+
+        Las tres primeras no se escriben aquí: las pone `tone="dark"` de
+        `SectionHeader`, que ya existía y usan otras cuatro páginas.
+
+        LAS COSTURAS BAJAN DE `greige` A `paper/25`, y no es un retoque estético.
+        Sobre papel, `greige` es un hilo discreto de 1,59:1; sobre este azul se
+        dispara a 8,54:1 y la rejilla pasaría a ser lo más luminoso de la
+        sección, por encima de las propias cifras. `paper/25` la devuelve a 2,12,
+        que es el filete que llevan las demás bandas oscuras del sitio.
+
+        LAS CELDAS LLEVAN `bg-brand-deep` Y NO SE QUEDAN SIN FONDO. La rejilla es
+        de costura: el hueco de 1px deja ver el fondo del PADRE, y son las celdas
+        opacas las que lo tapan salvo en las juntas. Sin fondo propio, el
+        `bg-paper/25` del padre se vería entero y el bloque saldría como un
+        rectángulo lechoso en vez de una rejilla.
+      */}
+      <section className="bg-brand-deep py-16 sm:py-24">
         <Container>
-          <SectionHeader index="03" title="Familias de tela" tag="Catálogo por familia" />
+          <SectionHeader
+            index={numero()}
+            title="Textil Padilla en cifras"
+            tag="Desde 1987"
+            tone="dark"
+          />
           <RevealGroup
             variante="rejilla"
-            className="grid grid-cols-1 gap-px border border-greige bg-greige sm:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-px border border-paper/25 bg-paper/25 sm:grid-cols-4"
+          >
+            {stats.map((stat) => (
+              <RevealItem key={stat.label} className="bg-brand-deep p-6">
+                <p className="font-sans text-h1 font-medium text-paper">
+                  <StatNumber target={stat.target} prefix={stat.prefix} suffix={stat.suffix} />
+                </p>
+                <p className="mt-2 font-mono text-label uppercase text-paper/60">
+                  {stat.label}
+                </p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+          <Reveal className="mt-10" tipo="cuerpo">
+            <p className="max-w-2xl font-serif text-body-m text-paper">
+              Casi cuatro décadas seleccionando hilo, tejiendo rollo y
+              afinando color. No hilamos: elegimos el mejor hilo disponible y
+              lo convertimos en tela con la precisión de una ficha técnica y
+              el criterio de quien conoce la materia por el tacto.
+            </p>
+          </Reveal>
+        </Container>
+      </section>
+
+      {/*
+        Familias de tela — ANCHO AMPLIO Y CUATRO PIEZAS SUELTAS.
+
+        Era una "seam grid": `gap-px` sobre un fondo greige con borde exterior,
+        de modo que las cuatro cards compartían filete y se leían como una sola
+        banda de cuatro casillas. Es el patrón correcto para las cifras —donde el
+        bloque ES la unidad— y el equivocado aquí: cada card es una familia
+        distinta y un destino distinto, y lo que se pedía al ojo era justo lo que
+        el filete compartido impedía, distinguir dónde acaba una y empieza la
+        siguiente.
+
+        Fuera el borde, fuera el fondo y `gap-px` pasa a separación de verdad. Las
+        cards se apoyan en el papel sin filete propio: no lo necesitan, porque
+        son planos oscuros sobre fondo claro y el contraste ya las recorta.
+
+        LAS CUATRO COLUMNAS SUBEN DE `lg` A `xl`, Y ESO NO ESTABA EN EL ENCARGO.
+        Medido: con el salto en `lg` (1024 px) y separación de verdad, la card se
+        quedaba en 196 px de ancho —menos que los 219 que tenía con `gap-px`—, y
+        dentro de esos 196 hay 60 de relleno, así que al título de 28 px le
+        quedaban 136 px: "Polialgodón" no cabía en una línea. La sección pedía
+        cards más anchas y en el portátil más común salían más estrechas. Con el
+        salto en `xl` (1280 px), entre 1024 y 1279 se ven dos columnas de 428 px
+        y a partir de ahí cuatro. Anchos reales de card, antes → después: 1024
+        219 → 428 · 1280 264 → 257 · 1440 259 → 291 · 1920 249 → 282. El único
+        tramo que pierde es 1280–1440, y pierde 7 px: ahí el contenedor todavía
+        no ha llegado a su tope de 1440 y los huecos cuestan más de lo que el
+        ancho amplio aporta.
+
+        La separación es la misma en los tres modos (24 px). No hace falta más:
+        son planos de tinta sobre papel, y el contraste hace la mitad del trabajo
+        que en una rejilla de fondos claros haría el hueco.
+      */}
+      <section id="categorias" className="py-16 sm:py-24">
+        <Container ancho="amplio">
+          <SectionHeader index={numero()} title="Familias de tela" tag="Catálogo por familia" />
+          <RevealGroup
+            variante="rejilla"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4"
           >
             {categories.map((category) => (
               <RevealItem key={category.slug}>
@@ -244,6 +295,8 @@ export default function Home() {
                   title={category.name}
                   description={category.description}
                   foto={foto(`familia-${category.slug}`)}
+                  /* Cuatro columnas desde 1280, no desde 1024: ver la rejilla. */
+                  sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
                   className="h-full"
                 />
               </RevealItem>
@@ -254,7 +307,7 @@ export default function Home() {
 
       <section className="py-16 sm:py-24">
         <Container>
-          <SectionHeader index="04" title="Encuentros" tag="Eventos recientes" />
+          <SectionHeader index={numero()} title="Encuentros" tag="Eventos recientes" />
           <EventCarousel slides={eventSlides} />
         </Container>
       </section>
@@ -263,10 +316,20 @@ export default function Home() {
         Asesor virtual — la mitad derecha lleva FOTO que cambia con el paso
         activo (Prenda / Sublimado / Uso), no un panel. Toda la lógica —ciclo
         automático, pausa al hover, fijar al pulsar, reduced-motion— vive en
-        `AsesorPasos`, que además pone la sección sobre fondo CLARO a propósito:
-        con "Verdad material" (oscuro con foto) y el footer (oscuro) delante y
-        detrás, otro bloque oscuro con foto los volvía gemelos y cerraba la
-        portada en tres bandas de tinta. Claro rompe las dos cosas.
+        `AsesorPasos`, que además pone la sección sobre fondo CLARO a propósito.
+
+        EL MOTIVO ORIGINAL YA NO ES EL QUE ERA, y conviene dejarlo dicho: iba en
+        claro porque "Verdad material" (entonces oscuro con foto) quedaba justo
+        delante y el footer detrás, y un tercer bloque oscuro con foto los volvía
+        gemelos. Ese vecino ya no existe: "Verdad material" pasó a papel y el
+        fondo oscuro se mudó a "Cifras", que queda tres secciones más arriba y no
+        toca esta.
+
+        La decisión se sostiene igual, y ahora por dos motivos suyos: el asesor es
+        el último bloque antes del footer, así que en oscuro se pegaría a él sin
+        costura; y con "Cifras" ya ocupando la única banda oscura del cuerpo,
+        abrir otra aquí volvería a cerrar la portada en tres tintas. `bone` lo
+        separa del papel de encuentros sin ser ninguna de las dos cosas.
       */}
       <AsesorPasos
         eyebrow="Asesor virtual"

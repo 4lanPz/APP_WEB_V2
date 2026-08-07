@@ -2,6 +2,10 @@ import Link from "next/link";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import type { Foto } from "@/data/imagenes";
 import { cn } from "@/lib/cn";
+import {
+  CLASES_FOTO_DE_CARD,
+  CLASES_TEXTO_DE_CARD,
+} from "@/lib/motion-interaccion";
 
 export interface CategoryCardProps {
   href: string;
@@ -20,6 +24,19 @@ export interface CategoryCardProps {
    * quien usa lector de pantalla.
    */
   foto?: Foto;
+  /**
+   * Anchos servidos, para `next/image`. El valor por defecto describe la rejilla
+   * de `/productos`: contenedor normal, cuatro columnas desde 1024.
+   *
+   * ES UN PROP Y NO UNA CONSTANTE DEL COMPONENTE porque las dos rejillas que lo
+   * usan ya no son la misma. La portada pasó a contenedor amplio y a cuatro
+   * columnas desde 1280, así que entre 1024 y 1279 sus cards miden 428 px y no
+   * 219: con el `sizes` de aquí pediría la variante de 25vw —256 px— y la
+   * estiraría al doble. Escribir un `sizes` que cubriera las dos rejillas
+   * significaría servir a `/productos` el doble de foto de la que cabe en su
+   * card, que es la misma factura pero pagada por la otra página.
+   */
+  sizes?: string;
   className?: string;
 }
 
@@ -50,6 +67,7 @@ export function CategoryCard({
   title,
   description,
   foto,
+  sizes = "(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw",
   className,
 }: CategoryCardProps) {
   const indexLabel = String(index).padStart(2, "0");
@@ -66,7 +84,7 @@ export function CategoryCard({
         dark
         src={foto?.ruta}
         alt={foto?.alt ?? ""}
-        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+        sizes={sizes}
         label="Foto de familia"
         /*
          * `marcadorEnAlto` y sin `sublabel`, las dos por lo mismo: el tercio
@@ -76,7 +94,25 @@ export function CategoryCard({
          * que la card ya escribe como título: repetirlo no añadía nada.
          */
         marcadorEnAlto
-        className="absolute inset-0"
+        /*
+         * EL ACERCAMIENTO SE APLICA AQUÍ Y NO CON `zoomOnGroupHover`, que sería
+         * lo obvio. Ese prop escribe un 1,04 fijo dentro de `ImagePlaceholder`
+         * que comparten `SubcategoryTile` y el muestrario de blancos: subirlo
+         * para calibrar esta card movería esas dos pantallas de paso y por fuera
+         * del interruptor de la tanda. Escalando el contenedor —que es
+         * exactamente la caja de la capa de imagen: `absolute inset-0` sobre una
+         * card con `overflow-hidden`— el resultado en pantalla es el mismo y el
+         * valor queda donde se puede juzgar solo.
+         *
+         * El acercamiento tiene que verse razonable TAMBIÉN SOBRE EL MARCADOR de
+         * hueco, que es lo que hoy se ve en las cuatro familias: la trama es
+         * repetitiva y sin borde propio, así que al acercarse no se lee como "la
+         * imagen crece" sino como profundidad, que es justo lo que se busca. El
+         * rótulo "Foto de familia" va dentro y escala con ella; es provisional
+         * por definición —el día que llegue la foto desaparece— y no justifica
+         * sacarlo del zoom.
+         */
+        className={cn("absolute inset-0", CLASES_FOTO_DE_CARD)}
       />
       <span
         aria-hidden
@@ -94,7 +130,19 @@ export function CategoryCard({
       <span className="relative font-mono text-label text-brand">
         {indexLabel}
       </span>
-      <div className="relative">
+      {/*
+        El bloque de texto sube 10px con el mismo tiempo y la misma curva que el
+        acercamiento de la foto: es un gesto, no dos.
+
+        SUBE SOBRE EL VELO, NO FUERA DE ÉL. El velo degradado cubre la card
+        entera y es más denso justo abajo (0,78 de opacidad en el borde
+        inferior), y el texto arranca a 30px del fondo por el `p-7.5`. Diez
+        píxeles lo dejan dentro del tramo más oscuro del degradado, así que el
+        contraste no baja. Es el valor de esta tanda que primero se topa con
+        algo: por encima de ~20px el bloque empieza a asomar a la zona donde el
+        degradado ya está claro y el texto pierde fondo.
+      */}
+      <div className={cn("relative", CLASES_TEXTO_DE_CARD)}>
         {/* eslint-disable-next-line no-restricted-syntax -- título de card: escala propia del componente, no de la escala editorial (fase 3) */}
         <h3 className="mb-2 font-sans text-[28px] font-medium tracking-[-0.01em] text-paper">
           {title}
