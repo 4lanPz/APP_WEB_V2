@@ -1,5 +1,16 @@
 # Inventario de botones y CTA
 
+> **Nota posterior — `--color-brand` cambió de `#33a2dc` a `#55a4db`.** Este informe
+> es una foto fija de `6796460` y se deja tal cual: reescribirle las cifras
+> convertiría un registro en una suposición. Lo que se movió, medido con
+> `npm run marca`, que fotografía las doce rutas: el azul COMO TEXTO da sobre `paper`
+> 2,56 → **2,44**, sobre `bone` 2,37 → **2,25** y sobre `brand-deep` 5,28 → **5,56**.
+> La fila de `brand` como RELLENO no la mide ese barrido —hoy no hay ningún control
+> con el azul de fondo, y por eso la tabla es una hipótesis—; por luminancia, el azul
+> nuevo sube ahí a ~6,5:1 con `ink` encima. Ninguna combinación cruza su umbral por el
+> cambio: las que fallaban siguen fallando y las que pasaban siguen pasando. Los
+> recuentos de elementos siguen siendo válidos.
+
 Fase de diagnóstico. **No propone solución ni cambia código**: solo levanta el mapa de
 lo que hay hoy en `main` para poder decidir con datos.
 

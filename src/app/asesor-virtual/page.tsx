@@ -65,8 +65,10 @@ export default function AsesorVirtualPage() {
            * Titular entero en `text-paper`, sin el tramo en `text-brand` que
            * tenía antes. Medido sobre esta foto: el azul de marca daba 2,70:1
            * en el peor píxel bajo glifo y el mínimo para texto grande es 3:1.
-           * `#33a2dc` necesita un fondo de luminancia ≤ 0,072 (gris ~rgb(77))
-           * para llegar, y el cielo de esta fachada no baja de ahí. En paper el
+           * Con el `#55a4db` de hoy ese mismo píxel da 2,84:1 — sigue sin
+           * llegar. El azul necesita un fondo de luminancia ≤ 0,079
+           * (gris ~rgb(79)) para llegar, y el cielo de esta fachada no baja de
+           * ahí. En paper el
            * mismo peor píxel da 6,92:1. El azul de marca sigue en la página, en
            * el eyebrow de cada pregunta y en la regla de progreso.
            */}

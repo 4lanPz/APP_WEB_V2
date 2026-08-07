@@ -19,15 +19,24 @@
    * de usarlo como fondo, y así se cumplía sola sin vigilar nada. La norma vive
    * ahora donde vive el peso — el relleno—, en el bloque SUPERFICIE de abajo.
    * Aquí `brand` es identidad y señalización: logo, viñetas, numeración de
-   * paso, estado activo. Como texto sobre claro se queda en 2,56:1, así que
+   * paso, estado activo. Como texto sobre claro se queda en 2,44:1, así que
    * para escribir se usa `brand-ink`.
+   *
+   * FUE `#33a2dc` HASTA AGOSTO DE 2026. El azul nuevo es algo más claro
+   * (luminancia 0,336 frente a 0,317), y eso mueve el token en dos direcciones
+   * a la vez: sobre los fondos oscuros gana —el índice de "Textil Padilla en
+   * cifras" pasa de 5,28:1 a 5,56:1— y sobre los claros pierde —2,56 → 2,44
+   * sobre `paper`, 2,37 → 2,25 sobre `bone`—. Ninguna combinación cruza el
+   * umbral por el cambio; las que fallan sobre claro ya fallaban. Medido con
+   * `npm run marca`, que fotografía las doce rutas y compone el color sobre el
+   * píxel real de fondo.
    */
-  --color-brand: #33a2dc; /* logo, viñetas, estado activo — nunca relleno de CTA */
+  --color-brand: #55a4db; /* logo, viñetas, estado activo — nunca relleno de CTA */
   --color-brand-deep: #0d2937; /* contornos de logo, fondos oscuros de contraste puntual */
   /*
    * Azul de TEXTO sobre superficie clara. No es un tono decorativo: existe
    * porque ni `brand` ni `brand-deep` sirven para escribir sobre `paper`
-   * —el primero da 2,56:1 y el segundo pasa con 13,37:1 pero se lee como
+   * —el primero da 2,44:1 y el segundo pasa con 13,37:1 pero se lee como
    * negro, no como azul—. Sobre `paper` da 5,10:1 y sobre `bone` 4,75:1.
    *
    * SOLO como color de texto o de icono sobre fondo claro. Como relleno no

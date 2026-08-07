@@ -42,13 +42,24 @@ const ATRIBUCION = "© OpenStreetMap · © CARTO";
  */
 function icono(location: Location, activo: boolean): L.DivIcon {
   const lado = location.isMatriz ? 14 : 10;
-  const color = location.isMatriz ? "#33A2DC" : "#A0715A";
+  // El relleno va por token. El `html` del divIcon se inserta en el panel del
+  // mapa, que está dentro del documento, así que `var()` hereda de `:root` como
+  // en cualquier otro nodo. Antes era el literal `#33A2DC`, una de las cuatro
+  // copias a mano del azul de marca.
+  const color = location.isMatriz ? "var(--color-brand)" : "#A0715A";
   // El halo crece con la selección: es la única señal de "este es el abierto"
   // que sobrevive sin depender del color, que ya codifica matriz/local.
+  //
+  // EL HALO SÍ SIGUE EN NÚMEROS, y no por descuido: es el mismo azul con alpha,
+  // y la única forma de decir eso con el token es `color-mix(in oklab, …)`, que
+  // mezcla en otro espacio y no da el mismo píxel que un `rgba()` de siempre.
+  // Un halo translúcido no es un valor de marca que haya que centralizar; el
+  // relleno de al lado sí. Si el token vuelve a cambiar, estos tres números van
+  // detrás: son el RGB de `--color-brand`.
   const halo = activo
-    ? `0 0 0 6px ${location.isMatriz ? "rgba(51,162,220,0.32)" : "rgba(160,113,90,0.32)"}`
+    ? `0 0 0 6px ${location.isMatriz ? "rgba(85,164,219,0.32)" : "rgba(160,113,90,0.32)"}`
     : location.isMatriz
-      ? "0 0 0 5px rgba(51,162,220,0.18)"
+      ? "0 0 0 5px rgba(85,164,219,0.18)"
       : "none";
 
   return L.divIcon({
@@ -153,7 +164,11 @@ export function MapaLocales({ locations }: { locations: Location[] }) {
           <span className="flex size-3 shrink-0 items-center justify-center">
             <span
               className="block size-2 rounded-full bg-brand"
-              style={{ boxShadow: "0 0 0 4px rgba(51,162,220,0.18)" }}
+              /* Mismo azul con alpha que el halo del marcador del mapa, y por el
+                 mismo motivo va en números y no en el token: ver `icono()`. El
+                 punto de al lado sí es `bg-brand`, así que si estos tres números
+                 se quedan atrás el halo desentona con su propio punto. */
+              style={{ boxShadow: "0 0 0 4px rgba(85,164,219,0.18)" }}
             />
           </span>
           Matriz de producción

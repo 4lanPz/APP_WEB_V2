@@ -1,6 +1,8 @@
 # Auditoría de consistencia
 
-Medido sobre el commit `6c9192d`.
+Medido sobre el commit `e6ecca3`.
+
+> **Aviso —** el árbol tenía 4 archivo(s) sin commitear al medir. Este informe NO describe exactamente el commit `e6ecca3`.
 
 Generado por `npm run auditoria:consistencia`. **No editar a mano:** cada pasada lo reescribe entero.
 
@@ -156,7 +158,7 @@ Anchos de contenedor: **679 px**, **1240 px**, **1440 px**. Padding lateral: **1
 | ---: | --- |
 | 679 px | `/productos/microfibra/dortmund-plus/blancos` |
 | 1240 px | `/`, `/asesor-virtual`, `/contacto`, `/empresa`, `/politica-datos`, `/productos`, `/productos/camisetas`, `/productos/microfibra`, `/productos/microfibra/athletic (×19 rutas)`, `/productos/microfibra/chelsea (×9 rutas)`, `/productos/microfibra/dortmund-plus`, `/productos/microfibra/dortmund-plus/blancos`, `/productos/microfibra/dortmund-plus/claros (×4 rutas)`, `/productos/microfibra/imperial (×21 rutas)`, `/productos/texturizado (×3 rutas)` |
-| 1440 px | `/` |
+| 1440 px | `/`, `/empresa` |
 
 ---
 
@@ -318,7 +320,7 @@ Las clases arbitrarias de color y tamaño de fuente ya las bloquea eslint en bui
 | color literal en estilo en línea | `src/components/ui/Timeline.tsx:89` | `gsap.set(dot, { backgroundColor: "#F5F2EE", borderColor: "#C8C2B8" });` |
 | color literal en estilo en línea | `src/components/ui/Timeline.tsx:98` | `backgroundColor: "#A0715A",` |
 | color literal en estilo en línea | `src/components/ui/Timeline.tsx:99` | `borderColor: "#A0715A",` |
-| excepción aprobada al guardarraíl de tokens | `src/app/page.tsx:182` | `// eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala e` |
+| excepción aprobada al guardarraíl de tokens | `src/app/page.tsx:158` | `// eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala e` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/BotonWhatsApp.tsx:76` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena, no es color de paleta` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/BotonWhatsApp.tsx:79` | `// eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/buttonVariants.ts:103` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena` |

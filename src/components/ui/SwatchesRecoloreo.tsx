@@ -19,7 +19,10 @@ import {
  * swatch, elegido o no: es el borde del chip, no parte de la selección.
  */
 const BORDE_DEL_CHIP = "0 0 0 1px #C8C2B8";
-const ANILLO_SELECCION = "0 0 0 3px #F5F2EE, 0 0 0 5px #33A2DC";
+/* El aro va por token y no por literal: este archivo era una de las cuatro
+   copias a mano del azul de marca que se quedaron atrás la primera vez que el
+   token cambió de valor. `var()` en un `boxShadow` en línea resuelve igual. */
+const ANILLO_SELECCION = "0 0 0 3px #F5F2EE, 0 0 0 5px var(--color-brand)";
 
 export interface SwatchesRecoloreoProps {
   /** Índice dentro de `COLORES_RECOLOREO`. */

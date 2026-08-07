@@ -108,8 +108,17 @@ const SOLO = process.env.RUTAS ? process.env.RUTAS.split(",") : null;
  */
 const DETALLE = process.env.DETALLE === "1";
 
-/** Azul de marca, para la auditoría de rellenos. */
-const BRAND = [51, 162, 220];
+/*
+ * ESTA CONSTANTE ESTABA MUERTA Y LA AUDITORÍA DE RELLENOS SEGUÍA VIVA: el
+ * `recoger()` de más abajo llevaba el RGB escrito otra vez, a mano, y era ESE el
+ * que se usaba. Dos copias del mismo azul, una sin usar —eslint lo venía
+ * avisando— y la otra sin nadie mirándola. Cuando `--color-brand` pasó de
+ * `#33a2dc` a `#55a4db`, las dos se quedaron apuntando al azul viejo y el
+ * guardarraíl habría dejado pasar en silencio justo lo que vigila.
+ *
+ * Ahora el azul se lee del TEMA dentro de la página, como en
+ * `verificar-marca.mjs`, y aquí no queda ningún número que actualizar.
+ */
 
 const lin = (c) => {
   const v = c / 255;
@@ -253,15 +262,23 @@ function recoger() {
   }
 
   /* Auditoría aparte: ningún control puede tener el azul de marca de relleno,
-     ni texto claro encima de azul. */
+     ni texto claro encima de azul.
+
+     EL AZUL SE LEE DEL TEMA, no de un RGB escrito aquí. Estaba a mano —51, 162,
+     220— y se quedó en el azul viejo el día que el token cambió: un guardarraíl
+     que compara contra un color que ya no existe no avisa de nada y no se queja
+     de nada. Resolviendo la variable, el barrido sigue al token solo. */
+  const marca = resolver(
+    getComputedStyle(document.documentElement).getPropertyValue("--color-brand").trim(),
+  );
   const azules = [];
   for (const el of document.querySelectorAll("a, button, input[type=submit], [role=button]")) {
     const fondo = resolver(getComputedStyle(el).backgroundColor);
     if (fondo.alpha < 0.5) continue;
     const d =
-      Math.abs(fondo.base[0] - 51) +
-      Math.abs(fondo.base[1] - 162) +
-      Math.abs(fondo.base[2] - 220);
+      Math.abs(fondo.base[0] - marca.base[0]) +
+      Math.abs(fondo.base[1] - marca.base[1]) +
+      Math.abs(fondo.base[2] - marca.base[2]);
     if (d < 36) {
       azules.push({
         texto: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 48),
