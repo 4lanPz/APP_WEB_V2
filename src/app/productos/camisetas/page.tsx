@@ -121,6 +121,18 @@ export default function CamisetasPage() {
         headlineLines={[
           "La camiseta",
           "empieza en",
+          /*
+           * SE QUEDA EN `brand`, NO PASA A `brand-ink` COMO LOS RÓTULOS SOBRE
+           * claro. Aquí el fondo no es un plano: es la foto del hero con velo, y
+           * el contraste depende del recorte —a 1440 da 3,32:1 y aprueba; a 375
+           * el encuadre sube una zona clara detrás de la palabra y baja a
+           * 2,90:1, contra un mínimo de 3 (texto grande)—. Con 0,10 de margen
+           * el arreglo no es cambiar el azul sino el velo o el recorte a 375, y
+           * eso es una decisión de la foto, no del token. `brand-ink` sobre una
+           * foto oscura además se apagaría. Mismo caso en
+           * `/productos/microfibra` («rinde en cancha.»). Medido en
+           * `npm run marca`.
+           */
           <span key="accent" className="text-brand">
             el punto.
           </span>,

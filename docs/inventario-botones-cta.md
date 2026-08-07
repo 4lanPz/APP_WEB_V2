@@ -10,6 +10,15 @@
 > nuevo sube ahí a ~6,5:1 con `ink` encima. Ninguna combinación cruza su umbral por el
 > cambio: las que fallaban siguen fallando y las que pasaban siguen pasando. Los
 > recuentos de elementos siguen siendo válidos.
+>
+> **Segunda nota — el azul de texto sobre claro ya se está arreglando.** De la fila
+> «Estado activo en `text-brand` sobre `paper`» (12 elementos, §resumen) el
+> recomendador de `/productos` pasó a `text-brand-ink` —5,10:1, filete incluido— y
+> con él las tres rejillas de catálogo («Ficha disponible», 36 medidas) y los
+> eyebrow sobre `bone` del asesor de la portada y de «Ejemplo de aplicación»
+> (4,70:1). Sigue pendiente el **paso activo del stepper de la portada**
+> (fila «01 PRENDA»): ahí el azul claro también gobierna la barra de progreso, así
+> que no es un cambio de token sino una decisión del rediseño del stepper.
 
 Fase de diagnóstico. **No propone solución ni cambia código**: solo levanta el mapa de
 lo que hay hoy en `main` para poder decidir con datos.

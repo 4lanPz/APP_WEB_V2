@@ -34,6 +34,12 @@ export default async function CategoriaMicrofibraPage() {
         headlineLines={[
           "Microfibra.",
           "Ligera, seca antes,",
+          /*
+           * SE QUEDA EN `brand`. 3,38:1 a 1440 y 2,88:1 a 375, contra un mínimo
+           * de 3 por ser texto grande: el que falla es el recorte del hero, no
+           * el token. Explicado entero en `/productos/camisetas`, que tiene el
+           * mismo caso.
+           */
           <span key="accent" className="text-brand">
             rinde en cancha.
           </span>,

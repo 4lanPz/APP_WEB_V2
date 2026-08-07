@@ -61,10 +61,20 @@ export function GarmentRecommender() {
             type="button"
             onClick={() => setActive(o.key)}
             aria-pressed={active === o.key}
+            /*
+             * La pestaña activa iba en `brand`: 2,44:1 sobre `paper`, y es el
+             * único sitio de la página que dice qué prenda se está mirando.
+             * Pasa a `brand-ink` (5,10:1).
+             *
+             * El filete se va con ella. Es el indicador de estado —no-texto,
+             * mínimo 3:1— y en `brand` daba los mismos 2,44 que la palabra;
+             * en `brand-ink` sube a 5,10. Dejarlo en el azul claro habría
+             * partido la pestaña en dos tonos además de no cumplir.
+             */
             className={cn(
               "border-b-2 px-1 py-3 font-sans text-body-s font-medium",
               active === o.key
-                ? "border-brand text-brand"
+                ? "border-brand-ink text-brand-ink"
                 : "border-transparent text-graphite hover:text-ink",
             )}
           >

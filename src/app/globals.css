@@ -37,14 +37,24 @@
    * Azul de TEXTO sobre superficie clara. No es un tono decorativo: existe
    * porque ni `brand` ni `brand-deep` sirven para escribir sobre `paper`
    * —el primero da 2,44:1 y el segundo pasa con 13,37:1 pero se lee como
-   * negro, no como azul—. Sobre `paper` da 5,10:1 y sobre `bone` 4,75:1.
+   * negro, no como azul—. Sobre `paper` da 5,10:1 y sobre `bone` 4,70:1.
+   *
+   * OJO CON `bone`: 4,70 es un aprobado con 0,20 de margen sobre el 4,5 que
+   * pide el texto normal. Cualquier superficie clara MÁS clara que `bone`
+   * —un velo blanco encima, un `paper/60` sobre foto— se lo come. Aquí decía
+   * 4,75, que es el número de `graphite` sobre `bone`; corregido.
    *
    * SOLO como color de texto o de icono sobre fondo claro. Como relleno no
-   * aporta nada que no dé ya `brand-deep`. Ver `/styleguide` §F.
+   * aporta nada que no dé ya `brand-deep` —salvo el filete de 2px de la
+   * pestaña activa del recomendador, que acompaña a su propia palabra—. Ver
+   * `/styleguide` §F.
    *
-   * Hoy no lo usa ninguna página: entra para que los quince
-   * `hover:text-brand` sobre claro tengan a dónde ir cuando se aplique el
-   * sistema de botones nuevo.
+   * DÓNDE SE USA (agosto de 2026): «Ficha disponible» de `SubcategoryTile`
+   * —las tres rejillas de catálogo—, la pestaña activa de
+   * `GarmentRecommender`, y los eyebrow sobre `bone` de `AsesorPasos` y
+   * `BloqueAplicacion`. Son los 42 suspensos de `text-brand` sobre claro que
+   * reportaba `npm run marca`. Los `hover:text-brand` del sistema de botones
+   * nuevo, que es para lo que entró el token, siguen pendientes.
    */
   --color-brand-ink: #1a6d99;
 

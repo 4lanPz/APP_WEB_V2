@@ -603,8 +603,8 @@ export function PropuestaBotones() {
 
       {/* ─────────────────────────────────────────────────────────────── */}
       <Titulo
-        n="F · Token nuevo, aprobado"
-        nota="Ya está en globals.css. No lo usa ninguna página todavía: entra para que los quince hover:text-brand sobre claro tengan a dónde ir cuando se aplique el sistema."
+        n="F · Token nuevo, en uso"
+        nota="Ya está en globals.css y ya se usa: la tile de catálogo («Ficha disponible»), la pestaña activa del recomendador y los eyebrow sobre bone del asesor y de «Ejemplo de aplicación». Entró para que los hover:text-brand sobre claro tuvieran a dónde ir cuando se aplique el sistema; se estrenó arreglando los 42 suspensos de text-brand sobre fondo claro que reportaba npm run marca."
       >
         <code className="font-mono">--color-brand-ink: #1a6d99</code>
       </Titulo>

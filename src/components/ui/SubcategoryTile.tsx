@@ -23,11 +23,26 @@ export interface SubcategoryTileProps {
   className?: string;
 }
 
+/*
+ * LOS TRES TONOS SON TEXTO DE 12px SOBRE `paper`: los tres necesitan 4,5:1, sin
+ * excepción de texto grande que valga.
+ *
+ * `publicada` iba en `brand` y daba 2,44:1 — el suspenso más repetido del
+ * sitio, porque esta tile se dibuja en las tres rejillas de catálogo. Pasa a
+ * `brand-ink` (5,10:1 sobre `paper`), que es el token que existe justamente
+ * para escribir el azul sobre claro. Sigue leyéndose como marca: queda al mismo
+ * peso visual que la tile `preliminar` de al lado, que es la relación correcta
+ * entre tres estados hermanos. Medido con `npm run marca`.
+ *
+ * `graphite` cumple (5,15:1). `accent` NO: da 3,76:1 sobre `paper` y es el
+ * mismo problema en terracota, pero no lo ve `npm run marca` —ese barrido solo
+ * sigue los azules— ni entra en esta tanda. Queda anotado aquí.
+ */
 const ETIQUETA: Record<EstadoFicha, { estado: string; accion: string; tono: string }> = {
   publicada: {
     estado: "Ficha disponible",
     accion: "Ver ficha →",
-    tono: "text-brand",
+    tono: "text-brand-ink",
   },
   preliminar: {
     estado: "Ficha preliminar",

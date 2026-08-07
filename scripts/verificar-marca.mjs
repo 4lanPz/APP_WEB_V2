@@ -1,5 +1,5 @@
 /**
- * CONTRASTE DE TODO EL TEXTO ESCRITO EN EL AZUL DE MARCA, SOBRE EL FONDO REAL.
+ * CONTRASTE DE TODO EL TEXTO ESCRITO EN LOS AZULES DE MARCA, SOBRE EL FONDO REAL.
  *
  *   npm run marca               (necesita el sitio servido; lo levanta él solo)
  *   BASE_JSON=antes.json npm run marca > /dev/null   (guarda una medición)
@@ -11,11 +11,17 @@
  * ve. Cuando se toca `--color-brand` hay que mirar los dos.
  *
  * QUÉ SE MIDE
- * Todo nodo de texto cuyo color RESUELTO se parezca al valor actual de
- * `--color-brand`. No se busca la clase `text-brand` ni ninguna otra cadena: se
- * pregunta por el color con el que el navegador va a pintar, así que entran
- * también los literales en estilo en línea y las reglas heredadas, y no se
- * cuela un `text-brand-ink` por parecerse el nombre.
+ * Todo nodo de texto cuyo color RESUELTO se parezca a `--color-brand` O a
+ * `--color-brand-ink`. No se busca la clase `text-brand` ni ninguna otra
+ * cadena: se pregunta por el color con el que el navegador va a pintar, así que
+ * entran también los literales en estilo en línea y las reglas heredadas.
+ *
+ * LOS DOS AZULES, NO SOLO UNO. Al principio esto seguía `brand` a secas y
+ * `brand-ink` estaba explícitamente excluido —no lo usaba nadie—. En cuanto un
+ * rótulo pasa de uno a otro para arreglar su contraste, seguir solo `brand`
+ * hace que el suspenso DESAPAREZCA de la lista en vez de aprobar: el número
+ * baja y no se ha medido nada. Con los dos dentro, el mismo texto conserva su
+ * `id` entre pasadas y `COMPARAR` lo enseña como recuperado.
  *
  * EL COLOR NO SE PARSEA, SE PINTA (igual que en el harness de botones)
  * Tailwind v4 devuelve `oklch(...)`, y las opacidades son
@@ -131,24 +137,31 @@ function recoger() {
   };
 
   /*
-   * EL AZUL DE REFERENCIA SALE DEL TEMA, NO DE UNA CONSTANTE ESCRITA AQUÍ.
-   * Así el barrido sigue valiendo el día que el token cambie de valor —que es
+   * LOS AZULES DE REFERENCIA SALEN DEL TEMA, NO DE CONSTANTES ESCRITAS AQUÍ.
+   * Así el barrido sigue valiendo el día que un token cambie de valor —que es
    * justo el día en que se corre este script— sin tener que acordarse de
    * actualizar el verificador a la vez que la paleta.
    */
-  const marca = resolver(
-    getComputedStyle(document.documentElement).getPropertyValue("--color-brand").trim(),
-  );
+  const raiz = getComputedStyle(document.documentElement);
+  const paleta = ["--color-brand", "--color-brand-ink"].map((nombre) => ({
+    nombre,
+    color: resolver(raiz.getPropertyValue(nombre).trim()),
+  }));
 
   /* Distancia en RGB. 24 sumando los tres canales es holgado para absorber el
-     redondeo del canvas y estrecho para no tragarse `brand-ink` (#1a6d99), que
-     está a 180 de aquí. */
-  const esMarca = (c) =>
-    c.alpha > 0.05 &&
-    Math.abs(c.base[0] / c.alpha - marca.base[0]) +
-      Math.abs(c.base[1] / c.alpha - marca.base[1]) +
-      Math.abs(c.base[2] / c.alpha - marca.base[2]) <
-      24;
+     redondeo del canvas y estrecho para no confundir los dos azules entre sí:
+     están a 180 uno del otro. */
+  const cualToken = (c) => {
+    if (c.alpha <= 0.05) return null;
+    for (const t of paleta) {
+      const d =
+        Math.abs(c.base[0] / c.alpha - t.color.base[0]) +
+        Math.abs(c.base[1] / c.alpha - t.color.base[1]) +
+        Math.abs(c.base[2] / c.alpha - t.color.base[2]);
+      if (d < 24) return t.nombre;
+    }
+    return null;
+  };
 
   const fijos = [];
   for (const el of document.querySelectorAll("body *")) {
@@ -175,7 +188,8 @@ function recoger() {
       if (cs.visibility === "hidden" || cs.display === "none") continue;
       if (parseFloat(cs.opacity) < 0.05) continue;
       const color = resolver(cs.color);
-      if (!esMarca(color)) continue;
+      const token = cualToken(color);
+      if (!token) continue;
 
       const rango = document.createRange();
       rango.selectNodeContents(n);
@@ -183,6 +197,7 @@ function recoger() {
         if (r.width < 2 || r.height < 2) continue;
         vistos.push({
           texto: texto.slice(0, 40),
+          token,
           clase: (el.getAttribute("class") || "").slice(0, 100),
           x: r.left,
           y: r.top,
@@ -222,7 +237,7 @@ function recoger() {
 
   return {
     vistos,
-    marca,
+    paleta,
     /* Si el tema no está aplicado, todo lo demás que se mida es basura. */
     salud: getComputedStyle(document.documentElement).getPropertyValue("--color-paper").trim(),
   };
@@ -329,7 +344,7 @@ async function main() {
   const navegador = await chromium.launch();
   const medidas = [];
   const sinMedir = [];
-  let azul = null;
+  let azules = null;
 
   try {
     for (let i = 0; i < 40; i++) {
@@ -362,12 +377,12 @@ async function main() {
              animación y la captura sale ya movida. */
           await page.waitForTimeout(950);
 
-          const { vistos, marca, salud } = await page.evaluate(recoger);
+          const { vistos, paleta, salud } = await page.evaluate(recoger);
           if (salud !== "#f5f2ee") {
             console.log(`  ! ${ruta} @${ancho} y=${y}: tema sin aplicar. Tramo descartado.`);
             continue;
           }
-          if (!azul) azul = marca;
+          if (!azules) azules = paleta;
           for (const v of vistos) claves.add(v.clave);
 
           const aqui = vistos.filter((v) => v.dentro && !v.pisado && !vistas.has(v.clave));
@@ -421,6 +436,7 @@ async function main() {
               ruta,
               ancho,
               texto: info.texto,
+              token: info.token,
               clase: info.clase,
               fs: info.fs,
               fw: info.fw,
@@ -446,12 +462,25 @@ async function main() {
     matarPuerto(PUERTO);
   }
 
-  const hex = azul
-    ? "#" + azul.base.map((c) => Math.round(c).toString(16).padStart(2, "0")).join("")
-    : "?";
+  const aHex = (c) =>
+    "#" + c.base.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+  const hexes = azules
+    ? Object.fromEntries(azules.map((t) => [t.nombre, aHex(t.color)]))
+    : {};
+  /* Se conserva el nombre `hex` en el JSON: es lo que imprime `COMPARAR` para
+     decir contra qué paleta se está comparando. */
+  const hex = azules ? azules.map((t) => aHex(t.color)).join(" + ") : "?";
+
+  const porToken = (lista, nombre) => lista.filter((m) => m.token === nombre).length;
 
   console.log(`\n${"═".repeat(78)}`);
-  console.log(`MEDIDOS ${medidas.length} textos en azul de marca (${hex}) · ${(SOLO ?? RUTAS).length} rutas × ${ANCHOS.join(" y ")}`);
+  console.log(
+    `MEDIDOS ${medidas.length} textos en los azules de marca · ` +
+      `${(SOLO ?? RUTAS).length} rutas × ${ANCHOS.join(" y ")}`,
+  );
+  for (const t of azules ?? []) {
+    console.log(`  ${t.nombre} ${hexes[t.nombre]} · ${porToken(medidas, t.nombre)} textos`);
+  }
   console.log("═".repeat(78));
 
   if (BASE_JSON) {
@@ -469,9 +498,11 @@ async function main() {
     console.log(`\n✗ ${fallos.length} por debajo del mínimo:\n`);
     for (const x of fallos) {
       const a = antes?.get(x.id);
-      const delta = a ? `  (antes ${f(a.valor)}:1 con ${previo.hex})` : "";
+      const delta = a ? `  (antes ${f(a.valor)}:1, ${a.token ?? "?"})` : "";
       console.log(`  ${x.ruta} @${x.ancho}  «${x.texto}»`);
-      console.log(`     ${f(x.valor)}:1  / ${f(x.umbral)}   ${x.fs}px/${x.fw}${delta}`);
+      console.log(
+        `     ${f(x.valor)}:1  / ${f(x.umbral)}   ${x.fs}px/${x.fw}  ${x.token}${delta}`,
+      );
       console.log(`     ${x.clase}`);
     }
   }
@@ -488,7 +519,27 @@ async function main() {
     });
     console.log(`Comparado con ${previo.hex}: ${nuevos.length} suspensos NUEVOS · ${arreglados.length} recuperados`);
     for (const n of nuevos) console.log(`  ✗ NUEVO  ${n.ruta}@${n.ancho} «${n.texto}» ${f(n.valor)}:1`);
-    for (const a of arreglados) console.log(`  ✓ pasa   ${a.ruta}@${a.ancho} «${a.texto}» ${f(a.valor)}:1 → ok`);
+    for (const a of arreglados) {
+      const h = medidas.find((m) => m.id === a.id);
+      const salto = a.token && h.token !== a.token ? `  ${a.token} → ${h.token}` : "";
+      console.log(
+        `  ✓ pasa   ${a.ruta}@${a.ancho} «${a.texto}» ${f(a.valor)}:1 → ${f(h.valor)}:1${salto}`,
+      );
+    }
+
+    /* Un texto que estaba en la base y hoy no aparece NO es un arreglo: es algo
+       que se salió del barrido —cambió a un color que no es ninguno de los dos
+       azules, o desapareció de la página—. Se dice, porque si no el total baja
+       solo y parece una mejora. */
+    const idsHoy = new Set(medidas.map((m) => m.id));
+    const ausentes = previo.medidas.filter((a) => !idsHoy.has(a.id));
+    if (ausentes.length) {
+      console.log(`  · ${ausentes.length} de la base ya no se miden (fuera de los dos azules o fuera de la página):`);
+      for (const a of ausentes.slice(0, 12)) {
+        console.log(`      ${a.ruta}@${a.ancho} «${a.texto}» daba ${f(a.valor)}:1`);
+      }
+      if (ausentes.length > 12) console.log(`      … y ${ausentes.length - 12} más`);
+    }
 
     /* El peor y el mejor de cada lado, para ver hacia dónde se movió todo. */
     const emparejados = medidas

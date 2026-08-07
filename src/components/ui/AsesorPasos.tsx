@@ -96,8 +96,13 @@ export function AsesorPasos({
       <Container>
         <div className="grid grid-cols-1 items-stretch gap-8 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col gap-5">
+            {/*
+              `brand-ink` y no `brand`: este bloque va sobre `bone` a propósito
+              (ver arriba), y ahí el azul de marca se queda en 2,25:1 a 12px.
+              `brand-ink` da 4,70:1 sobre el mismo fondo.
+            */}
             <Reveal tipo="etiqueta">
-              <span className="font-mono text-label uppercase text-brand">
+              <span className="font-mono text-label uppercase text-brand-ink">
                 {eyebrow}
               </span>
             </Reveal>
@@ -125,6 +130,21 @@ export function AsesorPasos({
                         →
                       </span>
                     )}
+                    {/*
+                      PENDIENTE, NO OLVIDADO: el paso activo sigue en `brand`
+                      —2,25:1 sobre `bone`— y la barra de abajo también. Es el
+                      mismo suspenso que se acaba de arreglar en el eyebrow,
+                      pero aquí no es un cambio de token y ya: el azul claro es
+                      lo que hace legible el AVANCE de la barra, y bajarlo a
+                      `brand-ink` cambia el gesto del bloque entero. Se decide
+                      con el rediseño del stepper.
+
+                      No aparece en la lista de `npm run marca` porque el ciclo
+                      avanza solo cada 4 s con transición de color y el barrido
+                      descarta lo que se mueve entre la lectura y la captura.
+                      El 2,25 es el mismo cálculo que el resto de `text-brand`
+                      sobre `bone`, no una medida del barrido.
+                    */}
                     <button
                       type="button"
                       onClick={() => seleccionar(i)}

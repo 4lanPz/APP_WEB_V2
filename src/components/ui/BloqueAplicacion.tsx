@@ -25,7 +25,8 @@ export interface BloqueAplicacionProps {
  * que sustituir la foto por el objeto 3D es cambiar lo que la página le pasa,
  * sin tocar este componente ni la página más allá de esa línea.
  *
- * Acentos solo en el azul de marca (`brand`), nunca en otro color.
+ * Acentos solo en el azul de marca, nunca en otro color. Aquí es `brand-ink`
+ * porque el fondo es claro; ver el comentario del eyebrow.
  */
 export function BloqueAplicacion({
   eyebrow = "Ejemplo de aplicación",
@@ -38,9 +39,15 @@ export function BloqueAplicacion({
     <section className={cn("bg-bone", className)}>
       <div className="mx-auto grid max-w-padilla grid-cols-1 items-center gap-8 px-[clamp(24px,7vw,120px)] py-16 sm:py-20 lg:grid-cols-2 lg:gap-16">
         <div className="order-2 flex flex-col gap-5 lg:order-1">
+          {/*
+            EL EYEBROW VA EN `brand-ink`, NO EN `brand`. Este bloque tiene fondo
+            `bone`, donde `brand` da 2,25:1 a 12px; `brand-ink` da 4,70:1. La
+            viñeta cambia con él: es la misma marca tipográfica partida en dos
+            piezas y dejarla en el azul claro las habría separado en dos tonos.
+          */}
           <Reveal tipo="etiqueta">
-            <span className="inline-flex items-center gap-2 font-mono text-label uppercase text-brand">
-              <span aria-hidden className="block size-1.5 bg-brand" />
+            <span className="inline-flex items-center gap-2 font-mono text-label uppercase text-brand-ink">
+              <span aria-hidden className="block size-1.5 bg-brand-ink" />
               {eyebrow}
             </span>
           </Reveal>
