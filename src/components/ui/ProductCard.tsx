@@ -49,10 +49,24 @@ export function ProductCard({
     <Link
       href={href}
       className={cn(
-        "group flex flex-col border border-transparent bg-paper text-ink transition-colors duration-500 ease-revelar hover:border-graphite",
+        "group relative flex flex-col border border-transparent bg-paper text-ink",
         className,
       )}
     >
+      {/*
+        Filete de hover como capa con opacidad, no como `border-color` que
+        transiciona — misma corrección y mismo motivo que en `SubcategoryTile`,
+        donde está la explicación larga y las cifras (`docs/rendimiento-cards.md`).
+
+        Esta card solo se ve hoy en `/styleguide`, así que su coste no salía en
+        la medición. Se cambia igual y a propósito: el styleguide es el sitio del
+        que se copia, y una copia con el defecto dentro es cómo volvería a
+        entrar en una página real.
+      */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -inset-px border border-graphite opacity-0 transition-opacity duration-500 ease-revelar group-hover:opacity-100"
+      />
       <div className="relative h-[clamp(150px,18vh,190px)] w-full overflow-hidden bg-bone">
         <Image
           src={imageSrc}

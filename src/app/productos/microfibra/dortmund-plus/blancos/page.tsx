@@ -147,8 +147,18 @@ export default async function ProductoDortmundPlusBlancosPage() {
                 <Link
                   href="/productos/microfibra"
                   title="Página en preparación"
-                  className="group flex h-full flex-col border border-transparent bg-paper text-ink transition-colors duration-500 ease-revelar hover:border-graphite"
+                  className="group relative flex h-full flex-col border border-transparent bg-paper text-ink"
                 >
+                  {/*
+                    Filete de hover como capa con opacidad — misma corrección y
+                    mismo motivo que en `SubcategoryTile`, que es de donde salió
+                    esta tile copiada a mano. La explicación larga y las cifras,
+                    en `docs/rendimiento-cards.md`.
+                  */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-px border border-graphite opacity-0 transition-opacity duration-500 ease-revelar group-hover:opacity-100"
+                  />
                   <ImagePlaceholder
                     label="Microfibra · foto pendiente"
                     zoomOnGroupHover
