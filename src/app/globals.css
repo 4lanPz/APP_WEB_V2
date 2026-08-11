@@ -59,7 +59,28 @@
   --color-brand-ink: #1a6d99;
 
   /* ---- Color · acento cálido Terracota (puntuación, nunca >5% de una superficie) ---- */
-  --color-accent: #a0715a; /* numeración de sección, filetes editoriales, énfasis puntual */
+  /*
+   * FUE `#a0715a` HASTA AGOSTO DE 2026, y no llegaba: 3,76:1 sobre `paper` y
+   * 3,47:1 sobre `bone`, con un mínimo de 4,5 para el texto normal. Y este token
+   * es CASI SIEMPRE texto —la numeración de sección, los eyebrow mono, el
+   * «Ficha preliminar» de las tres rejillas de catálogo, el rótulo de los huecos
+   * de imagen—, así que el suspenso no era de un caso raro sino del uso normal.
+   *
+   * `#8a5d46` da 5,04:1 sobre `paper`, 4,65:1 sobre `bone` y 4,24:1 sobre la
+   * raya del marcador de hueco (`#e4dfd8`), que es el fondo más claro sobre el
+   * que este color escribe. El tono no se mueve —H 19,7° → 20,3°—: baja de
+   * luminosidad y sube algo de saturación, que es lo que impide que al
+   * oscurecerlo se vuelva marrón de tierra en vez de terracota.
+   *
+   * Como NO textual (el punto del hito, el punto del mapa, el filete del
+   * `DraftNotice`) el cambio solo suma: pedían 3:1 y ya pasaban.
+   *
+   * POR QUÉ NO SE HABÍA VISTO. `npm run marca` seguía únicamente los dos azules
+   * y este token le era invisible; el suspenso estaba anotado a mano en un
+   * comentario de `SubcategoryTile.tsx` y ahí se quedó. El barrido ya sigue
+   * también el acento, así que el próximo se reporta solo.
+   */
+  --color-accent: #8a5d46; /* numeración de sección, filetes editoriales, énfasis puntual */
 
   /* ---- Tipografía · tres voces, un solo autor ---- */
   --font-sans: var(--font-archivo), -apple-system, "Segoe UI", sans-serif; /* grotesca neutra — títulos, navegación, botones */
@@ -359,6 +380,34 @@
   .transition-asentar {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 220ms;
+  }
+
+  /*
+   * CARRIL SIN BARRA DE SCROLL VISIBLE — hoy solo la línea de hitos.
+   *
+   * La barra del navegador se pinta debajo del carril, cruzada bajo las nueve
+   * tarjetas, y no es el mando de esta pieza: la línea de tiempo se recorre con
+   * las flechas, con la rueda, con el dedo o con el teclado. Una barra de
+   * sistema atravesando una línea de tiempo horizontal compite además con la
+   * propia línea, que es el elemento que la sección dibuja.
+   *
+   * NO QUITA NINGUNA FORMA DE RECORRER EL CARRIL, y esa es la condición para que
+   * esto sea aceptable. `overflow-x: auto` sigue puesto: el contenedor sigue
+   * teniendo scroll propio, el `tabIndex={0}` del carril lo hace enfocable y las
+   * flechas del teclado lo mueven, el lector de pantalla lo anuncia por su
+   * `role`/`aria-label`, y quien no use ninguna de las tres tiene los dos
+   * botones. Lo único que desaparece es el dibujo de la barra.
+   *
+   * Las dos declaraciones son la misma cosa en dos motores: `scrollbar-width`
+   * es la propiedad estándar (Firefox y Chromium moderno) y el pseudo-elemento
+   * `::-webkit-scrollbar` cubre WebKit, que no la implementa.
+   */
+  .sin-barra-de-scroll {
+    scrollbar-width: none;
+  }
+
+  .sin-barra-de-scroll::-webkit-scrollbar {
+    display: none;
   }
 
   /*

@@ -261,7 +261,7 @@ No se pide: ya está resuelta.
 - **Se ve a:** columna lateral de 240 px de ancho (`Timeline`)
 - **Proporción:** 4:3 apaisada
 - **Ancho mínimo de entrega:** 900 px
-- **Qué debe verse:** Textil Padilla, 2003 · Local de La Marín.
+- **Qué debe verse:** Textil Padilla, 2003 · Apertura de local · La Marín.
 - **Nota:** Opcional: la línea de hitos funciona sin fotos. Formato 4:3.
 
 #### **FALTA** `hito-loc-03.jpg`
@@ -269,7 +269,7 @@ No se pide: ya está resuelta.
 - **Se ve a:** columna lateral de 240 px de ancho (`Timeline`)
 - **Proporción:** 4:3 apaisada
 - **Ancho mínimo de entrega:** 900 px
-- **Qué debe verse:** Textil Padilla, 2008 · Local de Solanda.
+- **Qué debe verse:** Textil Padilla, 2008 · Apertura de local · Solanda.
 - **Nota:** Opcional: la línea de hitos funciona sin fotos. Formato 4:3.
 
 #### **FALTA** `hito-loc-04.jpg`
@@ -277,32 +277,40 @@ No se pide: ya está resuelta.
 - **Se ve a:** columna lateral de 240 px de ancho (`Timeline`)
 - **Proporción:** 4:3 apaisada
 - **Ancho mínimo de entrega:** 900 px
-- **Qué debe verse:** Textil Padilla, Apertura de local.
+- **Qué debe verse:** Textil Padilla, 2013 · Apertura de local · Sangolquí.
 - **Nota:** Opcional: la línea de hitos funciona sin fotos. Formato 4:3.
+
+> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** El año 2013 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
 
 #### **FALTA** `hito-loc-05.jpg`
 
 - **Se ve a:** columna lateral de 240 px de ancho (`Timeline`)
 - **Proporción:** 4:3 apaisada
 - **Ancho mínimo de entrega:** 900 px
-- **Qué debe verse:** Textil Padilla, Apertura de local.
+- **Qué debe verse:** Textil Padilla, 2017 · Apertura de local · Guayaquil.
 - **Nota:** Opcional: la línea de hitos funciona sin fotos. Formato 4:3.
+
+> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** El año 2017 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
 
 #### **FALTA** `hito-qlt-01.jpg`
 
 - **Se ve a:** columna lateral de 240 px de ancho (`Timeline`)
 - **Proporción:** 4:3 apaisada
 - **Ancho mínimo de entrega:** 900 px
-- **Qué debe verse:** Textil Padilla, Control de calidad.
+- **Qué debe verse:** Textil Padilla, 2021 · Protocolo de control por rollo.
 - **Nota:** Opcional: la línea de hitos funciona sin fotos. Formato 4:3.
+
+> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** El año 2021 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
 
 #### **FALTA** `hito-prd-02.jpg`
 
 - **Se ve a:** columna lateral de 240 px de ancho (`Timeline`)
 - **Proporción:** 4:3 apaisada
 - **Ancho mínimo de entrega:** 900 px
-- **Qué debe verse:** Textil Padilla, Ampliación de producción.
+- **Qué debe verse:** Textil Padilla, 2024 · Línea técnica PerformKnit.
 - **Nota:** Opcional: la línea de hitos funciona sin fotos. Formato 4:3.
+
+> **⚠ POR CONFIRMAR ANTES DE DISPARAR.** El año 2024 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
 
 ---
 

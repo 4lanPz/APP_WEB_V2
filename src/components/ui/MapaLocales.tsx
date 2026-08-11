@@ -78,9 +78,10 @@ function icono(location: Location, activo: boolean): L.DivIcon {
   const lado = location.isMatriz ? 14 : 10;
   // El relleno va por token. El `html` del divIcon se inserta en el panel del
   // mapa, que está dentro del documento, así que `var()` hereda de `:root` como
-  // en cualquier otro nodo. Antes era el literal `#33A2DC`, una de las cuatro
-  // copias a mano del azul de marca.
-  const color = location.isMatriz ? "var(--color-brand)" : "#A0715A";
+  // en cualquier otro nodo. Antes eran los literales `#33A2DC` y `#A0715A`, dos
+  // copias a mano de la paleta — y la del terracota se quedó atrás cuando el
+  // token cambió de valor, que es exactamente lo que esto evita.
+  const color = location.isMatriz ? "var(--color-brand)" : "var(--color-accent)";
   // El halo crece con la selección: es la única señal de "este es el abierto"
   // que sobrevive sin depender del color, que ya codifica matriz/local.
   //

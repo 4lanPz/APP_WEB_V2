@@ -1,5 +1,5 @@
 /**
- * CONTRASTE DE TODO EL TEXTO ESCRITO EN LOS AZULES DE MARCA, SOBRE EL FONDO REAL.
+ * CONTRASTE DE TODO EL TEXTO ESCRITO EN LOS COLORES DE MARCA, SOBRE EL FONDO REAL.
  *
  *   npm run marca               (necesita el sitio servido; lo levanta él solo)
  *   BASE_JSON=antes.json npm run marca > /dev/null   (guarda una medición)
@@ -8,13 +8,14 @@
  * Hermano de `verificar-botones.mjs`, que mide CONTROLES. Este mide TEXTO, que
  * es un universo distinto: el índice de una cabecera, el rótulo de un hueco de
  * imagen o el número de paso del asesor no son botones y aquel barrido no los
- * ve. Cuando se toca `--color-brand` hay que mirar los dos.
+ * ve. Cuando se toca un color de marca hay que mirar los dos.
  *
  * QUÉ SE MIDE
- * Todo nodo de texto cuyo color RESUELTO se parezca a `--color-brand` O a
- * `--color-brand-ink`. No se busca la clase `text-brand` ni ninguna otra
- * cadena: se pregunta por el color con el que el navegador va a pintar, así que
- * entran también los literales en estilo en línea y las reglas heredadas.
+ * Todo nodo de texto cuyo color RESUELTO se parezca a `--color-brand`, a
+ * `--color-brand-ink` o a `--color-accent`. No se busca la clase `text-brand`
+ * ni ninguna otra cadena: se pregunta por el color con el que el navegador va a
+ * pintar, así que entran también los literales en estilo en línea y las reglas
+ * heredadas.
  *
  * LOS DOS AZULES, NO SOLO UNO. Al principio esto seguía `brand` a secas y
  * `brand-ink` estaba explícitamente excluido —no lo usaba nadie—. En cuanto un
@@ -22,6 +23,16 @@
  * hace que el suspenso DESAPAREZCA de la lista en vez de aprobar: el número
  * baja y no se ha medido nada. Con los dos dentro, el mismo texto conserva su
  * `id` entre pasadas y `COMPARAR` lo enseña como recuperado.
+ *
+ * Y EL TERRACOTA, QUE FALTABA. `--color-accent` se quedó fuera de este barrido
+ * mientras la tanda que lo escribió iba de azules, y el precio se vio: daba
+ * 3,76:1 sobre `paper` en «Ficha preliminar», en la numeración de sección y en
+ * el rótulo de todos los huecos de imagen —suspenso de 4,5 en el uso normal del
+ * token, no en un caso raro—, y el único registro de ello era un comentario a
+ * mano en `SubcategoryTile.tsx`. Un verificador que solo mira dos de los tres
+ * colores de la paleta no dice «los colores de marca cumplen»: dice «los dos
+ * que miro cumplen», y lo primero es lo que se acaba entendiendo. Lo que este
+ * archivo mide es LA PALETA, así que la paleta entra entera.
  *
  * EL COLOR NO SE PARSEA, SE PINTA (igual que en el harness de botones)
  * Tailwind v4 devuelve `oklch(...)`, y las opacidades son
@@ -137,20 +148,22 @@ function recoger() {
   };
 
   /*
-   * LOS AZULES DE REFERENCIA SALEN DEL TEMA, NO DE CONSTANTES ESCRITAS AQUÍ.
+   * LOS COLORES DE REFERENCIA SALEN DEL TEMA, NO DE CONSTANTES ESCRITAS AQUÍ.
    * Así el barrido sigue valiendo el día que un token cambie de valor —que es
    * justo el día en que se corre este script— sin tener que acordarse de
    * actualizar el verificador a la vez que la paleta.
    */
   const raiz = getComputedStyle(document.documentElement);
-  const paleta = ["--color-brand", "--color-brand-ink"].map((nombre) => ({
-    nombre,
-    color: resolver(raiz.getPropertyValue(nombre).trim()),
-  }));
+  const paleta = ["--color-brand", "--color-brand-ink", "--color-accent"].map(
+    (nombre) => ({
+      nombre,
+      color: resolver(raiz.getPropertyValue(nombre).trim()),
+    }),
+  );
 
   /* Distancia en RGB. 24 sumando los tres canales es holgado para absorber el
-     redondeo del canvas y estrecho para no confundir los dos azules entre sí:
-     están a 180 uno del otro. */
+     redondeo del canvas y estrecho para no confundir los tres tokens entre sí:
+     el par más cercano es `brand-ink` y `accent`, a 211 uno del otro. */
   const cualToken = (c) => {
     if (c.alpha <= 0.05) return null;
     for (const t of paleta) {
@@ -344,7 +357,7 @@ async function main() {
   const navegador = await chromium.launch();
   const medidas = [];
   const sinMedir = [];
-  let azules = null;
+  let paletaVista = null;
 
   try {
     for (let i = 0; i < 40; i++) {
@@ -382,7 +395,7 @@ async function main() {
             console.log(`  ! ${ruta} @${ancho} y=${y}: tema sin aplicar. Tramo descartado.`);
             continue;
           }
-          if (!azules) azules = paleta;
+          if (!paletaVista) paletaVista = paleta;
           for (const v of vistos) claves.add(v.clave);
 
           const aqui = vistos.filter((v) => v.dentro && !v.pisado && !vistas.has(v.clave));
@@ -448,7 +461,7 @@ async function main() {
         }
         const perdidos = claves.size - vistas.size;
         process.stdout.write(
-          `  ${ruta} @${ancho} · ${vistas.size}/${claves.size} textos en azul de marca` +
+          `  ${ruta} @${ancho} · ${vistas.size}/${claves.size} textos en color de marca` +
             (perdidos ? ` (${perdidos} sin medir: no caben enteros en el viewport)` : "") +
             "\n",
         );
@@ -464,21 +477,21 @@ async function main() {
 
   const aHex = (c) =>
     "#" + c.base.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
-  const hexes = azules
-    ? Object.fromEntries(azules.map((t) => [t.nombre, aHex(t.color)]))
+  const hexes = paletaVista
+    ? Object.fromEntries(paletaVista.map((t) => [t.nombre, aHex(t.color)]))
     : {};
   /* Se conserva el nombre `hex` en el JSON: es lo que imprime `COMPARAR` para
      decir contra qué paleta se está comparando. */
-  const hex = azules ? azules.map((t) => aHex(t.color)).join(" + ") : "?";
+  const hex = paletaVista ? paletaVista.map((t) => aHex(t.color)).join(" + ") : "?";
 
   const porToken = (lista, nombre) => lista.filter((m) => m.token === nombre).length;
 
   console.log(`\n${"═".repeat(78)}`);
   console.log(
-    `MEDIDOS ${medidas.length} textos en los azules de marca · ` +
+    `MEDIDOS ${medidas.length} textos en los colores de marca · ` +
       `${(SOLO ?? RUTAS).length} rutas × ${ANCHOS.join(" y ")}`,
   );
-  for (const t of azules ?? []) {
+  for (const t of paletaVista ?? []) {
     console.log(`  ${t.nombre} ${hexes[t.nombre]} · ${porToken(medidas, t.nombre)} textos`);
   }
   console.log("═".repeat(78));
@@ -493,7 +506,7 @@ async function main() {
   const antes = previo ? new Map(previo.medidas.map((m) => [m.id, m])) : null;
 
   if (!fallos.length) {
-    console.log("\n✓ Ningún texto en azul de marca por debajo de su mínimo.");
+    console.log("\n✓ Ningún texto en color de marca por debajo de su mínimo.");
   } else {
     console.log(`\n✗ ${fallos.length} por debajo del mínimo:\n`);
     for (const x of fallos) {
@@ -528,13 +541,13 @@ async function main() {
     }
 
     /* Un texto que estaba en la base y hoy no aparece NO es un arreglo: es algo
-       que se salió del barrido —cambió a un color que no es ninguno de los dos
-       azules, o desapareció de la página—. Se dice, porque si no el total baja
-       solo y parece una mejora. */
+       que se salió del barrido —cambió a un color que no es ninguno de los tres
+       de la paleta, o desapareció de la página—. Se dice, porque si no el total
+       baja solo y parece una mejora. */
     const idsHoy = new Set(medidas.map((m) => m.id));
     const ausentes = previo.medidas.filter((a) => !idsHoy.has(a.id));
     if (ausentes.length) {
-      console.log(`  · ${ausentes.length} de la base ya no se miden (fuera de los dos azules o fuera de la página):`);
+      console.log(`  · ${ausentes.length} de la base ya no se miden (fuera de la paleta o fuera de la página):`);
       for (const a of ausentes.slice(0, 12)) {
         console.log(`      ${a.ruta}@${a.ancho} «${a.texto}» daba ${f(a.valor)}:1`);
       }

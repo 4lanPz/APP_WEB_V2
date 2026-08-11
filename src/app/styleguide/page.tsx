@@ -153,7 +153,7 @@ export default function StyleguidePage() {
                 Terracota
               </p>
               <p className="font-mono text-mono text-graphite">
-                #A0715A · accent · máx. 5% de superficie
+                #8A5D46 · accent · máx. 5% de superficie
               </p>
             </div>
           </div>

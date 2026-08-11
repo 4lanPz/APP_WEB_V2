@@ -22,8 +22,9 @@ const NAV_HEIGHT = "68px";
  *
  * El subrayado ya existía, pero en `bg-brand`: como marca visible contra
  * `paper` da 2,56:1 y el mínimo no textual es 3:1. Pasa a tinta (15,67:1).
- * `accent` también pasaba —3,76:1— pero queda descartado: el terracota ya
- * significa etiqueta mono y numeración de sección.
+ * `accent` también pasaba —3,76:1 entonces, 5,04:1 desde que el terracota se
+ * oscureció a `#8a5d46`— pero queda descartado: el terracota ya significa
+ * etiqueta mono y numeración de sección.
  *
  * El hover va detrás por coherencia: `hover:text-brand` sobre claro da 2,53:1,
  * y para eso entró `brand-ink` en globals.css (5,10:1 sobre paper). El
@@ -92,16 +93,27 @@ function NavLink({
   );
 }
 
+/*
+ * EL `x: "-50%"` NO ES UN GESTO, ES EL CENTRADO.
+ *
+ * El panel se centra con `left-1/2` + medio ancho hacia atrás, y ese medio ancho
+ * tiene que viajar en las variantes y no en una clase `-translate-x-1/2`: Framer
+ * escribe `transform` en el estilo en línea para animar la `y`, y eso pisa
+ * entero el transform que venga de una utilidad. Con la clase, el panel se
+ * plantaba con su borde izquierdo en el centro de la pantalla.
+ */
 const megaPanelVariants = {
-  hidden: { opacity: 0, y: -8 },
+  hidden: { opacity: 0, y: -8, x: "-50%" },
   visible: {
     opacity: 1,
     y: 0,
+    x: "-50%",
     transition: { duration: DURATION.asentar, ease: EASE_ASENTAR },
   },
   exit: {
     opacity: 0,
     y: -8,
+    x: "-50%",
     transition: { duration: DURATION.asentar, ease: EASE_ASENTAR },
   },
 };
@@ -334,68 +346,95 @@ export function Navbar() {
 
             <AnimatePresence>
               {megaOpen && (
+                /*
+                  EL PANEL OCUPA LO QUE PIDE SU CONTENIDO, NO LA PANTALLA.
+
+                  Iba `fixed inset-x-0` con un `Container` dentro: una banda de
+                  borde a borde con el margen fluido del sitio —100 px por lado a
+                  1440—, cuatro columnas en `fr` que se repartían todo el ancho
+                  sobrara o no, y 46 px de relleno vertical. Resultado: un panel
+                  que tapaba la página entera por detrás y en el que las cuatro
+                  listas quedaban separadas por huecos de 52 px que no separaban
+                  nada, porque no había con qué confundirlas.
+
+                  Ahora es una caja centrada bajo la barra —`left-1/2` y medio
+                  ancho hacia atrás, ver `megaPanelVariants`— con `w-max`: el
+                  ancho lo fija la columna más larga de cada familia y la página
+                  se sigue viendo a los dos lados. Las columnas pasan de `fr` a
+                  `minmax(0, max-content)`: `max-content` es lo que hace que el
+                  ancho salga del contenido, y el `minmax(0, …)` deja que se
+                  encojan cuando el panel toca su tope —entre 900 y ~1100 px de
+                  ventana— en vez de desbordar.
+
+                  El relleno y las separaciones bajan a poco más de la mitad. El
+                  borde pasa de `border-t`/`border-b` a los cuatro lados: ya no es
+                  una banda que cruza la pantalla, es una caja y tiene cuatro
+                  cantos.
+
+                  EL MENÚ MÓVIL NO CAMBIA. Este panel vive dentro del `<nav>` que
+                  es `hidden` por debajo de 900 px; el de móvil es el
+                  `motion.details` de más abajo y no comparte nada con esto.
+                */
                 <motion.div
-                  className="fixed inset-x-0 top-17 z-20 border-t border-b border-greige bg-paper/98 backdrop-blur-sm"
+                  className="fixed left-1/2 top-17 z-20 w-max max-w-[calc(100vw-3rem)] border border-greige bg-paper/98 backdrop-blur-sm"
                   initial={reduceMotion ? undefined : "hidden"}
                   animate="visible"
                   exit={reduceMotion ? undefined : "exit"}
                   variants={megaPanelVariants}
                 >
-                  <Container>
-                    <div
-                      className="grid gap-[clamp(24px,3vw,52px)] py-[clamp(26px,3vw,46px)]"
-                      style={{ gridTemplateColumns: "1.7fr 1fr 1fr 1fr" }}
-                    >
-                      {productCategories.map((category) => (
-                        <div key={category.label} className="min-w-0">
-                          <Link
-                            href={category.href}
-                            onClick={cerrarMenu}
-                            className="mb-3.5 flex items-baseline gap-2.25 border-b border-greige pb-3 font-sans text-caption font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand-ink"
-                          >
-                            {category.label}
-                            <span className="font-mono text-micro font-normal tracking-normal text-accent">
-                              {category.count}
-                            </span>
-                          </Link>
-                          <div
-                            className={cn(
-                              "grid grid-cols-1 gap-y-px",
-                              category.subcategories.length > 9 &&
-                                "grid-cols-2 gap-x-[clamp(16px,2vw,36px)]",
-                            )}
-                          >
-                            {category.subcategories.map((sub) => (
-                              <Link
-                                key={sub.label}
-                                href={sub.href}
-                                title={
-                                  sub.estado === "sin-ficha"
-                                    ? "Página en preparación"
-                                    : undefined
-                                }
-                                onClick={cerrarMenu}
-                                className="py-1.25 font-sans text-mono text-graphite hover:text-brand-ink"
-                              >
-                                {sub.label}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-
-                      <div className="col-span-full mt-2.5 flex items-center justify-between gap-5 border-t border-greige pt-5 font-mono text-xs uppercase tracking-[0.08em] text-graphite">
-                        <span>{catalogStats}</span>
+                  <div
+                    className="grid gap-x-[clamp(20px,2vw,34px)] px-[clamp(20px,1.8vw,30px)] py-[clamp(18px,1.6vw,26px)]"
+                    style={{ gridTemplateColumns: "repeat(4, minmax(0, max-content))" }}
+                  >
+                    {productCategories.map((category) => (
+                      <div key={category.label} className="min-w-0">
                         <Link
-                          href={catalogAllLink.href}
+                          href={category.href}
                           onClick={cerrarMenu}
-                          className="font-sans text-sm font-medium text-ink hover:text-brand-ink"
+                          className="mb-2.5 flex items-baseline gap-2.25 border-b border-greige pb-2.5 font-sans text-caption font-semibold uppercase tracking-[0.08em] text-ink hover:text-brand-ink"
                         >
-                          {catalogAllLink.label}
+                          {category.label}
+                          <span className="font-mono text-micro font-normal tracking-normal text-accent">
+                            {category.count}
+                          </span>
                         </Link>
+                        <div
+                          className={cn(
+                            "grid grid-cols-1 gap-y-px",
+                            category.subcategories.length > 9 &&
+                              "grid-cols-2 gap-x-[clamp(14px,1.4vw,26px)]",
+                          )}
+                        >
+                          {category.subcategories.map((sub) => (
+                            <Link
+                              key={sub.label}
+                              href={sub.href}
+                              title={
+                                sub.estado === "sin-ficha"
+                                  ? "Página en preparación"
+                                  : undefined
+                              }
+                              onClick={cerrarMenu}
+                              className="py-1 font-sans text-mono text-graphite hover:text-brand-ink"
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
                       </div>
+                    ))}
+
+                    <div className="col-span-full mt-1.5 flex items-center justify-between gap-8 border-t border-greige pt-3.5 font-mono text-xs uppercase tracking-[0.08em] text-graphite">
+                      <span>{catalogStats}</span>
+                      <Link
+                        href={catalogAllLink.href}
+                        onClick={cerrarMenu}
+                        className="font-sans text-sm font-medium text-ink hover:text-brand-ink"
+                      >
+                        {catalogAllLink.label}
+                      </Link>
                     </div>
-                  </Container>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

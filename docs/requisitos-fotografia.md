@@ -77,13 +77,17 @@ cerrar, pero puede que alguna resulte definitiva y salga del encargo.
 - **`hero-microfibra`** — Archivo propio, no duplicado de los otros heroes. Entró en 55ffae7 —el commit del mapa de Contacto— mencionada de pasada y sin decir de dónde sale. No consta el origen.
 - **`hero-home-poster`** — Entró en 8e485c6, al arreglar el póster de la portada. El commit explica por qué no se veía, no de dónde sale el archivo.
 
-## Hay que decidir esto antes de la sesión — 1
+## Hay que decidir esto antes de la sesión — 5
 
 No son dudas de fotografía sino de contenido: qué va en el hueco. Cada
 uno tiene su nota escrita con lo que se sabe hoy y se puede disparar así,
 pero si la decisión cae del otro lado la toma no sirve y hay que repetirla.
 
 - **`evento-alianza-retail`** — El id anuncia una ALIANZA y la nota describe un DESPACHO, que no es lo mismo. Antes de disparar hay que confirmar qué ocurrió de verdad en este encuentro: si la foto no comunica el acuerdo, el titular de la tarjeta dirá una cosa y la imagen otra. La nota está escrita con lo que hay hoy, que es el alt; si el evento resulta ser otra cosa, se reescribe aquí antes de la sesión.
+- **`hito-loc-04`** — El año 2013 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
+- **`hito-loc-05`** — El año 2017 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
+- **`hito-qlt-01`** — El año 2021 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
+- **`hito-prd-02`** — El año 2024 NO está confirmado por administración. Si al validarlo cambia, el hito cambia de sitio en la línea y puede que la foto de archivo que se dispare no sea la de ese año.
 
 ---
 
@@ -549,13 +553,13 @@ Fotos de archivo para la línea de tiempo de Empresa. OPCIONALES: la línea func
 |---|---|---|---|---|
 | **FALTA** | `hito-fnd-01.jpg` | Empresa | 900 px | Textil Padilla, 1987 · Fundación en Alangasí. |
 | **FALTA** | `hito-loc-01.jpg` | Empresa | 900 px | Textil Padilla, 1994 · Consolidación de la matriz. |
-| **FALTA** | `hito-loc-02.jpg` | Empresa | 900 px | Textil Padilla, 2003 · Local de La Marín. |
-| **FALTA** | `hito-loc-03.jpg` | Empresa | 900 px | Textil Padilla, 2008 · Local de Solanda. |
-| **FALTA** | `hito-loc-04.jpg` | Empresa | 900 px | Textil Padilla, Apertura de local. |
-| **FALTA** | `hito-loc-05.jpg` | Empresa | 900 px | Textil Padilla, Apertura de local. |
+| **FALTA** | `hito-loc-02.jpg` | Empresa | 900 px | Textil Padilla, 2003 · Apertura de local · La Marín. |
+| **FALTA** | `hito-loc-03.jpg` | Empresa | 900 px | Textil Padilla, 2008 · Apertura de local · Solanda. |
+| **FALTA** | `hito-loc-04.jpg` | Empresa | 900 px | Textil Padilla, 2013 · Apertura de local · Sangolquí. |
+| **FALTA** | `hito-loc-05.jpg` | Empresa | 900 px | Textil Padilla, 2017 · Apertura de local · Guayaquil. |
 | **FALTA** | `hito-prd-01.jpg` | Empresa | 900 px | Textil Padilla, 1999 · Teñido a demanda. |
-| **FALTA** | `hito-prd-02.jpg` | Empresa | 900 px | Textil Padilla, Ampliación de producción. |
-| **FALTA** | `hito-qlt-01.jpg` | Empresa | 900 px | Textil Padilla, Control de calidad. |
+| **FALTA** | `hito-prd-02.jpg` | Empresa | 900 px | Textil Padilla, 2024 · Línea técnica PerformKnit. |
+| **FALTA** | `hito-qlt-01.jpg` | Empresa | 900 px | Textil Padilla, 2021 · Protocolo de control por rollo. |
 
 > Clasificadas según el origen del slot: salen de `SLOTS_HITOS`, con nota común.
 

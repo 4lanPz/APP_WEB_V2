@@ -102,6 +102,14 @@ export function ImagePlaceholder({
     ? "transition-transform duration-500 ease-revelar group-hover:scale-[1.04]"
     : "";
 
+  /*
+   * Color base del hueco. Se calcula UNA vez porque lo usan dos cosas: el plano
+   * de fondo del marcador y el respaldo del rótulo (ver abajo). Escrito dos
+   * veces, un día el rótulo tendría detrás un color distinto del hueco en el que
+   * vive y se vería como un parche.
+   */
+  const fondoHueco = tintColor ?? (sinFondoPropio ? undefined : dark ? "#0D2937" : "#EDE9E3");
+
   return (
     <div className={cn("relative w-full overflow-hidden", className)}>
       {src ? (
@@ -117,8 +125,7 @@ export function ImagePlaceholder({
         <div
           className={cn("absolute inset-0", zoomClass)}
           style={{
-            backgroundColor:
-              tintColor ?? (sinFondoPropio ? undefined : dark ? "#0D2937" : "#EDE9E3"),
+            backgroundColor: fondoHueco,
             backgroundImage:
               tintColor || !MARCAR_HUECOS_DE_IMAGEN
                 ? undefined
@@ -135,28 +142,54 @@ export function ImagePlaceholder({
           {MARCAR_HUECOS_DE_IMAGEN && label && (
             <div
               className={cn(
-                "absolute flex flex-col items-center justify-center gap-1.5 px-6 text-center",
+                "absolute flex flex-col items-center justify-center px-6 text-center",
                 marcadorEnAlto ? "inset-x-0 top-0 h-3/5" : "inset-0",
               )}
             >
-              <span
-                className={cn(
-                  "font-mono text-label uppercase",
-                  dark ? "text-brand" : "text-accent",
-                )}
+              {/*
+                EL RÓTULO VA SOBRE EL COLOR BASE DEL HUECO, NO SOBRE LA TRAMA.
+
+                Iba directamente encima de las diagonales, y ahí el peor píxel
+                que le toca debajo es la banda oscura de la trama (`#E4DFD8`):
+                medido, el rótulo daba 4,24:1 con un mínimo de 4,5. NO ES UN
+                PROBLEMA DEL COLOR DEL TEXTO — sobre esa misma banda `graphite`
+                daría 4,33:1 y también fallaría—: es que un texto de 12 px no
+                puede apoyarse en un fondo que alterna dos tonos cada 9 px, y
+                cualquier tono medio de la paleta se cae ahí.
+
+                Con el respaldo, el rótulo se lee contra un plano conocido y
+                uniforme —el mismo `#EDE9E3` del hueco, así que no aparece un
+                color nuevo— y pasa a 4,65:1. Lo detectó `npm run marca` en
+                cuanto empezó a seguir el terracota, en 38 huecos de siete
+                páginas; era el mismo caso repetido, no 38 problemas.
+
+                La trama sigue llenando el hueco entero por detrás: el respaldo
+                solo se ajusta al texto, así que el marcador sigue leyéndose como
+                marcador.
+              */}
+              <div
+                className="flex max-w-full flex-col items-center gap-1.5 px-3.5 py-2.5"
+                style={{ backgroundColor: fondoHueco }}
               >
-                {label}
-              </span>
-              {sublabel && (
                 <span
                   className={cn(
-                    "font-sans text-body-s font-medium",
-                    dark ? "text-paper" : "text-ink",
+                    "font-mono text-label uppercase",
+                    dark ? "text-brand" : "text-accent",
                   )}
                 >
-                  {sublabel}
+                  {label}
                 </span>
-              )}
+                {sublabel && (
+                  <span
+                    className={cn(
+                      "font-sans text-body-s font-medium",
+                      dark ? "text-paper" : "text-ink",
+                    )}
+                  >
+                    {sublabel}
+                  </span>
+                )}
+              </div>
             </div>
           )}
         </div>

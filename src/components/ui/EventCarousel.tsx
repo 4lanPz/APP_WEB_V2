@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
+import { FlechaCarril } from "./FlechaCarril";
 import { buttonVariants } from "./buttonVariants";
 import { cn } from "@/lib/cn";
 import { EASE_REVELAR } from "@/lib/motion";
@@ -145,12 +146,16 @@ export function EventCarousel({ slides }: EventCarouselProps) {
       {/*
         `flex-wrap` SOLO tiene efecto por debajo de 640px, y es lo que hace
         tocables los puntos: con el área táctil a 44px el grupo de puntos pasa de
-        56 a 176px, y la fila entera pedía 424px en un ancho útil de 323. En vez
+        56 a 176px, y la fila entera pide 432px en un ancho útil de 323. En vez
         de encoger el objetivo o solapar puntos —a 16px de paso, un área de 44
         tapa el centro visual del vecino y el toque activa otra tarjeta—, el
         grupo de puntos y flechas baja a una segunda línea. Desde 640px la fila
-        cabe de sobra (404 de 588) y no envuelve: ahí sigue siendo una sola línea
+        cabe de sobra (412 de 588) y no envuelve: ahí sigue siendo una sola línea
         con `justify-between`, como estaba.
+
+        Los 432 eran 424 hasta que las flechas cumplieron también el mínimo
+        táctil: su grupo pasó de 84 a 92px (dos botones de 44 con `gap-1`, ver
+        `FlechaCarril`). No cambia ninguna de las dos conclusiones.
       */}
       <div className="mt-6 flex flex-wrap items-center justify-start gap-5 sm:flex-nowrap sm:justify-between sm:gap-0">
         <div className="flex items-center gap-4">
@@ -207,23 +212,27 @@ export function EventCarousel({ slides }: EventCarouselProps) {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              aria-label="Evento anterior"
+          {/*
+            `gap-1` DONDE HABÍA `gap-3`: las flechas pasan a `FlechaCarril`, que
+            mete el filete de 36 px dentro de un botón de 44 para cumplir el
+            mínimo táctil. Son 4 px invisibles por lado; descontados los dos, el
+            aire entre filetes es el mismo que antes y la fila no se mueve.
+
+            Es el mismo trato que ya llevaban los puntos de aquí al lado —punto
+            de 8 en botón de 44—, y ahora las tres piezas del mando del carrusel
+            cumplen la misma regla.
+          */}
+          <div className="flex items-center gap-1">
+            <FlechaCarril
+              direccion="anterior"
+              etiqueta="Evento anterior"
               onClick={() => irManual(index - 1, -1)}
-              className="flex size-9 items-center justify-center border border-graphite text-ink transition-colors duration-220 ease-asentar hover:border-ink"
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              aria-label="Evento siguiente"
+            />
+            <FlechaCarril
+              direccion="siguiente"
+              etiqueta="Evento siguiente"
               onClick={() => irManual(index + 1, 1)}
-              className="flex size-9 items-center justify-center border border-graphite text-ink transition-colors duration-220 ease-asentar hover:border-ink"
-            >
-              →
-            </button>
+            />
           </div>
         </div>
       </div>

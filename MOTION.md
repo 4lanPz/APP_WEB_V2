@@ -28,7 +28,7 @@ describir el efecto. Si hay que mirar fijo para percibirlo, está mal calibrado.
 | **Cuerpos de texto** | Opacidad + 24px, 500ms. Corto y rápido: es texto, tiene que poder leerse ya | `Reveal tipo="cuerpo"` | Sí |
 | **Tarjetas** | Opacidad + 56px + escala 0.985→1, 700ms. Recorrido largo, se asienta | `Reveal tipo="tarjeta"` / celdas de `RevealGroup` | No (una vez) |
 | **Etiquetas mono, eyebrows** | Solo opacidad, 350ms. No se desplazan: acompañan, no lideran | `Reveal tipo="etiqueta"` | Sí |
-| **Línea de hitos** | La línea vertical se dibuja atada al progreso de scroll (GSAP ScrollTrigger, único caso) y cada hito entra detrás de su punto | `Timeline` | No |
+| **Línea de hitos** | La línea horizontal se dibuja atada al progreso de scroll de la página (GSAP ScrollTrigger, único caso), tramo a tramo de izquierda a derecha, y los hitos entran detrás de sus puntos con stagger —los que tienen foto por encima de la línea, los que no por debajo— | `Timeline` | No |
 | **Flotante de WhatsApp** | Escala 0.7→1 a los 1,5s, cuando la secuencia del hero ya terminó. **Solo transform, sin opacidad**: con `prefers-reduced-motion` la opacidad sí se seguiría animando y el encargo pedía entrada sin animación | `BotonWhatsApp` | No (no es de scroll) |
 
 Todos los valores viven en [`src/lib/motion.ts`](src/lib/motion.ts)

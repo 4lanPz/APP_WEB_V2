@@ -8,6 +8,7 @@ import { BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
 import { Timeline } from "@/components/ui/Timeline";
 import { DraftNotice } from "@/components/ui/DraftNotice";
 import { foto } from "@/data/imagenes";
+import { HITOS } from "@/data/hitos";
 import { buttonVariants } from "@/components/ui/buttonVariants";
 import { MagneticLink } from "@/components/motion/MagneticLink";
 import { Reveal } from "@/components/motion/Reveal";
@@ -43,72 +44,15 @@ const valores = [
   },
 ];
 
-const hitos = [
-  {
-    year: "1987",
-    ref: "FND-01",
-    title: "Fundación en Alangasí",
-    description:
-      "Nace el taller familiar en Alangasí, valle de los Chillos: punto tejido para la confección local. Se fija el principio fundacional —seleccionar el mejor hilo, no hilar.",
-  },
-  {
-    year: "1994",
-    ref: "LOC-01",
-    title: "Consolidación de la matriz",
-    description:
-      "La planta de Alangasí se establece como matriz de producción: nave de tejido, bodega de hilo y primeros controles sistemáticos de gramaje por rollo.",
-  },
-  {
-    year: "1999",
-    ref: "PRD-01",
-    title: "Teñido a demanda",
-    description:
-      "Se incorpora la tintorería propia y el teñido al color exacto del cliente, con referencias registradas para reproducir el tono entre tiradas.",
-    featured: true,
-  },
-  {
-    year: "2003",
-    ref: "LOC-02",
-    title: "Apertura de local · La Marín",
-    description:
-      "Primer punto de venta y atención en el centro de Quito (La Marín), acercando el muestrario físico a talleres y confeccionistas de la ciudad.",
-  },
-  {
-    year: "2008",
-    ref: "LOC-03",
-    title: "Apertura de local · Solanda",
-    description:
-      "Nuevo local en el sur de Quito (Solanda) para dar cobertura a la creciente demanda de barrios productores de confección.",
-  },
-  {
-    year: "2013",
-    ref: "LOC-04",
-    title: "Apertura de local · Sangolquí",
-    description:
-      "Punto de venta en Sangolquí, reforzando la presencia en el valle de los Chillos, cerca de la matriz.",
-  },
-  {
-    year: "2017",
-    ref: "LOC-05",
-    title: "Apertura de local · Guayaquil",
-    description:
-      "Primer local en la costa (Guayaquil), abriendo distribución hacia marcas y retail del litoral.",
-  },
-  {
-    year: "2021",
-    ref: "QLT-01",
-    title: "Protocolo de control por rollo",
-    description:
-      "Se formaliza la ficha técnica por rollo: gramaje, encogimiento y solidez de color documentados, con tolerancia de tono ΔE ≤ 4 entre tiradas.",
-  },
-  {
-    year: "2024",
-    ref: "PRD-02",
-    title: "Línea técnica PerformKnit",
-    description:
-      "Presentación de tejidos técnicos de alto gramaje para uniformidad y contract, con color constante y rendimiento comprobado.",
-  },
-];
+/*
+ * LOS HITOS YA NO SE ESCRIBEN AQUÍ: viven en `src/data/hitos.ts`.
+ *
+ * Estaban en esta página Y en `SLOTS_HITOS` del registro de slots, y las dos
+ * copias habían divergido —cinco entradas del registro llevaban año y cuatro
+ * no, dos se llamaban las dos «Apertura de local»—, así que el encargo de
+ * fotografía pedía dos fotos indistinguibles. Con la fuente única, el rótulo
+ * del registro se deriva del año y el título que se ven aquí.
+ */
 
 /*
  * ORDEN DE LA PÁGINA: origen → propósito → taller → valores → cronología.
@@ -367,17 +311,23 @@ export default function EmpresaPage() {
       </section>
 
       {/*
-        Línea de hitos — PENDIENTE DE REDISEÑO (año en vez del código interno,
-        textos e imagen más grandes). Aquí solo cambia de sitio: cierra la
-        página en vez de partirla por la mitad.
+        Línea de hitos — REDISEÑADA: horizontal, el año identifica y la foto es
+        grande. Cierra la página en vez de partirla por la mitad.
 
-        CUANDO SE REDISEÑE VA EN `ancho="amplio"`, igual que la rejilla de
-        valores. El rediseño la hace crecer —tipografía mayor y una imagen por
-        hito—, y esos son justo los 200 px de contenedor que hoy no le hacen
-        falta y entonces sí.
+        VA EN `ancho="amplio"`, igual que la rejilla de valores, y ahora sí lo
+        necesita: son nueve tarjetas con foto de 4:3 en una fila que se recorre,
+        y esos 200 px de contenedor son media tarjeta más de asomo — lo que hace
+        que se vea que la fila sigue. El componente pone el carril y sus flechas.
+
+        EL AVISO DE FECHAS SE QUEDA, y cubre a los nueve. Cuatro de los años
+        (2013, 2017, 2021, 2024) están marcados en `data/hitos.ts` como no
+        confirmados por administración, pero eso NO se pinta hito a hito: es una
+        nota interna, viaja al registro de slots y de ahí al encargo de
+        fotografía. Señalar cuatro de nueve en pantalla no le da un dato al
+        visitante, le siembra una duda sobre los otros cinco.
       */}
       <section id="hitos" className="py-16 sm:py-24">
-        <Container>
+        <Container ancho="amplio">
           <div className="mb-6">
             <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
           </div>
@@ -385,7 +335,7 @@ export default function EmpresaPage() {
           <p className="mb-10 max-w-xl font-serif text-caption italic text-graphite">
             Fechas y aperturas por confirmar con administración.
           </p>
-          <Timeline items={hitos} />
+          <Timeline items={HITOS} />
         </Container>
       </section>
     </div>

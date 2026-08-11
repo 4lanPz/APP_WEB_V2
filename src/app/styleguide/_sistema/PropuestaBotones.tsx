@@ -446,7 +446,8 @@ export function PropuestaBotones() {
         <code className="font-mono text-mono text-ink">bg-brand</code>: como marca visible
         contra paper da 2,56:1 y necesita 3:1. El filete pasa a tinta (15,67:1).{" "}
         <code className="font-mono text-mono text-ink">accent</code> también pasaba
-        —3,76:1—, pero queda descartado: el terracota ya significa etiqueta mono y
+        —3,76:1 cuando se decidió; 5,04:1 desde que el terracota se oscureció a
+        #8A5D46—, pero queda descartado: el terracota ya significa etiqueta mono y
         numeración de sección, y darle un segundo papel lo diluye.
       </p>
 

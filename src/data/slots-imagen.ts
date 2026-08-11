@@ -15,6 +15,7 @@
 
 import { categories } from "./taxonomy";
 import { estadoFicha } from "./fichas";
+import { HITOS, rotuloDeHito, slotDeHito } from "./hitos";
 
 export interface SlotImagen {
   /** Id del slot = nombre del archivo a dejar en `entrega/`, sin extensión. */
@@ -568,27 +569,38 @@ export const SLOTS_UNICOS: SlotImagen[] = [
 ];
 
 /**
- * Hitos de la línea de tiempo de Empresa. El id sale del código de referencia
- * que ya lleva cada hito (`ref`), que es estable y único.
+ * Hitos de la línea de tiempo de Empresa. SE DERIVAN DE `HITOS`, que es la
+ * misma lista que pinta la página: el id sale del `ref` —estable y único, y por
+ * eso sigue siendo la clave del archivo aunque el año cambie— y el rótulo del
+ * año más el título.
+ *
+ * ESTA LISTA ESTABA ESCRITA A MANO Y HABÍA DIVERGIDO. Cinco entradas llevaban
+ * año y cuatro no, dos de ellas se llamaban las dos «Apertura de local» —el
+ * encargo pedía dos fotos indistinguibles— y otras dos decían cosas
+ * («Control de calidad», «Ampliación de producción») que no eran el título del
+ * hito. Derivarlas es lo que impide que se vuelva a separar.
+ *
+ * EL AÑO SIN CONFIRMAR VIAJA COMO `porConfirmar` Y NO COMO NOTA. La nota es el
+ * encargo —cómo se dispara—; que la fecha esté pendiente de administración es
+ * una duda sobre QUÉ va en el hueco, y el documento de fotografía la imprime
+ * aparte y destacada justamente para eso.
  */
-export const SLOTS_HITOS: SlotImagen[] = [
-  ["fnd-01", "1987 · Fundación en Alangasí"],
-  ["loc-01", "1994 · Consolidación de la matriz"],
-  ["prd-01", "1999 · Teñido a demanda"],
-  ["loc-02", "2003 · Local de La Marín"],
-  ["loc-03", "2008 · Local de Solanda"],
-  ["loc-04", "Apertura de local"],
-  ["loc-05", "Apertura de local"],
-  ["qlt-01", "Control de calidad"],
-  ["prd-02", "Ampliación de producción"],
-].map(([ref, titulo]) => ({
-  id: `hito-${ref}`,
-  destino: `/hitos/${ref}.webp`,
-  alt: `Textil Padilla, ${titulo}.`,
+export const SLOTS_HITOS: SlotImagen[] = HITOS.map((h) => ({
+  id: slotDeHito(h.ref),
+  destino: `/hitos/${h.ref.toLowerCase()}.webp`,
+  alt: `Textil Padilla, ${rotuloDeHito(h)}.`,
   pagina: "/empresa",
   seccion: "Línea de hitos",
   ancho: 900,
   nota: "Opcional: la línea de hitos funciona sin fotos. Formato 4:3.",
+  ...(h.anoPorConfirmar
+    ? {
+        porConfirmar:
+          `El año ${h.year} NO está confirmado por administración. Si al ` +
+          "validarlo cambia, el hito cambia de sitio en la línea y puede que la " +
+          "foto de archivo que se dispare no sea la de ese año.",
+      }
+    : {}),
 }));
 
 /**

@@ -5,7 +5,7 @@ import { CategoryCard } from "@/components/ui/CategoryCard";
 import { EventCarousel } from "@/components/ui/EventCarousel";
 import { StatNumber } from "@/components/ui/StatNumber";
 import { AsesorPasos } from "@/components/ui/AsesorPasos";
-import { BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
+import { ALTO_FOTO, BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
 import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
@@ -13,6 +13,7 @@ import { MASCARA } from "@/lib/motion";
 import { numerador } from "@/lib/numerador";
 import { categories } from "@/data/taxonomy";
 import { foto } from "@/data/imagenes";
+import { cn } from "@/lib/cn";
 
 const stats = [
   { target: 39, prefix: "", suffix: "", label: "Años de oficio" },
@@ -138,6 +139,25 @@ export default function Home() {
                * foto más grande que el hueco donde va a caber.
                */
               sizes: "(min-width: 1024px) 40vw, 100vw",
+              /*
+               * FILETE, PORQUE ESTA FOTO NO TIENE CANTO PROPIO.
+               *
+               * `macro-fibra-blanca` es un macro de tela blanca casi acromático:
+               * medias RGB 203/203/203, o sea 1,45:1 contra el papel. Sin borde,
+               * el rectángulo no se lee como una fotografía sino como una zona
+               * clara vacía —de referencia, el marcador de hueco daría 1,08:1—, y
+               * de ahí venía la impresión de que este slot «no funcionaba». Se
+               * comprobó en el navegador a 1440 y a 375: el archivo existe
+               * (1920×1080), entra por la rama `src` de `ImagePlaceholder` y no
+               * se pinta ningún marcador. Lo que faltaba era el canto.
+               *
+               * `greige` es el hairline de divisor del sitio (1,59:1 sobre
+               * papel), no un borde inventado para esta sección. Y se compone
+               * sobre `ALTO_FOTO` en vez de copiar sus tres valores: el
+               * `className` de `foto` SUSTITUYE al alto por defecto, no se
+               * fusiona con él.
+               */
+              className: cn(ALTO_FOTO, "border border-greige"),
             }}
           >
             <Reveal tipo="etiqueta">

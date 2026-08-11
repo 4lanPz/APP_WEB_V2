@@ -34,9 +34,12 @@ export interface SubcategoryTileProps {
  * peso visual que la tile `preliminar` de al lado, que es la relación correcta
  * entre tres estados hermanos. Medido con `npm run marca`.
  *
- * `graphite` cumple (5,15:1). `accent` NO: da 3,76:1 sobre `paper` y es el
- * mismo problema en terracota, pero no lo ve `npm run marca` —ese barrido solo
- * sigue los azules— ni entra en esta tanda. Queda anotado aquí.
+ * `graphite` cumple (5,15:1). `accent` daba 3,76:1 sobre `paper` —el mismo
+ * problema en terracota— y aquí quedó anotado a mano porque `npm run marca` no
+ * lo veía: aquel barrido solo seguía los azules. RESUELTO: el token pasó de
+ * `#a0715a` a `#8a5d46` (5,04:1 sobre `paper`) y el verificador sigue ya los
+ * tres colores de marca, así que esto vuelve a medirse solo. Ver el bloque de
+ * `--color-accent` en `globals.css`.
  */
 const ETIQUETA: Record<EstadoFicha, { estado: string; accion: string; tono: string }> = {
   publicada: {

@@ -220,7 +220,7 @@ export const RECOLOREO = {
  * │  al lado para saber de dónde se viene.                                │
  * └───────────────────────────────────────────────────────────────────────┘
  *
- * ESTOS NÚMEROS ESTÁN ESCRITOS DOS VECES, A PROPÓSITO Y CON CUIDADO. Los cuatro
+ * ESTOS NÚMEROS ESTÁN ESCRITOS DOS VECES, A PROPÓSITO Y CON CUIDADO. Los cinco
  * efectos son transiciones CSS, así que quien los aplica es una clase de
  * Tailwind (`group-hover:-translate-y-1`, `duration-220`…) y una clase no se
  * puede componer a partir de una variable: Tailwind lee el código fuente como
@@ -244,6 +244,23 @@ export const INTERACCION = {
     /** Subida del bloque de texto, en px (antes 4) — `group-hover:-translate-y-2.5`. */
     subidaTexto: 10,
     /** `duration-500 ease-revelar`, el mismo par para las dos mitades. */
+    duracion: DURATION.acercamiento,
+  },
+  /**
+   * Hito de la línea de tiempo (`Timeline`): la tarjeta entera se acerca.
+   *
+   * MISMO GESTO QUE LA CARD DE FAMILIA —acercamiento, `duration-500`,
+   * `ease-revelar`— PERO CON OTRA AMPLITUD, y la diferencia no es un descuido.
+   * Allí el 1,10 se aplica a la foto DENTRO de una caja con `overflow-hidden`:
+   * la card no crece ni un píxel y puede permitirse un acercamiento grande.
+   * Aquí crece la tarjeta de verdad, con vecinas a 24/32px a los lados y la
+   * línea de tiempo pegada a un borde. A 1,10 una tarjeta de 328px ganaría 33px
+   * —16 por lado— y se comería el medianil entero.
+   */
+  hitoDeLinea: {
+    /** Escala de la tarjeta completa — `group-hover:scale-[1.04]`. */
+    escala: 1.04,
+    /** `duration-500 ease-revelar`, el par de la card de familia. */
     duracion: DURATION.acercamiento,
   },
   /** Botón pulsado: se hunde y vuelve al soltar. */

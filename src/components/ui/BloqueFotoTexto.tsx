@@ -11,8 +11,13 @@ import { cn } from "@/lib/cn";
  * Se pisa entero pasando `className` en `foto` —no se fusiona—, porque una
  * página que pide `aspect-*` está eligiendo proporción, y dejarle debajo un
  * `min-h` heredado son dos mecanismos de tamaño discutiendo por el mismo marco.
+ *
+ * SE EXPORTA para que una página que solo quiere AÑADIR algo al marco —un
+ * filete, por ejemplo— pueda componer sobre él en vez de copiar los tres
+ * valores. Copiados, el día que este alto cambie habría un sitio que se
+ * quedaría atrás sin que nada avise.
  */
-const ALTO_FOTO = "min-h-[62vw] sm:min-h-90 lg:min-h-130";
+export const ALTO_FOTO = "min-h-[62vw] sm:min-h-90 lg:min-h-130";
 
 export interface BloqueFotoTextoProps {
   /** Props de la foto. Su `className` sustituye al alto por defecto. */

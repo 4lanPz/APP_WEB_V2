@@ -525,6 +525,15 @@ function recoger() {
    * por `outline`, pero un anillo de Tailwind puede llegar por `box-shadow`, y
    * un control puede marcar el foco cambiando su relleno. Si NADA de eso cambia,
    * la persona que navega con teclado no sabe dónde está.
+   *
+   * LOS INHABILITADOS NO SE MIDEN, y no es una exención de conveniencia: un
+   * control `disabled` no está en el orden de tabulación, así que `.focus()` no
+   * hace nada y su huella sale idéntica SIEMPRE — se reportaría como «no marca
+   * el foco» un control al que el foco no puede llegar. Es un falso positivo
+   * garantizado, y de los caros: aparece como incumplimiento de accesibilidad
+   * en el resumen y tapa a los de verdad. Lo destapó la flecha «anterior» de la
+   * línea de hitos, que nace inhabilitada porque el carril empieza a la
+   * izquierda del todo. WCAG 2.4.7 habla de lo que RECIBE el foco.
    */
   const focoInvisible: { texto: string; etiqueta: string }[] = [];
   const huella = (el: Element) => {
@@ -542,6 +551,12 @@ function recoger() {
   };
 
   for (const el of controles) {
+    if (
+      (el as HTMLButtonElement).disabled ||
+      el.getAttribute("aria-disabled") === "true"
+    ) {
+      continue;
+    }
     const antes = huella(el);
     (el as HTMLElement).focus();
     const despues = huella(el);

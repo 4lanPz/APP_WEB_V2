@@ -1,14 +1,14 @@
 /**
  * ══════════════════════════════════════════════════════════════════════════
- *  LOS CUATRO INTERRUPTORES DE LA FAMILIA INTERACCIÓN
+ *  LOS CINCO INTERRUPTORES DE LA FAMILIA INTERACCIÓN
  * ══════════════════════════════════════════════════════════════════════════
  *
  * Movimiento que dispara el visitante al tocar o pasar el ratón. Cada efecto se
- * apaga por separado poniendo su constante en `false`, y con los cuatro en
+ * apaga por separado poniendo su constante en `false`, y con los cinco en
  * `false` el sitio queda EXACTAMENTE como estaba antes de esta tanda: ni una
  * clase de más en el HTML, ni un nodo extra, ni una transición inerte.
  *
- * Es una tanda de prueba —los cuatro se miran en el navegador y alguno se
+ * Es una tanda de prueba —los cinco se miran en el navegador y alguno se
  * descarta—, así que apagar tiene que ser esto y no un desmontaje. Misma idea
  * que `MARCAR_HUECOS_DE_IMAGEN` en `@/lib/huecos`: la pregunta vive en una
  * línea, y los componentes solo la leen.
@@ -28,12 +28,12 @@
  * `INTERACCION` cita de vuelta la clase que lo escribe.
  *
  * ── `prefers-reduced-motion` NO APARECE EN NINGUNA PARTE, Y ES CORRECTO ────
- * Los cuatro efectos son transiciones CSS, y `globals.css` colapsa TODA
+ * Los cinco efectos son transiciones CSS, y `globals.css` colapsa TODA
  * transición CSS a 0,01ms cuando la preferencia está activa. Con ella puesta,
- * el hover sigue cambiando el aspecto —foto acercada, filete puesto, anillo
- * cerrado, botón hundido— pero sin recorrido. No hay nada que ramificar: el
- * estado final es el mismo, lo único que desaparece es el camino hasta él.
- * Por eso los cuatro se resuelven en CSS y ninguno en JS.
+ * el hover sigue cambiando el aspecto —foto acercada, hito acercado, filete
+ * puesto, anillo cerrado, botón hundido— pero sin recorrido. No hay nada que
+ * ramificar: el estado final es el mismo, lo único que desaparece es el camino
+ * hasta él. Por eso los cinco se resuelven en CSS y ninguno en JS.
  *
  * ── EL HOVER NO SE QUEDA PEGADO EN TÁCTIL ─────────────────────────────────
  * Tailwind v4 envuelve `hover:` y `group-hover:` en `@media (hover: hover)`, así
@@ -204,3 +204,53 @@ export function clasesAnilloDeSwatch(activo: boolean) {
     ? "pointer-events-none absolute inset-0 rounded-full transition-[opacity,scale] duration-400 ease-asentar scale-100 opacity-100"
     : "pointer-events-none absolute inset-0 rounded-full transition-[opacity,scale] duration-400 ease-asentar scale-115 opacity-0";
 }
+
+/* ── 5. Hitos de la línea de tiempo con hover ───────────────────────────── */
+
+/**
+ * `Timeline`: al señalar un hito se acerca la TARJETA ENTERA —foto, año, título
+ * y descripción—, no solo la foto.
+ *
+ * Va el quinto porque el orden de este archivo es el de la tanda: los cuatro
+ * primeros se calibran juntos y este entra después, con la línea de hitos ya en
+ * horizontal. Se mira igual que los otros y se apaga igual.
+ *
+ * SUSTITUYE AL `zoomOnGroupHover` DE LA FOTO, no se suma a él. Con los dos
+ * puestos habría dos acercamientos anidados —la foto al 1,04 dentro de una
+ * tarjeta al 1,04— y el marco se leería como si resbalara por dentro. El hito es
+ * una pieza: o se mueve entero o no se mueve.
+ */
+export const HOVER_EN_HITOS_DE_LINEA = true;
+
+/**
+ * Acercamiento de la tarjeta, 1,04 (`INTERACCION.hitoDeLinea.escala`), con el
+ * mismo par duración/curva que la card de familia: 500ms y `revelar`. Es el
+ * mismo gesto que el del catálogo y por eso comparte tiempos, aunque no
+ * amplitud — el porqué, en `INTERACCION.hitoDeLinea`.
+ *
+ * ESTAS CLASES NO PUEDEN IR EN EL MISMO NODO QUE ANIMA GSAP, y no es cuestión de
+ * gusto: al tomar el control de las transformaciones de un elemento, GSAP le
+ * escribe EN LÍNEA `translate: none; rotate: none; scale: none` para que su
+ * matriz de `transform` sea la única fuente. Un estilo en línea gana a cualquier
+ * hoja, así que puesto sobre `[data-timeline-content]` —que es lo que GSAP anima
+ * al entrar en pantalla— el acercamiento no ocurre: la regla casa, el `:hover`
+ * está puesto y el `scale` calculado se queda en `none`. `Timeline` lo resuelve
+ * con un nodo dentro del que anima GSAP; quien reutilice esto tiene el mismo
+ * deber.
+ *
+ * `transition-[scale]` Y NO `transition-transform`, que sería lo habitual. En
+ * Tailwind v4 `scale-*` se aplica con la propiedad `scale`, independiente de
+ * `transform`, y la utilidad con nombre cubre las cuatro (`transform, translate,
+ * scale, rotate`). Nombrar solo la que se mueve deja fuera de la transición
+ * cualquier `transform` que ponga GSAP en un ancestro y evita heredar el
+ * problema de arriba por la puerta de al lado.
+ *
+ * EL ORIGEN NO ESTÁ AQUÍ, a propósito: depende de a qué lado de la línea caiga
+ * el hito (`origin-bottom` arriba, `origin-top` abajo) y eso es maquetación del
+ * componente, no calibración de la tanda. Lo que sí es común es la consecuencia
+ * buscada: el borde pegado a la línea se queda quieto y la tarjeta crece hacia
+ * afuera, así que la línea de tiempo no se mueve al señalar un hito.
+ */
+export const CLASES_HITO_DE_LINEA = HOVER_EN_HITOS_DE_LINEA
+  ? "transition-[scale] duration-500 ease-revelar group-hover:scale-[1.04]"
+  : "";
