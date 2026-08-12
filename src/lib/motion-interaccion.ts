@@ -206,6 +206,7 @@ export function clasesAnilloDeSwatch(activo: boolean) {
 }
 
 /* ── 5. Hitos de la línea de tiempo con hover ───────────────────────────── */
+/* (el sexto, el díptico de misión y visión, va al final del archivo) */
 
 /**
  * `Timeline`: al señalar un hito se acerca la TARJETA ENTERA —foto, año, título
@@ -254,3 +255,28 @@ export const HOVER_EN_HITOS_DE_LINEA = true;
 export const CLASES_HITO_DE_LINEA = HOVER_EN_HITOS_DE_LINEA
   ? "transition-[scale] duration-500 ease-revelar group-hover:scale-[1.04]"
   : "";
+
+/* ── 6. Fotos del díptico de misión y visión con hover ──────────────────── */
+
+/**
+ * Díptico de «Lo que nos mueve»: al señalar una declaración, su fotografía
+ * cuadrada se acerca dentro del marco.
+ *
+ * ES EL `zoomOnGroupHover` DE `ImagePlaceholder`, NO UN GESTO NUEVO, y por eso
+ * este interruptor es un booleano suelto y no un par de cadenas de clases como
+ * los cinco de arriba: lo único que hay que apagar es el prop. El acercamiento
+ * es el 1,04 / 500ms / `revelar` que ya comparten las tiles de subcategoría y el
+ * muestrario de blancos — la misma familia de gesto, la misma amplitud.
+ *
+ * NO SE CALIBRA CON LA CARD DE FAMILIA (1,10). Allí el acercamiento compensa que
+ * la foto sea un fondo con texto encima; aquí la foto ES la pieza, está sola
+ * dentro de su marco y mide hasta 583 px de lado. A 1,10 un cuadrado así se
+ * mueve 29 px por lado y el gesto deja de leerse como acercamiento.
+ *
+ * LA DIRECCIÓN VA AL REVÉS QUE EN LA MAQUETA, a propósito. El export de Claude
+ * Design deja la foto en reposo a `scale(1.05)` y la relaja a 1 al señalarla, o
+ * sea que el 5% del encuadre está recortado SIEMPRE y solo se recupera pasando
+ * el cursor —que en táctil no ocurre nunca—. El sitio acerca desde 1, que además
+ * es lo que ya hacen las otras cuatro fotos con hover.
+ */
+export const ACERCAMIENTO_EN_DIPTICO = true;

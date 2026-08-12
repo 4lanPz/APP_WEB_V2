@@ -291,6 +291,52 @@ export const INTERACCION = {
   },
 } as const;
 
+/**
+ * RIEL DE ETAPAS de «El taller por dentro» (`RielDeEtapas`).
+ *
+ * ── LA DURACIÓN DEL TRAMO ES PROPORCIONAL A LO QUE RECORRE ────────────────
+ *
+ * La maqueta movía el tramo activo con `transition: left 520ms` fijos, y un
+ * tiempo fijo es lo que rompe la ilusión de que el tramo SE DESPLAZA: saltar de
+ * la etapa 01 a la 02 y saltar de la 01 a la 05 son un cuarto de riel y el riel
+ * entero, y hechos en el mismo tiempo el segundo se lee como un parpadeo en otro
+ * sitio, no como un recorrido. Con la duración atada a la distancia, la
+ * velocidad es la misma en los dos casos y el ojo puede seguirlo.
+ *
+ * Un salto de una etapa vale `asentar` —es la respuesta a haber pulsado un
+ * control, y ese es el tiempo de esa familia—; cada etapa más de recorrido suma
+ * `porEtapaExtra`. El recorrido máximo son cuatro etapas (de la 01 a la 05), o
+ * sea 220 + 3 × 100 = 520ms: exactamente el valor de la maqueta, que pasa de ser
+ * una constante a ser el TECHO.
+ *
+ * Con `prefers-reduced-motion` no hace falta ramificar: la duración se escribe
+ * en línea sobre una transición CSS y `globals.css` las colapsa todas a 0,01ms
+ * con `!important`, que gana también a los estilos en línea.
+ */
+export const RIEL_DE_ETAPAS = {
+  /** Salto de una sola etapa: `asentar`, 220ms. */
+  saltoBase: DURATION.asentar,
+  /** Lo que suma cada etapa ADICIONAL de recorrido, en segundos. */
+  porEtapaExtra: 0.1,
+  /**
+   * Cruce entre las fotografías, 700ms — `desenrollar`, no `asentar`. El tramo
+   * responde al dedo y la fotografía cambia de plano: son dos tiempos distintos
+   * a propósito, y el lento es el de la imagen. Es también el valor de la
+   * maqueta.
+   */
+  cruceDeFoto: DURATION.desenrollar,
+} as const;
+
+/**
+ * Duración del desplazamiento del tramo activo, en segundos, según cuántas
+ * etapas recorre. Vive aquí y no en el componente porque ningún componente
+ * define tiempos propios (ver cabecera de este archivo).
+ */
+export function duracionDelTramo(etapasRecorridas: number): number {
+  const salto = Math.max(1, Math.abs(etapasRecorridas));
+  return RIEL_DE_ETAPAS.saltoBase + (salto - 1) * RIEL_DE_ETAPAS.porEtapaExtra;
+}
+
 /** CSS easing strings (para transiciones fuera de framer-motion). */
 export const CSS_EASE_ASENTAR = "cubic-bezier(0.4, 0, 0.2, 1)";
 export const CSS_EASE_REVELAR = "cubic-bezier(0.16, 1, 0.3, 1)";

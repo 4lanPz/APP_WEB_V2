@@ -16,6 +16,7 @@
 import { categories } from "./taxonomy";
 import { estadoFicha } from "./fichas";
 import { HITOS, rotuloDeHito, slotDeHito } from "./hitos";
+import { ETAPAS_TALLER, numeroDeEtapa } from "./etapas-taller";
 
 export interface SlotImagen {
   /** Id del slot = nombre del archivo a dejar en `entrega/`, sin extensión. */
@@ -202,13 +203,70 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     ancho: 1280,
     nota: "Macro real de piqué. Acompaña a la ficha de la tela 02.",
   },
+  /*
+   * Las dos fotografías del díptico de «Lo que nos mueve»: una por declaración,
+   * APAISADAS 4:3, encima de su texto y a media anchura del contenedor amplio.
+   *
+   * PIDIERON SER CUADRADAS Y NO LLEGARON A SALIR ASÍ AL ENCARGO. La maqueta las
+   * dibuja 1:1 y así se montaron, pero un cuadrado de 607 px con 138 px de
+   * declaración debajo da una columna de 745 × 607 —más alta que ancha— y la
+   * pieza se leía esbelta. No era cuestión de tamaño: 607 es prácticamente el
+   * techo del contenedor amplio, y ensanchar sube el alto en la misma
+   * proporción. A 4:3 la foto mide 607 × 455 y la columna 593 × 607, que ya cae
+   * del lado ancho. Se eligió 4:3 y no 5:4 porque 4:3 es la proporción que ya
+   * usan la galería de telas, el carrusel de encuentros y la línea de hitos; 5:4
+   * habría sido una quinta proporción en este registro para ganar 31 px.
+   *
+   * Son dos huecos y no uno reutilizado dos veces: el díptico enfrenta las dos
+   * declaraciones en columnas simétricas, así que las dos fotos se ven A LA VEZ
+   * y una sola repetida se leería como un error de maqueta. Cada una ilustra su
+   * declaración —la misión mira al material, la visión al color terminado—, y
+   * por eso el encargo de las dos no es el mismo.
+   */
   {
-    id: "oficio-nave-tejido",
-    destino: "/oficio/nave-tejido.webp",
-    alt: "Nave de tejido de Textil Padilla: fileta de conos de hilo blanco alineados frente a máquinas de tejido circular.",
+    id: "manifiesto-mision",
+    destino: "/manifiesto/mision.webp",
+    alt: "Hilo entrando en el telar en la planta de Textil Padilla: el material del que parte la tela.",
     pagina: "/empresa",
-    seccion: "Oficio",
-    ancho: 1920,
+    seccion: "Misión y visión",
+    /*
+     * 1280 sale de medir el caso más grande, que NO es el de escritorio. A 1440
+     * la columna del díptico mide 607 px; apilada —por debajo de 640 px de
+     * ventana, cuando las dos columnas pasan a una— llega a 550. Manda el
+     * primero: 607 × 1,04 del acercamiento al pasar el cursor = 631, × 2 de
+     * densidad de pantalla = 1263. Es la misma cuenta que las cards de familia,
+     * y 1280 la cubre.
+     *
+     * EL PASO DE 1:1 A 4:3 NO LO MUEVE: la foto cambia de alto, no de ancho, y
+     * lo que se descarga lo fija el ancho.
+     */
+    ancho: 1280,
+    nota:
+      "APAISADA 4:3 — el marco es `aspect-4/3` y recorta con `object-cover`, así " +
+      "que una toma cuadrada o vertical pierde arriba y abajo. Se ve a media " +
+      "anchura del contenedor amplio, hasta 607 × 455 px. La MISIÓN mira al " +
+      "MATERIAL: hilo, cono, telar en operación, el género naciendo. Documental, " +
+      "sin posado ni rótulos quemados. Al pasar el cursor se acerca un 4%, así " +
+      "que el encuadre no puede depender de lo que hay justo en el borde.",
+  },
+  {
+    id: "manifiesto-vision",
+    destino: "/manifiesto/vision.webp",
+    alt: "Carta de color y rollos teñidos de Textil Padilla: el color exacto como resultado.",
+    pagina: "/empresa",
+    seccion: "Misión y visión",
+    /* Misma cuenta que `manifiesto-mision`: es la otra mitad del mismo díptico. */
+    ancho: 1280,
+    nota:
+      "APAISADA 4:3 — el marco es `aspect-4/3` y recorta con `object-cover`, así " +
+      "que una toma cuadrada o vertical pierde arriba y abajo. Se ve a media " +
+      "anchura del contenedor amplio, hasta 607 × 455 px. La VISIÓN mira al " +
+      "RESULTADO: carta de color, rollos teñidos, tono terminado. Tiene que " +
+      "distinguirse de un vistazo de la de misión —material crudo frente a color " +
+      "acabado—, porque las dos se ven una al lado de la otra. Luz neutra: la " +
+      "carta de color es lo que sostiene el argumento y una carta con dominante " +
+      "no se puede enseñar. Al pasar el cursor se acerca un 4%, así que el " +
+      "encuadre no puede depender de lo que hay justo en el borde.",
   },
   {
     id: "oficio-taller-alangasi",
@@ -218,24 +276,6 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     seccion: "Oficio",
     ancho: 1200,
     nota: "Vertical (4:5).",
-  },
-  {
-    id: "oficio-tintoreria",
-    destino: "/oficio/tintoreria.webp",
-    alt: "Tintorería de Textil Padilla: barcas de teñido en proceso.",
-    pagina: "/empresa",
-    seccion: "Oficio",
-    ancho: 1600,
-    nota: "Área de tintorería en marcha. Apaisada (4:3). Es la que sostiene el argumento del teñido a demanda.",
-  },
-  {
-    id: "oficio-carta-color",
-    destino: "/oficio/carta-color.webp",
-    alt: "Carta de color de Textil Padilla: muestras de tela teñidas ordenadas por tono.",
-    pagina: "/empresa",
-    seccion: "Oficio",
-    ancho: 1600,
-    nota: "Muestrario físico de colores. Apaisada (4:3).",
   },
   {
     id: "local-fachada",
@@ -417,12 +457,23 @@ export const SLOTS_UNICOS: SlotImagen[] = [
   },
 
   /*
-   * Bloque "Asesor virtual" de la portada: una foto por paso del cuestionario
-   * (Prenda / Sublimado / Uso) que se cambia sola al avanzar el paso activo. Son
-   * tres slots propios y no los del recomendador (`prenda-*`) ni los del wizard
+   * Bloque "Asesor virtual": una foto por paso del cuestionario (Prenda /
+   * Sublimado / Uso) que se cambia sola al avanzar el paso activo. Son tres
+   * slots propios y no los del recomendador (`prenda-*`) ni los del wizard
    * (`asesor-*`): aquí la foto es grande, editorial y va sobre fondo claro, no
    * una miniatura. Formato flexible —la caja recorta con object-cover—, así que
    * marketing puede entregar apaisada o vertical sin romper el bloque.
+   *
+   * UN SOLO SLOT POR PASO AUNQUE EL BLOQUE SALGA EN DOS PÁGINAS. `AsesorPasos`
+   * cierra la portada y también /empresa, con el mismo componente y los mismos
+   * tres pasos (`data/pasos-asesor.ts`); lo que cambia entre las dos es el
+   * discurso, no las fotos. Duplicar el slot por ruta le pediría a marketing seis
+   * fotos para enseñar tres cosas. Es el mismo trato que las cards de familia,
+   * que salen en tres rejillas con un archivo cada una.
+   *
+   * Siguen figurando en `/` porque es donde más peso tienen —quien lee este
+   * inventario para disparar la foto necesita saber dónde se va a ver, y la
+   * portada manda—. La doble ubicación va dicha en la `nota` de cada una.
    */
   {
     id: "asesor-portada-prenda",
@@ -431,7 +482,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Asesor virtual",
     ancho: 1600,
-    nota: "Paso 01 (Prenda). Qué se va a producir: prenda deportiva terminada o en confección. Sin rótulos quemados. Formato flexible; se recorta a la caja del split.",
+    nota: "Paso 01 (Prenda). Qué se va a producir: prenda deportiva terminada o en confección. Sin rótulos quemados. Formato flexible; se recorta a la caja del split. SE VE EN DOS PÁGINAS —la portada y /empresa montan el mismo bloque—, así que es un archivo, no dos.",
   },
   {
     id: "asesor-portada-sublimado",
@@ -440,7 +491,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Asesor virtual",
     ancho: 1600,
-    nota: "Paso 02 (Sublimado). Base clara con estampado full-print, o el contraste liso/sublimado. Formato flexible; se recorta a la caja del split.",
+    nota: "Paso 02 (Sublimado). Base clara con estampado full-print, o el contraste liso/sublimado. Formato flexible; se recorta a la caja del split. SE VE EN DOS PÁGINAS —la portada y /empresa montan el mismo bloque—, así que es un archivo, no dos.",
   },
   {
     id: "asesor-portada-uso",
@@ -449,7 +500,7 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     pagina: "/",
     seccion: "Asesor virtual",
     ancho: 1600,
-    nota: "Paso 03 (Uso). El destino de la tela: alto rendimiento, casual o uniforme. Formato flexible; se recorta a la caja del split.",
+    nota: "Paso 03 (Uso). El destino de la tela: alto rendimiento, casual o uniforme. Formato flexible; se recorta a la caja del split. SE VE EN DOS PÁGINAS —la portada y /empresa montan el mismo bloque—, así que es un archivo, no dos.",
   },
 
   // Recomendador de prenda de /productos. El id es la `key` de cada opción.
@@ -567,6 +618,44 @@ export const SLOTS_UNICOS: SlotImagen[] = [
     nota: "Cuadrada (1:1). Uniforme corporativo, color estable al lavado.",
   },
 ];
+
+/**
+ * Las cinco fotografías del riel de «El taller por dentro». SE DERIVAN DE
+ * `ETAPAS_TALLER`, que es la misma lista que pinta la sección: el id, el alt y
+ * la nota salen de la etapa, y el rótulo del hueco lleva su número.
+ *
+ * Mismo motivo que en `SLOTS_HITOS`: escrita aparte, esta lista y la de la
+ * página divergen, y el encargo acaba pidiendo una foto de una etapa que la
+ * página ya no enseña. Reordenar el recorrido renumera los rótulos aquí solo.
+ *
+ * TRES DE LOS CINCO IDS SON LOS DE ANTES —`oficio-carta-color`,
+ * `oficio-nave-tejido`, `oficio-tintoreria`—, que vivían sueltos en
+ * `SLOTS_UNICOS` alimentando el mosaico de tres fotos que había en esta sección.
+ * No se renombran: `oficio-nave-tejido` YA TIENE foto real del cliente y un id
+ * nuevo la dejaría huérfana, y los otros dos ya están pedidos a marketing con
+ * ese nombre. Lo que cambia es su especificación, porque el hueco cambió de
+ * tamaño: eran media columna a 4:3 y ahora son una foto grande casi 2:1.
+ *
+ * `ancho` 2400 y no 1600: el marco llega a ~1038 px de ancho a 1440, y ×2 de
+ * densidad de pantalla son 2076. Es el mismo orden que las cabeceras de página,
+ * que es lo que este hueco es ahora — una foto a lo ancho de la banda.
+ */
+export const SLOTS_TALLER: SlotImagen[] = ETAPAS_TALLER.map((e, i) => ({
+  id: e.slot,
+  /*
+   * Sigue siendo `/oficio/`, no una carpeta nueva. Tres de estos archivos ya
+   * están publicados en esa ruta y uno de ellos existe de verdad: mover el
+   * destino por ordenar la carpeta dejaría un 404 hasta que alguien volviera a
+   * correr el procesado. La convención del sitio es que la carpeta la marca el
+   * prefijo del id, y el prefijo sigue siendo `oficio-`.
+   */
+  destino: `/oficio/${e.slot.replace(/^oficio-/, "")}.webp`,
+  alt: e.alt,
+  pagina: "/empresa",
+  seccion: "El taller por dentro",
+  ancho: 2400,
+  nota: `Etapa ${numeroDeEtapa(i)} · ${e.riel}. ${e.nota}`,
+}));
 
 /**
  * Hitos de la línea de tiempo de Empresa. SE DERIVAN DE `HITOS`, que es la
@@ -864,6 +953,7 @@ export const SLOTS: SlotImagen[] = [
   ...SLOTS_GALERIA_TELA,
   ...SLOTS_VISTAS_EXTRA,
   ...SLOTS_ALTA_TELA,
+  ...SLOTS_TALLER,
   ...SLOTS_HITOS,
 ];
 

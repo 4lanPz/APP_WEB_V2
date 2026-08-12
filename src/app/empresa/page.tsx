@@ -3,16 +3,20 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Hero } from "@/components/ui/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { AsesorPasos } from "@/components/ui/AsesorPasos";
 import { BloqueFotoTexto } from "@/components/ui/BloqueFotoTexto";
+import { RielDeEtapas } from "@/components/ui/RielDeEtapas";
 import { Timeline } from "@/components/ui/Timeline";
 import { DraftNotice } from "@/components/ui/DraftNotice";
+import { buttonVariants } from "@/components/ui/buttonVariants";
 import { foto } from "@/data/imagenes";
 import { HITOS } from "@/data/hitos";
-import { buttonVariants } from "@/components/ui/buttonVariants";
-import { MagneticLink } from "@/components/motion/MagneticLink";
+import { PASOS_ASESOR } from "@/data/pasos-asesor";
+import { PhotoCurtain } from "@/components/motion/Curtain";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealGroup, RevealItem } from "@/components/motion/RevealGroup";
+import { ACERCAMIENTO_EN_DIPTICO } from "@/lib/motion-interaccion";
+import { catalogAllLink } from "@/lib/nav-data";
 import { numerador } from "@/lib/numerador";
 
 export const metadata: Metadata = {
@@ -21,28 +25,62 @@ export const metadata: Metadata = {
     "Casi cuatro décadas seleccionando hilo, tejiendo rollo y afinando color desde Alangasí, Ecuador.",
 };
 
-const valores = [
+/**
+ * PROPORCIÓN DE LAS DOS FOTOS DEL DÍPTICO.
+ *
+ * La maqueta las pide CUADRADAS y se montaron así. El problema no era el tamaño
+ * —a 1440 miden 607 px de lado, que es prácticamente el techo del contenedor
+ * amplio— sino la PROPORCIÓN DE LA COLUMNA: un cuadrado de 607 con 138 px de
+ * declaración debajo da una pieza de 745 × 607, o sea más alta que ancha, y eso
+ * es lo que se lee como esbelta por mucho que la foto crezca. Ensanchar no lo
+ * arregla: la columna crece a lo ancho y a lo alto a la vez.
+ *
+ * A 4:3 la foto mide 607 × 455 y la columna entera 593 × 607 — ligeramente más
+ * ancha que alta, que es lo que la endereza. A 5:4 serían 607 × 486 y la columna
+ * 624 × 607, casi cuadrada.
+ *
+ * SE ELIGE 4:3 Y NO 5:4 POR UNA RAZÓN QUE NO ES DE ESTA SECCIÓN: 4:3 ya es la
+ * proporción de la galería de telas, del carrusel de encuentros y de las fotos
+ * de la línea de hitos, mientras que 5:4 no existe hoy en ningún hueco del
+ * sitio. Meterla aquí sería una quinta proporción en el registro de fotografía
+ * —y por tanto en el encargo a marketing— para ganar 31 px de alto.
+ *
+ * VIVE EN UNA CONSTANTE porque la comparten las dos columnas y porque tiene que
+ * cuadrar con la `nota` de los dos slots: si esto cambia, ahí hay que decirlo.
+ */
+const PROPORCION_DIPTICO = "aspect-4/3";
+
+/**
+ * Las dos declaraciones del díptico. Cada una con su hueco de fotografía,
+ * registrado en `data/slots-imagen.ts`.
+ *
+ * EL TEXTO DE LA VISIÓN VIENE RECORTADO DEL EXPORT DE DISEÑO: acaba en «sino por
+ * el criterio» y ya no arrastra «la casa a la que se acude cuando el color y la
+ * constancia no admiten error». No es una pérdida por descuido — esa frase es
+ * una segunda afirmación metida detrás de la primera con dos puntos, y en un
+ * bloque a media columna bajo una foto de 583 px la declaración tiene que caber
+ * de una lectura. Sigue viva en la maqueta como titular propio de otra variante.
+ */
+const DECLARACIONES = [
   {
-    title: "Herencia",
-    description:
-      "El oficio como legado. Manos que conocen la tela por el tacto antes que por la ficha, y una memoria de taller que se transmite entre tiradas. No presumimos de tradición: la usamos.",
+    rotulo: "Misión",
+    slot: "manifiesto-mision",
+    texto:
+      "Convertir el mejor hilo disponible en tela que se comporta: gramaje medido, color exacto y una mano que se reconoce al tacto, rollo tras rollo.",
   },
   {
-    title: "Precisión",
-    description:
-      "La tela como sistema. Gramaje, torsión, densidad y solidez del color: nada se deja al azar y todo se documenta. Hablamos en unidades —metros, gramos, referencias— porque el criterio se demuestra con datos.",
-  },
-  {
-    title: "Vanguardia",
-    description:
-      "La materia al servicio de lo que aún no existe. Teñido a demanda, color exacto y respuesta ágil: tradición puesta a trabajar para que otros construyan sobre una base que no falla.",
-  },
-  {
-    title: "Reserva",
-    description:
-      "La marca nunca grita. Preferimos la afirmación a la exclamación y el trabajo bien hecho al ruido. Servimos al color del cliente desde el criterio de quien conoce la materia —servicial, sin sumisión.",
+    rotulo: "Visión",
+    slot: "manifiesto-vision",
+    texto:
+      "Ser el partner de manufactura textil de referencia para las marcas, distribuidores y retail premium de la región andina —reconocidos no por el volumen, sino por el criterio.",
   },
 ];
+
+/*
+ * LOS CUATRO VALORES YA NO SE ESCRIBEN AQUÍ, y no porque se hayan movido a un
+ * componente: la sección que los pintaba se retiró. El contenido está entero en
+ * `src/data/valores.ts`, que no lo importa nadie a propósito — ver allí.
+ */
 
 /*
  * LOS HITOS YA NO SE ESCRIBEN AQUÍ: viven en `src/data/hitos.ts`.
@@ -169,8 +207,29 @@ export default function EmpresaPage() {
         </Container>
       </section>
 
+      {/*
+        Lo que nos mueve — DÍPTICO: dos columnas iguales, foto cuadrada sobre la
+        declaración. Antes eran dos filas de rótulo + párrafo separadas por
+        filete, sin una sola imagen.
+
+        VA EN `ancho="amplio"`, y esta vez lo pide el contenido: son dos piezas
+        simétricas en paralelo —el caso literal para el que `globals.css` reserva
+        el segundo ancho—, y lo que crece con el contenedor no es la línea de
+        lectura sino el LADO DE LAS FOTOS, que pasan de 504 a 583 px. La
+        declaración no se alarga con él: sigue siendo media columna.
+
+        LAS DOS COLUMNAS SON IGUALES A PROPÓSITO. Misión y visión no se jerarquizan
+        entre sí, y cualquier reparto desigual diría que una manda sobre la otra.
+
+        LOS VALORES NO ENTRAN AQUÍ: siguen en su propia sección, dos más abajo.
+
+        LA FOTO NO VA DENTRO DE UN `RevealItem`. Su gesto es el barrido de
+        `Curtain` —el de toda fotografía del sitio— y el del texto es el de un
+        cuerpo; montados en el mismo nodo serían dos entradas discutiendo por el
+        mismo elemento, que es lo que ya evita `BloqueFotoTexto`.
+      */}
       <section id="manifiesto" className="py-16 sm:py-24">
-        <Container>
+        <Container ancho="amplio">
           <div className="mb-6">
             <DraftNotice>Contenido de ejemplo · pendiente de validación</DraftNotice>
           </div>
@@ -181,134 +240,116 @@ export default function EmpresaPage() {
             medio. La etiqueta enumera lo que hay debajo de ella, no el tema.
           */}
           <SectionHeader index={numero()} title="Lo que nos mueve" tag="Misión · Visión" />
-          <RevealGroup className="flex flex-col divide-y divide-greige">
-            <RevealItem className="grid grid-cols-1 gap-4 py-10 sm:grid-cols-[0.42fr_1fr] sm:gap-10">
-              <span className="font-mono text-label uppercase text-accent">
-                Misión
-              </span>
-              <p className="font-serif text-body-l text-ink">
-                Convertir el mejor hilo disponible en tela que se comporta:
-                gramaje medido, color exacto y una mano que se reconoce al
-                tacto, rollo tras rollo.
-              </p>
-            </RevealItem>
-            <RevealItem className="grid grid-cols-1 gap-4 py-10 sm:grid-cols-[0.42fr_1fr] sm:gap-10">
-              <span className="font-mono text-label uppercase text-accent">
-                Visión
-              </span>
-              <p className="font-serif text-body-l text-ink">
-                Ser el partner de manufactura textil de referencia para las
-                marcas, distribuidores y retail premium de la región andina
-                —reconocidos no por el volumen, sino por el criterio: la casa
-                a la que se acude cuando el color y la constancia no admiten
-                error.
-              </p>
-            </RevealItem>
-          </RevealGroup>
-        </Container>
-      </section>
+          {/*
+            LA CALLE ES DE 24 px DESDE QUE HAY DOS COLUMNAS, el mínimo del propio
+            clamp del diseño (`clamp(24px,4vw,72px)`), y no es una preferencia
+            estética: es lo único que queda para dar ancho a las fotos. La
+            columna es `(1238 útiles − calle) / 2`, así que cada píxel que se le
+            quita a la calle son medio píxel para cada foto. Con 24 salen 607 px
+            de lado a 1440; con la calle a cero —que ya no sería una calle— serían
+            619, y ese es el techo del contenedor amplio.
 
-      <section id="infraestructura" className="bg-brand-deep py-16 text-paper sm:py-24">
-        <Container>
-          <SectionHeader
-            index={numero()}
-            title="El taller por dentro"
-            tag="Oficio · manos y máquina"
-            tone="dark"
-          />
-          {/* Aquí había un briefing de fotografía ("Documental de taller…
-              Aquí irán las fotografías reales cuando estén listas"): una nota
-              del mockup dirigida al fotógrafo, no al visitante, y se estaba
-              publicando. La cabecera de sección ya dice qué es esto. */}
-          <RevealGroup
-            variante="rejilla" fondo="bg-brand-deep"
-            className="grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
-            <RevealItem className="sm:row-span-2">
-              <ImagePlaceholder
-                dark
-                src={foto("oficio-nave-tejido")?.ruta}
-                alt={foto("oficio-nave-tejido")?.alt}
-                sizes="(min-width: 640px) 50vw, 100vw"
-                caption="01 · Nave de tejido · Alangasí"
-                className="aspect-4/3 h-full sm:aspect-auto"
-              />
-            </RevealItem>
-            <RevealItem>
-              <ImagePlaceholder
-                dark
-                src={foto("oficio-tintoreria")?.ruta}
-                alt={foto("oficio-tintoreria")?.alt ?? ""}
-                sizes="(min-width: 640px) 50vw, 100vw"
-                caption="02 · Tintorería"
-                className="aspect-4/3"
-              />
-            </RevealItem>
-            <RevealItem>
-              <ImagePlaceholder
-                dark
-                src={foto("oficio-carta-color")?.ruta}
-                alt={foto("oficio-carta-color")?.alt ?? ""}
-                sizes="(min-width: 640px) 50vw, 100vw"
-                caption="03 · Carta de color"
-                className="aspect-4/3"
-              />
-            </RevealItem>
-          </RevealGroup>
-          <div className="mt-10 flex flex-wrap items-center gap-6">
-            <MagneticLink href="/#asesor" className={buttonVariants({ variant: "contorno" })}>
-              Hablar con un asesor →
-            </MagneticLink>
-            <Link
-              href="/productos"
-              className={buttonVariants({ variant: "enlace" })}
-            >
-              Ver catálogo de telas →
-            </Link>
+            Apilado (por debajo de 640) la separación vuelve a 40 px: ahí no es
+            una calle entre columnas sino el aire entre una declaración y la
+            siguiente, y 24 px las pegaría.
+          */}
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-6">
+            {DECLARACIONES.map((d) => (
+              /*
+                `group` para que la foto se acerque al señalar CUALQUIER parte de
+                la declaración, no solo la imagen: la columna entera es la pieza.
+              */
+              <div key={d.rotulo} className="group">
+                <PhotoCurtain
+                  src={foto(d.slot)?.ruta}
+                  alt={foto(d.slot)?.alt ?? ""}
+                  /* La columna es media anchura del contenedor amplio: 583 px de 1440. */
+                  sizes="(min-width: 640px) 45vw, 100vw"
+                  sublabel={d.rotulo}
+                  zoomOnGroupHover={ACERCAMIENTO_EN_DIPTICO}
+                  className={PROPORCION_DIPTICO}
+                />
+                <Reveal>
+                  {/*
+                    Rótulo y filete comparten línea de base. El filete es
+                    decorativo —no marca ningún estado—, y por eso puede ir en
+                    `brand`: la norma de contraste de 3:1 cubre los indicadores
+                    de estado y los límites de control, no la puntuación
+                    editorial.
+                  */}
+                  <div className="flex items-baseline gap-3.5 pt-7 pb-3.5">
+                    <span className="font-mono text-label uppercase text-accent">
+                      {d.rotulo}
+                    </span>
+                    <span aria-hidden className="block h-px w-10 bg-brand" />
+                  </div>
+                  <p className="font-sans text-h3 font-medium text-ink">
+                    {d.texto}
+                  </p>
+                </Reveal>
+              </div>
+            ))}
           </div>
         </Container>
       </section>
 
       {/*
-        Los valores — PENDIENTE DE REDISEÑO, INTACTO A PROPÓSITO.
+        El taller por dentro — RIEL DE ETAPAS. Eran tres fotografías fijas en
+        mosaico —nave de tejido, tintorería, carta de color— y pasa a ser el
+        recorrido completo en cinco etapas con una sola foto grande.
 
-        Se mueve de sitio y nada más: sigue siendo la lista de cuatro filas
-        separadas por filete, sin cabecera numerada, con el rótulo mono suelto
-        que tenía. Llegará con el diseño ya decidido.
+        LO QUE GANA NO ES INTERACCIÓN, ES EL RECORRIDO. El mosaico enseñaba tres
+        sitios de la planta sin decir en qué orden ocurren; el riel es la línea
+        que sigue la tela, y las dos etapas que faltaban —control de calidad y
+        envío— son justamente las que sostienen lo que la página afirma sobre
+        medir y documentar.
 
-        CUANDO SE REDISEÑE VA EN `ancho="amplio"`. Es una rejilla de piezas
-        —cuatro valores en paralelo, no un texto seguido—, que es exactamente el
-        caso para el que se reservó el segundo ancho del `Container`. Hoy no se
-        cambia porque en una lista de filas a todo lo ancho el ancho extra solo
-        alarga la línea de lectura; en cuanto sea rejilla, deja de serlo.
+        Las cinco etapas viven en `data/etapas-taller.ts`, que es también de
+        donde el registro de slots deriva sus cinco huecos de fotografía.
       */}
-      <section className="border-y border-greige bg-bone py-16 sm:py-24">
+      <section id="infraestructura" className="bg-brand-deep py-16 text-paper sm:py-24">
         <Container>
-          <p className="mb-10 font-mono text-label uppercase text-graphite">
-            Los valores que no negociamos
-          </p>
-          <RevealGroup className="flex flex-col divide-y divide-greige">
-            {valores.map((valor) => (
-              <RevealItem
-                key={valor.title}
-                className="grid grid-cols-1 gap-3 py-8 sm:grid-cols-[200px_1fr] sm:gap-10"
-              >
-                <h3 className="font-sans text-h3 font-semibold text-ink">
-                  {valor.title}
-                </h3>
-                <p className="max-w-2xl font-serif text-body-s text-graphite">
-                  {valor.description}
-                </p>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-          <Reveal className="mt-10">
-            <p className="max-w-xl font-serif text-body-l italic text-ink">
-              «No fabricamos la moda. Fabricamos aquello con lo que la moda se
-              hace.»
-            </p>
-          </Reveal>
+          <SectionHeader
+            index={numero()}
+            title="El taller por dentro"
+            tag="Recorrido en cinco etapas"
+            tone="dark"
+          />
+          {/*
+            Aquí había un briefing de fotografía ("Documental de taller… Aquí
+            irán las fotografías reales cuando estén listas"): una nota del
+            mockup dirigida al fotógrafo, no al visitante, y se estaba
+            publicando. La cabecera de sección ya dice qué es esto.
+
+            Y después hubo un "Elija una etapa del riel para verla de cerca",
+            que se ha ido con el avance automático: era una instrucción de uso, y
+            una pieza que ya se mueve sola no necesita que le expliquen que se
+            puede tocar. Si hiciera falta la frase, el problema sería el riel.
+
+            LOS DOS BOTONES DE AQUÍ ABAJO TAMBIÉN SE RETIRAN («Hablar con un
+            asesor», «Ver catálogo de telas»). El bloque de asesor que cierra
+            ahora la página cubre la conversación, y el catálogo lo repone la
+            línea de cierre del final — no aquí: a media página el visitante
+            todavía está leyendo quiénes somos.
+          */}
+          <RielDeEtapas />
         </Container>
       </section>
+
+      {/*
+        AQUÍ ESTABA «LOS VALORES QUE NO NEGOCIAMOS». Marketing la retira
+        (agosto de 2026).
+
+        EL CONTENIDO NO SE HA PERDIDO: los cuatro valores y la cita de cierre
+        están enteros en `src/data/valores.ts`, con la nota de cómo tenía que
+        volver si vuelve (rejilla de cuatro piezas en `ancho="amplio"`, que era
+        el rediseño pendiente). No tenía ningún hueco de imagen, así que
+        retirarla no da de baja ningún slot ni cambia el encargo de fotografía.
+
+        LA CITA SIGUE PUBLICÁNDOSE. Es la misma frase que el footer imprime en
+        las trece páginas (`footerBrandQuote`), así que al irse esta sección
+        /empresa no la pierde: deja de decirla dos veces seguidas.
+      */}
 
       {/*
         Línea de hitos — REDISEÑADA: horizontal, el año identifica y la foto es
@@ -336,6 +377,80 @@ export default function EmpresaPage() {
             Fechas y aperturas por confirmar con administración.
           </p>
           <Timeline items={HITOS} />
+        </Container>
+      </section>
+
+      {/*
+        Asesor virtual — EL MISMO BLOQUE DE LA PORTADA, no una copia.
+        `AsesorPasos` ya estaba parametrizado por completo (eyebrow, titular,
+        párrafo, CTA y pasos), así que reutilizarlo es pasarle otro texto: no ha
+        hecho falta tocar el componente.
+
+        LAS TRES FOTOS SON LAS MISMAS, y a propósito. `asesor-portada-*` son los
+        huecos que ya alimentan el bloque en la portada, y los pasos son los
+        mismos tres —Prenda, Sublimado, Uso—: pedir tres fotos nuevas para
+        enseñar exactamente lo mismo en otra página duplicaría el encargo sin
+        ganar nada. Es el trato que ya tienen las cards de familia, que salen en
+        tres rejillas con un solo archivo cada una.
+
+        EL TEXTO SÍ CAMBIA. En la portada el bloque abre la conversación con
+        alguien que acaba de llegar («¿No sabes qué tela necesitas?»); aquí cierra
+        una página que se ha pasado cuatro secciones contando cómo se mide y se
+        tiñe, así que engancha con eso en vez de volver a presentarse. El mismo
+        párrafo en los dos sitios se leería como una plantilla repetida.
+
+        NO REPONE EL ENLACE AL CATÁLOGO — este bloque lleva al asesor, que es otra
+        cosa. Lo repone la línea de cierre de aquí abajo.
+      */}
+      <AsesorPasos
+        eyebrow="Asesor virtual"
+        titular={["Ya sabe cómo", "trabajamos.", "Vamos a su color."]}
+        parrafo="Tres preguntas y un asesor le devuelve una recomendación concreta: referencia, gramaje y tono, lista para pedir muestra."
+        cta={{ label: "Probar el asesor virtual →", href: "/asesor-virtual" }}
+        pasos={PASOS_ASESOR}
+      />
+
+      {/*
+        SALIDA AL CATÁLOGO — lo único que /empresa perdió al retirar los dos
+        botones del taller, y lo que se repone aquí.
+
+        VA AL FINAL Y NO AL PIE DEL RIEL. A media página el visitante todavía
+        está leyendo quiénes somos; mandarlo al catálogo ahí lo saca del relato
+        por la mitad. Aquí ya lo ha terminado, y la pregunta que le queda —«¿y qué
+        telas hacen?»— es exactamente la que este enlace contesta.
+
+        LA ETIQUETA Y EL DESTINO SON `catalogAllLink`, la misma constante que
+        pinta el «ver todo» del mega-menú y del menú móvil. Escribir el rótulo a
+        mano es lo que ya hizo divergir tres veces la navegación, y este enlace
+        cumple la misma función que aquel: la salida general al catálogo. (El
+        hero de la portada y el cierre de /contacto sí llevan texto propio —«Ver
+        catálogo de telas →»—, que son CTA redactados para su página, no el «ver
+        todo» del sistema.)
+
+        VARIANTE `enlace` Y NO UN BOTÓN. El bloque del asesor termina con un
+        contorno; otro control con caja justo debajo serían dos botones
+        discutiendo por el mismo final de página. `enlace` es la variante que el
+        sistema define como el enlace de texto dentro del flujo de lectura, que
+        es lo que esto es: una línea más, no una segunda llamada.
+
+        SIGUE EN `bg-bone` a propósito, dentro de la misma banda clara del
+        asesor y separado solo por un filete. La página cierra claro → oscuro de
+        una vez hacia el footer; meter aquí una tercera superficie partiría ese
+        cierre en dos por un enlace de una línea. El `bg-bone` además es lo que
+        declara `--sup-*`, de donde la variante toma su color.
+      */}
+      <section className="bg-bone pb-16 text-ink">
+        <Container>
+          <Reveal>
+            <div className="border-t border-greige pt-7">
+              <Link
+                href={catalogAllLink.href}
+                className={buttonVariants({ variant: "enlace" })}
+              >
+                {catalogAllLink.label}
+              </Link>
+            </div>
+          </Reveal>
         </Container>
       </section>
     </div>
