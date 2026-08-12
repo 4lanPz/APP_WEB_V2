@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./image-slot.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#E8E4DE; }
+  a { color:#33A2DC; text-decoration:none; }
+  a:hover { color:#0D2937; }
+  ::selection { background:#33A2DC; color:#F5F2EE; }
+</style>
+</helmet>
+
+<section data-screen-label="Turno 5 — Seccion 04 El taller por dentro" style="padding:clamp(32px,4vw,64px) clamp(20px,3vw,48px) 120px; display:flex; flex-direction:column; gap:clamp(28px,3vw,48px);">
+
+  <div style="display:flex; flex-direction:column; gap:14px; max-width:1180px;">
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <span style="width:6px; height:6px; background:#A0715A; display:block;"></span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#6B6560;">Turno 5 · Empresa · Sección 04 «El taller por dentro» · cinco etapas</span>
+    </div>
+    <h1 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(26px,3vw,40px); letter-spacing:-0.02em; color:#0D2937;">Cinco maneras de mostrar las cinco etapas</h1>
+    <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.3vw,19px); line-height:1.55; color:#3E3A36; max-width:66ch; text-wrap:pretty;">Cada opción usa exactamente las cinco fotografías disponibles: desarrollo de color, tejido, tintura, control de calidad y envío. Se diferencian en cómo se ordenan y en cuánta interacción piden: <a href="#5a">5a</a> mosaico fijo, <a href="#5b">5b</a> riel de etapas, <a href="#5c">5c</a> tira desplazable, <a href="#5d">5d</a> acordeón de láminas, <a href="#5e">5e</a> pliego editorial.</p>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:clamp(28px,3vw,56px); align-items:flex-start;">
+
+    <!-- ══════════ 5a · MOSAICO FIJO ══════════ -->
+    <div id="5a" style="flex:0 0 auto; width:1180px; max-width:100%; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:baseline; gap:14px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#F5F2EE; background:#0D2937; padding:5px 10px;">5a</span>
+        <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#0D2937;">Mosaico fijo</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Sin clics · las cinco a la vez</span>
+      </div>
+
+      <div style="background:#0D2937;">
+        <div style="padding:clamp(56px,6vw,88px) clamp(28px,4vw,72px);">
+          <div style="display:flex; align-items:baseline; gap:20px; border-bottom:1px solid rgba(245,242,238,0.25); padding-bottom:18px; margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#33A2DC;">04</span>
+            <h2 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.01em; color:#F5F2EE;">El taller por dentro</h2>
+            <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Cinco etapas · un solo proceso</span>
+          </div>
+          <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; max-width:54ch; margin-bottom:44px; text-wrap:pretty;">Del color aprobado al rollo embalado. Cinco estaciones que ocurren bajo el mismo techo, en Alangasí, y que explican por qué una tela sale igual la segunda vez que se pide.</p>
+
+          <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:1px; background:rgba(245,242,238,0.16); border:1px solid rgba(245,242,238,0.16);">
+            <div style="grid-column:span 2; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(260px,34vh,360px);">
+              <image-slot id="tf5a1" shape="rect" fit="cover" placeholder="01 Desarrollo de color — carta física y muestras sobre mesa (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(14px,1.6vw,22px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 84%); pointer-events:none; display:flex; flex-direction:column; gap:5px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#33A2DC;">01</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#F5F2EE;">Desarrollo de color</span>
+              </div>
+            </div>
+            <div style="grid-column:span 4; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(260px,34vh,360px);">
+              <image-slot id="tf5a2" shape="rect" fit="cover" placeholder="02 Tejido — telar circular en operación, luz lateral rasante (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(14px,1.6vw,22px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 84%); pointer-events:none; display:flex; flex-direction:column; gap:5px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#33A2DC;">02</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#F5F2EE;">Tejido</span>
+              </div>
+            </div>
+            <div style="grid-column:span 2; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(220px,28vh,300px);">
+              <image-slot id="tf5a3" shape="rect" fit="cover" placeholder="03 Tintura — tintorería propia, tela en baño de color (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(14px,1.6vw,22px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 84%); pointer-events:none; display:flex; flex-direction:column; gap:5px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#33A2DC;">03</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#F5F2EE;">Tintura</span>
+              </div>
+            </div>
+            <div style="grid-column:span 2; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(220px,28vh,300px);">
+              <image-slot id="tf5a4" shape="rect" fit="cover" placeholder="04 Control de calidad — medición de gramaje sobre el rollo (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(14px,1.6vw,22px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 84%); pointer-events:none; display:flex; flex-direction:column; gap:5px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#33A2DC;">04</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#F5F2EE;">Control de calidad</span>
+              </div>
+            </div>
+            <div style="grid-column:span 2; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(220px,28vh,300px);">
+              <image-slot id="tf5a5" shape="rect" fit="cover" placeholder="05 Envío — rollos etiquetados listos para despacho (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(14px,1.6vw,22px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 84%); pointer-events:none; display:flex; flex-direction:column; gap:5px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#33A2DC;">05</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#F5F2EE;">Envío</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-top:44px;">
+            <a href="Textil Padilla Home.dc.html#asesor" style="font-family:'Archivo',sans-serif; font-weight:500; font-size:15px; color:#F5F2EE; background:#33A2DC; padding:15px 30px; border-radius:2px;" style-hover="background:#F5F2EE; color:#0D2937;">Hablar con un asesor →</a>
+            <a href="Textil Padilla Productos.dc.html" style="font-family:'Archivo',sans-serif; font-weight:500; font-size:15px; color:#C8C2B8; border-bottom:1px solid rgba(200,194,184,0.4); padding-bottom:3px;" style-hover="color:#F5F2EE; border-bottom:1px solid #F5F2EE;">Ver catálogo de telas →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 5b · RIEL DE ETAPAS ══════════ -->
+    <div id="5b" style="flex:0 0 auto; width:1180px; max-width:100%; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:baseline; gap:14px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#F5F2EE; background:#0D2937; padding:5px 10px;">5b</span>
+        <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#0D2937;">Riel de etapas</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Una foto grande · tramo activo deslizante</span>
+      </div>
+
+      <div style="background:#0D2937;">
+        <div style="padding:clamp(56px,6vw,88px) clamp(28px,4vw,72px);">
+          <div style="display:flex; align-items:baseline; gap:20px; border-bottom:1px solid rgba(245,242,238,0.25); padding-bottom:18px; margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#33A2DC;">04</span>
+            <h2 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.01em; color:#F5F2EE;">El taller por dentro</h2>
+            <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Recorrido en cinco etapas</span>
+          </div>
+          <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; max-width:54ch; margin-bottom:40px; text-wrap:pretty;">Elija una etapa del riel para verla de cerca. El orden es el mismo que sigue la tela dentro de la planta.</p>
+
+          <div style="position:relative; overflow:hidden; background:#0B2130; min-height:clamp(360px,58vh,560px); border:1px solid rgba(245,242,238,0.16);">
+            <div style="position:absolute; inset:0; opacity:{{ bOn1 }}; z-index:{{ bZ1 }}; transition:opacity 700ms cubic-bezier(0.16,1,0.30,1);">
+              <image-slot id="tf5b1" shape="rect" fit="cover" placeholder="01 Desarrollo de color — carta física, hilos de referencia (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.4vw,34px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 80%); pointer-events:none; display:flex; flex-direction:column; gap:8px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 01 · Laboratorio de color</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,25px); letter-spacing:-0.01em; color:#F5F2EE;">El color se aprueba antes de tejer</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8; max-width:48ch;">Carta física, referencia registrada por cliente y receta guardada: así el segundo pedido sale igual al primero.</span>
+              </div>
+            </div>
+            <div style="position:absolute; inset:0; opacity:{{ bOn2 }}; z-index:{{ bZ2 }}; transition:opacity 700ms cubic-bezier(0.16,1,0.30,1);">
+              <image-slot id="tf5b2" shape="rect" fit="cover" placeholder="02 Tejido — telar circular en operación, hilo entrando (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.4vw,34px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 80%); pointer-events:none; display:flex; flex-direction:column; gap:8px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 02 · Nave de tejido · Alangasí</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,25px); letter-spacing:-0.01em; color:#F5F2EE;">La estructura se decide en el telar</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8; max-width:48ch;">Punto jersey, piqué y microfibra tejidos en casa, con galga y gramaje fijados por ficha.</span>
+              </div>
+            </div>
+            <div style="position:absolute; inset:0; opacity:{{ bOn3 }}; z-index:{{ bZ3 }}; transition:opacity 700ms cubic-bezier(0.16,1,0.30,1);">
+              <image-slot id="tf5b3" shape="rect" fit="cover" placeholder="03 Tintura — tela en baño de color, vapor (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.4vw,34px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 80%); pointer-events:none; display:flex; flex-direction:column; gap:8px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 03 · Tintorería propia</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,25px); letter-spacing:-0.01em; color:#F5F2EE;">Teñido a demanda, al color exacto</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8; max-width:48ch;">Sin stock de colores: se tiñe lo que se pide, con solidez verificada antes de salir del baño.</span>
+              </div>
+            </div>
+            <div style="position:absolute; inset:0; opacity:{{ bOn4 }}; z-index:{{ bZ4 }}; transition:opacity 700ms cubic-bezier(0.16,1,0.30,1);">
+              <image-slot id="tf5b4" shape="rect" fit="cover" placeholder="04 Control de calidad — manos midiendo gramaje sobre la tela (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.4vw,34px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 80%); pointer-events:none; display:flex; flex-direction:column; gap:8px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 04 · Ficha por rollo</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,25px); letter-spacing:-0.01em; color:#F5F2EE;">Nada sale sin medirse</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8; max-width:48ch;">Gramaje, encogimiento y solidez de color documentados rollo por rollo, con tolerancia declarada.</span>
+              </div>
+            </div>
+            <div style="position:absolute; inset:0; opacity:{{ bOn5 }}; z-index:{{ bZ5 }}; transition:opacity 700ms cubic-bezier(0.16,1,0.30,1);">
+              <image-slot id="tf5b5" shape="rect" fit="cover" placeholder="05 Envío — rollos etiquetados en zona de despacho (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.4vw,34px); background:linear-gradient(to top, rgba(13,41,55,0.9), rgba(13,41,55,0) 80%); pointer-events:none; display:flex; flex-direction:column; gap:8px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 05 · Despacho</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,25px); letter-spacing:-0.01em; color:#F5F2EE;">Etiquetado, embalado y a ruta</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8; max-width:48ch;">Cada rollo sale con su etiqueta de lote: el taller sabe qué recibió y nosotros qué enviamos.</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; margin-top:2px;">
+            <div style="position:absolute; top:0; left:0; right:0; height:1px; background:rgba(245,242,238,0.2);"></div>
+            <div style="position:absolute; top:0; height:1px; width:20%; background:#33A2DC; left:{{ bRail }}; transition:left 520ms cubic-bezier(0.16,1,0.30,1);"></div>
+            <div style="display:grid; grid-template-columns:repeat(5,minmax(0,1fr));">
+              <button type="button" onClick="{{ bPick1 }}" style="background:none; border:none; cursor:pointer; text-align:left; padding:18px 14px 0 0; display:flex; flex-direction:column; gap:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; color:{{ bNum1 }}; transition:color 260ms;">01</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(14px,1.2vw,17px); letter-spacing:-0.01em; color:{{ bTitle1 }}; transition:color 260ms;">Desarrollo de color</span>
+              </button>
+              <button type="button" onClick="{{ bPick2 }}" style="background:none; border:none; cursor:pointer; text-align:left; padding:18px 14px 0 0; display:flex; flex-direction:column; gap:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; color:{{ bNum2 }}; transition:color 260ms;">02</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(14px,1.2vw,17px); letter-spacing:-0.01em; color:{{ bTitle2 }}; transition:color 260ms;">Tejido</span>
+              </button>
+              <button type="button" onClick="{{ bPick3 }}" style="background:none; border:none; cursor:pointer; text-align:left; padding:18px 14px 0 0; display:flex; flex-direction:column; gap:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; color:{{ bNum3 }}; transition:color 260ms;">03</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(14px,1.2vw,17px); letter-spacing:-0.01em; color:{{ bTitle3 }}; transition:color 260ms;">Tintura</span>
+              </button>
+              <button type="button" onClick="{{ bPick4 }}" style="background:none; border:none; cursor:pointer; text-align:left; padding:18px 14px 0 0; display:flex; flex-direction:column; gap:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; color:{{ bNum4 }}; transition:color 260ms;">04</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(14px,1.2vw,17px); letter-spacing:-0.01em; color:{{ bTitle4 }}; transition:color 260ms;">Control de calidad</span>
+              </button>
+              <button type="button" onClick="{{ bPick5 }}" style="background:none; border:none; cursor:pointer; text-align:left; padding:18px 14px 0 0; display:flex; flex-direction:column; gap:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; color:{{ bNum5 }}; transition:color 260ms;">05</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(14px,1.2vw,17px); letter-spacing:-0.01em; color:{{ bTitle5 }}; transition:color 260ms;">Envío</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 5c · TIRA DESPLAZABLE ══════════ -->
+    <div id="5c" style="flex:0 0 auto; width:1180px; max-width:100%; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:baseline; gap:14px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#F5F2EE; background:#0D2937; padding:5px 10px;">5c</span>
+        <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#0D2937;">Tira desplazable</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Arrastre horizontal · igual en móvil</span>
+      </div>
+
+      <div style="background:#0D2937;">
+        <div style="padding:clamp(56px,6vw,88px) 0;">
+          <div style="padding:0 clamp(28px,4vw,72px);">
+            <div style="display:flex; align-items:baseline; gap:20px; border-bottom:1px solid rgba(245,242,238,0.25); padding-bottom:18px; margin-bottom:14px;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#33A2DC;">04</span>
+              <h2 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.01em; color:#F5F2EE;">El taller por dentro</h2>
+              <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:#33A2DC;">Desplace →</span>
+            </div>
+            <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; max-width:54ch; margin-bottom:40px; text-wrap:pretty;">Una tira continua, como una película de contactos: cinco estaciones en el orden en que la tela las atraviesa.</p>
+          </div>
+
+          <div style="display:flex; gap:1px; overflow-x:auto; scroll-snap-type:x mandatory; padding:0 clamp(28px,4vw,72px); scrollbar-width:thin;">
+            <div style="flex:0 0 auto; width:clamp(280px,32vw,400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px;">
+              <div style="position:relative; overflow:hidden; background:#0B2130; height:clamp(340px,50vh,480px); border:1px solid rgba(245,242,238,0.16);">
+                <image-slot id="tf5c1" shape="rect" fit="cover" placeholder="01 Desarrollo de color — carta y muestras (vertical, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; top:14px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#F5F2EE; background:rgba(13,41,55,0.72); padding:5px 9px;">01 / 05</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px; padding-right:18px;">
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:19px; letter-spacing:-0.01em; color:#F5F2EE;">Desarrollo de color</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8;">Carta física y receta registrada por cliente.</span>
+              </div>
+            </div>
+            <div style="flex:0 0 auto; width:clamp(280px,32vw,400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px;">
+              <div style="position:relative; overflow:hidden; background:#0B2130; height:clamp(340px,50vh,480px); border:1px solid rgba(245,242,238,0.16);">
+                <image-slot id="tf5c2" shape="rect" fit="cover" placeholder="02 Tejido — telar en operación (vertical, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; top:14px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#F5F2EE; background:rgba(13,41,55,0.72); padding:5px 9px;">02 / 05</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px; padding-right:18px;">
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:19px; letter-spacing:-0.01em; color:#F5F2EE;">Tejido</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8;">Jersey, piqué y microfibra tejidos en Alangasí.</span>
+              </div>
+            </div>
+            <div style="flex:0 0 auto; width:clamp(280px,32vw,400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px;">
+              <div style="position:relative; overflow:hidden; background:#0B2130; height:clamp(340px,50vh,480px); border:1px solid rgba(245,242,238,0.16);">
+                <image-slot id="tf5c3" shape="rect" fit="cover" placeholder="03 Tintura — baño de color (vertical, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; top:14px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#F5F2EE; background:rgba(13,41,55,0.72); padding:5px 9px;">03 / 05</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px; padding-right:18px;">
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:19px; letter-spacing:-0.01em; color:#F5F2EE;">Tintura</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8;">Teñido a demanda: se tiñe el color que se pide.</span>
+              </div>
+            </div>
+            <div style="flex:0 0 auto; width:clamp(280px,32vw,400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px;">
+              <div style="position:relative; overflow:hidden; background:#0B2130; height:clamp(340px,50vh,480px); border:1px solid rgba(245,242,238,0.16);">
+                <image-slot id="tf5c4" shape="rect" fit="cover" placeholder="04 Control de calidad — medición sobre el rollo (vertical, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; top:14px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#F5F2EE; background:rgba(13,41,55,0.72); padding:5px 9px;">04 / 05</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px; padding-right:18px;">
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:19px; letter-spacing:-0.01em; color:#F5F2EE;">Control de calidad</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8;">Gramaje, encogimiento y solidez, rollo por rollo.</span>
+              </div>
+            </div>
+            <div style="flex:0 0 auto; width:clamp(280px,32vw,400px); scroll-snap-align:start; display:flex; flex-direction:column; gap:16px;">
+              <div style="position:relative; overflow:hidden; background:#0B2130; height:clamp(340px,50vh,480px); border:1px solid rgba(245,242,238,0.16);">
+                <image-slot id="tf5c5" shape="rect" fit="cover" placeholder="05 Envío — rollos etiquetados en despacho (vertical, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; top:14px; left:14px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#F5F2EE; background:rgba(13,41,55,0.72); padding:5px 9px;">05 / 05</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px; padding-right:18px;">
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:19px; letter-spacing:-0.01em; color:#F5F2EE;">Envío</span>
+                <span style="font-family:'Newsreader',serif; font-size:15px; line-height:1.5; color:#C8C2B8;">Etiqueta de lote y despacho a taller o retail.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 5d · ACORDEÓN DE LÁMINAS ══════════ -->
+    <div id="5d" style="flex:0 0 auto; width:1180px; max-width:100%; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:baseline; gap:14px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#F5F2EE; background:#0D2937; padding:5px 10px;">5d</span>
+        <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#0D2937;">Acordeón de láminas</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Índice vertical que se abre</span>
+      </div>
+
+      <div style="background:#0D2937;">
+        <div style="padding:clamp(56px,6vw,88px) clamp(28px,4vw,72px);">
+          <div style="display:flex; align-items:baseline; gap:20px; border-bottom:1px solid rgba(245,242,238,0.25); padding-bottom:18px; margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#33A2DC;">04</span>
+            <h2 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.01em; color:#F5F2EE;">El taller por dentro</h2>
+            <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Cinco láminas · abra una</span>
+          </div>
+          <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; max-width:54ch; margin-bottom:40px; text-wrap:pretty;">El proceso leído como índice: todas las etapas a la vista, la abierta muestra su fotografía.</p>
+
+          <div style="display:flex; flex-direction:column; border-top:1px solid rgba(245,242,238,0.2);">
+            <div onClick="{{ dPick1 }}" style="cursor:pointer; border-bottom:1px solid rgba(245,242,238,0.2); overflow:hidden; height:{{ dH1 }}; min-height:86px; transition:height 620ms cubic-bezier(0.16,1,0.30,1); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:18px; padding:26px 4px; flex:0 0 auto;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#33A2DC; width:28px;">01</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(18px,1.8vw,24px); letter-spacing:-0.01em; color:{{ dTitle1 }}; transition:color 300ms;">Desarrollo de color</span>
+                <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Laboratorio</span>
+              </div>
+              <div style="position:relative; overflow:hidden; background:#0B2130; flex:1 1 auto; min-height:0; margin-bottom:26px;">
+                <image-slot id="tf5d1" shape="rect" fit="cover" placeholder="01 Desarrollo de color — carta física y muestras (panorámica, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; left:16px; bottom:14px; font-family:'Newsreader',serif; font-size:15px; color:#F5F2EE; text-shadow:0 1px 12px rgba(13,41,55,0.9);">Receta registrada: el segundo pedido sale igual al primero.</span>
+              </div>
+            </div>
+            <div onClick="{{ dPick2 }}" style="cursor:pointer; border-bottom:1px solid rgba(245,242,238,0.2); overflow:hidden; height:{{ dH2 }}; min-height:86px; transition:height 620ms cubic-bezier(0.16,1,0.30,1); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:18px; padding:26px 4px; flex:0 0 auto;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#33A2DC; width:28px;">02</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(18px,1.8vw,24px); letter-spacing:-0.01em; color:{{ dTitle2 }}; transition:color 300ms;">Tejido</span>
+                <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Nave · Alangasí</span>
+              </div>
+              <div style="position:relative; overflow:hidden; background:#0B2130; flex:1 1 auto; min-height:0; margin-bottom:26px;">
+                <image-slot id="tf5d2" shape="rect" fit="cover" placeholder="02 Tejido — telar circular en operación (panorámica, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; left:16px; bottom:14px; font-family:'Newsreader',serif; font-size:15px; color:#F5F2EE; text-shadow:0 1px 12px rgba(13,41,55,0.9);">Galga y gramaje fijados por ficha antes de arrancar.</span>
+              </div>
+            </div>
+            <div onClick="{{ dPick3 }}" style="cursor:pointer; border-bottom:1px solid rgba(245,242,238,0.2); overflow:hidden; height:{{ dH3 }}; min-height:86px; transition:height 620ms cubic-bezier(0.16,1,0.30,1); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:18px; padding:26px 4px; flex:0 0 auto;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#33A2DC; width:28px;">03</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(18px,1.8vw,24px); letter-spacing:-0.01em; color:{{ dTitle3 }}; transition:color 300ms;">Tintura</span>
+                <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Tintorería propia</span>
+              </div>
+              <div style="position:relative; overflow:hidden; background:#0B2130; flex:1 1 auto; min-height:0; margin-bottom:26px;">
+                <image-slot id="tf5d3" shape="rect" fit="cover" placeholder="03 Tintura — tela en baño de color (panorámica, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; left:16px; bottom:14px; font-family:'Newsreader',serif; font-size:15px; color:#F5F2EE; text-shadow:0 1px 12px rgba(13,41,55,0.9);">Teñido a demanda, al color exacto del cliente.</span>
+              </div>
+            </div>
+            <div onClick="{{ dPick4 }}" style="cursor:pointer; border-bottom:1px solid rgba(245,242,238,0.2); overflow:hidden; height:{{ dH4 }}; min-height:86px; transition:height 620ms cubic-bezier(0.16,1,0.30,1); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:18px; padding:26px 4px; flex:0 0 auto;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#33A2DC; width:28px;">04</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(18px,1.8vw,24px); letter-spacing:-0.01em; color:{{ dTitle4 }}; transition:color 300ms;">Control de calidad</span>
+                <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Ficha por rollo</span>
+              </div>
+              <div style="position:relative; overflow:hidden; background:#0B2130; flex:1 1 auto; min-height:0; margin-bottom:26px;">
+                <image-slot id="tf5d4" shape="rect" fit="cover" placeholder="04 Control de calidad — medición de gramaje (panorámica, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; left:16px; bottom:14px; font-family:'Newsreader',serif; font-size:15px; color:#F5F2EE; text-shadow:0 1px 12px rgba(13,41,55,0.9);">Gramaje, encogimiento y solidez, con tolerancia declarada.</span>
+              </div>
+            </div>
+            <div onClick="{{ dPick5 }}" style="cursor:pointer; border-bottom:1px solid rgba(245,242,238,0.2); overflow:hidden; height:{{ dH5 }}; min-height:86px; transition:height 620ms cubic-bezier(0.16,1,0.30,1); display:flex; flex-direction:column;">
+              <div style="display:flex; align-items:center; gap:18px; padding:26px 4px; flex:0 0 auto;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#33A2DC; width:28px;">05</span>
+                <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(18px,1.8vw,24px); letter-spacing:-0.01em; color:{{ dTitle5 }}; transition:color 300ms;">Envío</span>
+                <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Despacho</span>
+              </div>
+              <div style="position:relative; overflow:hidden; background:#0B2130; flex:1 1 auto; min-height:0; margin-bottom:26px;">
+                <image-slot id="tf5d5" shape="rect" fit="cover" placeholder="05 Envío — rollos etiquetados listos (panorámica, foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+                <span style="position:absolute; z-index:3; left:16px; bottom:14px; font-family:'Newsreader',serif; font-size:15px; color:#F5F2EE; text-shadow:0 1px 12px rgba(13,41,55,0.9);">Cada rollo con su etiqueta de lote.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 5e · PLIEGO EDITORIAL ══════════ -->
+    <div id="5e" style="flex:0 0 auto; width:1180px; max-width:100%; display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; align-items:baseline; gap:14px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; color:#F5F2EE; background:#0D2937; padding:5px 10px;">5e</span>
+        <span style="font-family:'Archivo',sans-serif; font-weight:500; font-size:16px; color:#0D2937;">Pliego editorial</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Scroll largo · fotos alternadas</span>
+      </div>
+
+      <div style="background:#0D2937;">
+        <div style="padding:clamp(56px,6vw,88px) clamp(28px,4vw,72px);">
+          <div style="display:flex; align-items:baseline; gap:20px; border-bottom:1px solid rgba(245,242,238,0.25); padding-bottom:18px; margin-bottom:14px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#33A2DC;">04</span>
+            <h2 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.01em; color:#F5F2EE;">El taller por dentro</h2>
+            <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">01 → 05</span>
+          </div>
+          <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; max-width:54ch; margin-bottom:clamp(48px,5vw,72px); text-wrap:pretty;">Sin selectores: el proceso se lee de arriba abajo, una etapa por pliego, como una ficha técnica ilustrada.</p>
+
+          <div style="display:flex; flex-direction:column; gap:clamp(40px,4.5vw,72px);">
+            <div style="display:flex; flex-wrap:wrap; gap:clamp(24px,3vw,48px); align-items:stretch; border-top:1px solid rgba(245,242,238,0.2); padding-top:clamp(24px,2.6vw,36px);">
+              <div style="flex:1 1 420px; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(280px,38vh,380px);">
+                <image-slot id="tf5e1" shape="rect" fit="cover" placeholder="01 Desarrollo de color — carta física y muestras (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              </div>
+              <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:14px; justify-content:center; max-width:46ch;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 01 · Laboratorio de color</span>
+                <h3 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.015em; color:#F5F2EE;">Desarrollo de color</h3>
+                <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; text-wrap:pretty;">El pedido empieza en una carta física. Se iguala el tono, se registra la receta con el nombre del cliente y queda archivada: es lo que permite repetir el mismo color meses después.</p>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap-reverse; gap:clamp(24px,3vw,48px); align-items:stretch; border-top:1px solid rgba(245,242,238,0.2); padding-top:clamp(24px,2.6vw,36px);">
+              <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:14px; justify-content:center; max-width:46ch;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 02 · Nave de tejido</span>
+                <h3 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.015em; color:#F5F2EE;">Tejido</h3>
+                <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; text-wrap:pretty;">Punto jersey, piqué y microfibra tejidos en nuestros telares de Alangasí. La estructura, la galga y el gramaje se fijan por ficha antes de arrancar la máquina.</p>
+              </div>
+              <div style="flex:1 1 420px; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(280px,38vh,380px);">
+                <image-slot id="tf5e2" shape="rect" fit="cover" placeholder="02 Tejido — telar circular en operación (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:clamp(24px,3vw,48px); align-items:stretch; border-top:1px solid rgba(245,242,238,0.2); padding-top:clamp(24px,2.6vw,36px);">
+              <div style="flex:1 1 420px; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(280px,38vh,380px);">
+                <image-slot id="tf5e3" shape="rect" fit="cover" placeholder="03 Tintura — tela en baño de color (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              </div>
+              <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:14px; justify-content:center; max-width:46ch;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 03 · Tintorería propia</span>
+                <h3 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.015em; color:#F5F2EE;">Tintura</h3>
+                <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; text-wrap:pretty;">Teñimos a demanda, no contra stock de colores. La tintorería es nuestra, así que el color exacto y el tiempo de entrega dependen de la misma planta.</p>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap-reverse; gap:clamp(24px,3vw,48px); align-items:stretch; border-top:1px solid rgba(245,242,238,0.2); padding-top:clamp(24px,2.6vw,36px);">
+              <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:14px; justify-content:center; max-width:46ch;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 04 · Ficha por rollo</span>
+                <h3 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.015em; color:#F5F2EE;">Control de calidad</h3>
+                <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; text-wrap:pretty;">Cada rollo se mide: gramaje, encogimiento y solidez de color quedan documentados, con la tolerancia declarada por escrito. Si algo se sale del rango, no sale de la planta.</p>
+              </div>
+              <div style="flex:1 1 420px; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(280px,38vh,380px);">
+                <image-slot id="tf5e4" shape="rect" fit="cover" placeholder="04 Control de calidad — medición de gramaje sobre el rollo (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:clamp(24px,3vw,48px); align-items:stretch; border-top:1px solid rgba(245,242,238,0.2); padding-top:clamp(24px,2.6vw,36px);">
+              <div style="flex:1 1 420px; position:relative; overflow:hidden; background:#0B2130; min-height:clamp(280px,38vh,380px);">
+                <image-slot id="tf5e5" shape="rect" fit="cover" placeholder="05 Envío — rollos etiquetados en zona de despacho (foto real)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot>
+              </div>
+              <div style="flex:1 1 320px; display:flex; flex-direction:column; gap:14px; justify-content:center; max-width:46ch;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:#33A2DC;">Etapa 05 · Despacho</span>
+                <h3 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.2vw,30px); letter-spacing:-0.015em; color:#F5F2EE;">Envío</h3>
+                <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.55; color:#C8C2B8; text-wrap:pretty;">El rollo sale etiquetado con su lote y su ficha. El taller sabe qué recibió, nosotros qué enviamos, y cualquier reclamo se rastrea hasta el baño de tintura.</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-top:clamp(48px,5vw,72px);">
+            <a href="Textil Padilla Home.dc.html#asesor" style="font-family:'Archivo',sans-serif; font-weight:500; font-size:15px; color:#F5F2EE; background:#33A2DC; padding:15px 30px; border-radius:2px;" style-hover="background:#F5F2EE; color:#0D2937;">Hablar con un asesor →</a>
+            <a href="Textil Padilla Productos.dc.html" style="font-family:'Archivo',sans-serif; font-weight:500; font-size:15px; color:#C8C2B8; border-bottom:1px solid rgba(200,194,184,0.4); padding-bottom:3px;" style-hover="color:#F5F2EE; border-bottom:1px solid #F5F2EE;">Ver catálogo de telas →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;etapaInicial&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Comportamiento&quot;},&quot;altoLaminaAbierta&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:400,&quot;min&quot;:280,&quot;max&quot;:560,&quot;step&quot;:20,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Comportamiento&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const i = Math.min(4, Math.max(0, (props.etapaInicial ?? 1) - 1));
+    this.state = { b: i, d: i };
+  }
+  pick(k, i) { this.setState({ [k]: i }); }
+  renderVals() {
+    const B = this.state.b, D = this.state.d, alto = this.props.altoLaminaAbierta ?? 400;
+    const v = { bRail: (B * 20) + '%' };
+    for (let i = 0; i < 5; i++) {
+      const n = i + 1, onB = i === B, onD = i === D;
+      v['bOn' + n] = onB ? 1 : 0;
+      v['bZ' + n] = onB ? 2 : 1;
+      v['bTitle' + n] = onB ? '#F5F2EE' : '#8E8A85';
+      v['bNum' + n] = onB ? '#33A2DC' : '#6B6560';
+      v['bPick' + n] = () => this.pick('b', i);
+      v['dH' + n] = onD ? alto + 'px' : '86px';
+      v['dTitle' + n] = onD ? '#F5F2EE' : '#9C9792';
+      v['dPick' + n] = () => this.pick('d', i);
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

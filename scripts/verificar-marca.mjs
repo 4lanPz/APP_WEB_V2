@@ -189,6 +189,35 @@ function recoger() {
    * son la letra que interesa. El `Range` sobre el nodo de texto devuelve la
    * caja ajustada a los glifos, que es exactamente donde debe caer la máscara.
    */
+  /*
+   * OPACIDAD ACUMULADA DE TODA LA CADENA, no solo la del elemento del texto.
+   *
+   * `visibility` y `display` se heredan, así que mirarlos en el nodo basta.
+   * `opacity` NO: crea un contexto de apilamiento y se queda en su elemento, de
+   * modo que un `<span>` con `opacity: 1` dentro de una capa a `opacity: 0` daba
+   * 1 en la comprobación de arriba y se medía como si estuviera a la vista.
+   *
+   * NO ES UN CASO RARO: es lo que hace cualquier cruce de imágenes montado con
+   * capas superpuestas —el riel de etapas de Empresa, las fotos por paso del
+   * asesor—, donde N capas ocupan EXACTAMENTE las mismas coordenadas y solo una
+   * se ve. Al medir el texto de una capa invisible, la máscara caía sobre los
+   * píxeles de la capa visible, así que el "fondo" que leía era el propio glifo
+   * de la otra: el riel reportaba cuatro suspensos de 1,01:1 a 1,22:1 contra
+   * `brand`, que es lo que sale al comparar un color consigo mismo. Ninguno era
+   * real y ninguno se podía arreglar tocando el color.
+   *
+   * Se multiplica hasta `body`. Con el producto por debajo de 0,05 el texto no
+   * está a la vista y no hay contraste que exigirle.
+   */
+  const opacidadAcumulada = (el) => {
+    let o = 1;
+    for (let n = el; n && n !== document.body; n = n.parentElement) {
+      o *= parseFloat(getComputedStyle(n).opacity);
+      if (o < 0.05) return o;
+    }
+    return o;
+  };
+
   const vistos = [];
   const recorrer = (raiz) => {
     const it = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT);
@@ -199,7 +228,7 @@ function recoger() {
       if (!el) continue;
       const cs = getComputedStyle(el);
       if (cs.visibility === "hidden" || cs.display === "none") continue;
-      if (parseFloat(cs.opacity) < 0.05) continue;
+      if (opacidadAcumulada(el) < 0.05) continue;
       const color = resolver(cs.color);
       const token = cualToken(color);
       if (!token) continue;
@@ -372,6 +401,33 @@ async function main() {
       const ctx = await navegador.newContext({
         viewport: { width: ancho, height: ancho === 375 ? 780 : 900 },
         deviceScaleFactor: 1,
+        /*
+         * SE MIDE LA PÁGINA QUIETA, no un fotograma a medio camino.
+         *
+         * El barrido compone cada color sobre el píxel real que tiene detrás, y
+         * eso exige que el píxel esté decidido. Con las transiciones vivas no lo
+         * está: las piezas que cruzan imágenes —el riel de etapas de Empresa,
+         * las fotos por paso del asesor— apilan N capas en las MISMAS
+         * coordenadas, así que a mitad de cruce el fondo que hay bajo un rótulo
+         * es el rótulo de la capa que se va, del mismo color. De ahí salían
+         * lecturas de 1,00:1: un color comparado consigo mismo. Ninguna era real
+         * y ninguna se arreglaba tocando el color.
+         *
+         * `prefers-reduced-motion` es la forma limpia de pedir esa quietud
+         * porque el sitio entero ya la respeta: `globals.css` colapsa toda
+         * transición CSS, `useAvanceAutomatico` no arranca el reloj y framer
+         * salta el movimiento vía `MotionConfig reducedMotion="user"`. El
+         * contenido sigue apareciendo —el estado final es el mismo, lo que
+         * desaparece es el camino—, así que no se pierde texto que medir. Y lo
+         * que se mide pasa a ser lo que la gente LEE: el estado asentado, no un
+         * fotograma intermedio que nadie llega a leer.
+         *
+         * ESTO ADEMÁS DESTAPA LO QUE ANTES SE ESCAPABA. Había una nota en
+         * `AsesorPasos` diciendo que su paso activo no salía en esta lista
+         * "porque el ciclo avanza solo cada 4 s y el barrido descarta lo que se
+         * mueve". Con la página quieta ya no se descarta.
+         */
+        reducedMotion: "reduce",
       });
       const page = await ctx.newPage();
 

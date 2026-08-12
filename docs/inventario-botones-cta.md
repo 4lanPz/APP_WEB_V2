@@ -19,6 +19,11 @@
 > (4,70:1). Sigue pendiente el **paso activo del stepper de la portada**
 > (fila «01 PRENDA»): ahí el azul claro también gobierna la barra de progreso, así
 > que no es un cambio de token sino una decisión del rediseño del stepper.
+>
+> **Tercera nota — ese pendiente ya no es solo «de la portada».** Desde agosto de
+> 2026 el bloque `AsesorPasos` también cierra `/empresa`, así que el mismo 2,25:1 se
+> publica en dos páginas y cuatro apariciones. Sigue en `docs/pendientes.md` §1, que
+> es donde se lleva ahora la cuenta.
 
 Fase de diagnóstico. **No propone solución ni cambia código**: solo levanta el mapa de
 lo que hay hoy en `main` para poder decidir con datos.

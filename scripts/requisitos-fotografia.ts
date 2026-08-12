@@ -220,11 +220,36 @@ const GRUPOS: Grupo[] = [
     pertenece: (s) => s.id.startsWith("hero-"),
   },
   {
+    tipo: "El taller por dentro — las cinco etapas",
+    resumen:
+      "El recorrido de la tela por la planta, una foto por etapa: desarrollo de color, tejido, tintura, control de calidad y envío. SE DISPARAN DEL TIRÓN, en una sola visita y siguiendo el orden de producción — es una sesión, no cinco encargos. Son las que sostienen los argumentos de la página de Empresa: el teñido a demanda y la ficha por rollo no se afirman, se enseñan.",
+    seVeA:
+      "una sola foto GRANDE a todo el ancho del contenedor, hasta ~1038 px, con 360 px de alto en móvil, 480 desde tablet y 560 en escritorio (`RielDeEtapas`)",
+    proporcion:
+      "apaisada, cerca de 2:1 en escritorio; se recorta con `object-cover`, así que el motivo tiene que aguantar del cuadrado al panorámico",
+    segun:
+      "el origen del slot: salen de `SLOTS_TALLER`, derivado de `data/etapas-taller.ts`, con nota por etapa.",
+    formato: "ficha",
+    pertenece: (s) => s.seccion === "El taller por dentro",
+  },
+  {
+    tipo: "Díptico de misión y visión",
+    resumen:
+      "Las dos fotografías del bloque «Lo que nos mueve», una por declaración. Se ven UNA AL LADO DE LA OTRA y a la vez, así que tienen que distinguirse de un vistazo: la misión mira al material y la visión al color terminado. OJO SI YA SE HABÍA ANOTADO ESTA SESIÓN: se pidieron cuadradas en una versión anterior de este documento y ahora son apaisadas 4:3.",
+    seVeA:
+      "media anchura del contenedor amplio, hasta 607 × 455 px (`empresa/page.tsx`)",
+    proporcion: "4:3 apaisada — el marco es `aspect-4/3`",
+    segun: "la sección del slot: «Misión y visión», con nota propia.",
+    formato: "ficha",
+    pertenece: (s) => s.seccion === "Misión y visión",
+  },
+  {
     tipo: "Industrial / proceso",
     resumen:
-      "La planta trabajando. Son las que sostienen los argumentos de la página de Empresa — el teñido a demanda no se afirma, se enseña.",
-    seVeA: "media columna del bloque de Oficio, hasta ~620 px de ancho (`empresa/page.tsx`)",
-    proporcion: "4:3 apaisada",
+      "La planta trabajando, fuera del riel de etapas. Hoy solo el retrato del taller que abre «De dónde venimos».",
+    seVeA:
+      "media columna del split de «De dónde venimos», hasta ~579 px de ancho (`empresa/page.tsx`)",
+    proporcion: "4:5 vertical",
     segun: "la sección del slot: «Oficio», con nota propia.",
     formato: "ficha",
     pertenece: (s) => s.seccion === "Oficio",
@@ -273,11 +298,11 @@ const GRUPOS: Grupo[] = [
     pertenece: (s) => s.seccion === "Opciones del cuestionario",
   },
   {
-    tipo: "Asesor virtual en portada",
+    tipo: "Asesor virtual",
     resumen:
-      "Una foto grande y editorial por paso del cuestionario en la portada. Se cambian solas al avanzar el paso.",
+      "Una foto grande y editorial por paso del cuestionario. Se cambian solas al avanzar el paso. OJO: el mismo bloque cierra la portada Y /empresa, así que cada archivo se ve en DOS páginas — son tres fotos, no seis.",
     seVeA:
-      "media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`)",
+      "media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`, montado en `app/page.tsx` y en `app/empresa/page.tsx`)",
     proporcion: "flexible — la caja recorta con `object-cover`",
     segun: "la sección del slot: «Asesor virtual», con nota propia.",
     formato: "ficha",

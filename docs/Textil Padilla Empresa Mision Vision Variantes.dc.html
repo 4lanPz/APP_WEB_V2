@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="./image-slot.js"></script>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:#F5F2EE; }
+  a { color:#33A2DC; text-decoration:none; }
+  a:hover { color:#0D2937; }
+  ::selection { background:#33A2DC; color:#F5F2EE; }
+
+  .tp-draft { display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#6B6560; border:1px solid #C8C2B8; border-radius:2px; padding:5px 9px; }
+  .tp-draft::before { content:""; width:5px; height:5px; background:#A0715A; display:block; }
+
+  .sq { position:relative; aspect-ratio:1/1; overflow:hidden; }
+  .sq .z { position:absolute; inset:0; transform:scale(1.05); transition:transform 1500ms cubic-bezier(0.16,1,0.30,1); }
+  .sq:hover .z { transform:scale(1); }
+  .sq .cap { position:absolute; z-index:3; left:0; bottom:0; padding:clamp(12px,1.4vw,20px); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#F5F2EE; text-shadow:0 1px 14px rgba(13,25,30,0.75); }
+
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px,4vw,72px); }
+  .lbl { font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.13em; text-transform:uppercase; color:#A0715A; }
+  .stmt { font-family:'Archivo',sans-serif; font-weight:500; line-height:1.18; letter-spacing:-0.025em; text-wrap:pretty; }
+  .rulehair { display:block; width:38px; height:1px; background:#33A2DC; }
+  .badge { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#F5F2EE; background:#1C1917; padding:5px 9px; border-radius:2px; }
+  .vhead { max-width:1240px; margin:0 auto; padding:clamp(36px,5vh,64px) clamp(24px,7vw,120px) 14px; display:flex; align-items:baseline; gap:14px; }
+  .vhead span.d { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#6B6560; }
+  .wrap { max-width:1240px; margin:0 auto; padding:clamp(64px,9vh,112px) clamp(24px,7vw,120px); }
+
+  .scrim { position:absolute; inset:0; z-index:2; background:linear-gradient(to top, rgba(13,25,30,0.92) 0%, rgba(13,41,55,0.42) 52%, rgba(13,41,55,0.10) 100%); }
+  .colrun { display:flex; flex-direction:column; gap:clamp(26px,3.4vw,48px); }
+  .keyrow { display:grid; grid-template-columns:minmax(0,130px) minmax(0,1fr); gap:clamp(18px,2.6vw,40px); padding-top:clamp(20px,2.4vw,30px); border-top:1px solid #C8C2B8; }
+  .keyrow.dark { border-top:1px solid rgba(245,242,238,0.2); }
+
+  @media (max-width:900px){
+    .two { grid-template-columns:1fr !important; }
+    .keyrow { grid-template-columns:1fr !important; }
+    .stagger { display:block !important; }
+    .stagger > * + * { margin-top:clamp(40px,7vh,72px); }
+  }
+</style>
+</helmet>
+
+<div style="background:#F5F2EE; color:#1C1917; font-family:'Newsreader',Georgia,serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;">
+
+  <section data-screen-label="Turno 1 mision y vision">
+    <div style="max-width:1240px; margin:0 auto; padding:clamp(48px,7vh,84px) clamp(24px,7vw,120px) clamp(24px,3vh,36px);">
+      <div style="display:flex; align-items:baseline; gap:20px; border-bottom:1px solid #1C1917; padding-bottom:18px; margin-bottom:20px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#A0715A;">01</span>
+        <h2 style="font-family:'Archivo',sans-serif; font-weight:500; font-size:clamp(22px,2.4vw,32px); letter-spacing:-0.01em;">Misión y visión · 5 variantes</h2>
+        <span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">2 fotos 1:1</span>
+      </div>
+      <p style="font-family:'Newsreader',serif; font-size:clamp(17px,1.5vw,20px); line-height:1.55; color:#6B6560; max-width:70ch; margin-bottom:18px;">Solo misión y visión, con dos fotografías cuadradas —una por declaración—. Los valores no aparecen: siguen en su propia sección. <a href="#a">1a</a> díptico simétrico. <a href="#b">1b</a> cruzado en diagonal. <a href="#c">1c</a> sobreimpresión sobre las dos placas. <a href="#d">1d</a> desfase editorial. <a href="#e">1e</a> par de placas con las dos declaraciones al costado.</p>
+      <span class="tp-draft">Textos tomados de la página actual · pendiente de validación</span>
+    </div>
+
+    <!-- 1a · DÍPTICO SIMÉTRICO -->
+    <div id="a">
+      <div class="vhead"><span class="badge">1a</span><span class="d">Díptico · dos columnas iguales, foto sobre texto</span></div>
+      <div style="background:#F5F2EE; border-top:1px solid #C8C2B8; border-bottom:1px solid #C8C2B8;">
+        <div class="wrap">
+          <div class="two">
+            <div>
+              <div class="sq"><div class="z"><image-slot id="mv-a-mision" shape="rect" fit="cover" placeholder="Misión · foto cuadrada 1:1 (hilo / telar en operación)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div></div>
+              <div style="display:flex; align-items:baseline; gap:14px; padding:clamp(20px,2.4vw,30px) 0 14px;"><span class="lbl">Misión</span><span class="rulehair"></span></div>
+              <p class="stmt" style="font-size:clamp(20px,2vw,28px);">Convertir el mejor hilo disponible en tela que se comporta: gramaje medido, color exacto y una mano que se reconoce al tacto, rollo tras rollo.</p>
+            </div>
+            <div>
+              <div class="sq"><div class="z"><image-slot id="mv-a-vision" shape="rect" fit="cover" placeholder="Visión · foto cuadrada 1:1 (carta de color / rollos teñidos)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div></div>
+              <div style="display:flex; align-items:baseline; gap:14px; padding:clamp(20px,2.4vw,30px) 0 14px;"><span class="lbl">Visión</span><span class="rulehair"></span></div>
+              <p class="stmt" style="font-size:clamp(20px,2vw,28px);">Ser el partner de manufactura textil de referencia para las marcas, distribuidores y retail premium de la región andina —reconocidos no por el volumen, sino por el criterio.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1b · CRUZADO EN DIAGONAL -->
+    <div id="b">
+      <div class="vhead"><span class="badge">1b</span><span class="d">Cruzado · foto y texto alternan de lado</span></div>
+      <div style="background:#EDE9E3; border-top:1px solid #C8C2B8; border-bottom:1px solid #C8C2B8;">
+        <div class="wrap">
+          <div class="two" style="align-items:center; margin-bottom:clamp(40px,6vh,80px);">
+            <div class="sq"><div class="z"><image-slot id="mv-b-mision" shape="rect" fit="cover" placeholder="Misión · foto cuadrada 1:1 (hilo / telar en operación)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div><span class="cap">Misión</span></div>
+            <div>
+              <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:clamp(16px,2vw,24px);"><span class="lbl">Misión</span><span class="rulehair"></span><span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.11em; text-transform:uppercase; color:#6B6560;">00</span></div>
+              <p class="stmt" style="font-size:clamp(23px,2.7vw,40px); max-width:22ch;">Convertir el mejor hilo disponible en tela que se comporta.</p>
+              <p style="font-family:'Newsreader',serif; font-size:clamp(17px,1.5vw,20px); line-height:1.58; color:#6B6560; max-width:42ch; margin-top:clamp(16px,2vw,24px);">Gramaje medido, color exacto y una mano que se reconoce al tacto, rollo tras rollo.</p>
+            </div>
+          </div>
+          <div class="two" style="align-items:center; padding-top:clamp(40px,6vh,80px); border-top:1px solid #C8C2B8;">
+            <div style="order:1;">
+              <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:clamp(16px,2vw,24px);"><span class="lbl">Visión</span><span class="rulehair"></span><span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.11em; text-transform:uppercase; color:#6B6560;">01</span></div>
+              <p class="stmt" style="font-size:clamp(23px,2.7vw,40px); max-width:22ch;">Ser la referencia andina cuando el color no admite error.</p>
+              <p style="font-family:'Newsreader',serif; font-size:clamp(17px,1.5vw,20px); line-height:1.58; color:#6B6560; max-width:42ch; margin-top:clamp(16px,2vw,24px);">El partner de manufactura de marcas, distribuidores y retail premium de la región andina. Reconocidos por el criterio, no por el volumen.</p>
+            </div>
+            <div class="sq" style="order:2;"><div class="z"><image-slot id="mv-b-vision" shape="rect" fit="cover" placeholder="Visión · foto cuadrada 1:1 (carta de color / rollos teñidos)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div><span class="cap">Visión</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1c · SOBREIMPRESIÓN -->
+    <div id="c">
+      <div class="vhead"><span class="badge">1c</span><span class="d">Sobreimpresión · la declaración dentro de la placa</span></div>
+      <div style="background:#0D2937;">
+        <div class="wrap">
+          <div class="two" style="gap:clamp(16px,2vw,32px);">
+            <div class="sq" style="border:1px solid rgba(245,242,238,0.16);">
+              <div class="z"><image-slot id="mv-c-mision" shape="rect" fit="cover" placeholder="Misión · foto cuadrada 1:1 (hilo / telar en operación)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div>
+              <span class="scrim"></span>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.6vw,38px); display:flex; flex-direction:column; gap:clamp(12px,1.4vw,18px);">
+                <div style="display:flex; align-items:baseline; gap:12px;"><span class="lbl" style="color:#33A2DC;">Misión</span><span class="rulehair"></span></div>
+                <p class="stmt" style="font-size:clamp(19px,2vw,30px); color:#F5F2EE;">Convertir el mejor hilo disponible en tela que se comporta: gramaje medido, color exacto y una mano que se reconoce al tacto.</p>
+              </div>
+            </div>
+            <div class="sq" style="border:1px solid rgba(245,242,238,0.16);">
+              <div class="z"><image-slot id="mv-c-vision" shape="rect" fit="cover" placeholder="Visión · foto cuadrada 1:1 (carta de color / rollos teñidos)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div>
+              <span class="scrim"></span>
+              <div style="position:absolute; z-index:3; inset:auto 0 0 0; padding:clamp(20px,2.6vw,38px); display:flex; flex-direction:column; gap:clamp(12px,1.4vw,18px);">
+                <div style="display:flex; align-items:baseline; gap:12px;"><span class="lbl" style="color:#33A2DC;">Visión</span><span class="rulehair"></span></div>
+                <p class="stmt" style="font-size:clamp(19px,2vw,30px); color:#F5F2EE;">Ser la casa a la que se acude cuando el color y la constancia no admiten error, en toda la región andina.</p>
+              </div>
+            </div>
+          </div>
+          <p style="font-family:'Newsreader',serif; font-style:italic; font-size:clamp(17px,1.6vw,21px); line-height:1.5; color:#C8C2B8; max-width:44ch; margin-top:clamp(32px,4.4vh,56px);">«No fabricamos la moda. Fabricamos aquello con lo que la moda se hace.»</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1d · DESFASE EDITORIAL -->
+    <div id="d">
+      <div class="vhead"><span class="badge">1d</span><span class="d">Desfase · placas a distinta altura, texto al hilo</span></div>
+      <div style="background:#F5F2EE; border-top:1px solid #C8C2B8; border-bottom:1px solid #C8C2B8;">
+        <div class="wrap">
+          <div class="stagger two" style="gap:clamp(28px,5vw,88px); align-items:start;">
+            <div>
+              <div style="display:flex; align-items:baseline; gap:14px; margin-bottom:clamp(16px,2vw,22px);"><span class="lbl">Misión</span><span class="rulehair"></span></div>
+              <p class="stmt" style="font-size:clamp(22px,2.5vw,36px); margin-bottom:clamp(18px,2.2vw,28px);">Convertir el mejor hilo disponible en tela que se comporta.</p>
+              <div class="sq" style="width:min(100%,420px);"><div class="z"><image-slot id="mv-d-mision" shape="rect" fit="cover" placeholder="Misión · foto cuadrada 1:1 (hilo / telar en operación)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div></div>
+              <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.58; color:#6B6560; max-width:38ch; margin-top:clamp(16px,2vw,22px);">Gramaje medido, color exacto y una mano que se reconoce al tacto, rollo tras rollo. No hilamos: seleccionamos.</p>
+            </div>
+            <div style="margin-top:clamp(48px,9vw,140px);">
+              <div class="sq" style="width:min(100%,420px); margin-left:auto;"><div class="z"><image-slot id="mv-d-vision" shape="rect" fit="cover" placeholder="Visión · foto cuadrada 1:1 (carta de color / rollos teñidos)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div></div>
+              <div style="display:flex; align-items:baseline; gap:14px; margin:clamp(20px,2.4vw,30px) 0 clamp(16px,2vw,22px);"><span class="lbl">Visión</span><span class="rulehair"></span></div>
+              <p class="stmt" style="font-size:clamp(22px,2.5vw,36px); margin-bottom:clamp(14px,1.8vw,20px);">Ser la referencia andina cuando el color no admite error.</p>
+              <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.58; color:#6B6560; max-width:38ch;">Partner de marcas, distribuidores y retail premium; reconocidos por el criterio, no por el volumen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1e · PAR DE PLACAS -->
+    <div id="e">
+      <div class="vhead"><span class="badge">1e</span><span class="d">Par de placas · las dos fotos juntas, texto fichado al costado</span></div>
+      <div style="background:#EDE9E3; border-top:1px solid #C8C2B8;">
+        <div class="wrap">
+          <div class="two" style="grid-template-columns:minmax(0,0.95fr) minmax(0,1fr); gap:clamp(28px,5vw,80px); align-items:center;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#C8C2B8;">
+              <div class="sq"><div class="z"><image-slot id="mv-e-mision" shape="rect" fit="cover" placeholder="Misión · foto cuadrada 1:1 (hilo / telar en operación)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div><span class="cap">00 · Misión</span></div>
+              <div class="sq"><div class="z"><image-slot id="mv-e-vision" shape="rect" fit="cover" placeholder="Visión · foto cuadrada 1:1 (carta de color / rollos teñidos)" style="position:absolute; inset:0; width:100%; height:100%;"></image-slot></div><span class="cap">01 · Visión</span></div>
+            </div>
+            <div class="colrun">
+              <div class="keyrow">
+                <span class="lbl">Misión</span>
+                <div>
+                  <p class="stmt" style="font-size:clamp(20px,2.1vw,30px); margin-bottom:12px;">Convertir el mejor hilo disponible en tela que se comporta.</p>
+                  <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.58; color:#6B6560; max-width:44ch;">Gramaje medido, color exacto y una mano que se reconoce al tacto, rollo tras rollo.</p>
+                </div>
+              </div>
+              <div class="keyrow">
+                <span class="lbl">Visión</span>
+                <div>
+                  <p class="stmt" style="font-size:clamp(20px,2.1vw,30px); margin-bottom:12px;">Ser la referencia andina cuando el color no admite error.</p>
+                  <p style="font-family:'Newsreader',serif; font-size:clamp(16px,1.4vw,19px); line-height:1.58; color:#6B6560; max-width:44ch;">El partner de manufactura textil de marcas, distribuidores y retail premium de la región andina. Reconocidos por el criterio, no por el volumen.</p>
+                </div>
+              </div>
+              <div class="keyrow">
+                <span class="lbl" style="color:#6B6560;">Planta</span>
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#6B6560;">Alangasí · desde 1987</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

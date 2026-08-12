@@ -44,18 +44,18 @@ revisarla.
 
 ## Resumen
 
-Los **133 huecos** de imagen del sitio, repartidos en **11 páginas**:
+Los **137 huecos** de imagen del sitio, repartidos en **11 páginas**:
 
-- **Faltan 88** — no hay archivo.
+- **Faltan 92** — no hay archivo.
 - **Provisionales 34** — hay foto, pero hay que reemplazarla. De estas, **3 están pendientes de clasificar**.
 - **Definitivas 11** — no se piden.
 
-**Hay que conseguir 122 fotos**, no 88.
+**Hay que conseguir 126 fotos**, no 92.
 
 | Página | Faltan | Provisionales | Definitivas | Total |
 |---|---|---|---|---|
 | [Inicio](#inicio--) (`/`) | 11 | 1 | 1 | 13 |
-| [Empresa](#empresa--empresa) (`/empresa`) | 11 | 1 | 2 | 14 |
+| [Empresa](#empresa--empresa) (`/empresa`) | 15 | 1 | 2 | 18 |
 | [Productos](#productos--productos) (`/productos`) | 3 | 1 | 1 | 5 |
 | [Microfibra](#microfibra--productosmicrofibra) (`/productos/microfibra`) | 21 | 13 | 5 | 39 |
 | [Dortmund Plus](#dortmund-plus--productosmicrofibradortmund-plus) (`/productos/microfibra/dortmund-plus`) | 2 | 1 | 0 | 3 |
@@ -164,33 +164,33 @@ No se pide: ya está resuelta.
 
 #### **FALTA** `asesor-portada-prenda.jpg`
 
-- **Se ve a:** media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`)
+- **Se ve a:** media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`, montado en `app/page.tsx` y en `app/empresa/page.tsx`)
 - **Proporción:** flexible — la caja recorta con `object-cover`
 - **Ancho mínimo de entrega:** 1600 px
 - **Qué debe verse:** Prendas deportivas en confección: camisetas y buzos que definen el punto de partida de la asesoría.
-- **Nota:** Paso 01 (Prenda). Qué se va a producir: prenda deportiva terminada o en confección. Sin rótulos quemados. Formato flexible; se recorta a la caja del split.
+- **Nota:** Paso 01 (Prenda). Qué se va a producir: prenda deportiva terminada o en confección. Sin rótulos quemados. Formato flexible; se recorta a la caja del split. SE VE EN DOS PÁGINAS —la portada y /empresa montan el mismo bloque—, así que es un archivo, no dos.
 
 #### **FALTA** `asesor-portada-sublimado.jpg`
 
-- **Se ve a:** media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`)
+- **Se ve a:** media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`, montado en `app/page.tsx` y en `app/empresa/page.tsx`)
 - **Proporción:** flexible — la caja recorta con `object-cover`
 - **Ancho mínimo de entrega:** 1600 px
 - **Qué debe verse:** Tela clara con estampado sublimado full-print, mostrando el color a sangre sobre la base.
-- **Nota:** Paso 02 (Sublimado). Base clara con estampado full-print, o el contraste liso/sublimado. Formato flexible; se recorta a la caja del split.
+- **Nota:** Paso 02 (Sublimado). Base clara con estampado full-print, o el contraste liso/sublimado. Formato flexible; se recorta a la caja del split. SE VE EN DOS PÁGINAS —la portada y /empresa montan el mismo bloque—, así que es un archivo, no dos.
 
 #### **FALTA** `asesor-portada-uso.jpg`
 
-- **Se ve a:** media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`)
+- **Se ve a:** media pantalla del split, mínimo 380 px de alto, solo desde tablet (`AsesorPasos`, montado en `app/page.tsx` y en `app/empresa/page.tsx`)
 - **Proporción:** flexible — la caja recorta con `object-cover`
 - **Ancho mínimo de entrega:** 1600 px
 - **Qué debe verse:** Tela en uso deportivo, mostrando el rendimiento y la caída del género en movimiento.
-- **Nota:** Paso 03 (Uso). El destino de la tela: alto rendimiento, casual o uniforme. Formato flexible; se recorta a la caja del split.
+- **Nota:** Paso 03 (Uso). El destino de la tela: alto rendimiento, casual o uniforme. Formato flexible; se recorta a la caja del split. SE VE EN DOS PÁGINAS —la portada y /empresa montan el mismo bloque—, así que es un archivo, no dos.
 
 ---
 
 ## Empresa — `/empresa`
 
-**11 faltan · 1 provisional · 2 definitivas** — 14 huecos en total. Quedan 12 fotos por conseguir.
+**15 faltan · 1 provisional · 2 definitivas** — 18 huecos en total. Quedan 16 fotos por conseguir.
 
 ### Cabecera — 1 (1 por conseguir)
 
@@ -204,31 +204,67 @@ No se pide: ya está resuelta.
 
 > **⚠ HAY FOTO, PERO ES PROVISIONAL.** Puesta solo para maquetar o valorar el tratamiento. Según: Lo dice el commit que la subió (b1e2e42): «entra como muestra para poder valorarlo; es la misma foto que ya sale más abajo en esa página, así que no es definitiva».
 
-### Oficio — 4 (2 por conseguir)
+### Misión y visión — 2 (2 por conseguir)
 
-#### **DEFINITIVA** `oficio-nave-tejido.jpg`
+#### **FALTA** `manifiesto-mision.jpg`
 
-No se pide: ya está resuelta.
+- **Se ve a:** media anchura del contenedor amplio, hasta 607 × 455 px (`empresa/page.tsx`)
+- **Proporción:** 4:3 apaisada — el marco es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Hilo entrando en el telar en la planta de Textil Padilla: el material del que parte la tela.
+- **Nota:** APAISADA 4:3 — el marco es `aspect-4/3` y recorta con `object-cover`, así que una toma cuadrada o vertical pierde arriba y abajo. Se ve a media anchura del contenedor amplio, hasta 607 × 455 px. La MISIÓN mira al MATERIAL: hilo, cono, telar en operación, el género naciendo. Documental, sin posado ni rótulos quemados. Al pasar el cursor se acerca un 4%, así que el encuadre no puede depender de lo que hay justo en el borde.
+
+#### **FALTA** `manifiesto-vision.jpg`
+
+- **Se ve a:** media anchura del contenedor amplio, hasta 607 × 455 px (`empresa/page.tsx`)
+- **Proporción:** 4:3 apaisada — el marco es `aspect-4/3`
+- **Ancho mínimo de entrega:** 1280 px
+- **Qué debe verse:** Carta de color y rollos teñidos de Textil Padilla: el color exacto como resultado.
+- **Nota:** APAISADA 4:3 — el marco es `aspect-4/3` y recorta con `object-cover`, así que una toma cuadrada o vertical pierde arriba y abajo. Se ve a media anchura del contenedor amplio, hasta 607 × 455 px. La VISIÓN mira al RESULTADO: carta de color, rollos teñidos, tono terminado. Tiene que distinguirse de un vistazo de la de misión —material crudo frente a color acabado—, porque las dos se ven una al lado de la otra. Luz neutra: la carta de color es lo que sostiene el argumento y una carta con dominante no se puede enseñar. Al pasar el cursor se acerca un 4%, así que el encuadre no puede depender de lo que hay justo en el borde.
+
+### Oficio — 1 (resuelta)
 
 #### **DEFINITIVA** `oficio-taller-alangasi.jpg`
 
 No se pide: ya está resuelta.
 
-#### **FALTA** `oficio-tintoreria.jpg`
-
-- **Se ve a:** media columna del bloque de Oficio, hasta ~620 px de ancho (`empresa/page.tsx`)
-- **Proporción:** 4:3 apaisada
-- **Ancho mínimo de entrega:** 1600 px
-- **Qué debe verse:** Tintorería de Textil Padilla: barcas de teñido en proceso.
-- **Nota:** Área de tintorería en marcha. Apaisada (4:3). Es la que sostiene el argumento del teñido a demanda.
+### El taller por dentro — 5 (4 por conseguir)
 
 #### **FALTA** `oficio-carta-color.jpg`
 
-- **Se ve a:** media columna del bloque de Oficio, hasta ~620 px de ancho (`empresa/page.tsx`)
-- **Proporción:** 4:3 apaisada
-- **Ancho mínimo de entrega:** 1600 px
+- **Se ve a:** una sola foto GRANDE a todo el ancho del contenedor, hasta ~1038 px, con 360 px de alto en móvil, 480 desde tablet y 560 en escritorio (`RielDeEtapas`)
+- **Proporción:** apaisada, cerca de 2:1 en escritorio; se recorta con `object-cover`, así que el motivo tiene que aguantar del cuadrado al panorámico
+- **Ancho mínimo de entrega:** 2400 px
 - **Qué debe verse:** Carta de color de Textil Padilla: muestras de tela teñidas ordenadas por tono.
-- **Nota:** Muestrario físico de colores. Apaisada (4:3).
+- **Nota:** Etapa 01 · Desarrollo de color. Apaisada y GRANDE: se ve a todo el ancho del contenedor —hasta ~1038 px a 1440— con 360 px de alto en móvil y hasta 560 en escritorio, así que el marco es casi 2:1 y se recorta con `object-cover`. Documental de planta: material y gente reales en su puesto, sin posado de estudio ni rótulos quemados. EL TERCIO INFERIOR SE OSCURECE —encima van el rótulo de etapa, el titular y una línea de texto sobre un degradado que llega al 90%—, así que ahí no puede caer detalle importante. La foto es la única que se ve de esta etapa: si no se lee qué se está haciendo, la etapa no se sostiene. Muestrario físico de colores con la carta abierta, y a ser posible las manos comparando una referencia contra ella: lo que se enseña es el momento en que el color se aprueba, no el mueble donde se guarda.
+
+#### **DEFINITIVA** `oficio-nave-tejido.jpg`
+
+No se pide: ya está resuelta.
+
+#### **FALTA** `oficio-tintoreria.jpg`
+
+- **Se ve a:** una sola foto GRANDE a todo el ancho del contenedor, hasta ~1038 px, con 360 px de alto en móvil, 480 desde tablet y 560 en escritorio (`RielDeEtapas`)
+- **Proporción:** apaisada, cerca de 2:1 en escritorio; se recorta con `object-cover`, así que el motivo tiene que aguantar del cuadrado al panorámico
+- **Ancho mínimo de entrega:** 2400 px
+- **Qué debe verse:** Tintorería de Textil Padilla: barcas de teñido en proceso.
+- **Nota:** Etapa 03 · Tintura. Apaisada y GRANDE: se ve a todo el ancho del contenedor —hasta ~1038 px a 1440— con 360 px de alto en móvil y hasta 560 en escritorio, así que el marco es casi 2:1 y se recorta con `object-cover`. Documental de planta: material y gente reales en su puesto, sin posado de estudio ni rótulos quemados. EL TERCIO INFERIOR SE OSCURECE —encima van el rótulo de etapa, el titular y una línea de texto sobre un degradado que llega al 90%—, así que ahí no puede caer detalle importante. La foto es la única que se ve de esta etapa: si no se lee qué se está haciendo, la etapa no se sostiene. Área de tintorería en marcha —tela en el baño de color, vapor—. Es la que sostiene el argumento del teñido a demanda, que es el argumento central de la empresa: sin ella la etapa se queda en una afirmación.
+
+#### **FALTA** `oficio-control-calidad.jpg`
+
+- **Se ve a:** una sola foto GRANDE a todo el ancho del contenedor, hasta ~1038 px, con 360 px de alto en móvil, 480 desde tablet y 560 en escritorio (`RielDeEtapas`)
+- **Proporción:** apaisada, cerca de 2:1 en escritorio; se recorta con `object-cover`, así que el motivo tiene que aguantar del cuadrado al panorámico
+- **Ancho mínimo de entrega:** 2400 px
+- **Qué debe verse:** Control de calidad en Textil Padilla: manos midiendo el gramaje de la tela sobre la mesa de revisión.
+- **Nota:** Etapa 04 · Control de calidad. Apaisada y GRANDE: se ve a todo el ancho del contenedor —hasta ~1038 px a 1440— con 360 px de alto en móvil y hasta 560 en escritorio, así que el marco es casi 2:1 y se recorta con `object-cover`. Documental de planta: material y gente reales en su puesto, sin posado de estudio ni rótulos quemados. EL TERCIO INFERIOR SE OSCURECE —encima van el rótulo de etapa, el titular y una línea de texto sobre un degradado que llega al 90%—, así que ahí no puede caer detalle importante. La foto es la única que se ve de esta etapa: si no se lee qué se está haciendo, la etapa no se sostiene. Manos midiendo sobre la tela —cortador de gramaje, balanza, mesa de revisión al trasluz—. El INSTRUMENTO tiene que verse: es lo que distingue esta etapa de «alguien mirando tela».
+
+#### **FALTA** `oficio-despacho.jpg`
+
+- **Se ve a:** una sola foto GRANDE a todo el ancho del contenedor, hasta ~1038 px, con 360 px de alto en móvil, 480 desde tablet y 560 en escritorio (`RielDeEtapas`)
+- **Proporción:** apaisada, cerca de 2:1 en escritorio; se recorta con `object-cover`, así que el motivo tiene que aguantar del cuadrado al panorámico
+- **Ancho mínimo de entrega:** 2400 px
+- **Qué debe verse:** Zona de despacho de Textil Padilla: rollos de tela etiquetados y embalados, preparados para salir a ruta.
+- **Nota:** Etapa 05 · Envío. Apaisada y GRANDE: se ve a todo el ancho del contenedor —hasta ~1038 px a 1440— con 360 px de alto en móvil y hasta 560 en escritorio, así que el marco es casi 2:1 y se recorta con `object-cover`. Documental de planta: material y gente reales en su puesto, sin posado de estudio ni rótulos quemados. EL TERCIO INFERIOR SE OSCURECE —encima van el rótulo de etapa, el titular y una línea de texto sobre un degradado que llega al 90%—, así que ahí no puede caer detalle importante. La foto es la única que se ve de esta etapa: si no se lee qué se está haciendo, la etapa no se sostiene. Rollos etiquetados en la zona de despacho. La ETIQUETA DE LOTE tiene que leerse como etiqueta —no hace falta que se lea el número—, porque es lo que la frase afirma. Sin marcas ni logotipos de terceros identificables: al cliente no se le nombra.
 
 ### Línea de hitos — 9 (9 por conseguir)
 
