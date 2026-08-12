@@ -1,8 +1,6 @@
 # Auditoría de consistencia
 
-Medido sobre el commit `26ad7dc`.
-
-> **Aviso —** el árbol tenía 22 archivo(s) sin commitear al medir. Este informe NO describe exactamente el commit `26ad7dc`.
+Medido sobre el commit `e7fdc31`.
 
 Generado por `npm run auditoria:consistencia`. **No editar a mano:** cada pasada lo reescribe entero.
 
