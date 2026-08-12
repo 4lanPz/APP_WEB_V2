@@ -1545,13 +1545,30 @@ function componerInforme(d: DatosInforme): string {
       w();
     }
   }
+  /*
+   * ESTE PÁRRAFO DECÍA «la razón de que `h3` muestre cuatro tamaños» Y ERA UN
+   * NÚMERO ESCRITO A MANO dentro de un documento que se regenera: en cuanto una
+   * página estrenó un `h3` en otro token, el recuento de arriba dijo cinco y
+   * esta línea siguió diciendo cuatro. Ya no cuenta nada — y de paso separa las
+   * dos cosas que juntaba, que son distintas.
+   */
   w(
     "La columna del medio es la distinción que de verdad separa lo deliberado de " +
       "lo accidental: un tamaño que sale de un token es una decisión del sistema; " +
       "uno que no sale de ninguno se escribió a mano. Los que aparecen **fuera de " +
-      "la escala** aquí son, uno por uno, los títulos de card con escala propia " +
-      "que ya están inventariados como excepción aprobada en §13 — no son deriva " +
-      "silenciosa, pero sí son la razón de que `h3` muestre cuatro tamaños.",
+      "la escala** son, uno por uno, los títulos de card con escala propia que ya " +
+      "están inventariados como excepción aprobada en §13 — no son deriva " +
+      "silenciosa, pero son de donde salen los tamaños que ningún token explica.",
+  );
+  w();
+  w(
+    "Que una MISMA etiqueta aparezca con varios tamaños de token no es lo mismo " +
+      "ni es un fallo. `h3` es un nivel de esquema, no un tamaño: el mismo nivel " +
+      "pesa distinto según con qué comparta pantalla. El título de etapa del riel " +
+      "de Empresa va en `text-h2` porque tiene que sostenerse junto a una " +
+      "fotografía a todo lo ancho, y el nombre de una tela en una tira de " +
+      "miniaturas va en `text-body-s` por lo contrario. Lo que hay que vigilar en " +
+      "esta lista son las filas SIN token, no cuántas filas hay.",
   );
   w();
 
