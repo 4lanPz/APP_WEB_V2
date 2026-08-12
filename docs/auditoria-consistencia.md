@@ -1,8 +1,8 @@
 # Auditoría de consistencia
 
-Medido sobre el commit `0d507c4`.
+Medido sobre el commit `26ad7dc`.
 
-> **Aviso —** el árbol tenía 23 archivo(s) sin commitear al medir. Este informe NO describe exactamente el commit `0d507c4`.
+> **Aviso —** el árbol tenía 22 archivo(s) sin commitear al medir. Este informe NO describe exactamente el commit `26ad7dc`.
 
 Generado por `npm run auditoria:consistencia`. **No editar a mano:** cada pasada lo reescribe entero.
 
@@ -114,7 +114,7 @@ Sin banda de cabecera identificable (7 plantillas): `/politica-datos`, `/product
 
 | Padding | Secciones en |
 | ---: | --- |
-| 0 px | `/productos/microfibra` |
+| 0 px | `/empresa`, `/productos/microfibra` |
 | 40 px | `/productos/microfibra/dortmund-plus/blancos` |
 | 64 px | `/` ×5, `/contacto` ×3, `/empresa` ×5, `/productos` ×4, `/productos/camisetas` ×3, `/productos/microfibra` ×2, `/productos/microfibra/dortmund-plus` ×3, `/productos/microfibra/dortmund-plus/blancos` ×2 |
 
@@ -130,9 +130,9 @@ Todas las secciones se tocan: **el ritmo vertical no lo pone ningún margen, lo 
 
 | Padding | Secciones en |
 | ---: | --- |
-| 0 px | `/productos/microfibra` |
-| 64 px | `/`, `/productos/microfibra/dortmund-plus/blancos` |
-| 96 px | `/` ×4, `/contacto` ×3, `/empresa` ×5, `/productos` ×4, `/productos/camisetas` ×3, `/productos/microfibra` ×2, `/productos/microfibra/dortmund-plus` ×3, `/productos/microfibra/dortmund-plus/blancos` ×2 |
+| 0 px | `/empresa`, `/productos/microfibra` |
+| 64 px | `/`, `/empresa`, `/productos/microfibra/dortmund-plus/blancos` |
+| 96 px | `/` ×4, `/contacto` ×3, `/empresa` ×4, `/productos` ×4, `/productos/camisetas` ×3, `/productos/microfibra` ×2, `/productos/microfibra/dortmund-plus` ×3, `/productos/microfibra/dortmund-plus/blancos` ×2 |
 
 **Hueco real entre secciones consecutivas — 1 valor.** Medido borde a borde, así que recoge el efecto combinado de margin y padding.
 
@@ -175,11 +175,12 @@ Anchos de contenedor: **679 px**, **1240 px**, **1440 px**. Padding lateral: **1
 
   - **26,2 px** — `text-h2` — `/`, `/asesor-virtual`, `/contacto`, `/empresa`, `/productos`, `/productos/camisetas`, `/productos/microfibra`, `/productos/microfibra/dortmund-plus`, `/productos/microfibra/dortmund-plus/blancos`, `/productos/texturizado (×3 rutas)`
 
-**`h3` — 4 tamaños:** 15 px, 19,1 px, 21 px, 28 px
+**`h3` — 5 tamaños:** 15 px, 19,1 px, 21 px, 26,2 px, 28 px
 
   - **15 px** — `text-body-s` — `/productos/camisetas`, `/productos/microfibra/dortmund-plus/blancos`
   - **19,1 px** — `text-h3` — `/`, `/empresa`, `/productos`, `/productos/camisetas`, `/productos/microfibra/dortmund-plus`
   - **21 px** — **fuera de la escala de tokens** — `/productos/microfibra`, `/productos/microfibra/dortmund-plus`, `/productos/texturizado (×3 rutas)`
+  - **26,2 px** — `text-h2` — `/empresa`
   - **28 px** — **fuera de la escala de tokens** — `/`, `/productos`
 
 ### A 1440 px
@@ -193,14 +194,17 @@ Anchos de contenedor: **679 px**, **1240 px**, **1440 px**. Padding lateral: **1
 
   - **32 px** — `text-h2` — `/`, `/asesor-virtual`, `/contacto`, `/empresa`, `/productos`, `/productos/camisetas`, `/productos/microfibra`, `/productos/microfibra/dortmund-plus`, `/productos/microfibra/dortmund-plus/blancos`, `/productos/texturizado (×3 rutas)`
 
-**`h3` — 4 tamaños:** 15 px, 22 px, 26 px, 28 px
+**`h3` — 5 tamaños:** 15 px, 22 px, 26 px, 28 px, 32 px
 
   - **15 px** — `text-body-s` — `/productos/camisetas`, `/productos/microfibra/dortmund-plus/blancos`
   - **22 px** — `text-h3` — `/`, `/empresa`, `/productos`, `/productos/camisetas`, `/productos/microfibra/dortmund-plus`
   - **26 px** — **fuera de la escala de tokens** — `/productos/microfibra`, `/productos/microfibra/dortmund-plus`, `/productos/texturizado (×3 rutas)`
   - **28 px** — **fuera de la escala de tokens** — `/`, `/productos`
+  - **32 px** — `text-h2` — `/empresa`
 
-La columna del medio es la distinción que de verdad separa lo deliberado de lo accidental: un tamaño que sale de un token es una decisión del sistema; uno que no sale de ninguno se escribió a mano. Los que aparecen **fuera de la escala** aquí son, uno por uno, los títulos de card con escala propia que ya están inventariados como excepción aprobada en §13 — no son deriva silenciosa, pero sí son la razón de que `h3` muestre cuatro tamaños.
+La columna del medio es la distinción que de verdad separa lo deliberado de lo accidental: un tamaño que sale de un token es una decisión del sistema; uno que no sale de ninguno se escribió a mano. Los que aparecen **fuera de la escala** son, uno por uno, los títulos de card con escala propia que ya están inventariados como excepción aprobada en §13 — no son deriva silenciosa, pero son de donde salen los tamaños que ningún token explica.
+
+Que una MISMA etiqueta aparezca con varios tamaños de token no es lo mismo ni es un fallo. `h3` es un nivel de esquema, no un tamaño: el mismo nivel pesa distinto según con qué comparta pantalla. El título de etapa del riel de Empresa va en `text-h2` porque tiene que sostenerse junto a una fotografía a todo lo ancho, y el nombre de una tela en una tira de miniaturas va en `text-body-s` por lo contrario. Lo que hay que vigilar en esta lista son las filas SIN token, no cuántas filas hay.
 
 ---
 
@@ -228,16 +232,16 @@ No cubre los enlaces que solo existen tras una interacción de cliente. El panel
 
 ## 8 · Áreas táctiles por debajo de 44 px
 
-**62 controles** por debajo del mínimo a 375 px. Los enlaces en línea dentro de un párrafo quedan fuera del recuento: no son objetivos táctiles en el sentido de la norma.
+**65 controles** por debajo del mínimo a 375 px. Los enlaces en línea dentro de un párrafo quedan fuera del recuento: no son objetivos táctiles en el sentido de la norma.
 
-Son **29 controles distintos**, repetidos por el sitio. Ordenados por su dimensión más corta: arriba, lo que de verdad falla al tocarse; abajo, lo que se queda cerca del mínimo.
+Son **30 controles distintos**, repetidos por el sitio. Ordenados por su dimensión más corta: arriba, lo que de verdad falla al tocarse; abajo, lo que se queda cerca del mínimo.
 
 | Control | Tamaño | Rutas afectadas |
 | --- | ---: | --- |
 | ❚❚ Pausa | 54×16 px | `/` |
-| 01 Prenda | 76×16 px | `/` |
-| 02 Sublimado | 101×16 px | `/` |
-| 03 Uso | 50×16 px | `/` |
+| 01 Prenda | 76×16 px | `/`, `/empresa` |
+| 02 Sublimado | 101×16 px | `/`, `/empresa` |
+| 03 Uso | 50×16 px | `/`, `/empresa` |
 | Categorías | 86×16 px | `/productos/microfibra`, `/productos/texturizado (×3 rutas)` |
 | Dortmund Plus | 112×16 px | `/productos/microfibra/dortmund-plus/blancos`, `/productos/microfibra/dortmund-plus/claros (×4 rutas)` |
 | Inicio | 52×16 px | `/asesor-virtual` |
@@ -251,12 +255,13 @@ Son **29 controles distintos**, repetidos por el sitio. Ordenados por su dimensi
 | Cómo llegar ↗ (×5) | 323×36 px | `/contacto` |
 | Hablar con el asesor virtual → | 203×36 px | `/productos/microfibra/dortmund-plus/claros (×4 rutas)`, `/productos/microfibra/imperial (×21 rutas)` |
 | hola@textilpadilla.ec | 146×36 px | `/contacto` |
-| Ver catálogo de telas → | 162×36 px | `/contacto`, `/empresa` |
+| Ver catálogo de telas → | 162×36 px | `/contacto` |
 | Ver Dortmund Plus → | 149×36 px | `/productos/microfibra/dortmund-plus/blancos` |
 | Ver evento → | 94×36 px | `/` |
 | Ver ficha técnica y colores → (×2) | 197×36 px | `/productos/camisetas` |
 | Ver Microfibra → | 115×36 px | `/productos/microfibra/athletic (×19 rutas)`, `/productos/microfibra/chelsea (×9 rutas)` |
 | Ver todas las telas para camiseta → | 242×36 px | `/productos` |
+| Ver todo el catálogo → | 155×36 px | `/empresa` |
 | Guayaquil | 297×37 px | `/contacto` |
 | La Marín | 121×37 px | `/contacto` |
 | Matriz Alangasí | 175×37 px | `/contacto` |
@@ -306,7 +311,7 @@ Las clases arbitrarias de color y tamaño de fuente ya las bloquea eslint en bui
 
 | Tipo | Fichero | Fragmento |
 | --- | --- | --- |
-| excepción aprobada al guardarraíl de tokens | `src/app/page.tsx:178` | `// eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala e` |
+| excepción aprobada al guardarraíl de tokens | `src/app/page.tsx:175` | `// eslint-disable-next-line no-restricted-syntax -- display "Verdad material": tamaño fluido único, fuera de la escala e` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/BotonWhatsApp.tsx:76` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena, no es color de paleta` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/BotonWhatsApp.tsx:79` | `// eslint-disable-next-line no-restricted-syntax -- Teal Green Dark de WhatsApp, marca ajena` |
 | excepción aprobada al guardarraíl de tokens | `src/components/ui/buttonVariants.ts:103` | `// eslint-disable-next-line no-restricted-syntax -- teal de cabecera de WhatsApp Web, marca ajena` |
@@ -331,7 +336,7 @@ Nada en este nivel.
 
 - **5 alturas de banda de cabecera distintas a 375 px** (§1): 546 px, 628 px, 676 px, 688 px, 764 px. Es lo primero que se ve al pasar de una página a otra.
 - **4 alturas de banda de cabecera distintas a 1440 px** (§1): 630 px, 648 px, 680 px, 720 px. Es lo primero que se ve al pasar de una página a otra.
-- **62 áreas táctiles por debajo de 44 px** (§8). No impide usar el sitio, pero en una demo hecha desde el móvil se falla el toque.
+- **65 áreas táctiles por debajo de 44 px** (§8). No impide usar el sitio, pero en una demo hecha desde el móvil se falla el toque.
 - **4 tamaños de titular fuera de la escala de tokens** (§4): h3 21 px @375, h3 26 px @1440, h3 28 px @1440, h3 28 px @375. Todos corresponden a títulos de card con escala propia ya aprobada (§13), así que la decisión es si esa escala paralela se consolida como token o se retira.
 
 ### 3 · Cosmético — puede esperar
