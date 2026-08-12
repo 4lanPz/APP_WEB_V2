@@ -12,6 +12,7 @@ import { LineasEnMascara } from "@/components/motion/LineasEnMascara";
 import { MASCARA } from "@/lib/motion";
 import { numerador } from "@/lib/numerador";
 import { categories } from "@/data/taxonomy";
+import { PASOS_ASESOR } from "@/data/pasos-asesor";
 import { foto } from "@/data/imagenes";
 import { cn } from "@/lib/cn";
 
@@ -23,14 +24,10 @@ const stats = [
 ];
 
 /*
- * Los tres pasos del asesor: cada uno gobierna una foto en el bloque de portada
- * (ver `AsesorPasos`). El `slot` es su hueco de imagen registrado.
+ * Los tres pasos del asesor vivían aquí. Se han ido a `data/pasos-asesor.ts` al
+ * montarse el mismo bloque también en /empresa: son la misma lista con las
+ * mismas tres fotos, y ya no puede tener dos dueños.
  */
-const pasosAsesor = [
-  { index: "01", label: "Prenda", slot: "asesor-portada-prenda" },
-  { index: "02", label: "Sublimado", slot: "asesor-portada-sublimado" },
-  { index: "03", label: "Uso", slot: "asesor-portada-uso" },
-];
 
 const eventSlides = [
   {
@@ -361,7 +358,7 @@ export default function Home() {
         ]}
         parrafo="Tres preguntas y un asesor te devuelve una recomendación concreta: referencia, gramaje y tono, lista para pedir muestra."
         cta={{ label: "Probar el asesor virtual →", href: "/asesor-virtual" }}
-        pasos={pasosAsesor}
+        pasos={PASOS_ASESOR}
       />
       {/*
         NO HAY BOTÓN DE WHATSAPP EN ESTA PÁGINA, Y NO ES UN OLVIDO.

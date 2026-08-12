@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
 import { Container } from "./Container";
 import { buttonVariants } from "./buttonVariants";
 import { ImagePlaceholder } from "./ImagePlaceholder";
@@ -11,6 +10,7 @@ import { MagneticLink } from "@/components/motion/MagneticLink";
 import { Curtain } from "@/components/motion/Curtain";
 import { foto } from "@/data/imagenes";
 import { MASCARA } from "@/lib/motion";
+import { useAvanceAutomatico } from "@/lib/usar-avance-automatico";
 import { cn } from "@/lib/cn";
 
 export interface PasoAsesor {
@@ -61,13 +61,8 @@ export function AsesorPasos({
   pasos,
 }: AsesorPasosProps) {
   const [activo, setActivo] = useState(0);
-  /** El usuario pulsó un paso: toma el control y el auto-avance no vuelve. */
-  const [detenido, setDetenido] = useState(false);
-  /** El puntero está encima: pausa mientras dura. */
-  const [pausado, setPausado] = useState(false);
   /** El auto-avance solo corre donde HAY foto que cambiar (split ≥768). */
   const [conFoto, setConFoto] = useState(false);
-  const reduce = useReducedMotion();
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -77,18 +72,21 @@ export function AsesorPasos({
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  useEffect(() => {
-    if (reduce || detenido || pausado || !conFoto) return;
-    const t = setInterval(
-      () => setActivo((a) => (a + 1) % pasos.length),
-      CICLO_MS,
-    );
-    return () => clearInterval(t);
-  }, [reduce, detenido, pausado, conFoto, pasos.length]);
+  /*
+   * El reloj, la pausa al pasar el cursor y el corte por `prefers-reduced-motion`
+   * ya no se escriben aquí: son los de `useAvanceAutomatico`, el mismo que mueve
+   * el carrusel de «Encuentros» y el riel del taller. Este bloque solo aporta su
+   * condición propia —`conFoto`— y su cadencia.
+   */
+  const avance = useAvanceAutomatico({
+    intervalo: CICLO_MS,
+    avanzar: () => setActivo((a) => (a + 1) % pasos.length),
+    habilitado: conFoto,
+  });
 
   function seleccionar(i: number) {
     setActivo(i);
-    setDetenido(true);
+    avance.detener();
   }
 
   return (
@@ -133,17 +131,28 @@ export function AsesorPasos({
                     {/*
                       PENDIENTE, NO OLVIDADO: el paso activo sigue en `brand`
                       —2,25:1 sobre `bone`— y la barra de abajo también. Es el
-                      mismo suspenso que se acaba de arreglar en el eyebrow,
-                      pero aquí no es un cambio de token y ya: el azul claro es
-                      lo que hace legible el AVANCE de la barra, y bajarlo a
-                      `brand-ink` cambia el gesto del bloque entero. Se decide
-                      con el rediseño del stepper.
+                      mismo suspenso que se arregló en el eyebrow, pero aquí no
+                      es un cambio de token y ya: el azul claro es lo que hace
+                      legible el AVANCE de la barra, y bajarlo a `brand-ink`
+                      cambia el gesto del bloque entero. Se decide con el
+                      rediseño del stepper.
 
-                      No aparece en la lista de `npm run marca` porque el ciclo
-                      avanza solo cada 4 s con transición de color y el barrido
-                      descarta lo que se mueve entre la lectura y la captura.
-                      El 2,25 es el mismo cálculo que el resto de `text-brand`
-                      sobre `bone`, no una medida del barrido.
+                      EN LA LISTA: `docs/pendientes.md` §1. Ahí está el detalle
+                      de por qué sigue aplazado y qué lo desbloquea; esto es la
+                      nota junto al código, no el registro.
+
+                      YA SÍ APARECE EN `npm run marca`, y aquí decía lo
+                      contrario. La razón que daba era cierta cuando se escribió
+                      —el ciclo avanza solo y el barrido descartaba lo que se
+                      movía entre la lectura y la captura—, pero el barrido pasó
+                      a medir la página quieta (`reducedMotion` en
+                      `verificar-marca.mjs`) justamente para dejar de ser ciego a
+                      lo que se mueve, y este fue el primer suspenso que
+                      destapó. Sale cuatro veces: «01» y «Prenda» a 375 y a 1440.
+
+                      Y SALE EN DOS PÁGINAS DESDE QUE ESTE BLOQUE TAMBIÉN CIERRA
+                      /empresa. No es un suspenso nuevo, es el mismo en un sitio
+                      más — pero duplica lo que cuesta dejarlo pendiente.
                     */}
                     <button
                       type="button"
@@ -188,11 +197,7 @@ export function AsesorPasos({
             ciclo; al salir se reanuda (salvo que el usuario ya haya pulsado).
           */}
           <Curtain className="hidden md:block md:h-full md:min-h-95">
-            <div
-              className="relative h-full w-full"
-              onMouseEnter={() => setPausado(true)}
-              onMouseLeave={() => setPausado(false)}
-            >
+            <div className="relative h-full w-full" {...avance.cursor}>
               {pasos.map((paso, i) => {
                 const f = foto(paso.slot);
                 return (

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { FlechaCarril } from "./FlechaCarril";
 import { buttonVariants } from "./buttonVariants";
 import { cn } from "@/lib/cn";
 import { EASE_REVELAR } from "@/lib/motion";
+import { useAvanceAutomatico } from "@/lib/usar-avance-automatico";
 import { foto } from "@/data/imagenes";
 
 export interface EventSlide {
@@ -51,6 +52,12 @@ const slideVariants = {
  *  - `prefers-reduced-motion`: no arranca solo, se navega a mano y el botón de
  *    pausa se retira (no hay nada que pausar).
  *
+ * LAS TRES PRIMERAS REGLAS YA NO SE ESCRIBEN AQUÍ: viven en
+ * `useAvanceAutomatico`, que es el único temporizador del sitio. Estaban
+ * copiadas en el bloque del asesor virtual y a punto de copiarse una tercera vez
+ * en el riel del taller. Este carrusel sigue siendo su caso de referencia —es
+ * donde nacieron— pero ya no es su dueño.
+ *
  * Transición entre tarjetas (Motion §07): crossfade + desplazamiento horizontal
  * corto (24px), 500ms.
  *
@@ -60,23 +67,13 @@ const slideVariants = {
  */
 export function EventCarousel({ slides }: EventCarouselProps) {
   const [[index, direction], setState] = useState<[number, number]>([0, 0]);
-  const [auto, setAuto] = useState(true);
-  const [hover, setHover] = useState(false);
-  const reduceMotion = useReducedMotion();
   const slide = slides[index];
   const count = slides.length;
 
-  // El automático corre solo si está activo, sin cursor encima y sin la
-  // preferencia de menos movimiento.
-  const corriendo = auto && !hover && !reduceMotion;
-
-  useEffect(() => {
-    if (!corriendo) return;
-    const id = setInterval(() => {
-      setState(([i]) => [(i + 1) % count, 1]);
-    }, AUTO_MS);
-    return () => clearInterval(id);
-  }, [corriendo, count]);
+  const avance = useAvanceAutomatico({
+    intervalo: AUTO_MS,
+    avanzar: () => setState(([i]) => [(i + 1) % count, 1]),
+  });
 
   function go(nextIndex: number, dir: number) {
     setState([(nextIndex + count) % count, dir]);
@@ -85,15 +82,14 @@ export function EventCarousel({ slides }: EventCarouselProps) {
   // Navegación manual (flechas y puntos): además de mover, corta el automático.
   function irManual(nextIndex: number, dir: number) {
     go(nextIndex, dir);
-    setAuto(false);
+    avance.detener();
   }
 
   return (
     <div>
       <div
         className="relative grid grid-cols-1 gap-8 overflow-hidden border border-greige bg-bone p-6 sm:grid-cols-2 sm:gap-10 sm:p-10"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
+        {...avance.cursor}
       >
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           <motion.div
@@ -103,7 +99,7 @@ export function EventCarousel({ slides }: EventCarouselProps) {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: reduceMotion ? 0 : 0.5, ease: EASE_REVELAR }}
+            transition={{ duration: avance.sinMovimiento ? 0 : 0.5, ease: EASE_REVELAR }}
             className="col-span-full grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10"
           >
             <ImagePlaceholder
@@ -165,18 +161,28 @@ export function EventCarousel({ slides }: EventCarouselProps) {
           {/*
             Control de pausa visible y enfocable con teclado. Se retira con
             reduced-motion: ahí el carrusel no arranca solo, así que no hay nada
-            que pausar. `reduceMotion` es null en SSR y primer render (se pinta
+            que pausar. `sinMovimiento` es false en SSR y primer render (se pinta
             el botón, coincide servidor/cliente) y se resuelve tras montar.
+
+            ES LA ÚNICA PIEZA QUE USA `alternar()`. En el riel del taller y en el
+            asesor el propio contenido es el mando —pulsar una etapa o un paso ya
+            para el ciclo—, así que allí no hay nada que reanudar. Aquí los
+            puntos y las flechas solo navegan, y sin este botón no habría forma
+            de volver al automático.
           */}
-          {!reduceMotion && (
+          {!avance.sinMovimiento && (
             <button
               type="button"
-              onClick={() => setAuto((a) => !a)}
-              aria-pressed={!auto}
-              aria-label={auto ? "Pausar el avance automático" : "Reanudar el avance automático"}
+              onClick={avance.alternar}
+              aria-pressed={avance.detenido}
+              aria-label={
+                avance.detenido
+                  ? "Reanudar el avance automático"
+                  : "Pausar el avance automático"
+              }
               className="font-mono text-xs text-graphite transition-colors duration-220 ease-asentar hover:text-ink"
             >
-              {auto ? "❚❚ Pausa" : "▶ Auto"}
+              {avance.detenido ? "▶ Auto" : "❚❚ Pausa"}
             </button>
           )}
         </div>
